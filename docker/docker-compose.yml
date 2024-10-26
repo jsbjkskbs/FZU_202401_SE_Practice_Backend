@@ -1,0 +1,79 @@
+version: "3"
+services:
+  redis:
+    image: redis
+    restart: unless-stopped
+    ports:
+      - 16379:6379
+    networks:
+      custom_network:
+        ipv4_address: 20.20.20.2
+
+  mysql:
+    image: mysql:lts
+    restart: unless-stopped
+    ports:
+      - 13306:3306
+    volumes:
+      # You should run this sql file in the first time.
+      # For the reason of large memory usage of mysql, we can't run two or more mysql in the same time.
+      # You need to run these cmds in mysql first:
+      # > create database fulifuli;
+      # > use fulifuli;
+      # and then run the sql file.
+      # - ../pkg/config/sql:/docker-entrypoint-initdb.d
+      # Mount the configuration file.
+      - ../pkg/config/mysql/my.cnf:/etc/my.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: gorse
+      MYSQL_USER: gorse
+      MYSQL_PASSWORD: gorse_pass
+    networks:
+      custom_network:
+        ipv4_address: 20.20.20.3
+
+  gorse:
+    image: zhenghaoz/gorse-in-one
+    restart: unless-stopped
+    ports:
+      - 8086:8086   # gRPC port
+      - 8088:8088   # HTTP port
+    environment:
+      # Use Redis as cache storage backend.
+      GORSE_CACHE_STORE: redis://20.20.20.2:6379
+      # Use MySQL as data storage backend.
+      GORSE_DATA_STORE: mysql://gorse:gorse_pass@tcp(20.20.20.3:3306)/gorse?parseTime=true
+    command: >
+      -c /etc/gorse/config.toml 
+      --log-path /var/log/gorse/master.log 
+      --cache-path /var/lib/gorse/master_cache.data
+    volumes:
+      # Mount the configuration file.
+      - ../pkg/config/gorse/config.toml:/etc/gorse/config.toml
+    depends_on:
+      - redis
+      - mysql
+    networks:
+      custom_network:
+        ipv4_address: 20.20.20.4
+  
+  # ignore this when testing
+  #app:
+  #  image: app:latest
+  #  restart: unless-stopped
+  #  ports:
+  #    - 18005:18005
+  #  depends_on:
+  #    - gorse
+  #  networks:
+  #    custom_network:
+  #      ipv4_address: 20.20.20.5
+        
+
+networks:
+  custom_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 20.0.0.0/8
