@@ -1,0 +1,26 @@
+MySQL:
+  dsn: "root:123456@tcp(localhost:13306)/fulifuli?charset=utf8mb4&parseTime=True&loc=Local"
+
+Gorse:
+  url: "http://localhost:8088"
+  apikey: ""
+
+Email:
+  address: "smtp.mxhichina.com"
+  port: 465
+  username: "fulifuli@sophisms.cn"
+  password: "_222200316Cyk"
+  conn_pool_size: 4
+
+Redis:
+  email:
+    addr: "localhost:16379"
+    password: ""
+    db: 1
+
+# QPS limit for each API
+# QPS = threshold / statintervalinms
+Sentinel:
+    default:
+        threshold: 100000.0
+        statintervalinms: 1000.0
