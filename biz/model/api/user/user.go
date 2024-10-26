@@ -12,7 +12,7 @@ import (
 type UserRegisterReq struct {
 	Username string `thrift:"username,1,required" form:"username,required" json:"username,required" query:"username,required"`
 	Password string `thrift:"password,2,required" form:"password,required" json:"password,required" query:"password,required"`
-	Email    string `thrift:"email,3,required" form:"email,required" json:"email,required" query:"email,required"`
+	Email    string `thrift:"email,3,required" form:"email,required" json:"email,required" query:"email,required" vd:"email($); msg:'邮箱格式不正确'"`
 	Code     string `thrift:"code,4,required" form:"code,required" json:"code,required" query:"code,required"`
 }
 
@@ -503,7 +503,7 @@ func (p *UserRegisterResp) String() string {
 }
 
 type UserSecurityEmailCodeReq struct {
-	Email string `thrift:"email,1,required" form:"email,required" json:"email,required" query:"email,required"`
+	Email string `thrift:"email,1,required" form:"email,required" json:"email,required" query:"email,required" vd:"email($); msg:'邮箱格式不正确'"`
 }
 
 func NewUserSecurityEmailCodeReq() *UserSecurityEmailCodeReq {

@@ -3,6 +3,8 @@
 package user
 
 import (
+	auth "sfw/biz/router/api/api_auth"
+
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -73,7 +75,7 @@ func _avataruploadmethodMw() []app.HandlerFunc {
 
 func _mfaMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _mfabindmethodMw() []app.HandlerFunc {

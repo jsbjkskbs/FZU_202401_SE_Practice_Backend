@@ -11,7 +11,7 @@ type Errno struct {
 }
 
 func (e *Errno) Error() string {
-	return fmt.Sprintf("Error Message: %s", e.Message)
+	return e.Message
 }
 
 func (e *Errno) Unwrap() error {

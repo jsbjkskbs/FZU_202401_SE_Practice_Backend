@@ -5,7 +5,7 @@ include "base.thrift"
 struct UserRegisterReq {
     1: required string username;
     2: required string password;
-    3: required string email;
+    3: required string email(api.vd="email($); msg:'邮箱格式不正确'");
     4: required string code;
 }
 
@@ -15,7 +15,7 @@ struct UserRegisterResp {
 }
 
 struct UserSecurityEmailCodeReq {
-    1: required string email;
+    1: required string email(api.vd="email($); msg:'邮箱格式不正确'");
 }
 
 struct UserSecurityEmailCodeResp {

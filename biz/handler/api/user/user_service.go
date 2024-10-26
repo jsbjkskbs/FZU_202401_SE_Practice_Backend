@@ -25,7 +25,7 @@ func RegisterMethod(ctx context.Context, c *app.RequestContext) {
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		resp := utils.CreateBaseHttpResponse(err)
-		c.JSON(consts.StatusBadRequest, user.UserRegisterResp{
+		c.JSON(consts.StatusOK, user.UserRegisterResp{
 			Code: resp.Code,
 			Msg:  resp.Msg,
 		})
@@ -35,7 +35,7 @@ func RegisterMethod(ctx context.Context, c *app.RequestContext) {
 	err = service.NewUserService(ctx, c).NewRegisterEvent(&req)
 	if err != nil {
 		resp := utils.CreateBaseHttpResponse(err)
-		c.JSON(consts.StatusBadRequest, user.UserRegisterResp{
+		c.JSON(consts.StatusOK, user.UserRegisterResp{
 			Code: resp.Code,
 			Msg:  resp.Msg,
 		})
@@ -56,7 +56,7 @@ func SecurityEmailCodeMethod(ctx context.Context, c *app.RequestContext) {
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		resp := utils.CreateBaseHttpResponse(err)
-		c.JSON(consts.StatusBadRequest, user.UserSecurityEmailCodeResp{
+		c.JSON(consts.StatusOK, user.UserSecurityEmailCodeResp{
 			Code: resp.Code,
 			Msg:  resp.Msg,
 		})
@@ -66,7 +66,7 @@ func SecurityEmailCodeMethod(ctx context.Context, c *app.RequestContext) {
 	err = service.NewUserService(ctx, c).NewSecurityEmailCodeEvent(&req)
 	if err != nil {
 		resp := utils.CreateBaseHttpResponse(err)
-		c.JSON(consts.StatusBadRequest, user.UserSecurityEmailCodeResp{
+		c.JSON(consts.StatusOK, user.UserSecurityEmailCodeResp{
 			Code: resp.Code,
 			Msg:  resp.Msg,
 		})
@@ -87,7 +87,7 @@ func LoginMethod(ctx context.Context, c *app.RequestContext) {
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		resp := utils.CreateBaseHttpResponse(err)
-		c.JSON(consts.StatusBadRequest, user.UserLoginResp{
+		c.JSON(consts.StatusOK, user.UserLoginResp{
 			Code: resp.Code,
 			Msg:  resp.Msg,
 		})
@@ -97,7 +97,7 @@ func LoginMethod(ctx context.Context, c *app.RequestContext) {
 	data, err := service.NewUserService(ctx, c).NewLoginEvent(&req)
 	if err != nil {
 		resp := utils.CreateBaseHttpResponse(err)
-		c.JSON(consts.StatusBadRequest, user.UserLoginResp{
+		c.JSON(consts.StatusOK, user.UserLoginResp{
 			Code: resp.Code,
 			Msg:  resp.Msg,
 		})
@@ -130,13 +130,36 @@ func InfoMethod(ctx context.Context, c *app.RequestContext) {
 	var req user.UserInfoReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserInfoResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(user.UserInfoResp)
+	resp, err := service.NewUserService(ctx, c).NewInfoEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserInfoResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, user.UserInfoResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: &base.User{
+			ID:        fmt.Sprint(resp.ID),
+			Username:  resp.Username,
+			AvatarURL: resp.AvatarURL,
+			CreatedAt: resp.CreatedAt,
+			UpdatedAt: resp.UpdatedAt,
+			DeletedAt: resp.DeletedAt,
+		},
+	})
 }
 
 // FollowerCountMethod .
@@ -146,13 +169,32 @@ func FollowerCountMethod(ctx context.Context, c *app.RequestContext) {
 	var req user.UserFollowerCountReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserFollowerCountResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(user.UserFollowerCountResp)
+	resp, err := service.NewUserService(ctx, c).NewFollowerCountEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserFollowerCountResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, user.UserFollowerCountResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: &user.UserFollowerCountRespData{
+			ID:            req.UserID,
+			FollowerCount: resp,
+		},
+	})
 }
 
 // FollowingCountMethod .
@@ -162,13 +204,32 @@ func FollowingCountMethod(ctx context.Context, c *app.RequestContext) {
 	var req user.UserFollowingCountReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserFollowingCountResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(user.UserFollowingCountResp)
+	resp, err := service.NewUserService(ctx, c).NewFollowingCountEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserFollowingCountResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, user.UserFollowingCountResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: &user.UserFollowingCountRespData{
+			ID:             req.UserID,
+			FollowingCount: resp,
+		},
+	})
 }
 
 // LikeCountMethod .
@@ -178,13 +239,32 @@ func LikeCountMethod(ctx context.Context, c *app.RequestContext) {
 	var req user.UserLikeCountReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserLikeCountResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(user.UserLikeCountResp)
+	resp, err := service.NewUserService(ctx, c).NewLikeCountEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserLikeCountResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, user.UserLikeCountResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: &user.UserLikeCountRespData{
+			ID:        req.UserID,
+			LikeCount: resp,
+		},
+	})
 }
 
 // AvatarUploadMethod .
@@ -210,13 +290,29 @@ func MfaQrcodeMethod(ctx context.Context, c *app.RequestContext) {
 	var req user.UserMfaQrcodeReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserMfaQrcodeResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(user.UserMfaQrcodeResp)
+	resp, err := service.NewUserService(ctx, c).NewMfaQrcodeEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserMfaQrcodeResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, user.UserMfaQrcodeResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }
 
 // MfaBindMethod .
@@ -226,13 +322,27 @@ func MfaBindMethod(ctx context.Context, c *app.RequestContext) {
 	var req user.UserMfaBindReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserMfaBindResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(user.UserMfaBindResp)
-
-	c.JSON(consts.StatusOK, resp)
+	err = service.NewUserService(ctx, c).NewMfaBindEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserMfaBindResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+	c.JSON(consts.StatusOK, user.UserMfaBindResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
 }
 
 // SearchMethod .
