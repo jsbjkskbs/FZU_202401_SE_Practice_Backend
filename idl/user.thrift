@@ -93,6 +93,7 @@ struct UserAvatarUploadReq {
 
 struct UserAvatarUploadData {
     1: string upload_url;
+    2: string uptoken;
 }
 struct UserAvatarUploadResp {
     1: i64 code;
@@ -133,6 +134,9 @@ struct UserSearchReq {
 
 struct UserSearchRespData {
     1: list<base.User> items;
+    2: bool is_end;
+    3: i64 page_num;
+    4: i64 page_size;
 }
 struct UserSearchResp {
     1: i64 code;
@@ -140,19 +144,19 @@ struct UserSearchResp {
     3: UserSearchRespData data;
 }
 
-struct UserPasswordRetriveReq {
-    1: required string otype;
-    2: required string oid;
+struct UserPasswordRetrieveReq {
+    1: required string otype (api.vd="$ == 'email' || $ == 'phone'; msg:'类型不正确'");
+    2: required string oid (api.vd="((Otype)$ == 'phone' && phone($)) || ((Otype)$ == 'email' && email($)); msg:'邮箱或电话格式不正确'");
 }
 
-struct UserPasswordRetriveResp {
+struct UserPasswordRetrieveResp {
     1: i64 code;
     2: string msg;
 }
 
 struct UserPasswordResetReq {
-    1: required string otype;
-    2: required string oid;
+    1: required string otype (api.vd="$ == 'email' || $ == 'phone'; msg:'类型不正确'");
+    2: required string oid (api.vd="((Otype)$ == 'phone' && phone($)) || ((Otype)$ == 'email' && email($)); msg:'邮箱或电话格式不正确'");
     3: required string password;
     4: required string code;
 }
@@ -174,6 +178,6 @@ service UserService {
     UserMfaQrcodeResp MfaQrcodeMethod(1: UserMfaQrcodeReq req) (api.get="/api/v1/user/mfa/qrcode");
     UserMfaBindResp MfaBindMethod(1: UserMfaBindReq req) (api.post="/api/v1/user/mfa/bind");
     UserSearchResp SearchMethod(1: UserSearchReq req) (api.get="/api/v1/user/search");
-    UserPasswordRetriveResp PasswordRetriveMethod(1: UserPasswordRetriveReq req) (api.post="/api/v1/user/password/retrive");
-    UserPasswordResetResp PasswordResetMethod(1: UserPasswordResetReq req) (api.post="/api/v1/user/password/reset");
+    UserPasswordRetrieveResp PasswordRetrieveMethod(1: UserPasswordRetrieveReq req) (api.post="/api/v1/user/security/password/retrieve");
+    UserPasswordResetResp PasswordResetMethod(1: UserPasswordResetReq req) (api.post="/api/v1/user/security/password/reset");
 }

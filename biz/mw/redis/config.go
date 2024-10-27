@@ -7,5 +7,6 @@ type _Redis struct {
 }
 
 var (
-	EmailCodeRedisClient _Redis
+	EmailRedisClient _Redis
+	TokenExpireTimeClient _Redis
 )

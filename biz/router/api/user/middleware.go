@@ -70,7 +70,7 @@ func _avatarMw() []app.HandlerFunc {
 
 func _avataruploadmethodMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _mfaMw() []app.HandlerFunc {
@@ -114,6 +114,11 @@ func _emailMw() []app.HandlerFunc {
 }
 
 func _securityemailcodemethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _passwordretrievemethodMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }

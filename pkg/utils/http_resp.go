@@ -23,6 +23,10 @@ func CreateBaseHttpResponse(err error) *BaseHttpResponse {
 		return baseHttpResponse(*errno.NoError)
 	}
 
+	if e, ok := err.(*errno.Errno); ok {
+		return baseHttpResponse(*e)
+	}
+
 	s := errno.CustomError.WithMessage(err.Error())
 	return baseHttpResponse(*s)
 }

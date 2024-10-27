@@ -11,6 +11,7 @@ import (
 	"sfw/biz/mw/jwt"
 	"sfw/biz/service"
 	"sfw/pkg/errno"
+	"sfw/pkg/oss"
 	"sfw/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -274,13 +275,32 @@ func AvatarUploadMethod(ctx context.Context, c *app.RequestContext) {
 	var req user.UserAvatarUploadReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserAvatarUploadResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(user.UserAvatarUploadResp)
+	resp, err := service.NewUserService(ctx, c).NewAvatarUploadEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserAvatarUploadResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, user.UserAvatarUploadResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: &user.UserAvatarUploadData{
+			UploadURL: oss.UploadUrl,
+			Uptoken:   resp,
+		},
+	})
 }
 
 // MfaQrcodeMethod .
@@ -352,29 +372,65 @@ func SearchMethod(ctx context.Context, c *app.RequestContext) {
 	var req user.UserSearchReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserSearchResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(user.UserSearchResp)
+	resp, isEnd, pn, ps, err := service.NewUserService(ctx, c).NewSearchEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserSearchResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, user.UserSearchResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: &user.UserSearchRespData{
+			IsEnd:    isEnd,
+			Items:    *resp,
+			PageNum:  pn,
+			PageSize: ps,
+		},
+	})
 }
 
-// PasswordRetriveMethod .
-// @router /api/v1/user/password/retrive [POST]
-func PasswordRetriveMethod(ctx context.Context, c *app.RequestContext) {
+// PasswordRetrieveMethod .
+// @router /api/v1/user/security/password/retrieve [POST]
+func PasswordRetrieveMethod(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req user.UserPasswordRetriveReq
+	var req user.UserPasswordRetrieveReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserPasswordRetrieveResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(user.UserPasswordRetriveResp)
+	err = service.NewUserService(ctx, c).NewSecurityPasswordRetrieve(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserPasswordRetrieveResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, user.UserPasswordRetrieveResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
 }
 
 // PasswordResetMethod .
@@ -384,11 +440,26 @@ func PasswordResetMethod(ctx context.Context, c *app.RequestContext) {
 	var req user.UserPasswordResetReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserPasswordResetResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(user.UserPasswordResetResp)
+	err = service.NewUserService(ctx, c).NewSecurityPasswordResetEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserPasswordResetResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, user.UserPasswordResetResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
 }

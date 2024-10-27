@@ -20,7 +20,18 @@ require (
 	gorm.io/plugin/opentracing v0.0.0-20211220013347-7d2b2af23560
 )
 
-require gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+require (
+	github.com/BurntSushi/toml v1.3.2 // indirect
+	github.com/alex-ant/gomath v0.0.0-20160516115720-89013a210a82 // indirect
+	github.com/elastic/go-sysinfo v1.0.2 // indirect
+	github.com/elastic/go-windows v1.0.0 // indirect
+	github.com/gammazero/toposort v0.1.1 // indirect
+	github.com/gofrs/flock v0.8.1 // indirect
+	github.com/joeshaw/multierror v0.0.0-20140124173710-69b34d4ec901 // indirect
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+	howett.net/plist v0.0.0-20181124034731-591f970eefbb // indirect
+	modernc.org/fileutil v1.0.0 // indirect
+)
 
 require (
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
@@ -65,6 +76,7 @@ require (
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.37.0 // indirect
 	github.com/prometheus/procfs v0.8.0 // indirect
+	github.com/qiniu/go-sdk/v7 v7.25.0
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/shirou/gopsutil/v3 v3.21.6 // indirect

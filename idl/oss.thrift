@@ -2,20 +2,28 @@ namespace go api.oss
 
 include "base.thrift"
 
-struct OssCallbackReq {
+struct OssCallbackAvatarReq {
     1: required string authorization (api.header="Authorization");
-    2: required string key;
-    3: required string bucket;
-    4: required string name;
-    5: required i64 fsize;
-    6: required string hash;
-    7: required string otype;
-    8: required string oid;
+    2: string key;
+    3: string bucket;
+    4: string name;
+    5: i64 fsize;
+    6: string hash;
+    7: string otype;
+    8: string oid;
 }
 
-struct OssCallbackResp {
+struct OssCallbackAvatarResp {
+}
+
+struct OssCallbackFopReq {
+    1: required string authorization (api.header="Authorization");
+}
+
+struct OssCallbackFopResp {
 }
 
 service OssService {
-    OssCallbackResp OssCallbackMethod(1: OssCallbackReq req) (api.post="/api/v1/oss/callback");
+    OssCallbackAvatarResp OssCallbackAvatarMethod(1: OssCallbackAvatarReq req) (api.post="/api/v1/oss/callback/avatar");
+    OssCallbackFopResp OssCallbackFopMethod(1: OssCallbackFopReq req) (api.post="/api/v1/oss/callback/fop");
 }

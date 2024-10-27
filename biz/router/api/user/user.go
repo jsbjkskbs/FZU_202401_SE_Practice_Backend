@@ -40,15 +40,15 @@ func Register(r *server.Hertz) {
 					_mfa.GET("/qrcode", append(_mfaqrcodemethodMw(), user.MfaQrcodeMethod)...)
 				}
 				{
-					_password := _user.Group("/password", _passwordMw()...)
-					_password.POST("/reset", append(_passwordresetmethodMw(), user.PasswordResetMethod)...)
-					_password.POST("/retrive", append(_passwordretrivemethodMw(), user.PasswordRetriveMethod)...)
-				}
-				{
 					_security := _user.Group("/security", _securityMw()...)
 					{
 						_email := _security.Group("/email", _emailMw()...)
 						_email.POST("/code", append(_securityemailcodemethodMw(), user.SecurityEmailCodeMethod)...)
+					}
+					{
+						_password := _security.Group("/password", _passwordMw()...)
+						_password.POST("/reset", append(_passwordresetmethodMw(), user.PasswordResetMethod)...)
+						_password.POST("/retrieve", append(_passwordretrievemethodMw(), user.PasswordRetrieveMethod)...)
 					}
 				}
 			}
