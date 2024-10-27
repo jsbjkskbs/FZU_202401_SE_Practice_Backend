@@ -11,6 +11,7 @@ import (
 	"sfw/biz/mw/redis"
 	"sfw/biz/mw/sentinel"
 	"sfw/pkg/errno"
+	"sfw/pkg/oss"
 	"sfw/pkg/utils/configure"
 	"sfw/pkg/utils/mail"
 
@@ -156,13 +157,27 @@ func ConfigureRegister(...any) {
 				if !ok {
 					return errno.InternalServerError
 				}
-				if redis.EmailCodeRedisClient.Addr, ok = emap["addr"].(string); !ok {
+				if redis.EmailRedisClient.Addr, ok = emap["addr"].(string); !ok {
 					return errno.InternalServerError
 				}
-				if redis.EmailCodeRedisClient.Password, ok = emap["password"].(string); !ok {
+				if redis.EmailRedisClient.Password, ok = emap["password"].(string); !ok {
 					return errno.InternalServerError
 				}
-				if redis.EmailCodeRedisClient.DB, ok = emap["db"].(int); !ok {
+				if redis.EmailRedisClient.DB, ok = emap["db"].(int); !ok {
+					return errno.InternalServerError
+				}
+
+				tmap, ok := cmap["token_expire_time"].(map[string]interface{})
+				if !ok {
+					return errno.InternalServerError
+				}
+				if redis.TokenExpireTimeClient.Addr, ok = tmap["addr"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if redis.TokenExpireTimeClient.Password, ok = tmap["password"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if redis.TokenExpireTimeClient.DB, ok = tmap["db"].(int); !ok {
 					return errno.InternalServerError
 				}
 				redis.Load()
@@ -183,6 +198,42 @@ func ConfigureRegister(...any) {
 			LoadMethod: func(v ...any) error {
 				sentinel.Rules = configure.GlobalConfig.GetStringMap("Sentinel")
 				sentinel.Load()
+				return nil
+			},
+
+			SuccessTriggerParam: []interface{}{},
+			SuccessTrigger:      func(v ...any) {},
+
+			FailedTriggerParam: []interface{}{},
+			FailedTrigger:      func(v ...any) {},
+		},
+		{
+			RuleName: "OSS",
+			Level:    configure.LevelFatal,
+
+			LoadMethodParam: []interface{}{},
+			LoadMethod: func(v ...any) error {
+				cmap := configure.GlobalConfig.GetStringMap("OSS")
+				ok := false
+				if oss.Bucket, ok = cmap["bucket"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if oss.AccessKey, ok = cmap["access_key"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if oss.SecretKey, ok = cmap["secret_key"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if oss.Domain, ok = cmap["domain"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if oss.CallbackUrl, ok = cmap["callback_url"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if oss.UploadUrl, ok = cmap["upload_url"].(string); !ok {
+					return errno.InternalServerError
+				}
+				oss.Load()
 				return nil
 			},
 

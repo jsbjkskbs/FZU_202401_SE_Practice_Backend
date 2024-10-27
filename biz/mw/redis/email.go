@@ -1,6 +1,8 @@
 package redis
 
-import "time"
+import (
+	"time"
+)
 
 func EmailCodeStore(email string, code string) error {
 	if err := emailRedisClient.Set(email, code, 10*time.Minute).Err(); err != nil {
@@ -10,6 +12,13 @@ func EmailCodeStore(email string, code string) error {
 }
 
 func EmailCodeGet(email string) (string, error) {
+	exist, err := emailRedisClient.Exists(email).Result()
+	if err != nil {
+		return "", err
+	} else if exist == 0 {
+		return "", nil
+	}
+
 	code, err := emailRedisClient.Get(email).Result()
 	if err != nil {
 		return "", err

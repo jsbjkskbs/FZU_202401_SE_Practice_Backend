@@ -17,6 +17,10 @@ Redis:
     addr: "localhost:16379"
     password: ""
     db: 1
+  token_expire_time:
+    addr: "localhost:16379"
+    password: ""
+    db: 2
 
 # QPS limit for each API
 # QPS = threshold / statintervalinms
@@ -24,3 +28,11 @@ Sentinel:
     default:
         threshold: 100000.0
         statintervalinms: 1000.0
+
+OSS:
+  bucket: ""
+  secret_key: ""
+  access_key: ""
+  domain: ""
+  upload_url: ""
+  callback_url: ""

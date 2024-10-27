@@ -34,7 +34,8 @@ const (
 	PowerNotEnoughErrorCode = 6001
 
 	// MFA error
-	MfaAuthFailedErrorCode = 7001
+	MfaAuthFailedErrorCode     = 7001
+	MfaGenerateFailedErrorCode = 7002
 
 	// Query Limit error
 	QueryLimitErrorCode = 8001
@@ -79,7 +80,8 @@ const (
 	PowerNotEnoughErrorMsg = "Power not enough"
 
 	// MFA error
-	MfaAuthFailedErrorMsg = "MFA auth failed"
+	MfaAuthFailedErrorMsg     = "MFA auth failed"
+	MfaGenerateFailedErrorMsg = "MFA generate failed"
 
 	// Query Limit error
 	QueryLimitErrorMsg = "Server receive too many requests at this moment, please wait a moment and try again"
@@ -121,7 +123,8 @@ var (
 	PowerNotEnough = NewErrno(PowerNotEnoughErrorCode, PowerNotEnoughErrorMsg)
 
 	// MFA error
-	MfaAuthFailed = NewErrno(MfaAuthFailedErrorCode, MfaAuthFailedErrorMsg)
+	MfaAuthFailed     = NewErrno(MfaAuthFailedErrorCode, MfaAuthFailedErrorMsg)
+	MfaGenerateFailed = NewErrno(MfaGenerateFailedErrorCode, MfaGenerateFailedErrorMsg)
 
 	// Query Limit error
 	QueryLimit = NewErrno(QueryLimitErrorCode, QueryLimitErrorMsg)

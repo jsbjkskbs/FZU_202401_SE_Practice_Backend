@@ -4,24 +4,63 @@ package oss
 
 import (
 	"context"
+	"sfw/biz/model/api/oss"
+	"sfw/biz/service"
+	osspk "sfw/pkg/oss"
 
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/adaptor"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	oss "sfw/biz/model/api/oss"
 )
 
-// OssCallbackMethod .
-// @router /api/v1/oss/callback [POST]
-func OssCallbackMethod(ctx context.Context, c *app.RequestContext) {
+// OssCallbackAvatarMethod .
+// @router /api/v1/oss/callback/avatar [POST]
+func OssCallbackAvatarMethod(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req oss.OssCallbackReq
+	var req oss.OssCallbackAvatarReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		hlog.Info("bind and validate failed", err)
+		c.Status(consts.StatusBadRequest)
+		return
+	}
+
+	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
+	if err != nil {
+		hlog.Warn("get http request failed", err)
+		c.Status(consts.StatusBadRequest)
+		return
+	}
+	ok, err := osspk.Verify(httpReq)
+	if err != nil || !ok {
+		hlog.Warn("verify oss callback failed", err)
+		c.Status(consts.StatusBadRequest)
+		return
+	}
+
+	err = service.NewOssService(ctx, c).NewCallbackAvatarEvent(&req)
+	if err != nil {
+		hlog.Warn("update avatar url failed", err)
+		c.Status(consts.StatusOK)
+		return
+	}
+
+	c.Status(consts.StatusOK)
+}
+
+// OssCallbackFopMethod .
+// @router /api/v1/oss/callback/fop [POST]
+func OssCallbackFopMethod(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req oss.OssCallbackFopReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(oss.OssCallbackResp)
+	resp := new(oss.OssCallbackFopResp)
 
 	c.JSON(consts.StatusOK, resp)
 }

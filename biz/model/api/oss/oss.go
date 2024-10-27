@@ -8,57 +8,57 @@ import (
 	"github.com/apache/thrift/lib/go/thrift"
 )
 
-type OssCallbackReq struct {
+type OssCallbackAvatarReq struct {
 	Authorization string `thrift:"authorization,1,required" header:"Authorization,required" json:"authorization,required"`
-	Key           string `thrift:"key,2,required" form:"key,required" json:"key,required" query:"key,required"`
-	Bucket        string `thrift:"bucket,3,required" form:"bucket,required" json:"bucket,required" query:"bucket,required"`
-	Name          string `thrift:"name,4,required" form:"name,required" json:"name,required" query:"name,required"`
-	Fsize         int64  `thrift:"fsize,5,required" form:"fsize,required" json:"fsize,required" query:"fsize,required"`
-	Hash          string `thrift:"hash,6,required" form:"hash,required" json:"hash,required" query:"hash,required"`
-	Otype         string `thrift:"otype,7,required" form:"otype,required" json:"otype,required" query:"otype,required"`
-	Oid           string `thrift:"oid,8,required" form:"oid,required" json:"oid,required" query:"oid,required"`
+	Key           string `thrift:"key,2" form:"key" json:"key" query:"key"`
+	Bucket        string `thrift:"bucket,3" form:"bucket" json:"bucket" query:"bucket"`
+	Name          string `thrift:"name,4" form:"name" json:"name" query:"name"`
+	Fsize         int64  `thrift:"fsize,5" form:"fsize" json:"fsize" query:"fsize"`
+	Hash          string `thrift:"hash,6" form:"hash" json:"hash" query:"hash"`
+	Otype         string `thrift:"otype,7" form:"otype" json:"otype" query:"otype"`
+	Oid           string `thrift:"oid,8" form:"oid" json:"oid" query:"oid"`
 }
 
-func NewOssCallbackReq() *OssCallbackReq {
-	return &OssCallbackReq{}
+func NewOssCallbackAvatarReq() *OssCallbackAvatarReq {
+	return &OssCallbackAvatarReq{}
 }
 
-func (p *OssCallbackReq) InitDefault() {
+func (p *OssCallbackAvatarReq) InitDefault() {
 }
 
-func (p *OssCallbackReq) GetAuthorization() (v string) {
+func (p *OssCallbackAvatarReq) GetAuthorization() (v string) {
 	return p.Authorization
 }
 
-func (p *OssCallbackReq) GetKey() (v string) {
+func (p *OssCallbackAvatarReq) GetKey() (v string) {
 	return p.Key
 }
 
-func (p *OssCallbackReq) GetBucket() (v string) {
+func (p *OssCallbackAvatarReq) GetBucket() (v string) {
 	return p.Bucket
 }
 
-func (p *OssCallbackReq) GetName() (v string) {
+func (p *OssCallbackAvatarReq) GetName() (v string) {
 	return p.Name
 }
 
-func (p *OssCallbackReq) GetFsize() (v int64) {
+func (p *OssCallbackAvatarReq) GetFsize() (v int64) {
 	return p.Fsize
 }
 
-func (p *OssCallbackReq) GetHash() (v string) {
+func (p *OssCallbackAvatarReq) GetHash() (v string) {
 	return p.Hash
 }
 
-func (p *OssCallbackReq) GetOtype() (v string) {
+func (p *OssCallbackAvatarReq) GetOtype() (v string) {
 	return p.Otype
 }
 
-func (p *OssCallbackReq) GetOid() (v string) {
+func (p *OssCallbackAvatarReq) GetOid() (v string) {
 	return p.Oid
 }
 
-var fieldIDToName_OssCallbackReq = map[int16]string{
+var fieldIDToName_OssCallbackAvatarReq = map[int16]string{
 	1: "authorization",
 	2: "key",
 	3: "bucket",
@@ -69,18 +69,11 @@ var fieldIDToName_OssCallbackReq = map[int16]string{
 	8: "oid",
 }
 
-func (p *OssCallbackReq) Read(iprot thrift.TProtocol) (err error) {
+func (p *OssCallbackAvatarReq) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAuthorization bool = false
-	var issetKey bool = false
-	var issetBucket bool = false
-	var issetName bool = false
-	var issetFsize bool = false
-	var issetHash bool = false
-	var issetOtype bool = false
-	var issetOid bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -110,7 +103,6 @@ func (p *OssCallbackReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetKey = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -119,7 +111,6 @@ func (p *OssCallbackReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetBucket = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -128,7 +119,6 @@ func (p *OssCallbackReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetName = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -137,7 +127,6 @@ func (p *OssCallbackReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetFsize = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -146,7 +135,6 @@ func (p *OssCallbackReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetHash = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -155,7 +143,6 @@ func (p *OssCallbackReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField7(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetOtype = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -164,7 +151,6 @@ func (p *OssCallbackReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField8(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetOid = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -185,48 +171,13 @@ func (p *OssCallbackReq) Read(iprot thrift.TProtocol) (err error) {
 		fieldId = 1
 		goto RequiredFieldNotSetError
 	}
-
-	if !issetKey {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetBucket {
-		fieldId = 3
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetName {
-		fieldId = 4
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetFsize {
-		fieldId = 5
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetHash {
-		fieldId = 6
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetOtype {
-		fieldId = 7
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetOid {
-		fieldId = 8
-		goto RequiredFieldNotSetError
-	}
 	return nil
 ReadStructBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OssCallbackReq[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OssCallbackAvatarReq[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -235,10 +186,10 @@ ReadFieldEndError:
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_OssCallbackReq[fieldId]))
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_OssCallbackAvatarReq[fieldId]))
 }
 
-func (p *OssCallbackReq) ReadField1(iprot thrift.TProtocol) error {
+func (p *OssCallbackAvatarReq) ReadField1(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -249,7 +200,7 @@ func (p *OssCallbackReq) ReadField1(iprot thrift.TProtocol) error {
 	p.Authorization = _field
 	return nil
 }
-func (p *OssCallbackReq) ReadField2(iprot thrift.TProtocol) error {
+func (p *OssCallbackAvatarReq) ReadField2(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -260,7 +211,7 @@ func (p *OssCallbackReq) ReadField2(iprot thrift.TProtocol) error {
 	p.Key = _field
 	return nil
 }
-func (p *OssCallbackReq) ReadField3(iprot thrift.TProtocol) error {
+func (p *OssCallbackAvatarReq) ReadField3(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -271,7 +222,7 @@ func (p *OssCallbackReq) ReadField3(iprot thrift.TProtocol) error {
 	p.Bucket = _field
 	return nil
 }
-func (p *OssCallbackReq) ReadField4(iprot thrift.TProtocol) error {
+func (p *OssCallbackAvatarReq) ReadField4(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -282,7 +233,7 @@ func (p *OssCallbackReq) ReadField4(iprot thrift.TProtocol) error {
 	p.Name = _field
 	return nil
 }
-func (p *OssCallbackReq) ReadField5(iprot thrift.TProtocol) error {
+func (p *OssCallbackAvatarReq) ReadField5(iprot thrift.TProtocol) error {
 
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
@@ -293,7 +244,7 @@ func (p *OssCallbackReq) ReadField5(iprot thrift.TProtocol) error {
 	p.Fsize = _field
 	return nil
 }
-func (p *OssCallbackReq) ReadField6(iprot thrift.TProtocol) error {
+func (p *OssCallbackAvatarReq) ReadField6(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -304,7 +255,7 @@ func (p *OssCallbackReq) ReadField6(iprot thrift.TProtocol) error {
 	p.Hash = _field
 	return nil
 }
-func (p *OssCallbackReq) ReadField7(iprot thrift.TProtocol) error {
+func (p *OssCallbackAvatarReq) ReadField7(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -315,7 +266,7 @@ func (p *OssCallbackReq) ReadField7(iprot thrift.TProtocol) error {
 	p.Otype = _field
 	return nil
 }
-func (p *OssCallbackReq) ReadField8(iprot thrift.TProtocol) error {
+func (p *OssCallbackAvatarReq) ReadField8(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -327,9 +278,9 @@ func (p *OssCallbackReq) ReadField8(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *OssCallbackReq) Write(oprot thrift.TProtocol) (err error) {
+func (p *OssCallbackAvatarReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("OssCallbackReq"); err != nil {
+	if err = oprot.WriteStructBegin("OssCallbackAvatarReq"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -383,7 +334,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *OssCallbackReq) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *OssCallbackAvatarReq) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("authorization", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -400,7 +351,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *OssCallbackReq) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *OssCallbackAvatarReq) writeField2(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("key", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -417,7 +368,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
-func (p *OssCallbackReq) writeField3(oprot thrift.TProtocol) (err error) {
+func (p *OssCallbackAvatarReq) writeField3(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("bucket", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -434,7 +385,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
-func (p *OssCallbackReq) writeField4(oprot thrift.TProtocol) (err error) {
+func (p *OssCallbackAvatarReq) writeField4(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("name", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -451,7 +402,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
-func (p *OssCallbackReq) writeField5(oprot thrift.TProtocol) (err error) {
+func (p *OssCallbackAvatarReq) writeField5(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("fsize", thrift.I64, 5); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -468,7 +419,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
-func (p *OssCallbackReq) writeField6(oprot thrift.TProtocol) (err error) {
+func (p *OssCallbackAvatarReq) writeField6(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("hash", thrift.STRING, 6); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -485,7 +436,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
 }
 
-func (p *OssCallbackReq) writeField7(oprot thrift.TProtocol) (err error) {
+func (p *OssCallbackAvatarReq) writeField7(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("otype", thrift.STRING, 7); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -502,7 +453,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
 }
 
-func (p *OssCallbackReq) writeField8(oprot thrift.TProtocol) (err error) {
+func (p *OssCallbackAvatarReq) writeField8(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("oid", thrift.STRING, 8); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -519,27 +470,27 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
 }
 
-func (p *OssCallbackReq) String() string {
+func (p *OssCallbackAvatarReq) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("OssCallbackReq(%+v)", *p)
+	return fmt.Sprintf("OssCallbackAvatarReq(%+v)", *p)
 
 }
 
-type OssCallbackResp struct {
+type OssCallbackAvatarResp struct {
 }
 
-func NewOssCallbackResp() *OssCallbackResp {
-	return &OssCallbackResp{}
+func NewOssCallbackAvatarResp() *OssCallbackAvatarResp {
+	return &OssCallbackAvatarResp{}
 }
 
-func (p *OssCallbackResp) InitDefault() {
+func (p *OssCallbackAvatarResp) InitDefault() {
 }
 
-var fieldIDToName_OssCallbackResp = map[int16]string{}
+var fieldIDToName_OssCallbackAvatarResp = map[int16]string{}
 
-func (p *OssCallbackResp) Read(iprot thrift.TProtocol) (err error) {
+func (p *OssCallbackAvatarResp) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -581,8 +532,8 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *OssCallbackResp) Write(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteStructBegin("OssCallbackResp"); err != nil {
+func (p *OssCallbackAvatarResp) Write(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteStructBegin("OssCallbackAvatarResp"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -602,16 +553,249 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *OssCallbackResp) String() string {
+func (p *OssCallbackAvatarResp) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("OssCallbackResp(%+v)", *p)
+	return fmt.Sprintf("OssCallbackAvatarResp(%+v)", *p)
+
+}
+
+type OssCallbackFopReq struct {
+	Authorization string `thrift:"authorization,1,required" header:"Authorization,required" json:"authorization,required"`
+}
+
+func NewOssCallbackFopReq() *OssCallbackFopReq {
+	return &OssCallbackFopReq{}
+}
+
+func (p *OssCallbackFopReq) InitDefault() {
+}
+
+func (p *OssCallbackFopReq) GetAuthorization() (v string) {
+	return p.Authorization
+}
+
+var fieldIDToName_OssCallbackFopReq = map[int16]string{
+	1: "authorization",
+}
+
+func (p *OssCallbackFopReq) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+	var issetAuthorization bool = false
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetAuthorization = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	if !issetAuthorization {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OssCallbackFopReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_OssCallbackFopReq[fieldId]))
+}
+
+func (p *OssCallbackFopReq) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Authorization = _field
+	return nil
+}
+
+func (p *OssCallbackFopReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("OssCallbackFopReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *OssCallbackFopReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("authorization", thrift.STRING, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Authorization); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *OssCallbackFopReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("OssCallbackFopReq(%+v)", *p)
+
+}
+
+type OssCallbackFopResp struct {
+}
+
+func NewOssCallbackFopResp() *OssCallbackFopResp {
+	return &OssCallbackFopResp{}
+}
+
+func (p *OssCallbackFopResp) InitDefault() {
+}
+
+var fieldIDToName_OssCallbackFopResp = map[int16]string{}
+
+func (p *OssCallbackFopResp) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		if err = iprot.Skip(fieldTypeId); err != nil {
+			goto SkipFieldTypeError
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+SkipFieldTypeError:
+	return thrift.PrependError(fmt.Sprintf("%T skip field type %d error", p, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *OssCallbackFopResp) Write(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteStructBegin("OssCallbackFopResp"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *OssCallbackFopResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("OssCallbackFopResp(%+v)", *p)
 
 }
 
 type OssService interface {
-	OssCallbackMethod(ctx context.Context, req *OssCallbackReq) (r *OssCallbackResp, err error)
+	OssCallbackAvatarMethod(ctx context.Context, req *OssCallbackAvatarReq) (r *OssCallbackAvatarResp, err error)
+
+	OssCallbackFopMethod(ctx context.Context, req *OssCallbackFopReq) (r *OssCallbackFopResp, err error)
 }
 
 type OssServiceClient struct {
@@ -640,11 +824,20 @@ func (p *OssServiceClient) Client_() thrift.TClient {
 	return p.c
 }
 
-func (p *OssServiceClient) OssCallbackMethod(ctx context.Context, req *OssCallbackReq) (r *OssCallbackResp, err error) {
-	var _args OssServiceOssCallbackMethodArgs
+func (p *OssServiceClient) OssCallbackAvatarMethod(ctx context.Context, req *OssCallbackAvatarReq) (r *OssCallbackAvatarResp, err error) {
+	var _args OssServiceOssCallbackAvatarMethodArgs
 	_args.Req = req
-	var _result OssServiceOssCallbackMethodResult
-	if err = p.Client_().Call(ctx, "OssCallbackMethod", &_args, &_result); err != nil {
+	var _result OssServiceOssCallbackAvatarMethodResult
+	if err = p.Client_().Call(ctx, "OssCallbackAvatarMethod", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *OssServiceClient) OssCallbackFopMethod(ctx context.Context, req *OssCallbackFopReq) (r *OssCallbackFopResp, err error) {
+	var _args OssServiceOssCallbackFopMethodArgs
+	_args.Req = req
+	var _result OssServiceOssCallbackFopMethodResult
+	if err = p.Client_().Call(ctx, "OssCallbackFopMethod", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -670,7 +863,8 @@ func (p *OssServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunctio
 
 func NewOssServiceProcessor(handler OssService) *OssServiceProcessor {
 	self := &OssServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self.AddToProcessorMap("OssCallbackMethod", &ossServiceProcessorOssCallbackMethod{handler: handler})
+	self.AddToProcessorMap("OssCallbackAvatarMethod", &ossServiceProcessorOssCallbackAvatarMethod{handler: handler})
+	self.AddToProcessorMap("OssCallbackFopMethod", &ossServiceProcessorOssCallbackFopMethod{handler: handler})
 	return self
 }
 func (p *OssServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -691,16 +885,16 @@ func (p *OssServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.T
 	return false, x
 }
 
-type ossServiceProcessorOssCallbackMethod struct {
+type ossServiceProcessorOssCallbackAvatarMethod struct {
 	handler OssService
 }
 
-func (p *ossServiceProcessorOssCallbackMethod) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := OssServiceOssCallbackMethodArgs{}
+func (p *ossServiceProcessorOssCallbackAvatarMethod) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := OssServiceOssCallbackAvatarMethodArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("OssCallbackMethod", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("OssCallbackAvatarMethod", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -709,11 +903,11 @@ func (p *ossServiceProcessorOssCallbackMethod) Process(ctx context.Context, seqI
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := OssServiceOssCallbackMethodResult{}
-	var retval *OssCallbackResp
-	if retval, err2 = p.handler.OssCallbackMethod(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing OssCallbackMethod: "+err2.Error())
-		oprot.WriteMessageBegin("OssCallbackMethod", thrift.EXCEPTION, seqId)
+	result := OssServiceOssCallbackAvatarMethodResult{}
+	var retval *OssCallbackAvatarResp
+	if retval, err2 = p.handler.OssCallbackAvatarMethod(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing OssCallbackAvatarMethod: "+err2.Error())
+		oprot.WriteMessageBegin("OssCallbackAvatarMethod", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -721,7 +915,7 @@ func (p *ossServiceProcessorOssCallbackMethod) Process(ctx context.Context, seqI
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("OssCallbackMethod", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("OssCallbackAvatarMethod", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -739,35 +933,83 @@ func (p *ossServiceProcessorOssCallbackMethod) Process(ctx context.Context, seqI
 	return true, err
 }
 
-type OssServiceOssCallbackMethodArgs struct {
-	Req *OssCallbackReq `thrift:"req,1"`
+type ossServiceProcessorOssCallbackFopMethod struct {
+	handler OssService
 }
 
-func NewOssServiceOssCallbackMethodArgs() *OssServiceOssCallbackMethodArgs {
-	return &OssServiceOssCallbackMethodArgs{}
+func (p *ossServiceProcessorOssCallbackFopMethod) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := OssServiceOssCallbackFopMethodArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("OssCallbackFopMethod", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := OssServiceOssCallbackFopMethodResult{}
+	var retval *OssCallbackFopResp
+	if retval, err2 = p.handler.OssCallbackFopMethod(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing OssCallbackFopMethod: "+err2.Error())
+		oprot.WriteMessageBegin("OssCallbackFopMethod", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("OssCallbackFopMethod", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
 }
 
-func (p *OssServiceOssCallbackMethodArgs) InitDefault() {
+type OssServiceOssCallbackAvatarMethodArgs struct {
+	Req *OssCallbackAvatarReq `thrift:"req,1"`
 }
 
-var OssServiceOssCallbackMethodArgs_Req_DEFAULT *OssCallbackReq
+func NewOssServiceOssCallbackAvatarMethodArgs() *OssServiceOssCallbackAvatarMethodArgs {
+	return &OssServiceOssCallbackAvatarMethodArgs{}
+}
 
-func (p *OssServiceOssCallbackMethodArgs) GetReq() (v *OssCallbackReq) {
+func (p *OssServiceOssCallbackAvatarMethodArgs) InitDefault() {
+}
+
+var OssServiceOssCallbackAvatarMethodArgs_Req_DEFAULT *OssCallbackAvatarReq
+
+func (p *OssServiceOssCallbackAvatarMethodArgs) GetReq() (v *OssCallbackAvatarReq) {
 	if !p.IsSetReq() {
-		return OssServiceOssCallbackMethodArgs_Req_DEFAULT
+		return OssServiceOssCallbackAvatarMethodArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-var fieldIDToName_OssServiceOssCallbackMethodArgs = map[int16]string{
+var fieldIDToName_OssServiceOssCallbackAvatarMethodArgs = map[int16]string{
 	1: "req",
 }
 
-func (p *OssServiceOssCallbackMethodArgs) IsSetReq() bool {
+func (p *OssServiceOssCallbackAvatarMethodArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *OssServiceOssCallbackMethodArgs) Read(iprot thrift.TProtocol) (err error) {
+func (p *OssServiceOssCallbackAvatarMethodArgs) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -813,7 +1055,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OssServiceOssCallbackMethodArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OssServiceOssCallbackAvatarMethodArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -823,8 +1065,8 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *OssServiceOssCallbackMethodArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewOssCallbackReq()
+func (p *OssServiceOssCallbackAvatarMethodArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewOssCallbackAvatarReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -832,9 +1074,9 @@ func (p *OssServiceOssCallbackMethodArgs) ReadField1(iprot thrift.TProtocol) err
 	return nil
 }
 
-func (p *OssServiceOssCallbackMethodArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *OssServiceOssCallbackAvatarMethodArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("OssCallbackMethod_args"); err != nil {
+	if err = oprot.WriteStructBegin("OssCallbackAvatarMethod_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -860,7 +1102,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *OssServiceOssCallbackMethodArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *OssServiceOssCallbackAvatarMethodArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -877,43 +1119,43 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *OssServiceOssCallbackMethodArgs) String() string {
+func (p *OssServiceOssCallbackAvatarMethodArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("OssServiceOssCallbackMethodArgs(%+v)", *p)
+	return fmt.Sprintf("OssServiceOssCallbackAvatarMethodArgs(%+v)", *p)
 
 }
 
-type OssServiceOssCallbackMethodResult struct {
-	Success *OssCallbackResp `thrift:"success,0,optional"`
+type OssServiceOssCallbackAvatarMethodResult struct {
+	Success *OssCallbackAvatarResp `thrift:"success,0,optional"`
 }
 
-func NewOssServiceOssCallbackMethodResult() *OssServiceOssCallbackMethodResult {
-	return &OssServiceOssCallbackMethodResult{}
+func NewOssServiceOssCallbackAvatarMethodResult() *OssServiceOssCallbackAvatarMethodResult {
+	return &OssServiceOssCallbackAvatarMethodResult{}
 }
 
-func (p *OssServiceOssCallbackMethodResult) InitDefault() {
+func (p *OssServiceOssCallbackAvatarMethodResult) InitDefault() {
 }
 
-var OssServiceOssCallbackMethodResult_Success_DEFAULT *OssCallbackResp
+var OssServiceOssCallbackAvatarMethodResult_Success_DEFAULT *OssCallbackAvatarResp
 
-func (p *OssServiceOssCallbackMethodResult) GetSuccess() (v *OssCallbackResp) {
+func (p *OssServiceOssCallbackAvatarMethodResult) GetSuccess() (v *OssCallbackAvatarResp) {
 	if !p.IsSetSuccess() {
-		return OssServiceOssCallbackMethodResult_Success_DEFAULT
+		return OssServiceOssCallbackAvatarMethodResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-var fieldIDToName_OssServiceOssCallbackMethodResult = map[int16]string{
+var fieldIDToName_OssServiceOssCallbackAvatarMethodResult = map[int16]string{
 	0: "success",
 }
 
-func (p *OssServiceOssCallbackMethodResult) IsSetSuccess() bool {
+func (p *OssServiceOssCallbackAvatarMethodResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *OssServiceOssCallbackMethodResult) Read(iprot thrift.TProtocol) (err error) {
+func (p *OssServiceOssCallbackAvatarMethodResult) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -959,7 +1201,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OssServiceOssCallbackMethodResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OssServiceOssCallbackAvatarMethodResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -969,8 +1211,8 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *OssServiceOssCallbackMethodResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := NewOssCallbackResp()
+func (p *OssServiceOssCallbackAvatarMethodResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := NewOssCallbackAvatarResp()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -978,9 +1220,9 @@ func (p *OssServiceOssCallbackMethodResult) ReadField0(iprot thrift.TProtocol) e
 	return nil
 }
 
-func (p *OssServiceOssCallbackMethodResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *OssServiceOssCallbackAvatarMethodResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("OssCallbackMethod_result"); err != nil {
+	if err = oprot.WriteStructBegin("OssCallbackAvatarMethod_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -1006,7 +1248,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *OssServiceOssCallbackMethodResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *OssServiceOssCallbackAvatarMethodResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -1025,10 +1267,304 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *OssServiceOssCallbackMethodResult) String() string {
+func (p *OssServiceOssCallbackAvatarMethodResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("OssServiceOssCallbackMethodResult(%+v)", *p)
+	return fmt.Sprintf("OssServiceOssCallbackAvatarMethodResult(%+v)", *p)
+
+}
+
+type OssServiceOssCallbackFopMethodArgs struct {
+	Req *OssCallbackFopReq `thrift:"req,1"`
+}
+
+func NewOssServiceOssCallbackFopMethodArgs() *OssServiceOssCallbackFopMethodArgs {
+	return &OssServiceOssCallbackFopMethodArgs{}
+}
+
+func (p *OssServiceOssCallbackFopMethodArgs) InitDefault() {
+}
+
+var OssServiceOssCallbackFopMethodArgs_Req_DEFAULT *OssCallbackFopReq
+
+func (p *OssServiceOssCallbackFopMethodArgs) GetReq() (v *OssCallbackFopReq) {
+	if !p.IsSetReq() {
+		return OssServiceOssCallbackFopMethodArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_OssServiceOssCallbackFopMethodArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *OssServiceOssCallbackFopMethodArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *OssServiceOssCallbackFopMethodArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OssServiceOssCallbackFopMethodArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *OssServiceOssCallbackFopMethodArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewOssCallbackFopReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *OssServiceOssCallbackFopMethodArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("OssCallbackFopMethod_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *OssServiceOssCallbackFopMethodArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *OssServiceOssCallbackFopMethodArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("OssServiceOssCallbackFopMethodArgs(%+v)", *p)
+
+}
+
+type OssServiceOssCallbackFopMethodResult struct {
+	Success *OssCallbackFopResp `thrift:"success,0,optional"`
+}
+
+func NewOssServiceOssCallbackFopMethodResult() *OssServiceOssCallbackFopMethodResult {
+	return &OssServiceOssCallbackFopMethodResult{}
+}
+
+func (p *OssServiceOssCallbackFopMethodResult) InitDefault() {
+}
+
+var OssServiceOssCallbackFopMethodResult_Success_DEFAULT *OssCallbackFopResp
+
+func (p *OssServiceOssCallbackFopMethodResult) GetSuccess() (v *OssCallbackFopResp) {
+	if !p.IsSetSuccess() {
+		return OssServiceOssCallbackFopMethodResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_OssServiceOssCallbackFopMethodResult = map[int16]string{
+	0: "success",
+}
+
+func (p *OssServiceOssCallbackFopMethodResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *OssServiceOssCallbackFopMethodResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_OssServiceOssCallbackFopMethodResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *OssServiceOssCallbackFopMethodResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := NewOssCallbackFopResp()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *OssServiceOssCallbackFopMethodResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("OssCallbackFopMethod_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *OssServiceOssCallbackFopMethodResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *OssServiceOssCallbackFopMethodResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("OssServiceOssCallbackFopMethodResult(%+v)", *p)
 
 }

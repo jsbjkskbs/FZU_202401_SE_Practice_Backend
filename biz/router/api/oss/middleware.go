@@ -30,3 +30,18 @@ func _osscallbackmethodMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _callbackMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _osscallbackavatarmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _osscallbackfopmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

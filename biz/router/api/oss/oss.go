@@ -23,7 +23,11 @@ func Register(r *server.Hertz) {
 			_v1 := _api.Group("/v1", _v1Mw()...)
 			{
 				_oss := _v1.Group("/oss", _ossMw()...)
-				_oss.POST("/callback", append(_osscallbackmethodMw(), oss.OssCallbackMethod)...)
+				{
+					_callback := _oss.Group("/callback", _callbackMw()...)
+					_callback.POST("/avatar", append(_osscallbackavatarmethodMw(), oss.OssCallbackAvatarMethod)...)
+					_callback.POST("/fop", append(_osscallbackfopmethodMw(), oss.OssCallbackFopMethod)...)
+				}
 			}
 		}
 	}
