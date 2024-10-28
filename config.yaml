@@ -21,6 +21,14 @@ Redis:
     addr: "localhost:16379"
     password: ""
     db: 2
+  video:
+    addr: "localhost:16379"
+    password: ""
+    db: 3
+  video_info:
+    addr: "localhost:16379"
+    password: ""
+    db: 4
 
 # QPS limit for each API
 # QPS = threshold / statintervalinms

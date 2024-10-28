@@ -33,10 +33,12 @@ func newVideo(db *gorm.DB, opts ...gen.DOOption) video {
 	_video.CoverURL = field.NewString(tableName, "cover_url")
 	_video.Title = field.NewString(tableName, "title")
 	_video.Description = field.NewString(tableName, "description")
+	_video.CategoryID = field.NewInt64(tableName, "category_id")
 	_video.VisitCount = field.NewInt64(tableName, "visit_count")
 	_video.CreatedAt = field.NewInt64(tableName, "created_at")
 	_video.UpdatedAt = field.NewInt64(tableName, "updated_at")
 	_video.DeletedAt = field.NewInt64(tableName, "deleted_at")
+	_video.Status = field.NewString(tableName, "status")
 
 	_video.fillFieldMap()
 
@@ -54,10 +56,12 @@ type video struct {
 	CoverURL    field.String // 封面url
 	Title       field.String // 标题
 	Description field.String // 简介
+	CategoryID  field.Int64  // 分区ID
 	VisitCount  field.Int64  // 浏览量
 	CreatedAt   field.Int64  // 创建时间
 	UpdatedAt   field.Int64  // 修改时间
 	DeletedAt   field.Int64  // 删除时间
+	Status      field.String // 视频状态
 
 	fieldMap map[string]field.Expr
 }
@@ -80,10 +84,12 @@ func (v *video) updateTableName(table string) *video {
 	v.CoverURL = field.NewString(table, "cover_url")
 	v.Title = field.NewString(table, "title")
 	v.Description = field.NewString(table, "description")
+	v.CategoryID = field.NewInt64(table, "category_id")
 	v.VisitCount = field.NewInt64(table, "visit_count")
 	v.CreatedAt = field.NewInt64(table, "created_at")
 	v.UpdatedAt = field.NewInt64(table, "updated_at")
 	v.DeletedAt = field.NewInt64(table, "deleted_at")
+	v.Status = field.NewString(table, "status")
 
 	v.fillFieldMap()
 
@@ -108,17 +114,19 @@ func (v *video) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (v *video) fillFieldMap() {
-	v.fieldMap = make(map[string]field.Expr, 10)
+	v.fieldMap = make(map[string]field.Expr, 12)
 	v.fieldMap["id"] = v.ID
 	v.fieldMap["user_id"] = v.UserID
 	v.fieldMap["video_url"] = v.VideoURL
 	v.fieldMap["cover_url"] = v.CoverURL
 	v.fieldMap["title"] = v.Title
 	v.fieldMap["description"] = v.Description
+	v.fieldMap["category_id"] = v.CategoryID
 	v.fieldMap["visit_count"] = v.VisitCount
 	v.fieldMap["created_at"] = v.CreatedAt
 	v.fieldMap["updated_at"] = v.UpdatedAt
 	v.fieldMap["deleted_at"] = v.DeletedAt
+	v.fieldMap["status"] = v.Status
 }
 
 func (v video) clone(db *gorm.DB) video {

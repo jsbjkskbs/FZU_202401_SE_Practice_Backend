@@ -3585,6 +3585,7 @@ func (p *UserAvatarUploadReq) String() string {
 type UserAvatarUploadData struct {
 	UploadURL string `thrift:"upload_url,1" form:"upload_url" json:"upload_url" query:"upload_url"`
 	Uptoken   string `thrift:"uptoken,2" form:"uptoken" json:"uptoken" query:"uptoken"`
+	UploadKey string `thrift:"upload_key,3" form:"upload_key" json:"upload_key" query:"upload_key"`
 }
 
 func NewUserAvatarUploadData() *UserAvatarUploadData {
@@ -3602,9 +3603,14 @@ func (p *UserAvatarUploadData) GetUptoken() (v string) {
 	return p.Uptoken
 }
 
+func (p *UserAvatarUploadData) GetUploadKey() (v string) {
+	return p.UploadKey
+}
+
 var fieldIDToName_UserAvatarUploadData = map[int16]string{
 	1: "upload_url",
 	2: "uptoken",
+	3: "upload_key",
 }
 
 func (p *UserAvatarUploadData) Read(iprot thrift.TProtocol) (err error) {
@@ -3637,6 +3643,14 @@ func (p *UserAvatarUploadData) Read(iprot thrift.TProtocol) (err error) {
 		case 2:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -3693,6 +3707,17 @@ func (p *UserAvatarUploadData) ReadField2(iprot thrift.TProtocol) error {
 	p.Uptoken = _field
 	return nil
 }
+func (p *UserAvatarUploadData) ReadField3(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.UploadKey = _field
+	return nil
+}
 
 func (p *UserAvatarUploadData) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -3706,6 +3731,10 @@ func (p *UserAvatarUploadData) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField2(oprot); err != nil {
 			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
 			goto WriteFieldError
 		}
 	}
@@ -3758,6 +3787,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *UserAvatarUploadData) writeField3(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("upload_key", thrift.STRING, 3); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.UploadKey); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
 func (p *UserAvatarUploadData) String() string {

@@ -27,9 +27,16 @@ func Register(r *server.Hertz) {
 				_video.GET("/feed", append(_videofeedmethodMw(), video.VideoFeedMethod)...)
 				_video.GET("/info", append(_videoinfomethodMw(), video.VideoInfoMethod)...)
 				_video.GET("/list", append(_videolistmethodMw(), video.VideoListMethod)...)
-				_video.GET("/popular", append(_videopopularmethodMw(), video.VideoPopularMethod)...)
 				_video.POST("/publish", append(_videopublishmethodMw(), video.VideoPublishMethod)...)
 				_video.GET("/search", append(_videosearchmethodMw(), video.VideoSearchMethod)...)
+				{
+					_cover := _video.Group("/cover", _coverMw()...)
+					_cover.POST("/upload", append(_videocoveruploadmethodMw(), video.VideoCoverUploadMethod)...)
+				}
+				{
+					_custom := _video.Group("/custom", _customMw()...)
+					_custom.GET("/feed", append(_videocustomfeedmethodMw(), video.VideoCustomFeedMethod)...)
+				}
 				{
 					_submit := _video.Group("/submit", _submitMw()...)
 					_submit.GET("/all", append(_videosubmitallmethodMw(), video.VideoSubmitAllMethod)...)

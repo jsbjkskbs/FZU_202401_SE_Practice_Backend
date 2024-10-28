@@ -26,7 +26,9 @@ func Register(r *server.Hertz) {
 				{
 					_callback := _oss.Group("/callback", _callbackMw()...)
 					_callback.POST("/avatar", append(_osscallbackavatarmethodMw(), oss.OssCallbackAvatarMethod)...)
+					_callback.POST("/cover", append(_osscallbackvideocovermethodMw(), oss.OssCallbackVideoCoverMethod)...)
 					_callback.POST("/fop", append(_osscallbackfopmethodMw(), oss.OssCallbackFopMethod)...)
+					_callback.POST("/video", append(_osscallbackvideomethodMw(), oss.OssCallbackVideoMethod)...)
 				}
 			}
 		}

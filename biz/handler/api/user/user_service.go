@@ -115,6 +115,7 @@ func LoginMethod(ctx context.Context, c *app.RequestContext) {
 			ID:           fmt.Sprint(data.ID),
 			Username:     data.Username,
 			AvatarURL:    data.AvatarURL,
+			Role:         data.Role,
 			CreatedAt:    data.CreatedAt,
 			UpdatedAt:    data.UpdatedAt,
 			DeletedAt:    data.DeletedAt,
@@ -152,14 +153,7 @@ func InfoMethod(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, user.UserInfoResp{
 		Code: errno.NoError.Code,
 		Msg:  errno.NoError.Message,
-		Data: &base.User{
-			ID:        fmt.Sprint(resp.ID),
-			Username:  resp.Username,
-			AvatarURL: resp.AvatarURL,
-			CreatedAt: resp.CreatedAt,
-			UpdatedAt: resp.UpdatedAt,
-			DeletedAt: resp.DeletedAt,
-		},
+		Data: resp,
 	})
 }
 
@@ -283,7 +277,7 @@ func AvatarUploadMethod(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := service.NewUserService(ctx, c).NewAvatarUploadEvent(&req)
+	uptoken, uploadKey, err := service.NewUserService(ctx, c).NewAvatarUploadEvent(&req)
 	if err != nil {
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserAvatarUploadResp{
@@ -298,7 +292,8 @@ func AvatarUploadMethod(ctx context.Context, c *app.RequestContext) {
 		Msg:  errno.NoError.Message,
 		Data: &user.UserAvatarUploadData{
 			UploadURL: oss.UploadUrl,
-			Uptoken:   resp,
+			Uptoken:   uptoken,
+			UploadKey: uploadKey,
 		},
 	})
 }

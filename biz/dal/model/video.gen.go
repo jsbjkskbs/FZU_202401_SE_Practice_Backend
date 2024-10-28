@@ -14,10 +14,12 @@ type Video struct {
 	CoverURL    string `gorm:"column:cover_url;not null;comment:封面url" json:"cover_url"`       // 封面url
 	Title       string `gorm:"column:title;not null;comment:标题" json:"title"`                  // 标题
 	Description string `gorm:"column:description;not null;comment:简介" json:"description"`      // 简介
+	CategoryID  int64  `gorm:"column:category_id;not null;comment:分区ID" json:"category_id"`    // 分区ID
 	VisitCount  int64  `gorm:"column:visit_count;not null;comment:浏览量" json:"visit_count"`     // 浏览量
 	CreatedAt   int64  `gorm:"column:created_at;not null;comment:创建时间" json:"created_at"`      // 创建时间
 	UpdatedAt   int64  `gorm:"column:updated_at;not null;comment:修改时间" json:"updated_at"`      // 修改时间
 	DeletedAt   int64  `gorm:"column:deleted_at;comment:删除时间" json:"deleted_at"`               // 删除时间
+	Status      string `gorm:"column:status;not null;comment:视频状态" json:"status"`              // 视频状态
 }
 
 // TableName Video's table name

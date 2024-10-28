@@ -5,15 +5,19 @@ import (
 	"fmt"
 	"runtime"
 	"sfw/biz/dal"
+	"sfw/biz/dal/model"
 	"sfw/biz/mw/generator/snowflake"
 	"sfw/biz/mw/gorse"
 	"sfw/biz/mw/jwt"
 	"sfw/biz/mw/redis"
+	"sfw/biz/mw/scheduler"
 	"sfw/biz/mw/sentinel"
+	"sfw/biz/service/checker"
 	"sfw/pkg/errno"
 	"sfw/pkg/oss"
 	"sfw/pkg/utils/configure"
 	"sfw/pkg/utils/mail"
+	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
@@ -42,6 +46,7 @@ func InstallSentinel(h *server.Hertz) {
 func Initialize() {
 	checkEnv()
 	snowflake.Init()
+	scheduler.Init()
 	jwt.AccessTokenJwtInit()
 	jwt.RefreshTokenJwtInit()
 
@@ -63,6 +68,34 @@ func Initialize() {
 	if err := configureLoader.Run(); err != nil {
 		hlog.Fatal("|Config Loader|", err)
 	}
+	loadCategory()
+}
+
+func loadCategory() {
+	ticker := time.NewTicker(1 * time.Second)
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				c := dal.Executor.Category
+				list := []model.Category{}
+				err := c.WithContext(context.Background()).Scan(&list)
+				if err != nil {
+					hlog.Error("load category error", err)
+				}
+				for _, v := range list {
+					checker.CategoryMap[v.CategoryName] = v.ID
+				}
+				checker.Categories = make([]string, len(checker.CategoryMap)+1)
+				for k, v := range checker.CategoryMap {
+					checker.Categories[v] = k
+				}
+				checker.Categories = checker.Categories[1:]
+				hlog.Infof("Synchronizer: category loaded success[%v]", checker.CategoryMap)
+				ticker.Reset(1 * time.Hour)
+			}
+		}
+	}()
 }
 
 func ConfigureRegister(...any) {
@@ -178,6 +211,34 @@ func ConfigureRegister(...any) {
 					return errno.InternalServerError
 				}
 				if redis.TokenExpireTimeClient.DB, ok = tmap["db"].(int); !ok {
+					return errno.InternalServerError
+				}
+
+				vmap, ok := cmap["video"].(map[string]interface{})
+				if !ok {
+					return errno.InternalServerError
+				}
+				if redis.VideoClient.Addr, ok = vmap["addr"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if redis.VideoClient.Password, ok = vmap["password"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if redis.VideoClient.DB, ok = vmap["db"].(int); !ok {
+					return errno.InternalServerError
+				}
+
+				vimap, ok := cmap["video_info"].(map[string]interface{})
+				if !ok {
+					return errno.InternalServerError
+				}
+				if redis.VideoInfoClient.Addr, ok = vimap["addr"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if redis.VideoInfoClient.Password, ok = vimap["password"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if redis.VideoInfoClient.DB, ok = vimap["db"].(int); !ok {
 					return errno.InternalServerError
 				}
 				redis.Load()

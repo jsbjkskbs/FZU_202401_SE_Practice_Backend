@@ -386,6 +386,7 @@ type UserWithToken struct {
 	DeletedAt    int64  `thrift:"deleted_at,6" form:"deleted_at" json:"deleted_at" query:"deleted_at"`
 	AccessToken  string `thrift:"access_token,7" form:"access_token" json:"access_token" query:"access_token"`
 	RefreshToken string `thrift:"refresh_token,8" form:"refresh_token" json:"refresh_token" query:"refresh_token"`
+	Role         string `thrift:"role,9" form:"role" json:"role" query:"role"`
 }
 
 func NewUserWithToken() *UserWithToken {
@@ -427,6 +428,10 @@ func (p *UserWithToken) GetRefreshToken() (v string) {
 	return p.RefreshToken
 }
 
+func (p *UserWithToken) GetRole() (v string) {
+	return p.Role
+}
+
 var fieldIDToName_UserWithToken = map[int16]string{
 	1: "id",
 	2: "username",
@@ -436,6 +441,7 @@ var fieldIDToName_UserWithToken = map[int16]string{
 	6: "deleted_at",
 	7: "access_token",
 	8: "refresh_token",
+	9: "role",
 }
 
 func (p *UserWithToken) Read(iprot thrift.TProtocol) (err error) {
@@ -516,6 +522,14 @@ func (p *UserWithToken) Read(iprot thrift.TProtocol) (err error) {
 		case 8:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField8(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 9:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField9(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -638,6 +652,17 @@ func (p *UserWithToken) ReadField8(iprot thrift.TProtocol) error {
 	p.RefreshToken = _field
 	return nil
 }
+func (p *UserWithToken) ReadField9(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Role = _field
+	return nil
+}
 
 func (p *UserWithToken) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -675,6 +700,10 @@ func (p *UserWithToken) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField8(oprot); err != nil {
 			fieldId = 8
+			goto WriteFieldError
+		}
+		if err = p.writeField9(oprot); err != nil {
+			fieldId = 9
 			goto WriteFieldError
 		}
 	}
@@ -829,6 +858,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
+}
+
+func (p *UserWithToken) writeField9(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("role", thrift.STRING, 9); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Role); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 end error: ", p), err)
 }
 
 func (p *UserWithToken) String() string {

@@ -18,6 +18,7 @@ struct UserWithToken {
     6: i64 deleted_at;
     7: string access_token;
     8: string refresh_token;
+    9: string role;
 }
 
 struct Video {

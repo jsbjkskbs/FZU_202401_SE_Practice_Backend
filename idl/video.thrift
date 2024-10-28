@@ -4,7 +4,6 @@ include "base.thrift"
 
 struct VideoFeedReq {
     1: optional string category;
-    2: optional string access_token (api.header="Access-Token");
 }
 
 struct VideoFeedRespData {
@@ -14,6 +13,20 @@ struct VideoFeedResp {
     1: i64 code;
     2: string msg;
     3: VideoFeedRespData data;
+}
+
+struct VideoCustomFeedReq {
+    1: optional string category;
+    2: required string access_token (api.header="Access-Token");
+}
+
+struct VideoCustomFeedRespData {
+    1: list<base.Video> items;
+}
+struct VideoCustomFeedResp {
+    1: i64 code;
+    2: string msg;
+    3: VideoCustomFeedRespData data;
 }
 
 struct VideoInfoReq {
@@ -35,13 +48,30 @@ struct VideoPublishReq {
 }
 
 struct VideoPublishRespData {
-    1: string upload_video_url;
-    2: string upload_cover_url;
+    1: string upload_url;
+    2: string upload_key;
+    3: string uptoken;
 }
 struct VideoPublishResp {
     1: i64 code;
     2: string msg;
     3: VideoPublishRespData data;
+}
+
+struct VideoCoverUploadReq {
+    1: required string access_token (api.header="Access-Token");
+    2: required string video_id;
+}
+
+struct VideoCoverUploadRespData {
+    1: string upload_url;
+    2: string upload_key;
+    3: string uptoken;
+}
+struct VideoCoverUploadResp {
+    1: i64 code;
+    2: string msg;
+    3: VideoCoverUploadRespData data;
 }
 
 struct VideoCategoriesReq {
@@ -64,25 +94,14 @@ struct VideoListReq {
 
 struct VideoListRespData {
     1: list<base.Video> items;
+    2: bool is_end;
+    3: i64 page_num;
+    4: i64 page_size;
 }
 struct VideoListResp {
     1: i64 code;
     2: string msg;
     3: VideoListRespData data;
-}
-
-struct VideoPopularReq {
-    1: required i64 page_num;
-    2: required i64 page_size;
-}
-
-struct VideoPopularRespData {
-    1: list<base.Video> items;
-}
-struct VideoPopularResp {
-    1: i64 code;
-    2: string msg;
-    3: VideoPopularRespData data;
 }
 
 struct VideoSubmitAllReq {
@@ -93,6 +112,9 @@ struct VideoSubmitAllReq {
 
 struct VideoSubmitAllRespData {
     1: list<base.Video> items;
+    2: bool is_end;
+    3: i64 page_num;
+    4: i64 page_size;
 }
 struct VideoSubmitAllResp {
     1: i64 code;
@@ -108,6 +130,9 @@ struct VideoSubmitReviewReq {
 
 struct VideoSubmitReviewRespData {
     1: list<base.Video> items;
+    2: bool is_end;
+    3: i64 page_num;
+    4: i64 page_size;
 }
 struct VideoSubmitReviewResp {
     1: i64 code;
@@ -123,6 +148,9 @@ struct VideoSubmitLockedReq {
 
 struct VideoSubmitLockedRespData {
     1: list<base.Video> items;
+    2: bool is_end;
+    3: i64 page_num;
+    4: i64 page_size;
 }
 struct VideoSubmitLockedResp {
     1: i64 code;
@@ -138,6 +166,9 @@ struct VideoSubmitPassedReq {
 
 struct VideoSubmitPassedRespData {
     1: list<base.Video> items;
+    2: bool is_end;
+    3: i64 page_num;
+    4: i64 page_size;
 }
 struct VideoSubmitPassedResp {
     1: i64 code;
@@ -155,6 +186,9 @@ struct VideoSearchReq {
 
 struct VideoSearchRespData {
     1: list<base.Video> items;
+    2: bool is_end;
+    3: i64 page_num;
+    4: i64 page_size;
 }
 struct VideoSearchResp {
     1: i64 code;
@@ -164,11 +198,12 @@ struct VideoSearchResp {
 
 service VideoService {
     VideoFeedResp VideoFeedMethod(1: VideoFeedReq req) (api.get="/api/v1/video/feed");
+    VideoCustomFeedResp VideoCustomFeedMethod(1: VideoCustomFeedReq req) (api.get="/api/v1/video/custom/feed");
     VideoInfoResp VideoInfoMethod(1: VideoInfoReq req) (api.get="/api/v1/video/info");
     VideoPublishResp VideoPublishMethod(1: VideoPublishReq req) (api.post="/api/v1/video/publish");
+    VideoCoverUploadResp VideoCoverUploadMethod(1: VideoCoverUploadReq req) (api.post="/api/v1/video/cover/upload");
     VideoCategoriesResp VideoCategoriesMethod(1: VideoCategoriesReq req) (api.get="/api/v1/video/categories");
     VideoListResp VideoListMethod(1: VideoListReq req) (api.get="/api/v1/video/list");
-    VideoPopularResp VideoPopularMethod(1: VideoPopularReq req) (api.get="/api/v1/video/popular");
     VideoSubmitAllResp VideoSubmitAllMethod(1: VideoSubmitAllReq req) (api.get="/api/v1/video/submit/all");
     VideoSubmitReviewResp VideoSubmitReviewMethod(1: VideoSubmitReviewReq req) (api.get="/api/v1/video/submit/review");
     VideoSubmitLockedResp VideoSubmitLockedMethod(1: VideoSubmitLockedReq req) (api.get="/api/v1/video/submit/locked");

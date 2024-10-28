@@ -24,6 +24,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		ActivityCommentReport: newActivityCommentReport(db, opts...),
 		ActivityLike:          newActivityLike(db, opts...),
 		ActivityReport:        newActivityReport(db, opts...),
+		Category:              newCategory(db, opts...),
 		Follow:                newFollow(db, opts...),
 		Message:               newMessage(db, opts...),
 		Review:                newReview(db, opts...),
@@ -33,6 +34,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		VideoComment:          newVideoComment(db, opts...),
 		VideoCommentLike:      newVideoCommentLike(db, opts...),
 		VideoCommentReport:    newVideoCommentReport(db, opts...),
+		VideoLabel:            newVideoLabel(db, opts...),
 		VideoLike:             newVideoLike(db, opts...),
 		VideoReport:           newVideoReport(db, opts...),
 		VideoTag:              newVideoTag(db, opts...),
@@ -48,6 +50,7 @@ type Query struct {
 	ActivityCommentReport activityCommentReport
 	ActivityLike          activityLike
 	ActivityReport        activityReport
+	Category              category
 	Follow                follow
 	Message               message
 	Review                review
@@ -57,6 +60,7 @@ type Query struct {
 	VideoComment          videoComment
 	VideoCommentLike      videoCommentLike
 	VideoCommentReport    videoCommentReport
+	VideoLabel            videoLabel
 	VideoLike             videoLike
 	VideoReport           videoReport
 	VideoTag              videoTag
@@ -73,6 +77,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		ActivityCommentReport: q.ActivityCommentReport.clone(db),
 		ActivityLike:          q.ActivityLike.clone(db),
 		ActivityReport:        q.ActivityReport.clone(db),
+		Category:              q.Category.clone(db),
 		Follow:                q.Follow.clone(db),
 		Message:               q.Message.clone(db),
 		Review:                q.Review.clone(db),
@@ -82,6 +87,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		VideoComment:          q.VideoComment.clone(db),
 		VideoCommentLike:      q.VideoCommentLike.clone(db),
 		VideoCommentReport:    q.VideoCommentReport.clone(db),
+		VideoLabel:            q.VideoLabel.clone(db),
 		VideoLike:             q.VideoLike.clone(db),
 		VideoReport:           q.VideoReport.clone(db),
 		VideoTag:              q.VideoTag.clone(db),
@@ -105,6 +111,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		ActivityCommentReport: q.ActivityCommentReport.replaceDB(db),
 		ActivityLike:          q.ActivityLike.replaceDB(db),
 		ActivityReport:        q.ActivityReport.replaceDB(db),
+		Category:              q.Category.replaceDB(db),
 		Follow:                q.Follow.replaceDB(db),
 		Message:               q.Message.replaceDB(db),
 		Review:                q.Review.replaceDB(db),
@@ -114,6 +121,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		VideoComment:          q.VideoComment.replaceDB(db),
 		VideoCommentLike:      q.VideoCommentLike.replaceDB(db),
 		VideoCommentReport:    q.VideoCommentReport.replaceDB(db),
+		VideoLabel:            q.VideoLabel.replaceDB(db),
 		VideoLike:             q.VideoLike.replaceDB(db),
 		VideoReport:           q.VideoReport.replaceDB(db),
 		VideoTag:              q.VideoTag.replaceDB(db),
@@ -127,6 +135,7 @@ type queryCtx struct {
 	ActivityCommentReport *activityCommentReportDo
 	ActivityLike          *activityLikeDo
 	ActivityReport        *activityReportDo
+	Category              *categoryDo
 	Follow                *followDo
 	Message               *messageDo
 	Review                *reviewDo
@@ -136,6 +145,7 @@ type queryCtx struct {
 	VideoComment          *videoCommentDo
 	VideoCommentLike      *videoCommentLikeDo
 	VideoCommentReport    *videoCommentReportDo
+	VideoLabel            *videoLabelDo
 	VideoLike             *videoLikeDo
 	VideoReport           *videoReportDo
 	VideoTag              *videoTagDo
@@ -149,6 +159,7 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		ActivityCommentReport: q.ActivityCommentReport.WithContext(ctx),
 		ActivityLike:          q.ActivityLike.WithContext(ctx),
 		ActivityReport:        q.ActivityReport.WithContext(ctx),
+		Category:              q.Category.WithContext(ctx),
 		Follow:                q.Follow.WithContext(ctx),
 		Message:               q.Message.WithContext(ctx),
 		Review:                q.Review.WithContext(ctx),
@@ -158,6 +169,7 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		VideoComment:          q.VideoComment.WithContext(ctx),
 		VideoCommentLike:      q.VideoCommentLike.WithContext(ctx),
 		VideoCommentReport:    q.VideoCommentReport.WithContext(ctx),
+		VideoLabel:            q.VideoLabel.WithContext(ctx),
 		VideoLike:             q.VideoLike.WithContext(ctx),
 		VideoReport:           q.VideoReport.WithContext(ctx),
 		VideoTag:              q.VideoTag.WithContext(ctx),

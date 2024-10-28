@@ -3,6 +3,8 @@
 package video
 
 import (
+	auth "sfw/biz/router/api/api_auth"
+
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -53,7 +55,7 @@ func _videopopularmethodMw() []app.HandlerFunc {
 
 func _videopublishmethodMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _videosearchmethodMw() []app.HandlerFunc {
@@ -63,7 +65,7 @@ func _videosearchmethodMw() []app.HandlerFunc {
 
 func _submitMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _videosubmitallmethodMw() []app.HandlerFunc {
@@ -84,4 +86,24 @@ func _videosubmitpassedmethodMw() []app.HandlerFunc {
 func _videosubmitreviewmethodMw() []app.HandlerFunc {
 	// your code...
 	return nil
+}
+
+func _coverMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _videocoveruploadmethodMw() []app.HandlerFunc {
+	// your code...
+	return auth.Auth()
+}
+
+func _customMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _videocustomfeedmethodMw() []app.HandlerFunc {
+	// your code...
+	return auth.Auth()
 }
