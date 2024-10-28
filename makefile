@@ -10,7 +10,9 @@ hz_update:
 		hz update -module sfw -idl $$file; \
 	done
 	go mod tidy
-	
+
+gorm_gen:
+	gentool -dsn "root:123456@tcp(localhost:13306)/fulifuli?charset=utf8mb4&parseTime=True&loc=Local" -outPath ./biz/dal/query
 
 run:
 	go build

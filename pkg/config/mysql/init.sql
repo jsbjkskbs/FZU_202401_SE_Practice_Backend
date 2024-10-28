@@ -36,10 +36,12 @@ CREATE TABLE `Video` (
     `cover_url` VARCHAR(255) NOT NULL COMMENT '封面url',
     `title` VARCHAR(255) NOT NULL COMMENT '标题',
     `description` VARCHAR(255) NOT NULL COMMENT '简介',
+    `category_id` BIGINT NOT NULL COMMENT '分区ID',
     `visit_count` BIGINT NOT NULL COMMENT '浏览量',
     `created_at` BIGINT NOT NULL COMMENT '创建时间',
     `updated_at` BIGINT NOT NULL COMMENT '修改时间',
     `deleted_at` BIGINT DEFAULT NULL COMMENT '删除时间',
+    `status` VARCHAR(255) NOT NULL COMMENT '视频状态',
     PRIMARY KEY (`id`),
     KEY `idx_created_at` (`created_at`) USING BTREE COMMENT '时间查询索引',
     KEY `idx_user_id` (`user_id`) USING BTREE COMMENT '作者查询索引',
@@ -186,15 +188,26 @@ CREATE TABLE `ActivityReport` (
     KEY `idx_status` (`status`) USING BTREE COMMENT '状态索引'
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COMMENT='动态举报表';
 
-DROP TABLE IF EXISTS `Tag`;
-CREATE TABLE `Tag` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '标签ID',
-    `tag_name` VARCHAR(255) NOT NULL COMMENT '标签名称',
+DROP TABLE IF EXISTS `VideoLabel`;
+CREATE TABLE `VideoLabel` (
+    `video_id` BIGINT NOT NULL COMMENT '视频ID',
+    `label_name` VARCHAR(255) NOT NULL COMMENT '标签ID',
+    `created_at` BIGINT NOT NULL COMMENT '创建时间',
+    `deleted_at` BIGINT DEFAULT NULL COMMENT '删除时间',
+    PRIMARY KEY (`video_id`, `label_name`),
+    KEY `idx_video_id` (`video_id`) USING BTREE COMMENT '视频索引',
+    KEY `idx_label_id` (`label_name`) USING BTREE COMMENT '标签索引'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='视频标签关联表';
+
+DROP TABLE IF EXISTS `Category`;
+CREATE TABLE `Category` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '分区ID',
+    `category_name` VARCHAR(255) NOT NULL COMMENT '分区名称',
     `created_at` BIGINT NOT NULL COMMENT '创建时间',
     `deleted_at` BIGINT DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `idx_tag_name` (`tag_name`) USING BTREE COMMENT '标签名称唯一索引'
-) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COMMENT='标签静态库表';
+    UNIQUE KEY `idx_category_name` (`category_name`) USING BTREE COMMENT '分类名称唯一索引'
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COMMENT='分类静态库表';
 
 DROP TABLE IF EXISTS `VideoTag`;
 CREATE TABLE `VideoTag` (
@@ -245,3 +258,12 @@ CREATE TABLE `VideoCommentLike` (
     PRIMARY KEY (`user_id`, `comment_id`),
     KEY `idx_comment_id` (`comment_id`) USING BTREE COMMENT '视频评论索引'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='视频评论点赞表';
+
+INSERT INTO `Category` (`id`, `category_name`, `created_at`, `deleted_at`) 
+    VALUES 
+    (1, '游戏', 0, 0),
+    (2, '知识', 0, 0),
+    (3, '生活', 0, 0),
+    (4, '军事', 0, 0),
+    (5, '影音', 0, 0),
+    (6, '新闻', 0, 0);

@@ -10,7 +10,6 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/adaptor"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
@@ -21,27 +20,23 @@ func OssCallbackAvatarMethod(ctx context.Context, c *app.RequestContext) {
 	var req oss.OssCallbackAvatarReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		hlog.Info("bind and validate failed", err)
 		c.Status(consts.StatusBadRequest)
 		return
 	}
 
 	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
 	if err != nil {
-		hlog.Warn("get http request failed", err)
 		c.Status(consts.StatusBadRequest)
 		return
 	}
 	ok, err := osspk.Verify(httpReq)
 	if err != nil || !ok {
-		hlog.Warn("verify oss callback failed", err)
 		c.Status(consts.StatusBadRequest)
 		return
 	}
 
 	err = service.NewOssService(ctx, c).NewCallbackAvatarEvent(&req)
 	if err != nil {
-		hlog.Warn("update avatar url failed", err)
 		c.Status(consts.StatusOK)
 		return
 	}
@@ -63,4 +58,58 @@ func OssCallbackFopMethod(ctx context.Context, c *app.RequestContext) {
 	resp := new(oss.OssCallbackFopResp)
 
 	c.JSON(consts.StatusOK, resp)
+}
+
+// OssCallbackVideoMethod .
+// @router /api/v1/oss/callback/video [POST]
+func OssCallbackVideoMethod(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req oss.OssCallbackVideoReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.Status(consts.StatusBadRequest)
+		return
+	}
+	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
+	if err != nil {
+		c.Status(consts.StatusBadRequest)
+		return
+	}
+	ok, err := osspk.Verify(httpReq)
+	if err != nil || !ok {
+		c.Status(consts.StatusBadRequest)
+		return
+	}
+
+	err = service.NewOssService(ctx, c).NewCallbackVideoEvent(&req)
+	if err != nil {
+		c.Status(consts.StatusBadRequest)
+		return
+	}
+
+	c.Status(consts.StatusOK)
+}
+
+// OssCallbackVideoCoverMethod .
+// @router /api/v1/oss/callback/video/cover [POST]
+func OssCallbackVideoCoverMethod(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req oss.OssCallbackVideoCoverReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.Status(consts.StatusBadRequest)
+		return
+	}
+	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
+	if err != nil {
+		c.Status(consts.StatusBadRequest)
+		return
+	}
+	ok, err := osspk.Verify(httpReq)
+	if err != nil || !ok {
+		c.Status(consts.StatusBadRequest)
+		return
+	}
+
+	c.JSON(consts.StatusOK, consts.StatusOK)
 }

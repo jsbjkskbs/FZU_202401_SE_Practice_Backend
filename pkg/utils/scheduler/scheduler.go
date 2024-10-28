@@ -131,10 +131,10 @@ func ihash(s string) int {
 // 延迟任务异步调度，异步返回是否接受任务（与同步返回的区别在于，启动任务是异步的）
 func (s *Scheduler) Start(key string, offset time.Duration, f func(), c ...chan<- bool) {
 	if s.debug {
-		s.log(s.logPrefix, fmt.Sprintf("Key: %s", key), "is started", s.logSuffix)
+		s.log(s.logPrefix, fmt.Sprintf("[Key: %s]", key), " is started", s.logSuffix)
 	}
 	if len(c) > 1 {
-		s.log(s.logPrefix, fmt.Sprintf("Key: %s", key), "has more than one channel", s.logSuffix)
+		s.log(s.logPrefix, fmt.Sprintf("[Key: %s]", key), " has more than one channel", s.logSuffix)
 	}
 	if len(c) > 0 {
 		go func() { c[0] <- s.StartWithReturn(key, offset, f) }()
@@ -158,7 +158,7 @@ func (s *Scheduler) StartWithReturn(key string, offset time.Duration, f func()) 
 	defer s.partitionMutex[shard].Unlock()
 	if _, existed := s.taskRegister.Load(key); existed {
 		if s.debug {
-			s.log(s.logPrefix, fmt.Sprintf("Shard: %d, Key: %s", shard, key), "is already running[rejected by existed key]", s.logSuffix)
+			s.log(s.logPrefix, fmt.Sprintf("[Shard: %d, Key: %s]", shard, key), " is already running[rejected by existed key]", s.logSuffix)
 		}
 		return false
 	}
@@ -172,7 +172,7 @@ func (s *Scheduler) StartWithReturn(key string, offset time.Duration, f func()) 
 			return
 		case <-(*signal).Done():
 			if s.debug {
-				s.log(s.logPrefix, fmt.Sprintf("Shard: %d, Key: %s", shard, key), "is stopped", s.logSuffix)
+				s.log(s.logPrefix, fmt.Sprintf("[Shard: %d, Key: %s]", shard, key), " is stopped", s.logSuffix)
 			}
 			ticker.Stop()
 			return
@@ -181,7 +181,7 @@ func (s *Scheduler) StartWithReturn(key string, offset time.Duration, f func()) 
 			s.partitionMutex[gshard].Lock()
 			s.taskRegister.Delete(key)
 			s.partitionMutex[gshard].Unlock()
-			s.log(s.logPrefix, fmt.Sprintf("Shard: %d, Key: %s", shard, key), "is done", s.logSuffix)
+			s.log(s.logPrefix, fmt.Sprintf("[Shard: %d, Key: %s]", shard, key), " is done", s.logSuffix)
 			ticker.Stop()
 			return
 		}
@@ -201,10 +201,10 @@ func (s *Scheduler) StartWithReturn(key string, offset time.Duration, f func()) 
 // 强制覆盖任务异步调度，异步返回是否接受任务（与同步返回的区别在于，启动任务是异步的）
 func (s *Scheduler) ForceStartTask(key string, offset time.Duration, f func(), c ...chan<- bool) {
 	if s.debug {
-		s.log(s.logPrefix, fmt.Sprintf("Key: %s", key), "is forced to start", s.logSuffix)
+		s.log(s.logPrefix, fmt.Sprintf("[Key: %s]", key), " is forced to start", s.logSuffix)
 	}
 	if len(c) > 1 {
-		s.log(s.logPrefix, fmt.Sprintf("Key: %s", key), "has more than one channel", s.logSuffix)
+		s.log(s.logPrefix, fmt.Sprintf("[Key: %s]", key), " has more than one channel", s.logSuffix)
 	}
 	if len(c) > 0 {
 		go func() { c[0] <- s.ForceStartTaskWithReturn(key, offset, f) }()
@@ -229,7 +229,7 @@ func (s *Scheduler) ForceStartTaskWithReturn(key string, offset time.Duration, f
 	defer s.partitionMutex[shard].Unlock()
 	if cancel, existed := s.taskRegister.Load(key); existed {
 		if s.debug {
-			s.log(s.logPrefix, fmt.Sprintf("Shard: %d, Key: %s", shard, key), "try to force to stop the existed task", s.logSuffix)
+			s.log(s.logPrefix, fmt.Sprintf("[Shard: %d, Key: %s]", shard, key), " try to force to stop the existed task", s.logSuffix)
 		}
 		cancel.(context.CancelFunc)()
 		s.taskRegister.Delete(key)
@@ -244,7 +244,7 @@ func (s *Scheduler) ForceStartTaskWithReturn(key string, offset time.Duration, f
 			return
 		case <-(*signal).Done():
 			if s.debug {
-				s.log(s.logPrefix, fmt.Sprintf("Shard: %d, Key: %s", shard, key), "is stopped", s.logSuffix)
+				s.log(s.logPrefix, fmt.Sprintf("[Shard: %d, Key: %s]", shard, key), " is stopped", s.logSuffix)
 			}
 			ticker.Stop()
 			return
@@ -253,7 +253,7 @@ func (s *Scheduler) ForceStartTaskWithReturn(key string, offset time.Duration, f
 			s.partitionMutex[gshard].Lock()
 			s.taskRegister.Delete(key)
 			s.partitionMutex[gshard].Unlock()
-			s.log(s.logPrefix, fmt.Sprintf("Shard: %d, Key: %s", shard, key), "is done", s.logSuffix)
+			s.log(s.logPrefix, fmt.Sprintf("[Shard: %d, Key: %s]", shard, key), " is done", s.logSuffix)
 			ticker.Stop()
 			return
 		}

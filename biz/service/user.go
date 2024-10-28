@@ -12,6 +12,7 @@ import (
 	"sfw/biz/mw/jwt"
 	"sfw/biz/mw/redis"
 	"sfw/biz/service/checker"
+	"sfw/biz/service/common"
 	"sfw/biz/service/service_converter"
 	"sfw/pkg/errno"
 	"sfw/pkg/oss"
@@ -110,7 +111,7 @@ func (service *UserService) NewSecurityEmailCodeEvent(req *user.UserSecurityEmai
 	return nil
 }
 
-func (service *UserService) NewLoginEvent(req *user.UserLoginReq) (*model.User, error) {
+func (service *UserService) NewLoginEvent(req *user.UserLoginReq) (*base.UserWithToken, error) {
 	u := dal.Executor.User
 	user, err := u.WithContext(service.ctx).Where(u.Username.Eq(req.Username)).First()
 	if err != nil {
@@ -128,11 +129,10 @@ func (service *UserService) NewLoginEvent(req *user.UserLoginReq) (*model.User, 
 			return nil, errno.MfaAuthFailed
 		}
 	}
-	user.AvatarURL = oss.Key2Url(user.AvatarURL)
-	return user, nil
+	return service_converter.UserWithTokenDal2Resp(user), nil
 }
 
-func (service *UserService) NewInfoEvent(req *user.UserInfoReq) (*model.User, error) {
+func (service *UserService) NewInfoEvent(req *user.UserInfoReq) (*base.User, error) {
 	u := dal.Executor.User
 	uid, err := strconv.ParseInt(req.UserID, 10, 64)
 	if err != nil {
@@ -145,8 +145,7 @@ func (service *UserService) NewInfoEvent(req *user.UserInfoReq) (*model.User, er
 	if user == nil {
 		return nil, errno.CustomError.WithMessage("用户不存在")
 	}
-	user.AvatarURL = oss.Key2Url(user.AvatarURL)
-	return user, nil
+	return service_converter.UserDal2Resp(user), nil
 }
 
 func (service *UserService) NewFollowerCountEvent(req *user.UserFollowerCountReq) (int64, error) {
@@ -189,21 +188,21 @@ func (service *UserService) NewLikeCountEvent(req *user.UserLikeCountReq) (int64
 	return sum, nil
 }
 
-func (service *UserService) NewAvatarUploadEvent(req *user.UserAvatarUploadReq) (string, error) {
+func (service *UserService) NewAvatarUploadEvent(req *user.UserAvatarUploadReq) (string, string, error) {
 	uid, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
 	if err != nil {
-		return "", errno.AccessTokenInvalid
+		return "", "", errno.AccessTokenInvalid
 	}
 	id, err := strconv.ParseInt(uid, 10, 64)
 	if err != nil {
-		return "", errno.InternalServerError
+		return "", "", errno.InternalServerError
 	}
 
-	uptoken, err := oss.UploadAvatar(uid, id)
+	uptoken, uploadKey, err := oss.UploadAvatar(uid, id)
 	if err != nil {
-		return "", errno.InternalServerError
+		return "", "", errno.InternalServerError
 	}
-	return uptoken, nil
+	return uptoken, uploadKey, nil
 }
 
 func (service *UserService) NewMfaQrcodeEvent(req *user.UserMfaQrcodeReq) (*user.UserMfaQrcodeData, error) {
@@ -251,8 +250,7 @@ func (service *UserService) NewMfaBindEvent(req *user.UserMfaBindReq) error {
 }
 
 func (service *UserService) NewSearchEvent(req *user.UserSearchReq) (*[]*base.User, bool, int64, int64, error) {
-	req.PageNum = max(req.PageNum, 0)
-	req.PageSize = max(req.PageSize, 1)
+	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 
 	u := dal.Executor.User
 	users, count, err := u.
@@ -261,9 +259,6 @@ func (service *UserService) NewSearchEvent(req *user.UserSearchReq) (*[]*base.Us
 		FindByPage(int(req.PageNum*req.PageSize), int(req.PageSize))
 	if err != nil {
 		return nil, true, req.PageNum, req.PageSize, errno.DatabaseCallError
-	}
-	for _, user := range users {
-		user.AvatarURL = oss.Key2Url(user.AvatarURL)
 	}
 	return service_converter.UserListDal2Resp(&users), count <= (req.PageNum+1)*req.PageSize, req.PageNum, req.PageSize, nil
 }

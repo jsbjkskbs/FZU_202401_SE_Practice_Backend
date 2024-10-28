@@ -5,9 +5,13 @@ package video
 import (
 	"context"
 
+	video "sfw/biz/model/api/video"
+	"sfw/biz/service"
+	"sfw/pkg/errno"
+	"sfw/pkg/utils"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	video "sfw/biz/model/api/video"
 )
 
 // VideoFeedMethod .
@@ -17,13 +21,31 @@ func VideoFeedMethod(ctx context.Context, c *app.RequestContext) {
 	var req video.VideoFeedReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusBadRequest, video.VideoFeedResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(video.VideoFeedResp)
+	resp, err := service.NewVideoService(ctx, c).NewFeedEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, video.VideoFeedResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, video.VideoFeedResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: &video.VideoFeedRespData{
+			Items: resp,
+		},
+	})
 }
 
 // VideoInfoMethod .
@@ -33,13 +55,29 @@ func VideoInfoMethod(ctx context.Context, c *app.RequestContext) {
 	var req video.VideoInfoReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusBadRequest, video.VideoInfoResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(video.VideoInfoResp)
+	resp, err := service.NewVideoService(ctx, c).NewInfoEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, video.VideoInfoResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, video.VideoInfoResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }
 
 // VideoPublishMethod .
@@ -49,13 +87,29 @@ func VideoPublishMethod(ctx context.Context, c *app.RequestContext) {
 	var req video.VideoPublishReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusBadRequest, video.VideoPublishResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(video.VideoPublishResp)
+	resp, err := service.NewVideoService(ctx, c).NewPublishEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, video.VideoPublishResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, video.VideoPublishResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }
 
 // VideoCategoriesMethod .
@@ -65,13 +119,31 @@ func VideoCategoriesMethod(ctx context.Context, c *app.RequestContext) {
 	var req video.VideoCategoriesReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusBadRequest, video.VideoCategoriesResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(video.VideoCategoriesResp)
+	resp, err := service.NewVideoService(ctx, c).NewCategoriesEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, video.VideoCategoriesResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, video.VideoCategoriesResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: &video.VideoCategoriesRespData{
+			Items: resp,
+		},
+	})
 }
 
 // VideoListMethod .
@@ -81,29 +153,29 @@ func VideoListMethod(ctx context.Context, c *app.RequestContext) {
 	var req video.VideoListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusBadRequest, video.VideoListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(video.VideoListResp)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// VideoPopularMethod .
-// @router /api/v1/video/popular [GET]
-func VideoPopularMethod(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req video.VideoPopularReq
-	err = c.BindAndValidate(&req)
+	resp, err := service.NewVideoService(ctx, c).NewListEvent(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, video.VideoListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(video.VideoPopularResp)
-
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, video.VideoListResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }
 
 // VideoSubmitAllMethod .
@@ -113,13 +185,29 @@ func VideoSubmitAllMethod(ctx context.Context, c *app.RequestContext) {
 	var req video.VideoSubmitAllReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusBadRequest, video.VideoSubmitAllResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(video.VideoSubmitAllResp)
+	resp, err := service.NewVideoService(ctx, c).NewSubmitAllEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, video.VideoSubmitAllResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, video.VideoSubmitAllResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }
 
 // VideoSubmitReviewMethod .
@@ -129,13 +217,29 @@ func VideoSubmitReviewMethod(ctx context.Context, c *app.RequestContext) {
 	var req video.VideoSubmitReviewReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusBadRequest, video.VideoSubmitReviewResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(video.VideoSubmitReviewResp)
+	resp, err := service.NewVideoService(ctx, c).NewSubmitReviewEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, video.VideoSubmitReviewResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, video.VideoSubmitReviewResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }
 
 // VideoSubmitLockedMethod .
@@ -145,13 +249,29 @@ func VideoSubmitLockedMethod(ctx context.Context, c *app.RequestContext) {
 	var req video.VideoSubmitLockedReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusBadRequest, video.VideoSubmitLockedResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(video.VideoSubmitLockedResp)
+	resp, err := service.NewVideoService(ctx, c).NewSubmitLockedEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, video.VideoSubmitLockedResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, video.VideoSubmitLockedResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }
 
 // VideoSubmitPassedMethod .
@@ -161,13 +281,29 @@ func VideoSubmitPassedMethod(ctx context.Context, c *app.RequestContext) {
 	var req video.VideoSubmitPassedReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusBadRequest, video.VideoSubmitPassedResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(video.VideoSubmitPassedResp)
+	resp, err := service.NewVideoService(ctx, c).NewSumitPassedEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, video.VideoSubmitPassedResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, video.VideoSubmitPassedResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }
 
 // VideoSearchMethod .
@@ -177,11 +313,93 @@ func VideoSearchMethod(ctx context.Context, c *app.RequestContext) {
 	var req video.VideoSearchReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusBadRequest, video.VideoSearchResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(video.VideoSearchResp)
+	resp, err := service.NewVideoService(ctx, c).NewSearchEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, video.VideoSearchResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, video.VideoSearchResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
+}
+
+// VideoCoverUploadMethod .
+// @router /api/v1/video/cover/upload [POST]
+func VideoCoverUploadMethod(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req video.VideoCoverUploadReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusBadRequest, video.VideoCoverUploadResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	resp, err := service.NewVideoService(ctx, c).NewCoverUploadEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, video.VideoCoverUploadResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, video.VideoCoverUploadResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
+}
+
+// VideoCustomFeedMethod .
+// @router /api/v1/video/custom/feed [GET]
+func VideoCustomFeedMethod(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req video.VideoCustomFeedReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusBadRequest, video.VideoCustomFeedResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	resp, err := service.NewVideoService(ctx, c).NewCustomFeedEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, video.VideoCustomFeedResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, video.VideoCustomFeedResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: &video.VideoCustomFeedRespData{
+			Items: resp,
+		},
+	})
 }

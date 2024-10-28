@@ -94,6 +94,7 @@ struct UserAvatarUploadReq {
 struct UserAvatarUploadData {
     1: string upload_url;
     2: string uptoken;
+    3: string upload_key;
 }
 struct UserAvatarUploadResp {
     1: i64 code;
