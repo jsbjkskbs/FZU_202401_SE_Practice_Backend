@@ -39,8 +39,8 @@ Sentinel:
 
 OSS:
   bucket: ""
-  secret_key: ""
   access_key: ""
+  secret_key: ""
   domain: ""
   upload_url: ""
   callback_url: ""
