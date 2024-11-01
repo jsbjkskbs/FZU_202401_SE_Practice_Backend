@@ -13,13 +13,24 @@ import (
 
 func Auth() []app.HandlerFunc {
 	return append(make([]app.HandlerFunc, 0),
-		jwt.AccessTokenJwtMiddleware.MiddlewareFunc(),
+		checkTokenVaild,
 		checkTokenExpireTime,
 	)
 }
 
+func checkTokenVaild(ctx context.Context, c *app.RequestContext) {
+	if !jwt.IsAccessTokenAvailable(ctx, c) {
+		c.JSON(consts.StatusOK, utils.H{
+			"code": errno.AccessTokenInvalid.Code,
+			"msg":  errno.AccessTokenInvalid.Message,
+		})
+		c.Abort()
+	}
+}
+
 func checkTokenExpireTime(ctx context.Context, c *app.RequestContext) {
-	uid, err := jwt.CovertJWTPayloadToString(ctx, c)
+	token := string(c.GetHeader("Access-Token"))
+	payload, expire, err := jwt.GetBasicDataFromAccessToken(token)
 	if err != nil {
 		c.JSON(consts.StatusOK, utils.H{
 			"code": errno.AccessTokenInvalid.Code,
@@ -28,7 +39,16 @@ func checkTokenExpireTime(ctx context.Context, c *app.RequestContext) {
 		c.Abort()
 		return
 	}
-	tokenExpireTime := jwt.GetAccessTokenExpireAt(ctx, c).Add(-jwt.AccessTokenExpireTime).Unix()
+	uid, ok := payload.(string)
+	if !ok {
+		c.JSON(consts.StatusOK, utils.H{
+			"code": errno.AccessTokenInvalid.Code,
+			"msg":  errno.AccessTokenInvalid.Message,
+		})
+		c.Abort()
+		return
+	}
+	tokenExpireTime := expire.Add(-jwt.AccessTokenExpireTime).Unix()
 	latestExpireTime, err := redis.TokenExpireTimeGet(uid)
 	if err != nil {
 		c.JSON(consts.StatusOK, utils.H{

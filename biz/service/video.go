@@ -37,7 +37,7 @@ func NewVideoService(ctx context.Context, c *app.RequestContext) *VideoService {
 }
 
 func (service *VideoService) NewPublishEvent(req *video.VideoPublishReq) (*video.VideoPublishRespData, error) {
-	uid, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
+	id, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
@@ -49,7 +49,7 @@ func (service *VideoService) NewPublishEvent(req *video.VideoPublishReq) (*video
 
 	videoId := generator.VideoIDGenerator.Generate()
 	kv := map[string]interface{}{
-		"user_id":     uid,
+		"user_id":     fmt.Sprint(id),
 		"title":       req.Title,
 		"description": req.Description,
 		"category":    req.Category,
@@ -81,11 +81,7 @@ func (service *VideoService) NewPublishEvent(req *video.VideoPublishReq) (*video
 }
 
 func (service *VideoService) NewCoverUploadEvent(req *video.VideoCoverUploadReq) (*video.VideoCoverUploadRespData, error) {
-	uid, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
-	if err != nil {
-		return nil, errno.AccessTokenInvalid
-	}
-	userId, err := strconv.ParseInt(uid, 10, 64)
+	userId, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
@@ -147,16 +143,16 @@ func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) ([]*base.Vide
 }
 
 func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) ([]*base.Video, error) {
-	uid, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
+	userId, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
 
 	vids := []string{}
 	if req.Category != nil {
-		vids, err = gorse.GetRecommendWithCategory(uid, *req.Category, 10)
+		vids, err = gorse.GetRecommendWithCategory(fmt.Sprint(userId), *req.Category, 10)
 	} else {
-		vids, err = gorse.GetRecommend(uid, 10)
+		vids, err = gorse.GetRecommend(fmt.Sprint(userId), 10)
 	}
 
 	v := dal.Executor.Video
@@ -220,13 +216,13 @@ func (service *VideoService) NewListEvent(req *video.VideoListReq) (*video.Video
 }
 
 func (service *VideoService) NewSubmitAllEvent(req *video.VideoSubmitAllReq) (*video.VideoSubmitAllRespData, error) {
-	uid, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
+	userId, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
 
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	resp, count, err := common.QueryVideoSubmit(uid, "", req.PageNum, req.PageSize)
+	resp, count, err := common.QueryVideoSubmit(fmt.Sprint(userId), "", req.PageNum, req.PageSize)
 	if err != nil {
 		return nil, err
 	}
@@ -240,13 +236,13 @@ func (service *VideoService) NewSubmitAllEvent(req *video.VideoSubmitAllReq) (*v
 }
 
 func (service *VideoService) NewSubmitReviewEvent(req *video.VideoSubmitReviewReq) (*video.VideoSubmitReviewRespData, error) {
-	uid, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
+	userId, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
 
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	resp, count, err := common.QueryVideoSubmit(uid, "review", req.PageNum, req.PageSize)
+	resp, count, err := common.QueryVideoSubmit(fmt.Sprint(userId), "review", req.PageNum, req.PageSize)
 	if err != nil {
 		return nil, err
 	}
@@ -260,13 +256,13 @@ func (service *VideoService) NewSubmitReviewEvent(req *video.VideoSubmitReviewRe
 }
 
 func (service *VideoService) NewSubmitLockedEvent(req *video.VideoSubmitLockedReq) (*video.VideoSubmitLockedRespData, error) {
-	uid, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
+	userId, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
 
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	resp, count, err := common.QueryVideoSubmit(uid, "locked", req.PageNum, req.PageSize)
+	resp, count, err := common.QueryVideoSubmit(fmt.Sprint(userId), "locked", req.PageNum, req.PageSize)
 	if err != nil {
 		return nil, err
 	}
@@ -280,13 +276,13 @@ func (service *VideoService) NewSubmitLockedEvent(req *video.VideoSubmitLockedRe
 }
 
 func (service *VideoService) NewSumitPassedEvent(req *video.VideoSubmitPassedReq) (*video.VideoSubmitPassedRespData, error) {
-	uid, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
+	userId, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
 
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	resp, count, err := common.QueryVideoSubmit(uid, "passed", req.PageNum, req.PageSize)
+	resp, count, err := common.QueryVideoSubmit(fmt.Sprint(userId), "passed", req.PageNum, req.PageSize)
 	if err != nil {
 		return nil, err
 	}

@@ -40,7 +40,8 @@ func NewChatService(ctx context.Context, c *app.RequestContext, conn *websocket.
 }
 
 func (service *ChatService) Login() error {
-	uids, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
+	token := string(service.c.GetHeader("Access-Token"))
+	uids, err := jwt.ExtractUserIdFromAccessToken(token)
 	if err != nil {
 		return err
 	}
@@ -69,7 +70,8 @@ func (service *ChatService) Login() error {
 }
 
 func (service *ChatService) Logout() error {
-	uids, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
+	token := string(service.c.GetHeader("Access-Token"))
+	uids, err := jwt.ExtractUserIdFromAccessToken(token)
 	if err != nil {
 		return err
 	}
@@ -79,7 +81,8 @@ func (service *ChatService) Logout() error {
 }
 
 func (service *ChatService) ReadOfflineMessage() error {
-	uids, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
+	token := string(service.c.GetHeader("Access-Token"))
+	uids, err := jwt.ExtractUserIdFromAccessToken(token)
 	if err != nil {
 		return errno.AccessTokenInvalid
 	}
