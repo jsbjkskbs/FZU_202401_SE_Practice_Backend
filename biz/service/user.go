@@ -8,14 +8,13 @@ import (
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/user"
 	"sfw/biz/model/base"
-	"sfw/biz/mw/generator/snowflake"
 	"sfw/biz/mw/jwt"
 	"sfw/biz/mw/redis"
-	"sfw/biz/service/checker"
 	"sfw/biz/service/common"
-	"sfw/biz/service/service_converter"
+	"sfw/biz/service/model_converter"
 	"sfw/pkg/errno"
 	"sfw/pkg/oss"
+	"sfw/pkg/utils/checker"
 	"sfw/pkg/utils/encrypt"
 	"sfw/pkg/utils/generator"
 	"sfw/pkg/utils/mail"
@@ -42,41 +41,40 @@ func (service *UserService) NewRegisterEvent(req *user.UserRegisterReq) error {
 	// check username and password
 	err := checker.CheckUsername(req.Username)
 	if err != nil {
-		return errno.CustomError.WithMessage(err.Error())
+		return errno.CustomError.WithMessage("用户名不符合规范")
 	}
 	err = checker.CheckPassword(req.Password)
 	if err != nil {
-		return errno.CustomError.WithMessage(err.Error())
+		return errno.CustomError.WithMessage("密码不符合规范")
 	}
 
 	// check email and code
 	code, err := redis.EmailCodeGet(req.Email)
 	if err != nil {
-		return errno.DatabaseCallError
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	if code != req.Code {
 		return errno.CustomError.WithMessage("验证码错误、不存在或已过期")
 	}
 
 	// check username and email exist
-	u := dal.Executor.User
-	exist, err := u.WithContext(service.ctx).Where(u.Username.Eq(req.Username)).Count()
+	exist, err := exquery.QueryUserExistByUsernameOrEmail(req.Username, req.Email)
 	if err != nil {
-		return errno.DatabaseCallError
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist != 0 {
-		return errno.CustomError.WithMessage("用户名已存在")
+	if exist {
+		return errno.CustomError.WithMessage("用户名或邮箱已存在")
 	}
 
 	// create user
-	err = u.WithContext(service.ctx).Create(&model.User{
-		ID:       snowflake.UserIDGenerator.Generate(),
+	err = exquery.InsertUser(&model.User{
+		ID:       generator.UserIDGenerator.Generate(),
 		Username: req.Username,
 		Password: encrypt.EncryptBySHA256WithSalt(req.Password, encrypt.GetSalt()),
 		Email:    req.Email,
 	})
 	if err != nil {
-		return errno.DatabaseCallError
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
 
 	// not need to check error, because it's not a critical operation
@@ -85,37 +83,37 @@ func (service *UserService) NewRegisterEvent(req *user.UserRegisterReq) error {
 }
 
 func (service *UserService) NewSecurityEmailCodeEvent(req *user.UserSecurityEmailCodeReq) error {
-	u := dal.Executor.User
-	exist, err := u.WithContext(service.ctx).Where(u.Email.Eq(req.Email)).Count()
+	exist, err := exquery.QueryUserExistByEmail(req.Email)
 	if err != nil {
-		return errno.DatabaseCallError
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist != 0 {
+	if exist {
 		return errno.CustomError.WithMessage("邮箱已存在")
 	}
 
-	codeFormat := generator.AlnumGeneratorOption{
-		Length:    6,
-		UseNumber: true,
-	}
-	code := generator.GenerateAlnumString(codeFormat)
+	code := generator.GenerateAlnumString(
+		generator.AlnumGeneratorOption{
+			Length:    6,
+			UseNumber: true,
+		},
+	)
 	if err := redis.EmailCodeStore(req.Email, code); err != nil {
-		return errno.DatabaseCallError
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	email := &mail.Email{
-		To:      []string{req.Email},
-		Subject: "noreply",
-		HTML:    fmt.Sprintf(mail.HTML, "FuliFuli", code, "FuliFuli", "FuliFuli"),
-	}
-	mail.Station.Send(email)
+	mail.Station.Send(
+		&mail.Email{
+			To:      []string{req.Email},
+			Subject: "noreply",
+			HTML:    fmt.Sprintf(mail.HTML, "FuliFuli", code, "FuliFuli", "FuliFuli"),
+		},
+	)
 	return nil
 }
 
 func (service *UserService) NewLoginEvent(req *user.UserLoginReq) (*base.UserWithToken, error) {
-	u := dal.Executor.User
-	user, err := u.WithContext(service.ctx).Where(u.Username.Eq(req.Username)).First()
+	user, err := exquery.QueryUserByUsername(req.Username)
 	if err != nil {
-		return nil, errno.DatabaseCallError
+		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 	if user == nil {
 		return nil, errno.CustomError.WithMessage("用户不存在")
@@ -129,47 +127,44 @@ func (service *UserService) NewLoginEvent(req *user.UserLoginReq) (*base.UserWit
 			return nil, errno.MfaAuthFailed
 		}
 	}
-	return service_converter.UserWithTokenDal2Resp(user), nil
+	return model_converter.UserWithTokenDal2Resp(user), nil
 }
 
 func (service *UserService) NewInfoEvent(req *user.UserInfoReq) (*base.User, error) {
-	u := dal.Executor.User
 	uid, err := strconv.ParseInt(req.UserID, 10, 64)
 	if err != nil {
-		return nil, errno.ParamInvalid
+		return nil, errno.ParamInvalid.WithInnerError(err)
 	}
-	user, err := u.WithContext(service.ctx).Where(u.ID.Eq(uid)).First()
+	user, err := exquery.QueryUserByID(uid)
 	if err != nil {
-		return nil, errno.DatabaseCallError
+		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 	if user == nil {
 		return nil, errno.CustomError.WithMessage("用户不存在")
 	}
-	return service_converter.UserDal2Resp(user), nil
+	return model_converter.UserDal2Resp(user), nil
 }
 
 func (service *UserService) NewFollowerCountEvent(req *user.UserFollowerCountReq) (int64, error) {
-	f := dal.Executor.Follow
 	uid, err := strconv.ParseInt(req.UserID, 10, 64)
 	if err != nil {
-		return 0, errno.ParamInvalid
+		return 0, errno.ParamInvalid.WithInnerError(err)
 	}
-	count, err := f.WithContext(service.ctx).Where(f.FollowedID.Eq(uid)).Count()
+	count, err := exquery.QueryFollowerCountByUserID(uid)
 	if err != nil {
-		return 0, errno.DatabaseCallError
+		return 0, errno.DatabaseCallError.WithInnerError(err)
 	}
 	return count, nil
 }
 
 func (service *UserService) NewFollowingCountEvent(req *user.UserFollowingCountReq) (int64, error) {
-	f := dal.Executor.Follow
 	uid, err := strconv.ParseInt(req.UserID, 10, 64)
 	if err != nil {
-		return 0, errno.ParamInvalid
+		return 0, errno.ParamInvalid.WithInnerError(err)
 	}
-	count, err := f.WithContext(service.ctx).Where(f.FollowerID.Eq(uid)).Count()
+	count, err := exquery.QueryFollowingCountByUserID(uid)
 	if err != nil {
-		return 0, errno.DatabaseCallError
+		return 0, errno.DatabaseCallError.WithInnerError(err)
 	}
 	return count, nil
 }
@@ -177,12 +172,12 @@ func (service *UserService) NewFollowingCountEvent(req *user.UserFollowingCountR
 func (service *UserService) NewLikeCountEvent(req *user.UserLikeCountReq) (int64, error) {
 	uid, err := strconv.ParseInt(req.UserID, 10, 64)
 	if err != nil {
-		return 0, errno.ParamInvalid
+		return 0, errno.ParamInvalid.WithInnerError(err)
 	}
 
 	sum, err := exquery.QueryUserLikeCount(uid)
 	if err != nil {
-		return 0, errno.DatabaseCallError
+		return 0, errno.DatabaseCallError.WithInnerError(err)
 	}
 
 	return sum, nil
@@ -191,16 +186,16 @@ func (service *UserService) NewLikeCountEvent(req *user.UserLikeCountReq) (int64
 func (service *UserService) NewAvatarUploadEvent(req *user.UserAvatarUploadReq) (string, string, error) {
 	uid, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
 	if err != nil {
-		return "", "", errno.AccessTokenInvalid
+		return "", "", errno.AccessTokenInvalid.WithInnerError(err)
 	}
 	id, err := strconv.ParseInt(uid, 10, 64)
 	if err != nil {
-		return "", "", errno.InternalServerError
+		return "", "", errno.CustomError.WithMessage("用户ID错误")
 	}
 
 	uptoken, uploadKey, err := oss.UploadAvatar(uid, id)
 	if err != nil {
-		return "", "", errno.InternalServerError
+		return "", "", errno.InternalServerError.WithInnerError(err)
 	}
 	return uptoken, uploadKey, nil
 }
@@ -208,12 +203,12 @@ func (service *UserService) NewAvatarUploadEvent(req *user.UserAvatarUploadReq) 
 func (service *UserService) NewMfaQrcodeEvent(req *user.UserMfaQrcodeReq) (*user.UserMfaQrcodeData, error) {
 	id, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
 	if err != nil {
-		return nil, errno.AccessTokenInvalid
+		return nil, errno.AccessTokenInvalid.WithInnerError(err)
 	}
 
 	info, err := mfa.NewAuthController(id, "", "").GenerateTOTP()
 	if err != nil {
-		return nil, errno.MfaGenerateFailed
+		return nil, errno.MfaGenerateFailed.WithInnerError(err)
 	}
 
 	qrcode := encrypt.EncodeUrlToQrcodeAsPng(info.Url)
@@ -226,11 +221,11 @@ func (service *UserService) NewMfaQrcodeEvent(req *user.UserMfaQrcodeReq) (*user
 func (service *UserService) NewMfaBindEvent(req *user.UserMfaBindReq) error {
 	id, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
 	if err != nil {
-		return errno.AccessTokenInvalid
+		return errno.AccessTokenInvalid.WithInnerError(err)
 	}
 	uid, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
-		return errno.InternalServerError
+		return errno.InternalServerError.WithInnerError(err)
 	}
 
 	passed := mfa.NewAuthController(id, req.Code, req.Secret).VerifyTOTP()
@@ -244,7 +239,7 @@ func (service *UserService) NewMfaBindEvent(req *user.UserMfaBindReq) error {
 		MfaSecret: req.Secret,
 	})
 	if err != nil {
-		return errno.DatabaseCallError
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	return nil
 }
@@ -260,7 +255,7 @@ func (service *UserService) NewSearchEvent(req *user.UserSearchReq) (*[]*base.Us
 	if err != nil {
 		return nil, true, req.PageNum, req.PageSize, errno.DatabaseCallError
 	}
-	return service_converter.UserListDal2Resp(&users), count <= (req.PageNum+1)*req.PageSize, req.PageNum, req.PageSize, nil
+	return model_converter.UserListDal2Resp(&users), count <= (req.PageNum+1)*req.PageSize, req.PageNum, req.PageSize, nil
 }
 
 func (service *UserService) NewSecurityPasswordRetrieve(req *user.UserPasswordRetrieveReq) error {
@@ -269,7 +264,6 @@ func (service *UserService) NewSecurityPasswordRetrieve(req *user.UserPasswordRe
 		err  error
 	)
 
-	u := dal.Executor.User
 	code := generator.GenerateAlnumString(generator.AlnumGeneratorOption{
 		Length:    6,
 		UseNumber: true,
@@ -277,9 +271,9 @@ func (service *UserService) NewSecurityPasswordRetrieve(req *user.UserPasswordRe
 
 	switch req.Otype {
 	case "email":
-		user, err = u.WithContext(service.ctx).Where(u.Email.Eq(req.Oid)).First()
+		user, err = exquery.QueryUserByEmail(req.Oid)
 		if err != nil {
-			return errno.DatabaseCallError
+			return errno.DatabaseCallError.WithInnerError(err)
 		}
 		if user == nil {
 			return errno.CustomError.WithMessage("邮箱不存在")
@@ -290,7 +284,7 @@ func (service *UserService) NewSecurityPasswordRetrieve(req *user.UserPasswordRe
 			HTML:    fmt.Sprintf(mail.HTML, "FuliFuli", code, "FuliFuli", "FuliFuli"),
 		})
 		if err := redis.EmailCodeStore(req.Oid, code); err != nil {
-			return errno.DatabaseCallError
+			return errno.DatabaseCallError.WithInnerError(err)
 		}
 	default:
 		return errno.CustomError.WithMessage("暂不支持该类型: " + req.Otype)
@@ -305,24 +299,28 @@ func (service *UserService) NewSecurityPasswordRetrieve(req *user.UserPasswordRe
 
 func (servcie *UserService) NewSecurityPasswordResetEvent(req *user.UserPasswordResetReq) error {
 	if err := checker.CheckPassword(req.Password); err != nil {
-		return err
+		return errno.CustomError.WithMessage("密码不符合规范")
 	}
 
 	switch req.Otype {
 	case "email":
 		code, err := redis.EmailCodeGet(req.Oid)
 		if err != nil {
-			return errno.DatabaseCallError
+			return errno.DatabaseCallError.WithInnerError(err)
 		}
 		if code != req.Code {
 			return errno.CustomError.WithMessage("验证码错误、不存在或已过期")
 		}
-		u := dal.Executor.User
-		_, err = u.WithContext(servcie.ctx).
-			Where(u.Email.Eq(req.Oid)).
-			Update(u.Password, encrypt.EncryptBySHA256WithSalt(req.Password, encrypt.GetSalt()))
+		uid, err := strconv.ParseInt(req.Oid, 10, 64)
 		if err != nil {
-			return errno.DatabaseCallError
+			return errno.CustomError.WithMessage("用户ID错误")
+		}
+		err = exquery.UpdateUserWithId(&model.User{
+			ID:       uid,
+			Password: encrypt.EncryptBySHA256WithSalt(req.Password, encrypt.GetSalt()),
+		})
+		if err != nil {
+			return errno.DatabaseCallError.WithInnerError(err)
 		}
 		go redis.EmailCodeDel(req.Oid)
 	default:

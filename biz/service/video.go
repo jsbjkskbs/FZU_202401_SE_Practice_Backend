@@ -7,16 +7,16 @@ import (
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/video"
 	"sfw/biz/model/base"
-	"sfw/biz/mw/generator/snowflake"
 	"sfw/biz/mw/gorse"
 	"sfw/biz/mw/jwt"
 	"sfw/biz/mw/redis"
-	"sfw/biz/mw/scheduler"
-	"sfw/biz/service/checker"
 	"sfw/biz/service/common"
-	"sfw/biz/service/service_converter"
+	"sfw/biz/service/model_converter"
 	"sfw/pkg/errno"
 	"sfw/pkg/oss"
+	"sfw/pkg/utils/checker"
+	"sfw/pkg/utils/generator"
+	"sfw/pkg/utils/scheduler"
 	"strconv"
 	"strings"
 
@@ -47,7 +47,7 @@ func (service *VideoService) NewPublishEvent(req *video.VideoPublishReq) (*video
 		return nil, err
 	}
 
-	videoId := snowflake.VideoIDGenerator.Generate()
+	videoId := generator.VideoIDGenerator.Generate()
 	kv := map[string]interface{}{
 		"user_id":     uid,
 		"title":       req.Title,
@@ -143,7 +143,7 @@ func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) ([]*base.Vide
 		}
 		videos = append(videos, video)
 	}
-	return service_converter.VideoListDal2Resp(&videos)
+	return model_converter.VideoListDal2Resp(&videos)
 }
 
 func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) ([]*base.Video, error) {
@@ -172,7 +172,7 @@ func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) (
 		}
 		videos = append(videos, video)
 	}
-	return service_converter.VideoListDal2Resp(&videos)
+	return model_converter.VideoListDal2Resp(&videos)
 }
 
 func (service *VideoService) NewCategoriesEvent(req *video.VideoCategoriesReq) ([]string, error) {
@@ -190,7 +190,7 @@ func (service *VideoService) NewInfoEvent(req *video.VideoInfoReq) (*base.Video,
 	if err != nil {
 		return nil, errno.DatabaseCallError
 	}
-	return service_converter.VideoDal2Resp(video), nil
+	return model_converter.VideoDal2Resp(video), nil
 }
 
 func (service *VideoService) NewListEvent(req *video.VideoListReq) (*video.VideoListRespData, error) {
@@ -207,7 +207,7 @@ func (service *VideoService) NewListEvent(req *video.VideoListReq) (*video.Video
 	if err != nil {
 		return nil, errno.DatabaseCallError
 	}
-	items, err := service_converter.VideoListDal2Resp(&result)
+	items, err := model_converter.VideoListDal2Resp(&result)
 	if err != nil {
 		return nil, errno.InternalServerError
 	}
@@ -332,7 +332,7 @@ func (service *VideoService) NewSearchEvent(req *video.VideoSearchReq) (*video.V
 		return nil, errno.DatabaseCallError
 	}
 
-	resp, err := service_converter.VideoListDal2Resp(&result)
+	resp, err := model_converter.VideoListDal2Resp(&result)
 	if err != nil {
 		return nil, errno.InternalServerError
 	}

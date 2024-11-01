@@ -1,4 +1,4 @@
-package service_converter
+package model_converter
 
 import (
 	"context"
@@ -7,8 +7,8 @@ import (
 	"sfw/biz/dal/model"
 	"sfw/biz/model/base"
 	"sfw/biz/mw/redis"
-	"sfw/biz/service/checker"
 	"sfw/pkg/oss"
+	"sfw/pkg/utils/checker"
 )
 
 func VideoDal2Resp(v *model.Video) *base.Video {
