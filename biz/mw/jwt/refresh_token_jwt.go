@@ -3,9 +3,11 @@ package jwt
 import (
 	"context"
 	"encoding/json"
+	"sfw/pkg/errno"
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
+	gojwt "github.com/golang-jwt/jwt/v4"
 )
 
 // IsRefreshTokenAvailable 刷新Token是否有效
@@ -44,30 +46,31 @@ func IsRefreshTokenAvailable(ctx context.Context, c *app.RequestContext) bool {
 }
 
 // GetRefreshTokenExpireAt 获取刷新Token过期时间
-func GetRefreshTokenExpireAt(ctx context.Context, c *app.RequestContext) time.Time {
-	claims, _ := RefreshTokenJwtMiddleware.GetClaimsFromJWT(ctx, c)
-	switch v := claims["exp"].(type) {
-	case nil:
-		return time.Time{}
+func GetRefreshTokenExpireAt(token string) (time.Time, error) {
+	data, err := AccessTokenJwtMiddleware.ParseTokenString(token)
+	if err != nil {
+		return time.Time{}, err
+	}
+	exp, ok := data.Claims.(gojwt.MapClaims)["exp"]
+	if !ok {
+		return time.Time{}, errno.AccessTokenInvalid
+	}
+	switch v := exp.(type) {
 	case float64:
-		return time.Unix(int64(v), 0)
+		return time.Unix(int64(v), 0), nil
 	case json.Number:
 		n, err := v.Int64()
 		if err != nil {
-			return time.Time{}
+			return time.Time{}, err
 		}
-		return time.Unix(n, 0)
+		return time.Unix(n, 0), nil
 	default:
-		return time.Time{}
+		return time.Time{}, errno.AccessTokenInvalid
 	}
 }
 
 // GenerateRefreshToken 生成刷新Token
-func GenerateRefreshToken(ctx context.Context, c *app.RequestContext) string {
-	v, _ := c.Get(AccessTokenJwtMiddleware.IdentityKey)
-	data := PayloadIdentityData{
-		Uid: v.(*PayloadIdentityData).Uid,
-	}
-	tokenString, _, _ := AccessTokenJwtMiddleware.TokenGenerator(data)
+func GenerateRefreshToken(uid string) string {
+	tokenString, _, _ := RefreshTokenJwtMiddleware.TokenGenerator(PayloadIdentityData{Uid: uid})
 	return tokenString
 }

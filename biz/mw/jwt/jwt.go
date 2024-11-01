@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/hertz-contrib/jwt"
 )
 
@@ -43,11 +42,13 @@ func AccessTokenJwtInit() {
 	var err error
 	AccessTokenJwtMiddleware, err = jwt.New(&jwt.HertzJWTMiddleware{
 		Key:                         []byte("access_token_key_123456"),
-		TokenLookup:                 "query:token,header:Access-Token",
+		TokenLookup:                 "query:Access-Token,header:Access-Token",
 		Timeout:                     AccessTokenExpireTime,
 		IdentityKey:                 AccessTokenIdentityKey,
 		WithoutDefaultTokenHeadName: true,
 
+		// this func would never be called now
+		// use GenerateAccessToken instead
 		Authenticator: func(ctx context.Context, c *app.RequestContext) (interface{}, error) {
 			var loginRequest user.UserLoginReq
 			if err := c.BindAndValidate(&loginRequest); err != nil {
@@ -76,8 +77,6 @@ func AccessTokenJwtInit() {
 		},
 
 		LoginResponse: func(ctx context.Context, c *app.RequestContext, code int, message string, time time.Time) {
-			hlog.CtxInfof(ctx, "Login Successfully. IP: "+c.ClientIP())
-			c.Set("Access-Token", message)
 		},
 
 		HTTPStatusMessageFunc: func(e error, ctx context.Context, c *app.RequestContext) string {
@@ -100,6 +99,8 @@ func RefreshTokenJwtInit() {
 		IdentityKey:                 RefreshTokenIdentityKey,
 		WithoutDefaultTokenHeadName: true,
 
+		// this func would never be called now
+		// use GenerateAccessToken instead
 		// 只在LoginHandler触发
 		Authenticator: func(ctx context.Context, c *app.RequestContext) (interface{}, error) {
 			uid, exist := c.Get("user_id")
@@ -126,11 +127,9 @@ func RefreshTokenJwtInit() {
 		},
 
 		LoginResponse: func(ctx context.Context, c *app.RequestContext, code int, message string, time time.Time) {
-			c.Set("Refresh-Token", message)
 		},
 
 		Authorizator: func(data interface{}, ctx context.Context, c *app.RequestContext) bool {
-			c.Set("user_id", data.(*PayloadIdentityData).Uid)
 			return true
 		},
 	})

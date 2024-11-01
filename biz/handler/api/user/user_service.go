@@ -105,9 +105,6 @@ func LoginMethod(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	jwt.AccessTokenJwtMiddleware.LoginHandler(ctx, c)
-	jwt.RefreshTokenJwtMiddleware.LoginHandler(ctx, c)
-
 	c.JSON(consts.StatusOK, user.UserLoginResp{
 		Code: errno.NoError.Code,
 		Msg:  errno.NoError.Message,
@@ -119,8 +116,8 @@ func LoginMethod(ctx context.Context, c *app.RequestContext) {
 			CreatedAt:    data.CreatedAt,
 			UpdatedAt:    data.UpdatedAt,
 			DeletedAt:    data.DeletedAt,
-			AccessToken:  c.GetString("Access-Token"),
-			RefreshToken: c.GetString("Refresh-Token"),
+			AccessToken:  jwt.GenerateAccessToken(fmt.Sprint(data.ID)),
+			RefreshToken: jwt.GenerateRefreshToken(fmt.Sprint(data.ID)),
 		},
 	})
 }

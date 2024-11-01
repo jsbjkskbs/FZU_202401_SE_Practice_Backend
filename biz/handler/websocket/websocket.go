@@ -22,8 +22,8 @@ var (
 
 func Handler(ctx context.Context, c *app.RequestContext) {
 	err := upgrader.Upgrade(c, func(conn *websocket.Conn) {
-		_, err := jwt.CovertJWTPayloadToString(ctx, c)
-		if err != nil {
+		tokenValid := jwt.IsAccessTokenAvailable(ctx, c)
+		if !tokenValid {
 			conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf(badMessage,
 				errno.AccessTokenInvalidErrorCode, errno.AccessTokenInvalidErrorMsg)))
 			return

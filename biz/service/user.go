@@ -118,6 +118,9 @@ func (service *UserService) NewLoginEvent(req *user.UserLoginReq) (*base.UserWit
 	if user == nil {
 		return nil, errno.CustomError.WithMessage("用户不存在")
 	}
+	if user.Password != encrypt.EncryptBySHA256WithSalt(req.Password, encrypt.GetSalt()) {
+		return nil, errno.CustomError.WithMessage("密码错误")
+	}
 	if user.MfaEnable {
 		if req.MfaCode == nil {
 			return nil, errno.MfaAuthFailed
@@ -184,16 +187,12 @@ func (service *UserService) NewLikeCountEvent(req *user.UserLikeCountReq) (int64
 }
 
 func (service *UserService) NewAvatarUploadEvent(req *user.UserAvatarUploadReq) (string, string, error) {
-	uid, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
+	id, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return "", "", errno.AccessTokenInvalid.WithInnerError(err)
 	}
-	id, err := strconv.ParseInt(uid, 10, 64)
-	if err != nil {
-		return "", "", errno.CustomError.WithMessage("用户ID错误")
-	}
 
-	uptoken, uploadKey, err := oss.UploadAvatar(uid, id)
+	uptoken, uploadKey, err := oss.UploadAvatar(fmt.Sprint(id), id)
 	if err != nil {
 		return "", "", errno.InternalServerError.WithInnerError(err)
 	}
@@ -201,12 +200,12 @@ func (service *UserService) NewAvatarUploadEvent(req *user.UserAvatarUploadReq) 
 }
 
 func (service *UserService) NewMfaQrcodeEvent(req *user.UserMfaQrcodeReq) (*user.UserMfaQrcodeData, error) {
-	id, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
+	id, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid.WithInnerError(err)
 	}
 
-	info, err := mfa.NewAuthController(id, "", "").GenerateTOTP()
+	info, err := mfa.NewAuthController(fmt.Sprint(id), "", "").GenerateTOTP()
 	if err != nil {
 		return nil, errno.MfaGenerateFailed.WithInnerError(err)
 	}
@@ -219,22 +218,18 @@ func (service *UserService) NewMfaQrcodeEvent(req *user.UserMfaQrcodeReq) (*user
 }
 
 func (service *UserService) NewMfaBindEvent(req *user.UserMfaBindReq) error {
-	id, err := jwt.CovertJWTPayloadToString(service.ctx, service.c)
+	id, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return errno.AccessTokenInvalid.WithInnerError(err)
 	}
-	uid, err := strconv.ParseInt(id, 10, 64)
-	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
-	}
 
-	passed := mfa.NewAuthController(id, req.Code, req.Secret).VerifyTOTP()
+	passed := mfa.NewAuthController(fmt.Sprint(id), req.Code, req.Secret).VerifyTOTP()
 	if !passed {
 		return errno.MfaAuthFailed
 	}
 
 	u := dal.Executor.User
-	_, err = u.WithContext(service.ctx).Where(u.ID.Eq(uid)).Updates(model.User{
+	_, err = u.WithContext(service.ctx).Where(u.ID.Eq(id)).Updates(model.User{
 		MfaEnable: true,
 		MfaSecret: req.Secret,
 	})
@@ -289,7 +284,7 @@ func (service *UserService) NewSecurityPasswordRetrieve(req *user.UserPasswordRe
 	default:
 		return errno.CustomError.WithMessage("暂不支持该类型: " + req.Otype)
 	}
-	err = redis.TokenExpireTimeStore(fmt.Sprint(user.ID), time.Now().Unix(), jwt.AccessTokenExpireTime+1*time.Minute)
+	err = redis.TokenExpireTimeStore(fmt.Sprint(user.ID), time.Now().Unix(), jwt.AccessTokenExpireTime-1*time.Minute)
 	if err != nil {
 		return errno.DatabaseCallError
 	}

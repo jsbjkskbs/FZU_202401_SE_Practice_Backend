@@ -4,18 +4,16 @@ import (
 	"context"
 	"encoding/json"
 	"sfw/pkg/errno"
+	"strconv"
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
+	gojwt "github.com/golang-jwt/jwt/v4"
 )
 
 // GenerateAccessToken 生成AccessToken
-func GenerateAccessToken(ctx context.Context, c *app.RequestContext) string {
-	v, _ := c.Get(RefreshTokenJwtMiddleware.IdentityKey)
-	data := PayloadIdentityData{
-		Uid: v.(*PayloadIdentityData).Uid,
-	}
-	tokenString, _, _ := AccessTokenJwtMiddleware.TokenGenerator(data)
+func GenerateAccessToken(uid string) string {
+	tokenString, _, _ := AccessTokenJwtMiddleware.TokenGenerator(PayloadIdentityData{Uid: uid})
 	return tokenString
 }
 
@@ -55,38 +53,56 @@ func IsAccessTokenAvailable(ctx context.Context, c *app.RequestContext) bool {
 }
 
 // GetAccessTokenExpireAt 获取AccessToken过期时间
-func GetAccessTokenExpireAt(ctx context.Context, c *app.RequestContext) time.Time {
-	claims, _ := AccessTokenJwtMiddleware.GetClaimsFromJWT(ctx, c)
-	switch v := claims["exp"].(type) {
-	case nil:
-		return time.Time{}
-	case float64:
-		return time.Unix(int64(v), 0)
-	case json.Number:
-		n, err := v.Int64()
-		if err != nil {
-			return time.Time{}
-		}
-		return time.Unix(n, 0)
-	default:
-		return time.Time{}
-	}
+func GetAccessTokenExpireAt(token string) (time.Time, error) {
+	_, expiredAt, err := GetBasicDataFromAccessToken(token)
+	return expiredAt, err
 }
 
-// ExtractUserIdWhenAuthorized 提取用户ID
-func ExtractUserIdWhenAuthorized(ctx context.Context, c *app.RequestContext) (interface{}, error) {
-	data, exist := c.Get(AccessTokenJwtMiddleware.IdentityKey)
-	if !exist {
-		return nil, errno.AccessTokenInvalid
-	}
-	return data, nil
-}
-
-// CovertJWTPayloadToString 将JWT Payload转换为字符串
-func CovertJWTPayloadToString(ctx context.Context, c *app.RequestContext) (string, error) {
-	data, err := ExtractUserIdWhenAuthorized(ctx, c)
+func ExtractUserIdFromAccessToken(token string) (string, error) {
+	payload, _, err := GetBasicDataFromAccessToken(token)
 	if err != nil {
 		return ``, err
 	}
-	return data.(map[string]interface{})["Uid"].(string), nil
+	uid, ok := payload.(string)
+	if !ok {
+		return ``, errno.AccessTokenInvalid
+	}
+	return uid, nil
+}
+
+func ConvertJWTPayloadToInt64(token string) (int64, error) {
+	uid, err := ExtractUserIdFromAccessToken(token)
+	if err != nil {
+		return 0, err
+	}
+	return strconv.ParseInt(uid, 10, 64)
+}
+
+func GetBasicDataFromAccessToken(token string) (interface{}, time.Time, error) {
+	data, err := AccessTokenJwtMiddleware.ParseTokenString(token)
+	if err != nil {
+		return ``, time.Time{}, err
+	}
+	expiredAt := time.Time{}
+	exp, ok := data.Claims.(gojwt.MapClaims)["exp"]
+	if !ok {
+		return ``, time.Time{}, errno.AccessTokenInvalid
+	}
+	switch v := exp.(type) {
+	case float64:
+		expiredAt = time.Unix(int64(v), 0)
+	case json.Number:
+		n, err := v.Int64()
+		if err != nil {
+			return ``, time.Time{}, err
+		}
+		expiredAt = time.Unix(n, 0)
+	default:
+		return ``, time.Time{}, errno.AccessTokenInvalid
+	}
+	uid, ok := data.Claims.(gojwt.MapClaims)[AccessTokenIdentityKey].(map[string]interface{})["Uid"]
+	if !ok {
+		return ``, time.Time{}, errno.AccessTokenInvalid
+	}
+	return uid, expiredAt, nil
 }
