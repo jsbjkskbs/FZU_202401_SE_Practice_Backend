@@ -6,17 +6,17 @@ import (
 	"runtime"
 	"sfw/biz/dal"
 	"sfw/biz/dal/model"
-	"sfw/biz/mw/generator/snowflake"
 	"sfw/biz/mw/gorse"
 	"sfw/biz/mw/jwt"
 	"sfw/biz/mw/redis"
-	"sfw/biz/mw/scheduler"
 	"sfw/biz/mw/sentinel"
-	"sfw/biz/service/checker"
 	"sfw/pkg/errno"
 	"sfw/pkg/oss"
+	"sfw/pkg/utils/checker"
 	"sfw/pkg/utils/configure"
+	"sfw/pkg/utils/generator"
 	"sfw/pkg/utils/mail"
+	"sfw/pkg/utils/scheduler"
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -45,7 +45,7 @@ func InstallSentinel(h *server.Hertz) {
 
 func Initialize() {
 	checkEnv()
-	snowflake.Init()
+	generator.Init()
 	scheduler.Init()
 	jwt.AccessTokenJwtInit()
 	jwt.RefreshTokenJwtInit()

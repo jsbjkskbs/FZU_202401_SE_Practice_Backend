@@ -23,6 +23,11 @@ func (e *Errno) WithMessage(message string) *Errno {
 	return e
 }
 
+func (e *Errno) WithInnerError(err error) *Errno {
+	e.InnerErrno = ConvertErrno(err)
+	return e
+}
+
 func (e *Errno) PrintStack() string {
 	p := e.InnerErrno
 	stack := fmt.Sprint("main error: ", e.Error(), "\n")

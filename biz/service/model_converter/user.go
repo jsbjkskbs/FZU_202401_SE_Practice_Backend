@@ -1,4 +1,4 @@
-package service_converter
+package model_converter
 
 import (
 	"fmt"

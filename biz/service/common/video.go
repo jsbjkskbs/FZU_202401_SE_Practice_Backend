@@ -4,7 +4,7 @@ import (
 	"context"
 	"sfw/biz/dal"
 	"sfw/biz/model/base"
-	"sfw/biz/service/service_converter"
+	"sfw/biz/service/model_converter"
 	"sfw/pkg/errno"
 	"strconv"
 
@@ -34,7 +34,7 @@ func QueryVideoSubmit(userId, status string, pageNum, pageSize int64) (*[]*base.
 		Where(conditions...).
 		FindByPage(int(pageNum), int(pageSize))
 
-	videos, err := service_converter.VideoListDal2Resp(&result)
+	videos, err := model_converter.VideoListDal2Resp(&result)
 	if err != nil {
 		return nil, 0, err
 	}
