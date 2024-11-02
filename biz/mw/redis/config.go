@@ -11,4 +11,6 @@ var (
 	TokenExpireTimeClient _Redis
 	VideoClient           _Redis
 	VideoInfoClient       _Redis
+	ActivityInfoClient    _Redis
+	CommentInfoClient     _Redis
 )

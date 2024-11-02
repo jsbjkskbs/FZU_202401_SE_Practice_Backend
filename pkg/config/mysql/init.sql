@@ -48,12 +48,12 @@ CREATE TABLE `Video` (
     KEY `idx_title` (`title`) USING BTREE COMMENT '标题查询索引'
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COMMENT='视频表';
 
-
 DROP TABLE IF EXISTS `VideoComment`;
 CREATE TABLE `VideoComment` (
     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '评论ID',
     `user_id` BIGINT NOT NULL COMMENT '用户ID',
     `video_id` BIGINT NOT NULL COMMENT '视频ID',
+    `root_id` BIGINT NOT NULL COMMENT '根评论ID',
     `parent_id` BIGINT NOT NULL COMMENT '父评论ID',
     `content` VARCHAR(255) NOT NULL COMMENT '评论内容',
     `created_at` BIGINT NOT NULL COMMENT '创建时间',
@@ -76,14 +76,24 @@ CREATE TABLE `Follow` (
     KEY `idx_followed_id` (`followed_id`) USING BTREE COMMENT '被关注者索引'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='关注关系表';
 
+DROP TABLE IF EXISTS `Image`;
+CREATE TABLE `Image` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '图片ID',
+    `user_id` BIGINT NOT NULL COMMENT '用户ID',
+    `image_url` VARCHAR(255) NOT NULL COMMENT '图片url',
+    `created_at` BIGINT NOT NULL COMMENT '创建时间',
+    `deleted_at` BIGINT DEFAULT NULL COMMENT '删除时间',
+    PRIMARY KEY (`id`),
+    KEY `idx_user_id` (`user_id`) USING BTREE COMMENT '用户索引'
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COMMENT='图片表';
 
 DROP TABLE IF EXISTS `Activity`;
 CREATE TABLE `Activity` (
     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '动态ID',
     `user_id` BIGINT NOT NULL COMMENT '用户ID',
     `content` VARCHAR(255) NOT NULL COMMENT '动态内容',
-    `media_url` VARCHAR(255) COMMENT '媒体URL',
-    `visit_count` BIGINT NOT NULL COMMENT '浏览量',
+    `ref_activity_id` BIGINT DEFAULT NULL COMMENT '引用动态ID',
+    `ref_video_id` BIGINT DEFAULT NULL COMMENT '引用视频ID' ,
     `created_at` BIGINT NOT NULL COMMENT '创建时间',
     `updated_at` BIGINT NOT NULL COMMENT '修改时间',
     `deleted_at` BIGINT DEFAULT NULL COMMENT '删除时间',
@@ -93,6 +103,15 @@ CREATE TABLE `Activity` (
     KEY `idx_user_created` (`user_id`, `created_at`) USING BTREE COMMENT '用户与创建时间索引'
 ) ENGINE=InnoDB  AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COMMENT='动态表';
 
+DROP TABLE IF EXISTS `ActivityImages`;
+CREATE TABLE `ActivityImages` (
+    `image_id` BIGINT NOT NULL COMMENT '图片ID',
+    `activity_id` BIGINT NOT NULL COMMENT '动态ID',
+    `created_at` BIGINT NOT NULL COMMENT '创建时间',
+    `deleted_at` BIGINT DEFAULT NULL COMMENT '删除时间',
+    PRIMARY KEY (`image_id`, `activity_id`),
+    KEY `idx_activity_id` (`activity_id`) USING BTREE COMMENT '动态索引'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='图片表';
 
 DROP TABLE IF EXISTS `VideoReport`;
 CREATE TABLE `VideoReport` (
@@ -127,6 +146,7 @@ CREATE TABLE `ActivityComment` (
     `user_id` BIGINT NOT NULL COMMENT '用户ID',
     `activity_id` BIGINT NOT NULL COMMENT '动态ID',
     `parent_id` BIGINT NOT NULL COMMENT '父评论ID',
+    `root_id` BIGINT NOT NULL COMMENT '根评论ID',
     `content` VARCHAR(255) NOT NULL COMMENT '评论内容',
     `created_at` BIGINT NOT NULL COMMENT '创建时间',
     `updated_at` BIGINT NOT NULL COMMENT '修改时间',
@@ -267,3 +287,22 @@ INSERT INTO `Category` (`id`, `category_name`, `created_at`, `deleted_at`)
     (4, '军事', 0, 0),
     (5, '影音', 0, 0),
     (6, '新闻', 0, 0);
+
+DROP TRIGGER IF EXISTS BEFORE_INSERT_ACTIVITY;
+DELIMITER //
+CREATE TRIGGER BEFORE_INSERT_ACTIVITY
+BEFORE INSERT ON `Activity`
+FOR EACH ROW
+BEGIN
+    IF NEW.ref_activity_id = 0 THEN
+        SET NEW.ref_activity_id = NULL;
+    END IF;
+    IF NEW.ref_video_id = 0 THEN
+        SET NEW.ref_video_id = NULL;
+    END IF;
+    IF NEW.ref_activity_id IS NOT NULL AND NEW.ref_video_id IS NOT NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error: ref_activity_id and ref_video_id cannot both be non-null.';
+    END IF;
+END//
+DELIMITER ;

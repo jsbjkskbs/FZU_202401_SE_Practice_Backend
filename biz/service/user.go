@@ -263,7 +263,7 @@ func (service *UserService) NewSearchEvent(req *user.UserSearchReq) (*user.UserS
 	}, nil
 }
 
-func (service *UserService) NewSecurityPasswordRetrieve(req *user.UserPasswordRetrieveReq) error {
+func (service *UserService) NewSecurityPasswordRetrieveEmail(req *user.UserPasswordRetrieveEmailReq) error {
 	var (
 		user *model.User
 		err  error
@@ -274,25 +274,20 @@ func (service *UserService) NewSecurityPasswordRetrieve(req *user.UserPasswordRe
 		UseNumber: true,
 	})
 
-	switch req.Otype {
-	case "email":
-		user, err = exquery.QueryUserByEmail(req.Oid)
-		if err != nil {
-			return errno.DatabaseCallError.WithInnerError(err)
-		}
-		if user == nil {
-			return errno.CustomError.WithMessage("邮箱不存在")
-		}
-		mail.Station.Send(&mail.Email{
-			To:      []string{req.Oid},
-			Subject: "noreply",
-			HTML:    fmt.Sprintf(mail.HTML, "FuliFuli", code, "FuliFuli", "FuliFuli"),
-		})
-		if err := redis.EmailCodeStore(req.Oid, code); err != nil {
-			return errno.DatabaseCallError.WithInnerError(err)
-		}
-	default:
-		return errno.CustomError.WithMessage("暂不支持该类型: " + req.Otype)
+	user, err = exquery.QueryUserByEmail(req.Email)
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
+	}
+	if user == nil {
+		return errno.CustomError.WithMessage("邮箱不存在")
+	}
+	mail.Station.Send(&mail.Email{
+		To:      []string{req.Email},
+		Subject: "noreply",
+		HTML:    fmt.Sprintf(mail.HTML, "FuliFuli", code, "FuliFuli", "FuliFuli"),
+	})
+	if err := redis.EmailCodeStore(req.Email, code); err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	err = redis.TokenExpireTimeStore(fmt.Sprint(user.ID), time.Now().Unix(), jwt.AccessTokenExpireTime-1*time.Minute)
 	if err != nil {
@@ -302,34 +297,29 @@ func (service *UserService) NewSecurityPasswordRetrieve(req *user.UserPasswordRe
 	return nil
 }
 
-func (servcie *UserService) NewSecurityPasswordResetEvent(req *user.UserPasswordResetReq) error {
+func (servcie *UserService) NewSecurityPasswordResetEmailEvent(req *user.UserPasswordResetEmailReq) error {
 	if err := checker.CheckPassword(req.Password); err != nil {
 		return errno.CustomError.WithMessage("密码不符合规范")
 	}
 
-	switch req.Otype {
-	case "email":
-		code, err := redis.EmailCodeGet(req.Oid)
-		if err != nil {
-			return errno.DatabaseCallError.WithInnerError(err)
-		}
-		if code != req.Code {
-			return errno.CustomError.WithMessage("验证码错误、不存在或已过期")
-		}
-		uid, err := strconv.ParseInt(req.Oid, 10, 64)
-		if err != nil {
-			return errno.CustomError.WithMessage("用户ID错误")
-		}
-		err = exquery.UpdateUserWithId(&model.User{
-			ID:       uid,
-			Password: encrypt.EncryptBySHA256WithSalt(req.Password, encrypt.GetSalt()),
-		})
-		if err != nil {
-			return errno.DatabaseCallError.WithInnerError(err)
-		}
-		go redis.EmailCodeDel(req.Oid)
-	default:
-		return errno.CustomError.WithMessage("暂不支持该类型: " + req.Otype)
+	code, err := redis.EmailCodeGet(req.Email)
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
+	if code != req.Code {
+		return errno.CustomError.WithMessage("验证码错误、不存在或已过期")
+	}
+	uid, err := strconv.ParseInt(req.Email, 10, 64)
+	if err != nil {
+		return errno.CustomError.WithMessage("用户ID错误")
+	}
+	err = exquery.UpdateUserWithId(&model.User{
+		ID:       uid,
+		Password: encrypt.EncryptBySHA256WithSalt(req.Password, encrypt.GetSalt()),
+	})
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
+	}
+	go redis.EmailCodeDel(req.Email)
 	return nil
 }

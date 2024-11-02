@@ -30,8 +30,8 @@ func newActivity(db *gorm.DB, opts ...gen.DOOption) activity {
 	_activity.ID = field.NewInt64(tableName, "id")
 	_activity.UserID = field.NewInt64(tableName, "user_id")
 	_activity.Content = field.NewString(tableName, "content")
-	_activity.MediaURL = field.NewString(tableName, "media_url")
-	_activity.VisitCount = field.NewInt64(tableName, "visit_count")
+	_activity.RefActivityID = field.NewInt64(tableName, "ref_activity_id")
+	_activity.RefVideoID = field.NewInt64(tableName, "ref_video_id")
 	_activity.CreatedAt = field.NewInt64(tableName, "created_at")
 	_activity.UpdatedAt = field.NewInt64(tableName, "updated_at")
 	_activity.DeletedAt = field.NewInt64(tableName, "deleted_at")
@@ -45,15 +45,15 @@ func newActivity(db *gorm.DB, opts ...gen.DOOption) activity {
 type activity struct {
 	activityDo activityDo
 
-	ALL        field.Asterisk
-	ID         field.Int64  // 动态ID
-	UserID     field.Int64  // 用户ID
-	Content    field.String // 动态内容
-	MediaURL   field.String // 媒体URL
-	VisitCount field.Int64  // 浏览量
-	CreatedAt  field.Int64  // 创建时间
-	UpdatedAt  field.Int64  // 修改时间
-	DeletedAt  field.Int64  // 删除时间
+	ALL           field.Asterisk
+	ID            field.Int64  // 动态ID
+	UserID        field.Int64  // 用户ID
+	Content       field.String // 动态内容
+	RefActivityID field.Int64  // 引用动态ID
+	RefVideoID    field.Int64  // 引用视频ID
+	CreatedAt     field.Int64  // 创建时间
+	UpdatedAt     field.Int64  // 修改时间
+	DeletedAt     field.Int64  // 删除时间
 
 	fieldMap map[string]field.Expr
 }
@@ -73,8 +73,8 @@ func (a *activity) updateTableName(table string) *activity {
 	a.ID = field.NewInt64(table, "id")
 	a.UserID = field.NewInt64(table, "user_id")
 	a.Content = field.NewString(table, "content")
-	a.MediaURL = field.NewString(table, "media_url")
-	a.VisitCount = field.NewInt64(table, "visit_count")
+	a.RefActivityID = field.NewInt64(table, "ref_activity_id")
+	a.RefVideoID = field.NewInt64(table, "ref_video_id")
 	a.CreatedAt = field.NewInt64(table, "created_at")
 	a.UpdatedAt = field.NewInt64(table, "updated_at")
 	a.DeletedAt = field.NewInt64(table, "deleted_at")
@@ -106,8 +106,8 @@ func (a *activity) fillFieldMap() {
 	a.fieldMap["id"] = a.ID
 	a.fieldMap["user_id"] = a.UserID
 	a.fieldMap["content"] = a.Content
-	a.fieldMap["media_url"] = a.MediaURL
-	a.fieldMap["visit_count"] = a.VisitCount
+	a.fieldMap["ref_activity_id"] = a.RefActivityID
+	a.fieldMap["ref_video_id"] = a.RefVideoID
 	a.fieldMap["created_at"] = a.CreatedAt
 	a.fieldMap["updated_at"] = a.UpdatedAt
 	a.fieldMap["deleted_at"] = a.DeletedAt

@@ -8,14 +8,14 @@ const TableNameActivity = "Activity"
 
 // Activity 动态表
 type Activity struct {
-	ID         int64  `gorm:"column:id;primaryKey;autoIncrement:true;comment:动态ID" json:"id"` // 动态ID
-	UserID     int64  `gorm:"column:user_id;not null;comment:用户ID" json:"user_id"`            // 用户ID
-	Content    string `gorm:"column:content;not null;comment:动态内容" json:"content"`            // 动态内容
-	MediaURL   string `gorm:"column:media_url;comment:媒体URL" json:"media_url"`                // 媒体URL
-	VisitCount int64  `gorm:"column:visit_count;not null;comment:浏览量" json:"visit_count"`     // 浏览量
-	CreatedAt  int64  `gorm:"column:created_at;not null;comment:创建时间" json:"created_at"`      // 创建时间
-	UpdatedAt  int64  `gorm:"column:updated_at;not null;comment:修改时间" json:"updated_at"`      // 修改时间
-	DeletedAt  int64  `gorm:"column:deleted_at;comment:删除时间" json:"deleted_at"`               // 删除时间
+	ID            int64  `gorm:"column:id;primaryKey;autoIncrement:true;comment:动态ID" json:"id"` // 动态ID
+	UserID        int64  `gorm:"column:user_id;not null;comment:用户ID" json:"user_id"`            // 用户ID
+	Content       string `gorm:"column:content;not null;comment:动态内容" json:"content"`            // 动态内容
+	RefActivityID int64  `gorm:"column:ref_activity_id;comment:引用动态ID" json:"ref_activity_id"`   // 引用动态ID
+	RefVideoID    int64  `gorm:"column:ref_video_id;comment:引用视频ID" json:"ref_video_id"`         // 引用视频ID
+	CreatedAt     int64  `gorm:"column:created_at;not null;comment:创建时间" json:"created_at"`      // 创建时间
+	UpdatedAt     int64  `gorm:"column:updated_at;not null;comment:修改时间" json:"updated_at"`      // 修改时间
+	DeletedAt     int64  `gorm:"column:deleted_at;comment:删除时间" json:"deleted_at"`               // 删除时间
 }
 
 // TableName Activity's table name

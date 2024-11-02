@@ -23,17 +23,52 @@ func Register(r *server.Hertz) {
 			_v1 := _api.Group("/v1", _v1Mw()...)
 			{
 				_interact := _v1.Group("/interact", _interactMw()...)
-				_interact.POST("/like", append(_interactlikeactionmethodMw(), interact.InteractLikeActionMethod)...)
-				_like := _interact.Group("/like", _likeMw()...)
-				_like.GET("/list", append(_interactlikelistmethodMw(), interact.InteractLikeListMethod)...)
+				{
+					_activity := _interact.Group("/activity", _activityMw()...)
+					{
+						_child_comment := _activity.Group("/child_comment", _child_commentMw()...)
+						_child_comment.GET("/list", append(_interactactivitychildcommentlistmethodMw(), interact.InteractActivityChildCommentListMethod)...)
+					}
+				}
 				{
 					_comment := _interact.Group("/comment", _commentMw()...)
-					_comment.GET("/list", append(_interactcommentlistmethodMw(), interact.InteractCommentListMethod)...)
-					_comment.POST("/publish", append(_interactcommentpublishmethodMw(), interact.InteractCommentPublishMethod)...)
+					{
+						_activity0 := _comment.Group("/activity", _activity0Mw()...)
+						_activity0.GET("/list", append(_interactcommentactivitylistmethodMw(), interact.InteractCommentActivityListMethod)...)
+						_activity0.POST("/publish", append(_interactcommentactivitypublishmethodMw(), interact.InteractCommentActivityPublishMethod)...)
+					}
+					{
+						_video := _comment.Group("/video", _videoMw()...)
+						_video.GET("/list", append(_interactcommentvideolistmethodMw(), interact.InteractCommentVideoListMethod)...)
+						_video.POST("/publish", append(_interactcommentvideopublishmethodMw(), interact.InteractCommentVideoPublishMethod)...)
+					}
+				}
+				{
+					_like := _interact.Group("/like", _likeMw()...)
+					{
+						_activity1 := _like.Group("/activity", _activity1Mw()...)
+						_activity1.POST("/action", append(_interactlikeactivityactionmethodMw(), interact.InteractLikeActivityActionMethod)...)
+					}
+					{
+						_comment0 := _like.Group("/comment", _comment0Mw()...)
+						_comment0.POST("/action", append(_interactlikecommentactionmethodMw(), interact.InteractLikeCommentActionMethod)...)
+					}
+					{
+						_video0 := _like.Group("/video", _video0Mw()...)
+						_video0.POST("/action", append(_interactlikevideoactionmethodMw(), interact.InteractLikeVideoActionMethod)...)
+						_video0.GET("/list", append(_interactlikevideolistmethodMw(), interact.InteractLikeVideoListMethod)...)
+					}
 				}
 				{
 					_message := _interact.Group("/message", _messageMw()...)
 					_message.POST("/send", append(_interactmessagesendmethodMw(), interact.InteractMessageSendMethod)...)
+				}
+				{
+					_video1 := _interact.Group("/video", _video1Mw()...)
+					{
+						_child_comment0 := _video1.Group("/child_comment", _child_comment0Mw()...)
+						_child_comment0.GET("/list", append(_interactvideochildcommentlistmethodMw(), interact.InteractVideoChildCommentListMethod)...)
+					}
 				}
 			}
 		}

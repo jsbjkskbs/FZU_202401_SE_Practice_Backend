@@ -1,9 +1,11 @@
 package generator
 
 var (
-	UserIDGenerator     *Snowflake
-	VideoIDGenerator    *Snowflake
-	ActivityIDGenerator *Snowflake
+	UserIDGenerator           *Snowflake
+	VideoIDGenerator          *Snowflake
+	ActivityIDGenerator       *Snowflake
+	VideoCommentIDGenerator   *Snowflake
+	ActvityCommentIDGenerator *Snowflake
 )
 
 func Init() {
@@ -17,6 +19,14 @@ func Init() {
 		panic(err)
 	}
 	ActivityIDGenerator, err = NewSnowflake(3)
+	if err != nil {
+		panic(err)
+	}
+	VideoCommentIDGenerator, err = NewSnowflake(4)
+	if err != nil {
+		panic(err)
+	}
+	ActvityCommentIDGenerator, err = NewSnowflake(5)
 	if err != nil {
 		panic(err)
 	}

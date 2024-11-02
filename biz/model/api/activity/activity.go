@@ -650,7 +650,11 @@ func (p *ActivityFeedReq) String() string {
 }
 
 type ActivityFeedRespData struct {
-	Items []*base.Activity `thrift:"items,1" form:"items" json:"items" query:"items"`
+	Items    []*base.Activity `thrift:"items,1" form:"items" json:"items" query:"items"`
+	IsEnd    bool             `thrift:"is_end,2" form:"is_end" json:"is_end" query:"is_end"`
+	PageNum  int64            `thrift:"page_num,3" form:"page_num" json:"page_num" query:"page_num"`
+	PageSize int64            `thrift:"page_size,4" form:"page_size" json:"page_size" query:"page_size"`
+	Total    int64            `thrift:"total,5" form:"total" json:"total" query:"total"`
 }
 
 func NewActivityFeedRespData() *ActivityFeedRespData {
@@ -664,8 +668,28 @@ func (p *ActivityFeedRespData) GetItems() (v []*base.Activity) {
 	return p.Items
 }
 
+func (p *ActivityFeedRespData) GetIsEnd() (v bool) {
+	return p.IsEnd
+}
+
+func (p *ActivityFeedRespData) GetPageNum() (v int64) {
+	return p.PageNum
+}
+
+func (p *ActivityFeedRespData) GetPageSize() (v int64) {
+	return p.PageSize
+}
+
+func (p *ActivityFeedRespData) GetTotal() (v int64) {
+	return p.Total
+}
+
 var fieldIDToName_ActivityFeedRespData = map[int16]string{
 	1: "items",
+	2: "is_end",
+	3: "page_num",
+	4: "page_size",
+	5: "total",
 }
 
 func (p *ActivityFeedRespData) Read(iprot thrift.TProtocol) (err error) {
@@ -690,6 +714,38 @@ func (p *ActivityFeedRespData) Read(iprot thrift.TProtocol) (err error) {
 		case 1:
 			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.BOOL {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -747,6 +803,50 @@ func (p *ActivityFeedRespData) ReadField1(iprot thrift.TProtocol) error {
 	p.Items = _field
 	return nil
 }
+func (p *ActivityFeedRespData) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field bool
+	if v, err := iprot.ReadBool(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.IsEnd = _field
+	return nil
+}
+func (p *ActivityFeedRespData) ReadField3(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.PageNum = _field
+	return nil
+}
+func (p *ActivityFeedRespData) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.PageSize = _field
+	return nil
+}
+func (p *ActivityFeedRespData) ReadField5(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Total = _field
+	return nil
+}
 
 func (p *ActivityFeedRespData) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -756,6 +856,22 @@ func (p *ActivityFeedRespData) Write(oprot thrift.TProtocol) (err error) {
 	if p != nil {
 		if err = p.writeField1(oprot); err != nil {
 			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
 			goto WriteFieldError
 		}
 	}
@@ -799,6 +915,74 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ActivityFeedRespData) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("is_end", thrift.BOOL, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteBool(p.IsEnd); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *ActivityFeedRespData) writeField3(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("page_num", thrift.I64, 3); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.PageNum); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *ActivityFeedRespData) writeField4(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("page_size", thrift.I64, 4); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.PageSize); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *ActivityFeedRespData) writeField5(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("total", thrift.I64, 5); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.Total); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
 func (p *ActivityFeedRespData) String() string {
@@ -1049,11 +1233,10 @@ func (p *ActivityFeedResp) String() string {
 
 type ActivityPublishReq struct {
 	AccessToken string   `thrift:"access_token,1,required" header:"Access-Token,required" json:"access_token,required"`
-	Title       string   `thrift:"title,2,required" form:"title,required" json:"title,required" query:"title,required"`
-	Text        string   `thrift:"text,3,required" form:"text,required" json:"text,required" query:"text,required"`
-	Image       []string `thrift:"image,4,optional" form:"image" json:"image,omitempty" query:"image"`
-	RefVideo    *string  `thrift:"ref_video,5,optional" form:"ref_video" json:"ref_video,omitempty" query:"ref_video"`
-	RefActivity *string  `thrift:"ref_activity,6,optional" form:"ref_activity" json:"ref_activity,omitempty" query:"ref_activity"`
+	Content     string   `thrift:"content,2,required" form:"content,required" json:"content,required" query:"content,required"`
+	Image       []string `thrift:"image,3,optional" form:"image" json:"image,omitempty" query:"image"`
+	RefVideo    *string  `thrift:"ref_video,4,optional" form:"ref_video" json:"ref_video,omitempty" query:"ref_video"`
+	RefActivity *string  `thrift:"ref_activity,5,optional" form:"ref_activity" json:"ref_activity,omitempty" query:"ref_activity"`
 }
 
 func NewActivityPublishReq() *ActivityPublishReq {
@@ -1067,12 +1250,8 @@ func (p *ActivityPublishReq) GetAccessToken() (v string) {
 	return p.AccessToken
 }
 
-func (p *ActivityPublishReq) GetTitle() (v string) {
-	return p.Title
-}
-
-func (p *ActivityPublishReq) GetText() (v string) {
-	return p.Text
+func (p *ActivityPublishReq) GetContent() (v string) {
+	return p.Content
 }
 
 var ActivityPublishReq_Image_DEFAULT []string
@@ -1104,11 +1283,10 @@ func (p *ActivityPublishReq) GetRefActivity() (v string) {
 
 var fieldIDToName_ActivityPublishReq = map[int16]string{
 	1: "access_token",
-	2: "title",
-	3: "text",
-	4: "image",
-	5: "ref_video",
-	6: "ref_activity",
+	2: "content",
+	3: "image",
+	4: "ref_video",
+	5: "ref_activity",
 }
 
 func (p *ActivityPublishReq) IsSetImage() bool {
@@ -1128,8 +1306,7 @@ func (p *ActivityPublishReq) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
-	var issetTitle bool = false
-	var issetText bool = false
+	var issetContent bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -1159,21 +1336,20 @@ func (p *ActivityPublishReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetTitle = true
+				issetContent = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
 		case 3:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetText = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
 		case 4:
-			if fieldTypeId == thrift.LIST {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1183,14 +1359,6 @@ func (p *ActivityPublishReq) Read(iprot thrift.TProtocol) (err error) {
 		case 5:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField5(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 6:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1214,13 +1382,8 @@ func (p *ActivityPublishReq) Read(iprot thrift.TProtocol) (err error) {
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetTitle {
+	if !issetContent {
 		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetText {
-		fieldId = 3
 		goto RequiredFieldNotSetError
 	}
 	return nil
@@ -1260,21 +1423,10 @@ func (p *ActivityPublishReq) ReadField2(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.Title = _field
+	p.Content = _field
 	return nil
 }
 func (p *ActivityPublishReq) ReadField3(iprot thrift.TProtocol) error {
-
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.Text = _field
-	return nil
-}
-func (p *ActivityPublishReq) ReadField4(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
 		return err
@@ -1297,7 +1449,7 @@ func (p *ActivityPublishReq) ReadField4(iprot thrift.TProtocol) error {
 	p.Image = _field
 	return nil
 }
-func (p *ActivityPublishReq) ReadField5(iprot thrift.TProtocol) error {
+func (p *ActivityPublishReq) ReadField4(iprot thrift.TProtocol) error {
 
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
@@ -1308,7 +1460,7 @@ func (p *ActivityPublishReq) ReadField5(iprot thrift.TProtocol) error {
 	p.RefVideo = _field
 	return nil
 }
-func (p *ActivityPublishReq) ReadField6(iprot thrift.TProtocol) error {
+func (p *ActivityPublishReq) ReadField5(iprot thrift.TProtocol) error {
 
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
@@ -1344,10 +1496,6 @@ func (p *ActivityPublishReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField5(oprot); err != nil {
 			fieldId = 5
-			goto WriteFieldError
-		}
-		if err = p.writeField6(oprot); err != nil {
-			fieldId = 6
 			goto WriteFieldError
 		}
 	}
@@ -1386,10 +1534,10 @@ WriteFieldEndError:
 }
 
 func (p *ActivityPublishReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("title", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("content", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Title); err != nil {
+	if err := oprot.WriteString(p.Content); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1403,25 +1551,8 @@ WriteFieldEndError:
 }
 
 func (p *ActivityPublishReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("text", thrift.STRING, 3); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Text); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
-}
-
-func (p *ActivityPublishReq) writeField4(oprot thrift.TProtocol) (err error) {
 	if p.IsSetImage() {
-		if err = oprot.WriteFieldBegin("image", thrift.LIST, 4); err != nil {
+		if err = oprot.WriteFieldBegin("image", thrift.LIST, 3); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteListBegin(thrift.STRING, len(p.Image)); err != nil {
@@ -1441,14 +1572,14 @@ func (p *ActivityPublishReq) writeField4(oprot thrift.TProtocol) (err error) {
 	}
 	return nil
 WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
 WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
-func (p *ActivityPublishReq) writeField5(oprot thrift.TProtocol) (err error) {
+func (p *ActivityPublishReq) writeField4(oprot thrift.TProtocol) (err error) {
 	if p.IsSetRefVideo() {
-		if err = oprot.WriteFieldBegin("ref_video", thrift.STRING, 5); err != nil {
+		if err = oprot.WriteFieldBegin("ref_video", thrift.STRING, 4); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteString(*p.RefVideo); err != nil {
@@ -1460,14 +1591,14 @@ func (p *ActivityPublishReq) writeField5(oprot thrift.TProtocol) (err error) {
 	}
 	return nil
 WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
 WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
-func (p *ActivityPublishReq) writeField6(oprot thrift.TProtocol) (err error) {
+func (p *ActivityPublishReq) writeField5(oprot thrift.TProtocol) (err error) {
 	if p.IsSetRefActivity() {
-		if err = oprot.WriteFieldBegin("ref_activity", thrift.STRING, 6); err != nil {
+		if err = oprot.WriteFieldBegin("ref_activity", thrift.STRING, 5); err != nil {
 			goto WriteFieldBeginError
 		}
 		if err := oprot.WriteString(*p.RefActivity); err != nil {
@@ -1479,9 +1610,9 @@ func (p *ActivityPublishReq) writeField6(oprot thrift.TProtocol) (err error) {
 	}
 	return nil
 WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
 WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
 func (p *ActivityPublishReq) String() string {
@@ -1933,7 +2064,11 @@ func (p *ActivityListReq) String() string {
 }
 
 type ActivityListRespData struct {
-	Items []*base.Activity `thrift:"items,1" form:"items" json:"items" query:"items"`
+	Items    []*base.Activity `thrift:"items,1" form:"items" json:"items" query:"items"`
+	IsEnd    bool             `thrift:"is_end,2" form:"is_end" json:"is_end" query:"is_end"`
+	PageNum  int64            `thrift:"page_num,3" form:"page_num" json:"page_num" query:"page_num"`
+	PageSize int64            `thrift:"page_size,4" form:"page_size" json:"page_size" query:"page_size"`
+	Total    int64            `thrift:"total,5" form:"total" json:"total" query:"total"`
 }
 
 func NewActivityListRespData() *ActivityListRespData {
@@ -1947,8 +2082,28 @@ func (p *ActivityListRespData) GetItems() (v []*base.Activity) {
 	return p.Items
 }
 
+func (p *ActivityListRespData) GetIsEnd() (v bool) {
+	return p.IsEnd
+}
+
+func (p *ActivityListRespData) GetPageNum() (v int64) {
+	return p.PageNum
+}
+
+func (p *ActivityListRespData) GetPageSize() (v int64) {
+	return p.PageSize
+}
+
+func (p *ActivityListRespData) GetTotal() (v int64) {
+	return p.Total
+}
+
 var fieldIDToName_ActivityListRespData = map[int16]string{
 	1: "items",
+	2: "is_end",
+	3: "page_num",
+	4: "page_size",
+	5: "total",
 }
 
 func (p *ActivityListRespData) Read(iprot thrift.TProtocol) (err error) {
@@ -1973,6 +2128,38 @@ func (p *ActivityListRespData) Read(iprot thrift.TProtocol) (err error) {
 		case 1:
 			if fieldTypeId == thrift.LIST {
 				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.BOOL {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -2030,6 +2217,50 @@ func (p *ActivityListRespData) ReadField1(iprot thrift.TProtocol) error {
 	p.Items = _field
 	return nil
 }
+func (p *ActivityListRespData) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field bool
+	if v, err := iprot.ReadBool(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.IsEnd = _field
+	return nil
+}
+func (p *ActivityListRespData) ReadField3(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.PageNum = _field
+	return nil
+}
+func (p *ActivityListRespData) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.PageSize = _field
+	return nil
+}
+func (p *ActivityListRespData) ReadField5(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Total = _field
+	return nil
+}
 
 func (p *ActivityListRespData) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -2039,6 +2270,22 @@ func (p *ActivityListRespData) Write(oprot thrift.TProtocol) (err error) {
 	if p != nil {
 		if err = p.writeField1(oprot); err != nil {
 			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
 			goto WriteFieldError
 		}
 	}
@@ -2082,6 +2329,74 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ActivityListRespData) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("is_end", thrift.BOOL, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteBool(p.IsEnd); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *ActivityListRespData) writeField3(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("page_num", thrift.I64, 3); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.PageNum); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *ActivityListRespData) writeField4(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("page_size", thrift.I64, 4); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.PageSize); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *ActivityListRespData) writeField5(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("total", thrift.I64, 5); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.Total); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
 func (p *ActivityListRespData) String() string {

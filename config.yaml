@@ -29,6 +29,14 @@ Redis:
     addr: "localhost:16379"
     password: ""
     db: 4
+  activity_info:
+    addr: "localhost:16379"
+    password: ""
+    db: 5
+  comment_info:
+    addr: "localhost:16379"
+    password: ""
+    db: 6
 
 # QPS limit for each API
 # QPS = threshold / statintervalinms
