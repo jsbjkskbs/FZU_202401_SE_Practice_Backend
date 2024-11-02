@@ -18,7 +18,7 @@ func _wsAuth() []app.HandlerFunc {
 
 func tokenAuthFunc() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-		if !jwt.IsAccessTokenAvailable(ctx, c) {
+		if !jwt.AccessTokenJwtMiddleware.IsTokenAvailable(ctx, c) {
 			c.AbortWithStatusJSON(consts.StatusUnauthorized, utils.H{
 				"code": errno.AccessTokenInvalidErrorCode,
 				"msg":  errno.AccessTokenInvalidErrorMsg,

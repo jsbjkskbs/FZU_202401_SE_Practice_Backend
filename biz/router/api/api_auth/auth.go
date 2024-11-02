@@ -19,7 +19,7 @@ func Auth() []app.HandlerFunc {
 }
 
 func checkTokenVaild(ctx context.Context, c *app.RequestContext) {
-	if !jwt.IsAccessTokenAvailable(ctx, c) {
+	if !jwt.AccessTokenJwtMiddleware.IsTokenAvailable(ctx, c) {
 		c.JSON(consts.StatusOK, utils.H{
 			"code": errno.AccessTokenInvalid.Code,
 			"msg":  errno.AccessTokenInvalid.Message,
@@ -30,7 +30,7 @@ func checkTokenVaild(ctx context.Context, c *app.RequestContext) {
 
 func checkTokenExpireTime(ctx context.Context, c *app.RequestContext) {
 	token := string(c.GetHeader("Access-Token"))
-	payload, expire, err := jwt.GetBasicDataFromAccessToken(token)
+	payload, expire, err := jwt.AccessTokenJwtMiddleware.GetBasicDataFromToken(token)
 	if err != nil {
 		c.JSON(consts.StatusOK, utils.H{
 			"code": errno.AccessTokenInvalid.Code,

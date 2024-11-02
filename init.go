@@ -47,8 +47,7 @@ func Initialize() {
 	checkEnv()
 	generator.Init()
 	scheduler.Init()
-	jwt.AccessTokenJwtInit()
-	jwt.RefreshTokenJwtInit()
+	jwt.Init()
 
 	// Initialize your application here.
 	configureLoader := configure.NewConfLoader(&configure.ConfigureOption{

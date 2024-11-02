@@ -116,8 +116,8 @@ func LoginMethod(ctx context.Context, c *app.RequestContext) {
 			CreatedAt:    data.CreatedAt,
 			UpdatedAt:    data.UpdatedAt,
 			DeletedAt:    data.DeletedAt,
-			AccessToken:  jwt.GenerateAccessToken(fmt.Sprint(data.ID)),
-			RefreshToken: jwt.GenerateRefreshToken(fmt.Sprint(data.ID)),
+			AccessToken:  jwt.AccessTokenJwtMiddleware.GenerateToken(fmt.Sprint(data.ID)),
+			RefreshToken: jwt.RefreshTokenJwtMiddleware.GenerateToken(fmt.Sprint(data.ID)),
 		},
 	})
 }

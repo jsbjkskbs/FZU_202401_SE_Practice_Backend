@@ -37,7 +37,7 @@ func NewVideoService(ctx context.Context, c *app.RequestContext) *VideoService {
 }
 
 func (service *VideoService) NewPublishEvent(req *video.VideoPublishReq) (*video.VideoPublishRespData, error) {
-	id, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
+	id, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
@@ -81,7 +81,7 @@ func (service *VideoService) NewPublishEvent(req *video.VideoPublishReq) (*video
 }
 
 func (service *VideoService) NewCoverUploadEvent(req *video.VideoCoverUploadReq) (*video.VideoCoverUploadRespData, error) {
-	userId, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
+	userId, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
@@ -143,7 +143,7 @@ func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) ([]*base.Vide
 }
 
 func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) ([]*base.Video, error) {
-	userId, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
+	userId, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
@@ -216,7 +216,7 @@ func (service *VideoService) NewListEvent(req *video.VideoListReq) (*video.Video
 }
 
 func (service *VideoService) NewSubmitAllEvent(req *video.VideoSubmitAllReq) (*video.VideoSubmitAllRespData, error) {
-	userId, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
+	userId, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
@@ -236,7 +236,7 @@ func (service *VideoService) NewSubmitAllEvent(req *video.VideoSubmitAllReq) (*v
 }
 
 func (service *VideoService) NewSubmitReviewEvent(req *video.VideoSubmitReviewReq) (*video.VideoSubmitReviewRespData, error) {
-	userId, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
+	userId, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
@@ -256,7 +256,7 @@ func (service *VideoService) NewSubmitReviewEvent(req *video.VideoSubmitReviewRe
 }
 
 func (service *VideoService) NewSubmitLockedEvent(req *video.VideoSubmitLockedReq) (*video.VideoSubmitLockedRespData, error) {
-	userId, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
+	userId, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
@@ -276,7 +276,7 @@ func (service *VideoService) NewSubmitLockedEvent(req *video.VideoSubmitLockedRe
 }
 
 func (service *VideoService) NewSumitPassedEvent(req *video.VideoSubmitPassedReq) (*video.VideoSubmitPassedRespData, error) {
-	userId, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
+	userId, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
