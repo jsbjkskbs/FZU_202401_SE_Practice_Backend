@@ -187,7 +187,7 @@ func (service *UserService) NewLikeCountEvent(req *user.UserLikeCountReq) (int64
 }
 
 func (service *UserService) NewAvatarUploadEvent(req *user.UserAvatarUploadReq) (string, string, error) {
-	id, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
+	id, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return "", "", errno.AccessTokenInvalid.WithInnerError(err)
 	}
@@ -200,7 +200,7 @@ func (service *UserService) NewAvatarUploadEvent(req *user.UserAvatarUploadReq) 
 }
 
 func (service *UserService) NewMfaQrcodeEvent(req *user.UserMfaQrcodeReq) (*user.UserMfaQrcodeData, error) {
-	id, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
+	id, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid.WithInnerError(err)
 	}
@@ -218,7 +218,7 @@ func (service *UserService) NewMfaQrcodeEvent(req *user.UserMfaQrcodeReq) (*user
 }
 
 func (service *UserService) NewMfaBindEvent(req *user.UserMfaBindReq) error {
-	id, err := jwt.ConvertJWTPayloadToInt64(req.AccessToken)
+	id, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return errno.AccessTokenInvalid.WithInnerError(err)
 	}
