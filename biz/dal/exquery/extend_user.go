@@ -42,6 +42,16 @@ func QueryUserByEmail(email string) (*model.User, error) {
 	return user, nil
 }
 
+func QueryUserExistByID(id int64) (bool, error) {
+	u := dal.Executor.User
+	uc := u.WithContext(context.Background())
+	count, err := uc.Where(uc.Where(u.ID.Eq(id))).Count()
+	if err != nil {
+		return false, err
+	}
+	return count != 0, nil
+}
+
 func QueryUserExistByUsername(username string) (bool, error) {
 	u := dal.Executor.User
 	uc := u.WithContext(context.Background())

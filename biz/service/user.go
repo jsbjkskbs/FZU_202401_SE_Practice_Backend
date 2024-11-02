@@ -186,17 +186,21 @@ func (service *UserService) NewLikeCountEvent(req *user.UserLikeCountReq) (int64
 	return sum, nil
 }
 
-func (service *UserService) NewAvatarUploadEvent(req *user.UserAvatarUploadReq) (string, string, error) {
+func (service *UserService) NewAvatarUploadEvent(req *user.UserAvatarUploadReq) (*user.UserAvatarUploadData, error) {
 	id, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
-		return "", "", errno.AccessTokenInvalid.WithInnerError(err)
+		return nil, errno.AccessTokenInvalid.WithInnerError(err)
 	}
 
 	uptoken, uploadKey, err := oss.UploadAvatar(fmt.Sprint(id), id)
 	if err != nil {
-		return "", "", errno.InternalServerError.WithInnerError(err)
+		return nil, errno.InternalServerError.WithInnerError(err)
 	}
-	return uptoken, uploadKey, nil
+	return &user.UserAvatarUploadData{
+		UploadURL: oss.UploadUrl,
+		UploadKey: uploadKey,
+		Uptoken:   uptoken,
+	}, nil
 }
 
 func (service *UserService) NewMfaQrcodeEvent(req *user.UserMfaQrcodeReq) (*user.UserMfaQrcodeData, error) {
@@ -239,7 +243,7 @@ func (service *UserService) NewMfaBindEvent(req *user.UserMfaBindReq) error {
 	return nil
 }
 
-func (service *UserService) NewSearchEvent(req *user.UserSearchReq) (*[]*base.User, bool, int64, int64, error) {
+func (service *UserService) NewSearchEvent(req *user.UserSearchReq) (*user.UserSearchRespData, error) {
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 
 	u := dal.Executor.User
@@ -248,9 +252,15 @@ func (service *UserService) NewSearchEvent(req *user.UserSearchReq) (*[]*base.Us
 		Where(u.Username.Like(fmt.Sprintf("%%%s%%", req.Keyword))).
 		FindByPage(int(req.PageNum*req.PageSize), int(req.PageSize))
 	if err != nil {
-		return nil, true, req.PageNum, req.PageSize, errno.DatabaseCallError
+		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	return model_converter.UserListDal2Resp(&users), count <= (req.PageNum+1)*req.PageSize, req.PageNum, req.PageSize, nil
+	return &user.UserSearchRespData{
+		Items:    *model_converter.UserListDal2Resp(&users),
+		IsEnd:    count < req.PageSize*(req.PageNum+1),
+		PageNum:  req.PageNum,
+		PageSize: req.PageSize,
+		Total:    count,
+	}, nil
 }
 
 func (service *UserService) NewSecurityPasswordRetrieve(req *user.UserPasswordRetrieveReq) error {

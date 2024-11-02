@@ -21,6 +21,10 @@ struct RelationFollowListReq {
 
 struct RelationFollowListRespData {
     1: list<base.User> items;
+    2: bool is_end;
+    3: i64 page_num;
+    4: i64 page_size;
+    5: i64 total;
 }
 struct RelationFollowListResp {
     1: i64 code;
@@ -28,19 +32,23 @@ struct RelationFollowListResp {
     3: RelationFollowListRespData data;
 }
 
-struct RelationFollowedListReq {
+struct RelationFollowerListReq {
     1: required string user_id;
     2: required i64 page_num;
     3: required i64 page_size;
 }
 
-struct RelationFollowedListRespData {
+struct RelationFollowerListRespData {
     1: list<base.User> items;
+    2: bool is_end;
+    3: i64 page_num;
+    4: i64 page_size;
+    5: i64 total;
 }
-struct RelationFollowedListResp {
+struct RelationFollowerListResp {
     1: i64 code;
     2: string msg;
-    3: RelationFollowedListRespData data;
+    3: RelationFollowerListRespData data;
 }
 
 struct RelationFriendListReq {
@@ -51,6 +59,10 @@ struct RelationFriendListReq {
 
 struct RelationFriendListRespData {
     1: list<base.User> items;
+    2: bool is_end;
+    3: i64 page_num;
+    4: i64 page_size;
+    5: i64 total;
 }
 struct RelationFriendListResp {
     1: i64 code;
@@ -61,6 +73,6 @@ struct RelationFriendListResp {
 service RelationService {
     RelationFollowActionResp FollowActionMethod(1: RelationFollowActionReq req) (api.post="/api/v1/relation/follow/action");
     RelationFollowListResp FollowListMethod(1: RelationFollowListReq req) (api.get="/api/v1/relation/follow/list");
-    RelationFollowedListResp FollowedListMethod(1: RelationFollowedListReq req) (api.get="/api/v1/relation/followed/list");
+    RelationFollowerListResp FollowerListMethod(1: RelationFollowerListReq req) (api.get="/api/v1/relation/follower/list");
     RelationFriendListResp FriendListMethod(1: RelationFriendListReq req) (api.get="/api/v1/relation/friend/list");
 }

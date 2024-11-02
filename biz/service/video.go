@@ -212,6 +212,7 @@ func (service *VideoService) NewListEvent(req *video.VideoListReq) (*video.Video
 		IsEnd:    count <= req.PageSize*(req.PageNum+1),
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
+		Total:    count,
 	}, nil
 }
 
@@ -232,6 +233,7 @@ func (service *VideoService) NewSubmitAllEvent(req *video.VideoSubmitAllReq) (*v
 		IsEnd:    count <= req.PageSize*(req.PageNum+1),
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
+		Total:    count,
 	}, nil
 }
 
@@ -252,6 +254,7 @@ func (service *VideoService) NewSubmitReviewEvent(req *video.VideoSubmitReviewRe
 		IsEnd:    count <= req.PageSize*(req.PageNum+1),
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
+		Total:    count,
 	}, nil
 }
 
@@ -272,6 +275,7 @@ func (service *VideoService) NewSubmitLockedEvent(req *video.VideoSubmitLockedRe
 		IsEnd:    count <= req.PageSize*(req.PageNum+1),
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
+		Total:    count,
 	}, nil
 }
 
@@ -292,6 +296,7 @@ func (service *VideoService) NewSumitPassedEvent(req *video.VideoSubmitPassedReq
 		IsEnd:    count <= req.PageSize*(req.PageNum+1),
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
+		Total:    count,
 	}, nil
 }
 
@@ -338,5 +343,6 @@ func (service *VideoService) NewSearchEvent(req *video.VideoSearchReq) (*video.V
 		IsEnd:    count <= req.PageSize*(req.PageNum+1),
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
+		Total:    count,
 	}, nil
 }

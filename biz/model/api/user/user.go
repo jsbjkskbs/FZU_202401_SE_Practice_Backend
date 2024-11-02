@@ -5323,6 +5323,7 @@ type UserSearchRespData struct {
 	IsEnd    bool         `thrift:"is_end,2" form:"is_end" json:"is_end" query:"is_end"`
 	PageNum  int64        `thrift:"page_num,3" form:"page_num" json:"page_num" query:"page_num"`
 	PageSize int64        `thrift:"page_size,4" form:"page_size" json:"page_size" query:"page_size"`
+	Total    int64        `thrift:"total,5" form:"total" json:"total" query:"total"`
 }
 
 func NewUserSearchRespData() *UserSearchRespData {
@@ -5348,11 +5349,16 @@ func (p *UserSearchRespData) GetPageSize() (v int64) {
 	return p.PageSize
 }
 
+func (p *UserSearchRespData) GetTotal() (v int64) {
+	return p.Total
+}
+
 var fieldIDToName_UserSearchRespData = map[int16]string{
 	1: "items",
 	2: "is_end",
 	3: "page_num",
 	4: "page_size",
+	5: "total",
 }
 
 func (p *UserSearchRespData) Read(iprot thrift.TProtocol) (err error) {
@@ -5401,6 +5407,14 @@ func (p *UserSearchRespData) Read(iprot thrift.TProtocol) (err error) {
 		case 4:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -5491,6 +5505,17 @@ func (p *UserSearchRespData) ReadField4(iprot thrift.TProtocol) error {
 	p.PageSize = _field
 	return nil
 }
+func (p *UserSearchRespData) ReadField5(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Total = _field
+	return nil
+}
 
 func (p *UserSearchRespData) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -5512,6 +5537,10 @@ func (p *UserSearchRespData) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField4(oprot); err != nil {
 			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
 			goto WriteFieldError
 		}
 	}
@@ -5606,6 +5635,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *UserSearchRespData) writeField5(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("total", thrift.I64, 5); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.Total); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
 func (p *UserSearchRespData) String() string {

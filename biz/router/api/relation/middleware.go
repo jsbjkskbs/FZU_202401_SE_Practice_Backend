@@ -60,3 +60,13 @@ func _friendlistmethodMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _followerMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _followerlistmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

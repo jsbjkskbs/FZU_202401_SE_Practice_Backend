@@ -5,9 +5,13 @@ package relation
 import (
 	"context"
 
+	relation "sfw/biz/model/api/relation"
+	"sfw/biz/service"
+	"sfw/pkg/errno"
+	"sfw/pkg/utils"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	relation "sfw/biz/model/api/relation"
 )
 
 // FollowActionMethod .
@@ -17,13 +21,28 @@ func FollowActionMethod(ctx context.Context, c *app.RequestContext) {
 	var req relation.RelationFollowActionReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, relation.RelationFollowActionResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(relation.RelationFollowActionResp)
+	err = service.NewRelationService(ctx, c).NewFollowActionEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, relation.RelationFollowActionResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, relation.RelationFollowActionResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
 }
 
 // FollowListMethod .
@@ -33,29 +52,61 @@ func FollowListMethod(ctx context.Context, c *app.RequestContext) {
 	var req relation.RelationFollowListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, relation.RelationFollowListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(relation.RelationFollowListResp)
+	resp, err := service.NewRelationService(ctx, c).NewFollowListEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, relation.RelationFollowListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, relation.RelationFollowListResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }
 
-// FollowedListMethod .
-// @router /api/v1/relation/followed/list [GET]
-func FollowedListMethod(ctx context.Context, c *app.RequestContext) {
+// FollowerListMethod .
+// @router /api/v1/relation/follower/list [GET]
+func FollowerListMethod(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req relation.RelationFollowedListReq
+	var req relation.RelationFollowerListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, relation.RelationFollowerListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(relation.RelationFollowedListResp)
+	resp, err := service.NewRelationService(ctx, c).NewFollowerListEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, relation.RelationFollowerListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, relation.RelationFollowerListResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }
 
 // FriendListMethod .
@@ -65,11 +116,27 @@ func FriendListMethod(ctx context.Context, c *app.RequestContext) {
 	var req relation.RelationFriendListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, relation.RelationFriendListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(relation.RelationFriendListResp)
+	resp, err := service.NewRelationService(ctx, c).NewFriendListEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, relation.RelationFriendListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, relation.RelationFriendListResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }

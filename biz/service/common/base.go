@@ -7,5 +7,5 @@ package common
 */
 
 func CorrectPageNumAndPageSize(pageNum, pageSize int64) (int64, int64) {
-	return max(pageNum, 0), max(pageSize, 1)
+	return max(pageNum, 0), min(max(pageSize, 1), 20)
 }
