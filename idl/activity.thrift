@@ -20,6 +20,10 @@ struct ActivityFeedReq {
 
 struct ActivityFeedRespData {
     1: list<base.Activity> items;
+    2: bool is_end;
+    3: i64 page_num;
+    4: i64 page_size;
+    5: i64 total;
 }
 struct ActivityFeedResp {
     1: i64 code;
@@ -29,11 +33,10 @@ struct ActivityFeedResp {
 
 struct ActivityPublishReq {
     1: required string access_token (api.header="Access-Token");
-    2: required string title;
-    3: required string text;
-    4: optional list<string> image;
-    5: optional string ref_video;
-    6: optional string ref_activity;
+    2: required string content;
+    3: optional list<string> image;
+    4: optional string ref_video;
+    5: optional string ref_activity;
 }
 
 struct ActivityPublishResp {
@@ -49,6 +52,10 @@ struct ActivityListReq {
 
 struct ActivityListRespData {
     1: list<base.Activity> items;
+    2: bool is_end;
+    3: i64 page_num;
+    4: i64 page_size;
+    5: i64 total;
 }
 struct ActivityListResp {
     1: i64 code;

@@ -11,7 +11,6 @@ import (
 	"sfw/biz/mw/jwt"
 	"sfw/biz/service"
 	"sfw/pkg/errno"
-	"sfw/pkg/oss"
 	"sfw/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -274,7 +273,7 @@ func AvatarUploadMethod(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	uptoken, uploadKey, err := service.NewUserService(ctx, c).NewAvatarUploadEvent(&req)
+	resp, err := service.NewUserService(ctx, c).NewAvatarUploadEvent(&req)
 	if err != nil {
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserAvatarUploadResp{
@@ -287,11 +286,7 @@ func AvatarUploadMethod(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, user.UserAvatarUploadResp{
 		Code: errno.NoError.Code,
 		Msg:  errno.NoError.Message,
-		Data: &user.UserAvatarUploadData{
-			UploadURL: oss.UploadUrl,
-			Uptoken:   uptoken,
-			UploadKey: uploadKey,
-		},
+		Data: resp,
 	})
 }
 
@@ -372,7 +367,7 @@ func SearchMethod(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, isEnd, pn, ps, err := service.NewUserService(ctx, c).NewSearchEvent(&req)
+	resp, err := service.NewUserService(ctx, c).NewSearchEvent(&req)
 	if err != nil {
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserSearchResp{
@@ -385,12 +380,7 @@ func SearchMethod(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, user.UserSearchResp{
 		Code: errno.NoError.Code,
 		Msg:  errno.NoError.Message,
-		Data: &user.UserSearchRespData{
-			IsEnd:    isEnd,
-			Items:    *resp,
-			PageNum:  pn,
-			PageSize: ps,
-		},
+		Data: resp,
 	})
 }
 

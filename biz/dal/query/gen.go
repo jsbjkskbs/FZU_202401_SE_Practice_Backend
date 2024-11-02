@@ -22,10 +22,12 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		ActivityComment:       newActivityComment(db, opts...),
 		ActivityCommentLike:   newActivityCommentLike(db, opts...),
 		ActivityCommentReport: newActivityCommentReport(db, opts...),
+		ActivityImage:         newActivityImage(db, opts...),
 		ActivityLike:          newActivityLike(db, opts...),
 		ActivityReport:        newActivityReport(db, opts...),
 		Category:              newCategory(db, opts...),
 		Follow:                newFollow(db, opts...),
+		Image:                 newImage(db, opts...),
 		Message:               newMessage(db, opts...),
 		Review:                newReview(db, opts...),
 		Tag:                   newTag(db, opts...),
@@ -48,10 +50,12 @@ type Query struct {
 	ActivityComment       activityComment
 	ActivityCommentLike   activityCommentLike
 	ActivityCommentReport activityCommentReport
+	ActivityImage         activityImage
 	ActivityLike          activityLike
 	ActivityReport        activityReport
 	Category              category
 	Follow                follow
+	Image                 image
 	Message               message
 	Review                review
 	Tag                   tag
@@ -75,10 +79,12 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		ActivityComment:       q.ActivityComment.clone(db),
 		ActivityCommentLike:   q.ActivityCommentLike.clone(db),
 		ActivityCommentReport: q.ActivityCommentReport.clone(db),
+		ActivityImage:         q.ActivityImage.clone(db),
 		ActivityLike:          q.ActivityLike.clone(db),
 		ActivityReport:        q.ActivityReport.clone(db),
 		Category:              q.Category.clone(db),
 		Follow:                q.Follow.clone(db),
+		Image:                 q.Image.clone(db),
 		Message:               q.Message.clone(db),
 		Review:                q.Review.clone(db),
 		Tag:                   q.Tag.clone(db),
@@ -109,10 +115,12 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		ActivityComment:       q.ActivityComment.replaceDB(db),
 		ActivityCommentLike:   q.ActivityCommentLike.replaceDB(db),
 		ActivityCommentReport: q.ActivityCommentReport.replaceDB(db),
+		ActivityImage:         q.ActivityImage.replaceDB(db),
 		ActivityLike:          q.ActivityLike.replaceDB(db),
 		ActivityReport:        q.ActivityReport.replaceDB(db),
 		Category:              q.Category.replaceDB(db),
 		Follow:                q.Follow.replaceDB(db),
+		Image:                 q.Image.replaceDB(db),
 		Message:               q.Message.replaceDB(db),
 		Review:                q.Review.replaceDB(db),
 		Tag:                   q.Tag.replaceDB(db),
@@ -133,10 +141,12 @@ type queryCtx struct {
 	ActivityComment       *activityCommentDo
 	ActivityCommentLike   *activityCommentLikeDo
 	ActivityCommentReport *activityCommentReportDo
+	ActivityImage         *activityImageDo
 	ActivityLike          *activityLikeDo
 	ActivityReport        *activityReportDo
 	Category              *categoryDo
 	Follow                *followDo
+	Image                 *imageDo
 	Message               *messageDo
 	Review                *reviewDo
 	Tag                   *tagDo
@@ -157,10 +167,12 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		ActivityComment:       q.ActivityComment.WithContext(ctx),
 		ActivityCommentLike:   q.ActivityCommentLike.WithContext(ctx),
 		ActivityCommentReport: q.ActivityCommentReport.WithContext(ctx),
+		ActivityImage:         q.ActivityImage.WithContext(ctx),
 		ActivityLike:          q.ActivityLike.WithContext(ctx),
 		ActivityReport:        q.ActivityReport.WithContext(ctx),
 		Category:              q.Category.WithContext(ctx),
 		Follow:                q.Follow.WithContext(ctx),
+		Image:                 q.Image.WithContext(ctx),
 		Message:               q.Message.WithContext(ctx),
 		Review:                q.Review.WithContext(ctx),
 		Tag:                   q.Tag.WithContext(ctx),

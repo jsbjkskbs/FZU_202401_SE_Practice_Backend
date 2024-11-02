@@ -51,43 +51,43 @@ const (
 	NoErrorMsg = "ok"
 
 	// Common error
-	InternalServerErrorMsg = "Internal server error"
-	ThirdPartyCallErrorMsg = "Third party call error"
-	DatabaseCallErrorMsg   = "Database call error"
-	FileSystemErrorMsg     = "File system error"
+	InternalServerErrorMsg = "内部服务器错误"
+	ThirdPartyCallErrorMsg = "第三方调用错误"
+	DatabaseCallErrorMsg   = "数据访问错误"
+	FileSystemErrorMsg     = "文件系统错误"
 
 	// Auth error
-	AccessTokenInvalidErrorMsg    = "Access token invalid"
-	AccessTokenExpiredErrorMsg    = "Access token expired"
-	AccessTokenForbiddenErrorMsg  = "Access token forbidden"
-	RefreshTokenInvalidErrorMsg   = "Refresh token invalid"
-	RefreshTokenExpiredErrorMsg   = "Refresh token expired"
-	RefreshTokenForbiddenErrorMsg = "Refresh token forbidden"
-	AccountOrPasswordInvalidMsg   = "Account or password invalid"
+	AccessTokenInvalidErrorMsg    = "Access token 无效"
+	AccessTokenExpiredErrorMsg    = "Access token 过期"
+	AccessTokenForbiddenErrorMsg  = "Access token 被禁止"
+	RefreshTokenInvalidErrorMsg   = "Refresh token 无效"
+	RefreshTokenExpiredErrorMsg   = "Refresh token 过期"
+	RefreshTokenForbiddenErrorMsg = "Refresh token 被禁止"
+	AccountOrPasswordInvalidMsg   = "账号或密码错误"
 
 	// Api error
-	ApiForbiddenErrorMsg    = "Api forbidden"
-	ApiInvokeFailedErrorMsg = "Api invoke failed"
+	ApiForbiddenErrorMsg    = "API 被废弃"
+	ApiInvokeFailedErrorMsg = "API 调用失败"
 
 	// Param error
-	ParamInvalidErrorMsg = "Param invalid"
+	ParamInvalidErrorMsg = "参数错误"
 
 	// Resource error
-	ResourceNotFoundErrorMsg = "Resource not found"
-	ResourceConflictErrorMsg = "Resource conflict"
+	ResourceNotFoundErrorMsg = "资源不存在"
+	ResourceConflictErrorMsg = "资源冲突"
 
 	// Power error
-	PowerNotEnoughErrorMsg = "Power not enough"
+	PowerNotEnoughErrorMsg = "权限不足"
 
 	// MFA error
-	MfaAuthFailedErrorMsg     = "MFA auth failed"
-	MfaGenerateFailedErrorMsg = "MFA generate failed"
+	MfaAuthFailedErrorMsg     = "MFA 认证失败"
+	MfaGenerateFailedErrorMsg = "MFA 生成失败"
 
 	// Query Limit error
-	QueryLimitErrorMsg = "Server receive too many requests at this moment, please wait a moment and try again"
+	QueryLimitErrorMsg = "服务器繁忙，请稍后再试"
 
 	// User Offline error
-	UserOfflineErrorMsg = "User offline"
+	UserOfflineErrorMsg = "用户已离线"
 )
 
 var (

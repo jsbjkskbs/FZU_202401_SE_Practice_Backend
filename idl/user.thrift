@@ -138,6 +138,7 @@ struct UserSearchRespData {
     2: bool is_end;
     3: i64 page_num;
     4: i64 page_size;
+    5: i64 total;
 }
 struct UserSearchResp {
     1: i64 code;

@@ -97,6 +97,7 @@ struct VideoListRespData {
     2: bool is_end;
     3: i64 page_num;
     4: i64 page_size;
+    5: i64 total;
 }
 struct VideoListResp {
     1: i64 code;
@@ -115,6 +116,7 @@ struct VideoSubmitAllRespData {
     2: bool is_end;
     3: i64 page_num;
     4: i64 page_size;
+    5: i64 total;
 }
 struct VideoSubmitAllResp {
     1: i64 code;
@@ -133,6 +135,7 @@ struct VideoSubmitReviewRespData {
     2: bool is_end;
     3: i64 page_num;
     4: i64 page_size;
+    5: i64 total;
 }
 struct VideoSubmitReviewResp {
     1: i64 code;
@@ -151,6 +154,7 @@ struct VideoSubmitLockedRespData {
     2: bool is_end;
     3: i64 page_num;
     4: i64 page_size;
+    5: i64 total;
 }
 struct VideoSubmitLockedResp {
     1: i64 code;
@@ -169,6 +173,7 @@ struct VideoSubmitPassedRespData {
     2: bool is_end;
     3: i64 page_num;
     4: i64 page_size;
+    5: i64 total;
 }
 struct VideoSubmitPassedResp {
     1: i64 code;
@@ -189,6 +194,7 @@ struct VideoSearchRespData {
     2: bool is_end;
     3: i64 page_num;
     4: i64 page_size;
+    5: i64 total;
 }
 struct VideoSearchResp {
     1: i64 code;

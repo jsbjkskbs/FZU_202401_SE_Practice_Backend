@@ -5,9 +5,13 @@ package activity
 import (
 	"context"
 
+	activity "sfw/biz/model/api/activity"
+	"sfw/biz/service"
+	"sfw/pkg/errno"
+	"sfw/pkg/utils"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	activity "sfw/biz/model/api/activity"
 )
 
 // ActivityInfoMethod .
@@ -33,13 +37,29 @@ func ActivityFeedMethod(ctx context.Context, c *app.RequestContext) {
 	var req activity.ActivityFeedReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, activity.ActivityFeedResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(activity.ActivityFeedResp)
+	resp, err := service.NewActivityService(ctx, c).NewFeedEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, activity.ActivityFeedResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, activity.ActivityFeedResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }
 
 // ActivityPublishMethod .
@@ -49,13 +69,28 @@ func ActivityPublishMethod(ctx context.Context, c *app.RequestContext) {
 	var req activity.ActivityPublishReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, activity.ActivityPublishResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(activity.ActivityPublishResp)
+	err = service.NewActivityService(ctx, c).NewPublishEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, activity.ActivityPublishResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, activity.ActivityPublishResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
 }
 
 // ActivityListMethod .
@@ -65,11 +100,27 @@ func ActivityListMethod(ctx context.Context, c *app.RequestContext) {
 	var req activity.ActivityListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, activity.ActivityListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(activity.ActivityListResp)
+	resp, err := service.NewActivityService(ctx, c).NewListEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, activity.ActivityListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, activity.ActivityListResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }

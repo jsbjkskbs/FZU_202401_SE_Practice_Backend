@@ -31,7 +31,7 @@ const (
 		"otype": "video",
 		"oid": "%v"
 	}`
-	videoFopFormat  = "avthumb/mp4/vcodec/libx264/vb/1.25m/r/24/s/x720|saveas/"
+	// videoFopFormat  = "avthumb/mp4/vcodec/libx264/vb/1.25m/r/24/s/x720|saveas/"
 
 	coverUploadCallbackBody = `{
 		"key": "$(key)",
@@ -42,7 +42,7 @@ const (
 		"otype": "cover",
 		"oid": "%v"
 	}`
-	coverFopFormat = "imageMogr2/thumbnail/160000@/format/jpg/blur/1x0/quality/75|saveas/"
+	// coverFopFormat = "imageMogr2/thumbnail/160000@/format/jpg/blur/1x0/quality/75|saveas/"
 
 	AvatarUploadTokenDeadline = 1 * time.Hour
 	VideoUploadTokenDeadline  = 1 * time.Hour
@@ -78,12 +78,12 @@ func UploadVideo(filename string, oid int64) (string, string, error) {
 	putPolicy.SetCallbackUrl(CallbackUrl + "/video")
 	putPolicy.SetCallbackBody(fmt.Sprintf(videoUploadCallbackBody, oid))
 
-	saveVideoEntry := base64.URLEncoding.EncodeToString([]byte(Bucket + ":video/" + filename + "/video.mp4"))
-	videoFop := videoFopFormat + saveVideoEntry
+	// saveVideoEntry := base64.URLEncoding.EncodeToString([]byte(Bucket + ":video/" + filename + "/video.mp4"))
+	// videoFop := videoFopFormat + saveVideoEntry
 
-	persistentOps := strings.Join([]string{videoFop}, ";")
-	persistentType := int64(0)
-	putPolicy.SetPersistentOps(persistentOps).SetPersistentNotifyUrl(CallbackUrl + "/fop").SetPersistentType(persistentType)
+	// persistentOps := strings.Join([]string{videoFop}, ";")
+	// persistentType := int64(0)
+	// putPolicy.SetPersistentOps(persistentOps).SetPersistentNotifyUrl(CallbackUrl + "/fop").SetPersistentType(persistentType)
 	upToken, err := uptoken.NewSigner(putPolicy, Mac).GetUpToken(context.Background())
 	if err != nil {
 		return "", "", err
@@ -99,12 +99,12 @@ func UploadVideoCover(filename string, oid int64) (string, string, error) {
 	putPolicy.SetCallbackUrl(CallbackUrl + "/cover")
 	putPolicy.SetCallbackBody(fmt.Sprintf(coverUploadCallbackBody, oid))
 
-	saveVideoEntry := base64.URLEncoding.EncodeToString([]byte(Bucket + ":video/" + filename + "/cover.jpg"))
-	coverFop := coverFopFormat + saveVideoEntry
+	// saveVideoEntry := base64.URLEncoding.EncodeToString([]byte(Bucket + ":video/" + filename + "/cover.jpg"))
+	// coverFop := coverFopFormat + saveVideoEntry
 
-	persistentOps := strings.Join([]string{coverFop}, ";")
-	persistentType := int64(0)
-	putPolicy.SetPersistentOps(persistentOps).SetPersistentNotifyUrl(CallbackUrl + "/fop").SetPersistentType(persistentType)
+	// persistentOps := strings.Join([]string{coverFop}, ";")
+	// persistentType := int64(0)
+	// putPolicy.SetPersistentOps(persistentOps).SetPersistentNotifyUrl(CallbackUrl + "/fop").SetPersistentType(persistentType)
 	upToken, err := uptoken.NewSigner(putPolicy, Mac).GetUpToken(context.Background())
 	if err != nil {
 		return "", "", err
