@@ -48,12 +48,12 @@ CREATE TABLE `Video` (
     KEY `idx_title` (`title`) USING BTREE COMMENT '标题查询索引'
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COMMENT='视频表';
 
-
 DROP TABLE IF EXISTS `VideoComment`;
 CREATE TABLE `VideoComment` (
     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '评论ID',
     `user_id` BIGINT NOT NULL COMMENT '用户ID',
     `video_id` BIGINT NOT NULL COMMENT '视频ID',
+    `root_id` BIGINT NOT NULL COMMENT '根评论ID',
     `parent_id` BIGINT NOT NULL COMMENT '父评论ID',
     `content` VARCHAR(255) NOT NULL COMMENT '评论内容',
     `created_at` BIGINT NOT NULL COMMENT '创建时间',
@@ -146,6 +146,7 @@ CREATE TABLE `ActivityComment` (
     `user_id` BIGINT NOT NULL COMMENT '用户ID',
     `activity_id` BIGINT NOT NULL COMMENT '动态ID',
     `parent_id` BIGINT NOT NULL COMMENT '父评论ID',
+    `root_id` BIGINT NOT NULL COMMENT '根评论ID',
     `content` VARCHAR(255) NOT NULL COMMENT '评论内容',
     `created_at` BIGINT NOT NULL COMMENT '创建时间',
     `updated_at` BIGINT NOT NULL COMMENT '修改时间',

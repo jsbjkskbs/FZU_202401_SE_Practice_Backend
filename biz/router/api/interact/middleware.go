@@ -65,3 +65,103 @@ func _interactmessagesendmethodMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _activityMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _interactlikeactivityactionmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _comment0Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _interactionlikecommentactionmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _videoMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _interactlikevideoactionmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _interactlikevideolistmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _interactlikecommentactionmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _interactcommentactivitypublishmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _interactcommentvideopublishmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _activity0Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _video0Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _interactcommentactivitylistmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _interactcommentvideolistmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _child_commentMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _interactactivitychildcommentlistmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _activity1Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _video1Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _child_comment0Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _interactvideochildcommentlistmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

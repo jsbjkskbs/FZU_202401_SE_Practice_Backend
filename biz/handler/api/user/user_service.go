@@ -385,62 +385,62 @@ func SearchMethod(ctx context.Context, c *app.RequestContext) {
 }
 
 // PasswordRetrieveMethod .
-// @router /api/v1/user/security/password/retrieve [POST]
+// @router /api/v1/user/security/password/retrieve/email [POST]
 func PasswordRetrieveMethod(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req user.UserPasswordRetrieveReq
+	var req user.UserPasswordRetrieveEmailReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		resp := utils.CreateBaseHttpResponse(err)
-		c.JSON(consts.StatusOK, user.UserPasswordRetrieveResp{
+		c.JSON(consts.StatusOK, user.UserPasswordRetrieveEmailResp{
 			Code: resp.Code,
 			Msg:  resp.Msg,
 		})
 		return
 	}
 
-	err = service.NewUserService(ctx, c).NewSecurityPasswordRetrieve(&req)
+	err = service.NewUserService(ctx, c).NewSecurityPasswordRetrieveEmail(&req)
 	if err != nil {
 		resp := utils.CreateBaseHttpResponse(err)
-		c.JSON(consts.StatusOK, user.UserPasswordRetrieveResp{
+		c.JSON(consts.StatusOK, user.UserPasswordRetrieveEmailResp{
 			Code: resp.Code,
 			Msg:  resp.Msg,
 		})
 		return
 	}
 
-	c.JSON(consts.StatusOK, user.UserPasswordRetrieveResp{
+	c.JSON(consts.StatusOK, user.UserPasswordRetrieveEmailResp{
 		Code: errno.NoError.Code,
 		Msg:  errno.NoError.Message,
 	})
 }
 
 // PasswordResetMethod .
-// @router /api/v1/user/password/reset [POST]
+// @router /api/v1/user/security/password/reset/email [POST]
 func PasswordResetMethod(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req user.UserPasswordResetReq
+	var req user.UserPasswordResetEmailReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		resp := utils.CreateBaseHttpResponse(err)
-		c.JSON(consts.StatusOK, user.UserPasswordResetResp{
+		c.JSON(consts.StatusOK, user.UserPasswordResetEmailResp{
 			Code: resp.Code,
 			Msg:  resp.Msg,
 		})
 		return
 	}
 
-	err = service.NewUserService(ctx, c).NewSecurityPasswordResetEvent(&req)
+	err = service.NewUserService(ctx, c).NewSecurityPasswordResetEmailEvent(&req)
 	if err != nil {
 		resp := utils.CreateBaseHttpResponse(err)
-		c.JSON(consts.StatusOK, user.UserPasswordResetResp{
+		c.JSON(consts.StatusOK, user.UserPasswordResetEmailResp{
 			Code: resp.Code,
 			Msg:  resp.Msg,
 		})
 		return
 	}
 
-	c.JSON(consts.StatusOK, user.UserPasswordResetResp{
+	c.JSON(consts.StatusOK, user.UserPasswordResetEmailResp{
 		Code: errno.NoError.Code,
 		Msg:  errno.NoError.Message,
 	})

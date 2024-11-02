@@ -240,6 +240,34 @@ func ConfigureRegister(...any) {
 				if redis.VideoInfoClient.DB, ok = vimap["db"].(int); !ok {
 					return errno.InternalServerError
 				}
+
+				aimap, ok := cmap["activity_info"].(map[string]interface{})
+				if !ok {
+					return errno.InternalServerError
+				}
+				if redis.ActivityInfoClient.Addr, ok = aimap["addr"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if redis.ActivityInfoClient.Password, ok = aimap["password"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if redis.ActivityInfoClient.DB, ok = aimap["db"].(int); !ok {
+					return errno.InternalServerError
+				}
+
+				cimap, ok := cmap["comment_info"].(map[string]interface{})
+				if !ok {
+					return errno.InternalServerError
+				}
+				if redis.CommentInfoClient.Addr, ok = cimap["addr"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if redis.CommentInfoClient.Password, ok = cimap["password"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if redis.CommentInfoClient.DB, ok = cimap["db"].(int); !ok {
+					return errno.InternalServerError
+				}
 				redis.Load()
 				return nil
 			},
