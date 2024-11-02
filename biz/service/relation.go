@@ -150,6 +150,7 @@ func (service *RelationService) NewFriendListEvent(req *relation.RelationFriendL
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
+	defer rows.Close()
 	friends := []int64{}
 	for rows.Next() {
 		var friendId int64
@@ -160,6 +161,7 @@ func (service *RelationService) NewFriendListEvent(req *relation.RelationFriendL
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
+	defer row.Close()
 	var count int64
 	row.Next()
 	row.Scan(&count)

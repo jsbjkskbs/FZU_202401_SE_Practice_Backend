@@ -57,14 +57,13 @@ struct Comment {
 struct Activity {
     1: string id;
     2: string user_id;
-    3: string title;
-    4: string text;
-    5: list<string> image;
-    6: string ref_video;
-    7: string ref_activity;
-    8: i64 created_at;
-    9: i64 updated_at;
-    10: i64 deleted_at;
+    3: string content;
+    4: list<string> image;
+    5: string ref_video;
+    6: string ref_activity;
+    7: i64 created_at;
+    8: i64 updated_at;
+    9: i64 deleted_at;
 }
 
 struct Report {
