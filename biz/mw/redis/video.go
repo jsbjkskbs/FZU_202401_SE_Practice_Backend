@@ -1,8 +1,15 @@
 package redis
 
-func VideoUploadInfoStore(key string, kv map[string]interface{}) error {
+import "time"
+
+func VideoUploadInfoStore(key string, kv map[string]interface{}, ttl time.Duration) error {
 	if err := videoClient.HMSet(key, kv).Err(); err != nil {
 		return err
+	}
+	if ttl > 0 {
+		if err := videoClient.Expire(key, ttl).Err(); err != nil {
+			return err
+		}
 	}
 	return nil
 }

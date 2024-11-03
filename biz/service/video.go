@@ -16,7 +16,6 @@ import (
 	"sfw/pkg/oss"
 	"sfw/pkg/utils/checker"
 	"sfw/pkg/utils/generator"
-	"sfw/pkg/utils/scheduler"
 	"strconv"
 	"strings"
 
@@ -56,21 +55,14 @@ func (service *VideoService) NewPublishEvent(req *video.VideoPublishReq) (*video
 		"labels":      strings.Join(req.Labels, "\t"),
 	}
 
-	err = redis.VideoUploadInfoStore(fmt.Sprint(videoId), kv)
+	err = redis.VideoUploadInfoStore(fmt.Sprint(videoId), kv, oss.VideoUploadTokenDeadline)
 	if err != nil {
-		return nil, errno.DatabaseCallError
+		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	defer scheduler.Schdeduler.Start(
-		"video:"+fmt.Sprint(videoId),
-		oss.VideoUploadTokenDeadline,
-		func() {
-			redis.VideoUploadInfoDel(fmt.Sprint(videoId))
-		},
-	)
 
 	uptoken, uploadKey, err := oss.UploadVideo(fmt.Sprint(videoId), videoId)
 	if err != nil {
-		return nil, errno.InternalServerError
+		return nil, errno.InternalServerError.WithInnerError(err)
 	}
 
 	return &video.VideoPublishRespData{
