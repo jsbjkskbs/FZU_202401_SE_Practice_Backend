@@ -31,6 +31,7 @@ func newActivityReport(db *gorm.DB, opts ...gen.DOOption) activityReport {
 	_activityReport.UserID = field.NewInt64(tableName, "user_id")
 	_activityReport.ActivityID = field.NewInt64(tableName, "activity_id")
 	_activityReport.Reason = field.NewString(tableName, "reason")
+	_activityReport.Label = field.NewString(tableName, "label")
 	_activityReport.CreatedAt = field.NewInt64(tableName, "created_at")
 	_activityReport.Status = field.NewString(tableName, "status")
 	_activityReport.ResolvedAt = field.NewInt64(tableName, "resolved_at")
@@ -50,6 +51,7 @@ type activityReport struct {
 	UserID     field.Int64  // 用户ID
 	ActivityID field.Int64  // 动态ID
 	Reason     field.String // 举报原因
+	Label      field.String // 举报标签
 	CreatedAt  field.Int64  // 创建时间
 	Status     field.String // 举报状态
 	ResolvedAt field.Int64  // 解决时间
@@ -74,6 +76,7 @@ func (a *activityReport) updateTableName(table string) *activityReport {
 	a.UserID = field.NewInt64(table, "user_id")
 	a.ActivityID = field.NewInt64(table, "activity_id")
 	a.Reason = field.NewString(table, "reason")
+	a.Label = field.NewString(table, "label")
 	a.CreatedAt = field.NewInt64(table, "created_at")
 	a.Status = field.NewString(table, "status")
 	a.ResolvedAt = field.NewInt64(table, "resolved_at")
@@ -106,11 +109,12 @@ func (a *activityReport) GetFieldByName(fieldName string) (field.OrderExpr, bool
 }
 
 func (a *activityReport) fillFieldMap() {
-	a.fieldMap = make(map[string]field.Expr, 8)
+	a.fieldMap = make(map[string]field.Expr, 9)
 	a.fieldMap["id"] = a.ID
 	a.fieldMap["user_id"] = a.UserID
 	a.fieldMap["activity_id"] = a.ActivityID
 	a.fieldMap["reason"] = a.Reason
+	a.fieldMap["label"] = a.Label
 	a.fieldMap["created_at"] = a.CreatedAt
 	a.fieldMap["status"] = a.Status
 	a.fieldMap["resolved_at"] = a.ResolvedAt

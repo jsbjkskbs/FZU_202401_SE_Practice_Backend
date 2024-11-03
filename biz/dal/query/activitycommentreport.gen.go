@@ -31,6 +31,7 @@ func newActivityCommentReport(db *gorm.DB, opts ...gen.DOOption) activityComment
 	_activityCommentReport.UserID = field.NewInt64(tableName, "user_id")
 	_activityCommentReport.CommentID = field.NewInt64(tableName, "comment_id")
 	_activityCommentReport.Reason = field.NewString(tableName, "reason")
+	_activityCommentReport.Label = field.NewString(tableName, "label")
 	_activityCommentReport.CreatedAt = field.NewInt64(tableName, "created_at")
 	_activityCommentReport.Status = field.NewString(tableName, "status")
 	_activityCommentReport.ResolvedAt = field.NewInt64(tableName, "resolved_at")
@@ -50,6 +51,7 @@ type activityCommentReport struct {
 	UserID     field.Int64  // 用户ID
 	CommentID  field.Int64  // 动态评论ID
 	Reason     field.String // 举报原因
+	Label      field.String // 举报标签
 	CreatedAt  field.Int64  // 创建时间
 	Status     field.String // 举报状态
 	ResolvedAt field.Int64  // 解决时间
@@ -74,6 +76,7 @@ func (a *activityCommentReport) updateTableName(table string) *activityCommentRe
 	a.UserID = field.NewInt64(table, "user_id")
 	a.CommentID = field.NewInt64(table, "comment_id")
 	a.Reason = field.NewString(table, "reason")
+	a.Label = field.NewString(table, "label")
 	a.CreatedAt = field.NewInt64(table, "created_at")
 	a.Status = field.NewString(table, "status")
 	a.ResolvedAt = field.NewInt64(table, "resolved_at")
@@ -106,11 +109,12 @@ func (a *activityCommentReport) GetFieldByName(fieldName string) (field.OrderExp
 }
 
 func (a *activityCommentReport) fillFieldMap() {
-	a.fieldMap = make(map[string]field.Expr, 8)
+	a.fieldMap = make(map[string]field.Expr, 9)
 	a.fieldMap["id"] = a.ID
 	a.fieldMap["user_id"] = a.UserID
 	a.fieldMap["comment_id"] = a.CommentID
 	a.fieldMap["reason"] = a.Reason
+	a.fieldMap["label"] = a.Label
 	a.fieldMap["created_at"] = a.CreatedAt
 	a.fieldMap["status"] = a.Status
 	a.fieldMap["resolved_at"] = a.ResolvedAt
