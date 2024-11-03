@@ -3,6 +3,8 @@
 package tool
 
 import (
+	auth "sfw/biz/router/api/api_auth"
+
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -23,7 +25,7 @@ func _v1Mw() []app.HandlerFunc {
 
 func _adminMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.AdminAuth()
 }
 
 func _toolMw() []app.HandlerFunc {
@@ -72,6 +74,56 @@ func _userMw() []app.HandlerFunc {
 }
 
 func _userrefreshMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _deleteMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _admintooldeleteactivityMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _admintooldeletecommentMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _admintooldeletevideoMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _delete0Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _tooldeleteactivityMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _tooldeletecommentMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _tooldeletevideoMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _tokenMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _tooltokenrefreshMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }

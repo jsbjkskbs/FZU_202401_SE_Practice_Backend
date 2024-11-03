@@ -10,18 +10,18 @@ import (
 	"sync"
 )
 
-func SynchronizeVideoCommentLikeFromRedis2DB(cid string) error {
+func SynchronizeVideoCommentLikeFromRedis2DB(vid, cid string) error {
 	wg := sync.WaitGroup{}
 	wg.Add(2)
 	errs := make(chan error, 2)
 	go func() {
-		if err := synchronizeNewInsertVideoCommentLikeFromDB2Redis(cid); err != nil {
+		if err := synchronizeNewInsertVideoCommentLikeFromDB2Redis(vid, cid); err != nil {
 			errs <- err
 		}
 		wg.Done()
 	}()
 	go func() {
-		if err := synchronizeNewDeleteVideoCommentLikeFromDB2Redis(cid); err != nil {
+		if err := synchronizeNewDeleteVideoCommentLikeFromDB2Redis(vid, cid); err != nil {
 			errs <- err
 		}
 		wg.Done()
@@ -31,11 +31,11 @@ func SynchronizeVideoCommentLikeFromRedis2DB(cid string) error {
 	case err := <-errs:
 		return err
 	default:
-		return redis.DeleteVideoCommentLikeListFromDynamicSpace(cid)
+		return redis.DeleteVideoCommentLikeListFromDynamicSpace(vid, cid)
 	}
 }
 
-func synchronizeNewInsertVideoCommentLikeFromDB2Redis(cid string) error {
+func synchronizeNewInsertVideoCommentLikeFromDB2Redis(vid, cid string) error {
 	commentId, err := strconv.ParseInt(cid, 10, 64)
 	if err != nil {
 		return err
@@ -50,7 +50,7 @@ func synchronizeNewInsertVideoCommentLikeFromDB2Redis(cid string) error {
 		return nil
 	}
 
-	list, err := redis.GetNewUpdateVideoCommentLikeList(cid)
+	list, err := redis.GetNewUpdateVideoCommentLikeList(vid, cid)
 	if err != nil {
 		return err
 	}
@@ -73,20 +73,20 @@ func synchronizeNewInsertVideoCommentLikeFromDB2Redis(cid string) error {
 		return err
 	}
 
-	if err = redis.AppendVideoCommentLikeListToStaticSpace(cid, *list); err != nil {
+	if err = redis.AppendVideoCommentLikeListToStaticSpace(vid, cid, *list); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func synchronizeNewDeleteVideoCommentLikeFromDB2Redis(cid string) error {
+func synchronizeNewDeleteVideoCommentLikeFromDB2Redis(vid, cid string) error {
 	commentId, err := strconv.ParseInt(cid, 10, 64)
 	if err != nil {
 		return err
 	}
 
-	list, err := redis.GetNewDeleteVideoCommentLikeList(cid)
+	list, err := redis.GetNewDeleteVideoCommentLikeList(vid, cid)
 	if err != nil {
 		return err
 	}
@@ -108,7 +108,7 @@ func synchronizeNewDeleteVideoCommentLikeFromDB2Redis(cid string) error {
 
 func SynchronizeVideoCommentLikeFromDB2Redis() error {
 	vc := dal.Executor.VideoComment
-	vcomments, err := vc.WithContext(context.Background()).Select(vc.ID).Find()
+	vcomments, err := vc.WithContext(context.Background()).Select(vc.ID, vc.VideoID).Find()
 	if err != nil {
 		return err
 	}
@@ -124,25 +124,25 @@ func SynchronizeVideoCommentLikeFromDB2Redis() error {
 		for _, vcl := range clikes {
 			list = append(list, fmt.Sprint(vcl.UserID))
 		}
-		if err = redis.PutVideoCommentLikeInfo(fmt.Sprint(v.ID), &list); err != nil {
+		if err = redis.PutVideoCommentLikeInfo(fmt.Sprint(v.VideoID), fmt.Sprint(v.ID), &list); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func SynchronizeActivityCommentLikeFromRedis2DB(cid string) error {
+func SynchronizeActivityCommentLikeFromRedis2DB(aid, cid string) error {
 	wg := sync.WaitGroup{}
 	wg.Add(2)
 	errs := make(chan error, 2)
 	go func() {
-		if err := synchronizeNewInsertActivityCommentLikeFromDB2Redis(cid); err != nil {
+		if err := synchronizeNewInsertActivityCommentLikeFromDB2Redis(aid, cid); err != nil {
 			errs <- err
 		}
 		wg.Done()
 	}()
 	go func() {
-		if err := synchronizeNewDeleteActivityCommentLikeFromDB2Redis(cid); err != nil {
+		if err := synchronizeNewDeleteActivityCommentLikeFromDB2Redis(aid, cid); err != nil {
 			errs <- err
 		}
 		wg.Done()
@@ -152,11 +152,11 @@ func SynchronizeActivityCommentLikeFromRedis2DB(cid string) error {
 	case err := <-errs:
 		return err
 	default:
-		return redis.DeleteActivityCommentLikeListFromDynamicSpace(cid)
+		return redis.DeleteActivityCommentLikeListFromDynamicSpace(aid, cid)
 	}
 }
 
-func synchronizeNewInsertActivityCommentLikeFromDB2Redis(cid string) error {
+func synchronizeNewInsertActivityCommentLikeFromDB2Redis(aid, cid string) error {
 	commentId, err := strconv.ParseInt(cid, 10, 64)
 	if err != nil {
 		return err
@@ -171,7 +171,7 @@ func synchronizeNewInsertActivityCommentLikeFromDB2Redis(cid string) error {
 		return nil
 	}
 
-	list, err := redis.GetNewUpdateActivityCommentLikeList(cid)
+	list, err := redis.GetNewUpdateActivityCommentLikeList(aid, cid)
 	if err != nil {
 		return err
 	}
@@ -194,20 +194,20 @@ func synchronizeNewInsertActivityCommentLikeFromDB2Redis(cid string) error {
 		return err
 	}
 
-	if err = redis.AppendActivityCommentLikeListToStaticSpace(cid, *list); err != nil {
+	if err = redis.AppendActivityCommentLikeListToStaticSpace(aid, cid, *list); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func synchronizeNewDeleteActivityCommentLikeFromDB2Redis(cid string) error {
+func synchronizeNewDeleteActivityCommentLikeFromDB2Redis(aid, cid string) error {
 	commentId, err := strconv.ParseInt(cid, 10, 64)
 	if err != nil {
 		return err
 	}
 
-	list, err := redis.GetNewDeleteActivityCommentLikeList(cid)
+	list, err := redis.GetNewDeleteActivityCommentLikeList(aid, cid)
 	if err != nil {
 		return err
 	}
@@ -229,7 +229,7 @@ func synchronizeNewDeleteActivityCommentLikeFromDB2Redis(cid string) error {
 
 func SynchronizeActivityCommentLikeFromDB2Redis() error {
 	ac := dal.Executor.ActivityComment
-	acomments, err := ac.WithContext(context.Background()).Select(ac.ID).Find()
+	acomments, err := ac.WithContext(context.Background()).Select(ac.ID, ac.ActivityID).Find()
 	if err != nil {
 		return err
 	}
@@ -245,7 +245,7 @@ func SynchronizeActivityCommentLikeFromDB2Redis() error {
 		for _, acl := range clikes {
 			list = append(list, fmt.Sprint(acl.UserID))
 		}
-		if err = redis.PutActivityCommentLikeInfo(fmt.Sprint(a.ID), &list); err != nil {
+		if err = redis.PutActivityCommentLikeInfo(fmt.Sprint(ac.ActivityID), fmt.Sprint(a.ID), &list); err != nil {
 			return err
 		}
 	}

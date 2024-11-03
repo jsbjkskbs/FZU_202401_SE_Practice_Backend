@@ -3,6 +3,7 @@ package redis
 import (
 	"sfw/pkg/errno"
 	"strconv"
+	"sync"
 
 	"github.com/go-redis/redis"
 )
@@ -169,4 +170,45 @@ func GetVideoPopularList(pageNum, pageSize int64) (*[]string, error) {
 func IsVideoExist(vid string) bool {
 	_, err := videoInfoClient.ZScore(`visit`, vid).Result()
 	return err == nil
+}
+
+func DeleteVideo(vid string) error {
+	wg := sync.WaitGroup{}
+	wg.Add(4)
+	errs := make(chan error, 4)
+	go func() {
+		err := DeleteVideoCommentInfo(vid)
+		if err != nil {
+			errs <- err
+		}
+		wg.Done()
+	}()
+	go func() {
+		_, err := videoInfoClient.Del(`video/like/` + vid).Result()
+		if err != nil {
+			errs <- err
+		}
+		wg.Done()
+	}()
+	go func() {
+		_, err := videoInfoClient.Del(`video/changed_like/` + vid).Result()
+		if err != nil {
+			errs <- err
+		}
+		wg.Done()
+	}()
+	go func() {
+		_, err := videoInfoClient.ZRem(`visit`, vid).Result()
+		if err != nil {
+			errs <- err
+		}
+		wg.Done()
+	}()
+	wg.Wait()
+	select {
+	case err := <-errs:
+		return err
+	default:
+		return nil
+	}
 }
