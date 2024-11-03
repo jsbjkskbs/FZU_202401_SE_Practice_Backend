@@ -3,6 +3,9 @@ package service
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
+
 	"sfw/biz/dal"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/video"
@@ -17,8 +20,6 @@ import (
 	"sfw/pkg/utils/checker"
 	"sfw/pkg/utils/generator"
 	"sfw/pkg/utils/scheduler"
-	"strconv"
-	"strings"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"gorm.io/gen"
@@ -316,19 +317,19 @@ func (service *VideoService) NewSearchEvent(req *video.VideoSearchReq) (*video.V
 	result, count, err := vd.Where(conditions...).
 		Where(vd.Where(v.Title.Like("%"+req.Keyword+"%")).Or(v.Description.Like("%"+req.Keyword+"%"))).
 		FindByPage(int(req.PageNum), int(req.PageSize))
-	/*
-		SELECT *
-			FROM video
-			WHERE
-				(video.title LIKE '%keyword%' OR video.description LIKE '%keyword%')
-				AND
-				video.status = 'passed'
-				AND
-				video.created_at >= fromDate
-				AND
-				video.created_at <= toDate
-				LIMIT pageSize OFFSET pageNum
-	*/
+		/*
+			SELECT *
+				FROM video
+				WHERE
+					(video.title LIKE '%keyword%' OR video.description LIKE '%keyword%')
+					AND
+					video.status = 'passed'
+					AND
+					video.created_at >= fromDate
+					AND
+					video.created_at <= toDate
+					LIMIT pageSize OFFSET pageNum
+		*/
 	if err != nil {
 		return nil, errno.DatabaseCallError
 	}

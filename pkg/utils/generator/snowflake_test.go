@@ -1,10 +1,11 @@
 package generator_test
 
 import (
-	"sfw/pkg/utils/generator"
 	"sync"
 	"testing"
 	"time"
+
+	"sfw/pkg/utils/generator"
 )
 
 func TestSnowFlake(t *testing.T) {

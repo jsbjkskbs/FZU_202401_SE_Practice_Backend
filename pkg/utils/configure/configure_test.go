@@ -1,9 +1,10 @@
 package configure_test
 
 import (
-	"sfw/pkg/utils/configure"
 	"testing"
 	"time"
+
+	"sfw/pkg/utils/configure"
 )
 
 func TestNewLoader(t *testing.T) {

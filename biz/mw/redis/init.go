@@ -51,5 +51,4 @@ func Load() {
 	if _, err := videoInfoClient.Ping().Result(); err != nil {
 		panic(err)
 	}
-
 }

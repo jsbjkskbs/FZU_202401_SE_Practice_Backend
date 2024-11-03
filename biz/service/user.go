@@ -3,6 +3,9 @@ package service
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"time"
+
 	"sfw/biz/dal"
 	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
@@ -19,8 +22,6 @@ import (
 	"sfw/pkg/utils/generator"
 	"sfw/pkg/utils/mail"
 	"sfw/pkg/utils/mfa"
-	"strconv"
-	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
 )
