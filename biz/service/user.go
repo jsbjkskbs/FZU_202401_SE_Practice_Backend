@@ -136,7 +136,7 @@ func (service *UserService) NewLoginEvent(req *user.UserLoginReq) (*base.UserWit
 func (service *UserService) NewInfoEvent(req *user.UserInfoReq) (*base.User, error) {
 	uid, err := strconv.ParseInt(req.UserID, 10, 64)
 	if err != nil {
-		return nil, errno.ParamInvalid.WithInnerError(err)
+		return nil, errno.ParamInvalid.WithMessage("用户ID错误")
 	}
 	user, err := exquery.QueryUserByID(uid)
 	if err != nil {
@@ -151,7 +151,7 @@ func (service *UserService) NewInfoEvent(req *user.UserInfoReq) (*base.User, err
 func (service *UserService) NewFollowerCountEvent(req *user.UserFollowerCountReq) (int64, error) {
 	uid, err := strconv.ParseInt(req.UserID, 10, 64)
 	if err != nil {
-		return 0, errno.ParamInvalid.WithInnerError(err)
+		return 0, errno.ParamInvalid.WithMessage("用户ID错误")
 	}
 	count, err := exquery.QueryFollowerCountByUserID(uid)
 	if err != nil {
@@ -163,7 +163,7 @@ func (service *UserService) NewFollowerCountEvent(req *user.UserFollowerCountReq
 func (service *UserService) NewFollowingCountEvent(req *user.UserFollowingCountReq) (int64, error) {
 	uid, err := strconv.ParseInt(req.UserID, 10, 64)
 	if err != nil {
-		return 0, errno.ParamInvalid.WithInnerError(err)
+		return 0, errno.ParamInvalid.WithMessage("用户ID错误")
 	}
 	count, err := exquery.QueryFollowingCountByUserID(uid)
 	if err != nil {
@@ -189,7 +189,7 @@ func (service *UserService) NewLikeCountEvent(req *user.UserLikeCountReq) (int64
 func (service *UserService) NewAvatarUploadEvent(req *user.UserAvatarUploadReq) (*user.UserAvatarUploadData, error) {
 	id, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
-		return nil, errno.AccessTokenInvalid.WithInnerError(err)
+		return nil, errno.AccessTokenInvalid
 	}
 
 	uptoken, uploadKey, err := oss.UploadAvatar(fmt.Sprint(id), id)
@@ -206,7 +206,7 @@ func (service *UserService) NewAvatarUploadEvent(req *user.UserAvatarUploadReq) 
 func (service *UserService) NewMfaQrcodeEvent(req *user.UserMfaQrcodeReq) (*user.UserMfaQrcodeData, error) {
 	id, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
-		return nil, errno.AccessTokenInvalid.WithInnerError(err)
+		return nil, errno.AccessTokenInvalid
 	}
 
 	info, err := mfa.NewAuthController(fmt.Sprint(id), "", "").GenerateTOTP()
@@ -224,7 +224,7 @@ func (service *UserService) NewMfaQrcodeEvent(req *user.UserMfaQrcodeReq) (*user
 func (service *UserService) NewMfaBindEvent(req *user.UserMfaBindReq) error {
 	id, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
-		return errno.AccessTokenInvalid.WithInnerError(err)
+		return errno.AccessTokenInvalid
 	}
 
 	passed := mfa.NewAuthController(fmt.Sprint(id), req.Code, req.Secret).VerifyTOTP()
@@ -246,11 +246,7 @@ func (service *UserService) NewMfaBindEvent(req *user.UserMfaBindReq) error {
 func (service *UserService) NewSearchEvent(req *user.UserSearchReq) (*user.UserSearchRespData, error) {
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 
-	u := dal.Executor.User
-	users, count, err := u.
-		WithContext(service.ctx).
-		Where(u.Username.Like(fmt.Sprintf("%%%s%%", req.Keyword))).
-		FindByPage(int(req.PageNum*req.PageSize), int(req.PageSize))
+	users, count, err := exquery.QueryUserFuzzyByUsernamePaged("%"+req.Keyword+"%", req.PageNum, req.PageSize)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -279,7 +275,7 @@ func (service *UserService) NewSecurityPasswordRetrieveEmail(req *user.UserPassw
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	if user == nil {
-		return errno.CustomError.WithMessage("邮箱不存在")
+		return errno.CustomError.WithMessage("用户不存在")
 	}
 	mail.Station.Send(&mail.Email{
 		To:      []string{req.Email},
@@ -289,9 +285,9 @@ func (service *UserService) NewSecurityPasswordRetrieveEmail(req *user.UserPassw
 	if err := redis.EmailCodeStore(req.Email, code); err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	err = redis.TokenExpireTimeStore(fmt.Sprint(user.ID), time.Now().Unix(), jwt.AccessTokenExpireTime-1*time.Minute)
+	err = redis.TokenExpireTimeStore(fmt.Sprint(user.ID), time.Now().Unix(), jwt.RefreshTokenExpireTime-1*time.Minute)
 	if err != nil {
-		return errno.DatabaseCallError
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
 
 	return nil
@@ -309,12 +305,8 @@ func (servcie *UserService) NewSecurityPasswordResetEmailEvent(req *user.UserPas
 	if code != req.Code {
 		return errno.CustomError.WithMessage("验证码错误、不存在或已过期")
 	}
-	uid, err := strconv.ParseInt(req.Email, 10, 64)
-	if err != nil {
-		return errno.CustomError.WithMessage("用户ID错误")
-	}
-	err = exquery.UpdateUserWithId(&model.User{
-		ID:       uid,
+	err = exquery.UpdateUserWithEmail(&model.User{
+		Email:    req.Email,
 		Password: encrypt.EncryptBySHA256WithSalt(req.Password, encrypt.GetSalt()),
 	})
 	if err != nil {

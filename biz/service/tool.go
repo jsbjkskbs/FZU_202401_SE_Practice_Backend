@@ -4,10 +4,13 @@ import (
 	"context"
 	"fmt"
 	"sfw/biz/dal"
+	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/tool"
+	"sfw/biz/mw/gorse"
 	"sfw/biz/mw/jwt"
 	"sfw/biz/mw/redis"
+	"sfw/biz/service/common"
 	"sfw/pkg/errno"
 	"sfw/pkg/oss"
 	"sfw/pkg/utils/generator"
@@ -39,18 +42,22 @@ func (service *ToolService) NewDeleteVideoEvent(req *tool.ToolDeleteVideoReq) er
 		return errno.ParamInvalid.WithInnerError(err)
 	}
 
-	v := dal.Executor.Video
-	exist, err := v.WithContext(context.Background()).Where(v.UserID.Eq(uid), v.ID.Eq(videoId)).Count()
+	exist, err := exquery.QueryVideoExistByIdAndUserId(videoId, uid)
 	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("视频不存在或者不属于你")
 	}
 
-	_, err = v.WithContext(context.Background()).Where(v.ID.Eq(videoId)).Delete()
+	err = exquery.DeleteVideoById(videoId)
 	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
+	}
+
+	err = gorse.DelVideo(fmt.Sprint(videoId))
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
 
 	wg := &sync.WaitGroup{}
@@ -64,8 +71,7 @@ func (service *ToolService) NewDeleteVideoEvent(req *tool.ToolDeleteVideoReq) er
 		wg.Done()
 	}()
 	go func() {
-		vc := dal.Executor.VideoComment
-		_, err := vc.WithContext(context.Background()).Where(vc.VideoID.Eq(videoId)).Delete()
+		err := exquery.DeleteVideoCommentByVideoId(videoId)
 		if err != nil {
 			errs <- err
 		}
@@ -74,7 +80,7 @@ func (service *ToolService) NewDeleteVideoEvent(req *tool.ToolDeleteVideoReq) er
 	wg.Wait()
 	select {
 	case err := <-errs:
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	default:
 		return nil
 	}
@@ -90,18 +96,17 @@ func (service *ToolService) NewDeleteActivityEvent(req *tool.ToolDeleteActivityR
 		return errno.ParamInvalid.WithInnerError(err)
 	}
 
-	a := dal.Executor.Activity
-	exist, err := a.WithContext(context.Background()).Where(a.UserID.Eq(uid), a.ID.Eq(activityId)).Count()
+	exist, err := exquery.QueryActivityExistByIdAndUserId(activityId, uid)
 	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("动态不存在或者不属于你")
 	}
 
-	_, err = a.WithContext(context.Background()).Where(a.ID.Eq(activityId)).Delete()
+	err = exquery.DeleteActivityById(activityId)
 	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
 
 	wg := &sync.WaitGroup{}
@@ -115,8 +120,7 @@ func (service *ToolService) NewDeleteActivityEvent(req *tool.ToolDeleteActivityR
 		wg.Done()
 	}()
 	go func() {
-		ac := dal.Executor.ActivityComment
-		_, err := ac.WithContext(context.Background()).Where(ac.ActivityID.Eq(activityId)).Delete()
+		err := exquery.DeleteActivityCommentByActivityId(activityId)
 		if err != nil {
 			errs <- err
 		}
@@ -141,11 +145,11 @@ func (service *ToolService) newDeleteVideoCommentEvent(req *tool.ToolDeleteComme
 	}
 
 	vc := dal.Executor.VideoComment
-	exist, err := vc.WithContext(context.Background()).Where(vc.UserID.Eq(uid), vc.ID.Eq(commentId)).Count()
+	exist, err := exquery.QueryVideoCommentExistByIdAndUserId(commentId, uid)
 	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("不能删除别人的评论")
 	}
 
@@ -187,11 +191,11 @@ func (service *ToolService) newDeleteActivityCommentEvent(req *tool.ToolDeleteCo
 	}
 
 	ac := dal.Executor.ActivityComment
-	exist, err := ac.WithContext(context.Background()).Where(ac.UserID.Eq(uid), ac.ID.Eq(commentId)).Count()
+	exist, err := exquery.QueryActivityCommentExistByIdAndUserId(commentId, uid)
 	if err != nil {
 		return errno.InternalServerError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("不能删除别人的评论")
 	}
 
@@ -224,9 +228,9 @@ func (service *ToolService) newDeleteActivityCommentEvent(req *tool.ToolDeleteCo
 
 func (tool *ToolService) NewDeleteCommentEvent(req *tool.ToolDeleteCommentReq) error {
 	switch req.CommentType {
-	case "video":
+	case common.CommentTypeVideo:
 		return tool.newDeleteVideoCommentEvent(req)
-	case "activity":
+	case common.CommentTypeActivity:
 		return tool.newDeleteActivityCommentEvent(req)
 	}
 	return errno.ParamInvalid.WithMessage("评论类型错误")
@@ -238,16 +242,15 @@ func (service *ToolService) NewAdminDeleteVideoEvent(req *tool.AdminToolDeleteVi
 		return errno.ParamInvalid.WithInnerError(err)
 	}
 
-	v := dal.Executor.Video
-	exist, err := v.WithContext(context.Background()).Where(v.ID.Eq(videoId)).Count()
+	exist, err := exquery.QueryVideoExistById(videoId)
 	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("视频不存在")
 	}
 
-	_, err = v.WithContext(context.Background()).Where(v.ID.Eq(videoId)).Delete()
+	err = exquery.DeleteVideoById(videoId)
 	if err != nil {
 		return errno.InternalServerError.WithInnerError(err)
 	}
@@ -263,8 +266,7 @@ func (service *ToolService) NewAdminDeleteVideoEvent(req *tool.AdminToolDeleteVi
 		wg.Done()
 	}()
 	go func() {
-		vc := dal.Executor.VideoComment
-		_, err := vc.WithContext(context.Background()).Where(vc.VideoID.Eq(videoId)).Delete()
+		err := exquery.DeleteVideoCommentByVideoId(videoId)
 		if err != nil {
 			errs <- err
 		}
@@ -284,18 +286,17 @@ func (service *ToolService) NewAdminDeleteActivityEvent(req *tool.AdminToolDelet
 		return errno.ParamInvalid.WithInnerError(err)
 	}
 
-	a := dal.Executor.Activity
-	exist, err := a.WithContext(context.Background()).Where(a.ID.Eq(activityId)).Count()
+	exist, err := exquery.QueryActivityExistById(activityId)
 	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("动态不存在")
 	}
 
-	_, err = a.WithContext(context.Background()).Where(a.ID.Eq(activityId)).Delete()
+	err = exquery.DeleteActivityById(activityId)
 	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
 
 	wg := &sync.WaitGroup{}
@@ -309,8 +310,7 @@ func (service *ToolService) NewAdminDeleteActivityEvent(req *tool.AdminToolDelet
 		wg.Done()
 	}()
 	go func() {
-		ac := dal.Executor.ActivityComment
-		_, err := ac.WithContext(context.Background()).Where(ac.ActivityID.Eq(activityId)).Delete()
+		err := exquery.DeleteActivityCommentByActivityId(activityId)
 		if err != nil {
 			errs <- err
 		}
@@ -331,11 +331,11 @@ func (service *ToolService) newAdminDeleteVideoCommentEvent(req *tool.AdminToolD
 	}
 
 	vc := dal.Executor.VideoComment
-	exist, err := vc.WithContext(context.Background()).Where(vc.ID.Eq(commentId)).Count()
+	exist, err := exquery.QueryVideoCommentExistById(commentId)
 	if err != nil {
 		return errno.InternalServerError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("评论不存在")
 	}
 
@@ -346,7 +346,7 @@ func (service *ToolService) newAdminDeleteVideoCommentEvent(req *tool.AdminToolD
 		Select(vc.ID, vc.VideoID).
 		Scan(&list)
 	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
 
 	_, err = vc.WithContext(context.Background()).
@@ -354,7 +354,7 @@ func (service *ToolService) newAdminDeleteVideoCommentEvent(req *tool.AdminToolD
 		Or(vc.RootID.Eq(commentId)).
 		Delete()
 	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
 
 	go func() {
@@ -373,11 +373,11 @@ func (service *ToolService) newAdminDeleteActivityCommentEvent(req *tool.AdminTo
 	}
 
 	ac := dal.Executor.ActivityComment
-	exist, err := ac.WithContext(context.Background()).Where(ac.ID.Eq(commentId)).Count()
+	exist, err := exquery.QueryActivityCommentExistById(commentId)
 	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("评论不存在")
 	}
 
@@ -388,7 +388,7 @@ func (service *ToolService) newAdminDeleteActivityCommentEvent(req *tool.AdminTo
 		Select(ac.ID, ac.ActivityID).
 		Scan(&list)
 	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
 
 	_, err = ac.WithContext(context.Background()).
@@ -396,7 +396,7 @@ func (service *ToolService) newAdminDeleteActivityCommentEvent(req *tool.AdminTo
 		Or(ac.RootID.Eq(commentId)).
 		Delete()
 	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
 
 	go func() {
@@ -410,9 +410,9 @@ func (service *ToolService) newAdminDeleteActivityCommentEvent(req *tool.AdminTo
 
 func (service *ToolService) NewAdminDeleteCommentEvent(req *tool.AdminToolDeleteCommentReq) error {
 	switch req.CommentType {
-	case "video":
+	case common.CommentTypeVideo:
 		return service.newAdminDeleteVideoCommentEvent(req)
-	case "activity":
+	case common.CommentTypeActivity:
 		return service.newAdminDeleteActivityCommentEvent(req)
 	}
 	return errno.ParamInvalid.WithMessage("评论类型错误")
@@ -441,8 +441,10 @@ func (service *ToolService) NewGetImageEvent(req *tool.ToolGetImageReq) (*tool.T
 	if err != nil {
 		return nil, errno.ParamInvalid.WithInnerError(err)
 	}
-	img := dal.Executor.Image
-	image, _ := img.WithContext(context.Background()).Where(img.ID.Eq(imageId)).First()
+	image, err := exquery.QueryImageById(imageId)
+	if err != nil {
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
 	if image == nil {
 		return nil, errno.CustomError.WithMessage("图片不存在")
 	}
@@ -465,6 +467,7 @@ func (service *ToolService) NewTokenRefreshEvent(req *tool.ToolTokenRefreshReq) 
 	}
 	token := jwt.AccessTokenJwtMiddleware.GenerateToken(fmt.Sprint(payload))
 	return &tool.ToolTokenRefreshRespData{
+		ID:          fmt.Sprint(payload),
 		AccessToken: token,
 	}, nil
 }

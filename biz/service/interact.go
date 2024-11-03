@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"sfw/biz/dal"
+	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/interact"
 	"sfw/biz/mw/jwt"
@@ -136,45 +136,15 @@ func (service *InteractService) NewLikeVideoListEvent(req *interact.InteractLike
 	}
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 
-	rows, err := dal.DB.Raw(
-		`SELECT v.*  
-		FROM Video v  
-		JOIN (  
-			SELECT video_id, created_at  
-			FROM VideoLike  
-			WHERE user_id = ?  
-			ORDER BY created_at DESC  
-			LIMIT ?, ?  
-		) vl ON v.id = vl.video_id;`,
-		uid, req.PageNum*req.PageSize, req.PageSize,
-	).Rows()
+	videos, count, err := exquery.QueryVideoLikedByUserIdPaged(uid, int(req.PageNum), int(req.PageSize))
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	defer rows.Close()
-	row, err := dal.DB.Raw(
-		`SELECT COUNT(*) FROM Video WHERE id IN (SELECT video_id FROM VideoLike WHERE user_id = ?)`,
-		uid,
-	).Rows()
-	if err != nil {
-		return nil, errno.DatabaseCallError.WithInnerError(err)
-	}
-	defer row.Close()
 
-	videos := make([]*model.Video, 0, req.PageSize)
-	for rows.Next() {
-		var video model.Video
-		dal.DB.ScanRows(rows, &video)
-		videos = append(videos, &video)
-	}
 	items, err := model_converter.VideoListDal2Resp(&videos)
 	if err != nil {
-		return nil, err
+		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-
-	var count int64
-	row.Next()
-	row.Scan(&count)
 
 	return &interact.InteractLikeVideoListRespData{
 		Items:    items,
@@ -191,41 +161,40 @@ func (service *InteractService) NewCommentVideoPublishEvent(req *interact.Intera
 		return errno.AccessTokenInvalid
 	}
 
-	vc := dal.Executor.VideoComment
 	rid := int64(0)
 	pid := int64(0)
 	if req.RootID != nil {
 		rid, err = strconv.ParseInt(*req.RootID, 10, 64)
 		if err != nil {
-			return errno.CustomError.WithMessage("无效的根评论ID")
+			return errno.ParamInvalid.WithMessage("无效的根评论ID")
 		}
 		if rid == 0 {
-			return errno.CustomError.WithMessage("无效的根评论ID")
+			return errno.ParamInvalid.WithMessage("无效的根评论ID")
 		}
-		exist, err := vc.WithContext(context.Background()).Where(vc.ID.Eq(rid), vc.RootID.Eq(0)).Count()
+		exist, err := exquery.QueryVideoCommentExistByIdParentIdAndRootId(rid, 0, 0)
 		if err != nil {
 			return errno.DatabaseCallError.WithInnerError(err)
 		}
-		if exist == 0 {
+		if !exist {
 			return errno.CustomError.WithMessage("根评论不存在")
 		}
 	}
 	if req.ParentID != nil {
 		if req.RootID == nil {
-			return errno.CustomError.WithMessage("父评论ID必须与根评论ID同时存在")
+			return errno.ParamInvalid.WithMessage("父评论ID必须与根评论ID同时存在")
 		}
 		pid, err = strconv.ParseInt(*req.ParentID, 10, 64)
 		if err != nil {
-			return errno.CustomError.WithMessage("无效的父评论ID")
+			return errno.ParamInvalid.WithMessage("无效的父评论ID")
 		}
 		if pid == 0 {
-			return errno.CustomError.WithMessage("无效的父评论ID")
+			return errno.ParamInvalid.WithMessage("无效的父评论ID")
 		}
-		exist, err := vc.WithContext(context.Background()).Where(vc.ID.Eq(pid), vc.RootID.Eq(rid)).Count()
+		exist, err := exquery.QueryVideoCommentExistByIdAndRootId(pid, rid)
 		if err != nil {
 			return errno.DatabaseCallError.WithInnerError(err)
 		}
-		if exist == 0 {
+		if !exist {
 			return errno.CustomError.WithMessage("父评论不存在")
 		}
 	}
@@ -235,18 +204,17 @@ func (service *InteractService) NewCommentVideoPublishEvent(req *interact.Intera
 
 	videoId, err := strconv.ParseInt(req.VideoID, 10, 64)
 	if err != nil {
-		return errno.CustomError.WithMessage("无效的视频ID")
+		return errno.ParamInvalid.WithMessage("无效的视频ID")
 	}
-	v := dal.Executor.Video
-	exist, err := v.WithContext(context.Background()).Where(v.ID.Eq(videoId)).Count()
+	exist, err := exquery.QueryVideoExistById(videoId)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("视频不存在")
 	}
 
-	err = vc.WithContext(context.Background()).Create(&model.VideoComment{
+	err = exquery.InsertVideoComment(&model.VideoComment{
 		ID:       generator.VideoCommentIDGenerator.Generate(),
 		VideoID:  videoId,
 		UserID:   uid,
@@ -266,38 +234,37 @@ func (service *InteractService) NewCommentActivityPublishEvent(req *interact.Int
 		return errno.AccessTokenInvalid
 	}
 
-	ac := dal.Executor.ActivityComment
 	rid := int64(0)
 	pid := int64(0)
 	if req.RootID != nil {
 		rid, err = strconv.ParseInt(*req.RootID, 10, 64)
 		if err != nil {
-			return errno.CustomError.WithMessage("无效的根评论ID")
+			return errno.ParamInvalid.WithMessage("无效的根评论ID")
 		}
 		if rid == 0 {
-			return errno.CustomError.WithMessage("无效的根评论ID")
+			return errno.ParamInvalid.WithMessage("无效的根评论ID")
 		}
-		exist, err := ac.WithContext(context.Background()).Where(ac.ID.Eq(rid), ac.RootID.Eq(0), ac.ParentID.Eq(0)).Count()
+		exist, err := exquery.QueryActivityCommentExistByIdParentIdAndRootId(rid, 0, 0)
 		if err != nil {
 			return errno.DatabaseCallError.WithInnerError(err)
 		}
-		if exist == 0 {
+		if !exist {
 			return errno.CustomError.WithMessage("根评论不存在")
 		}
 	}
 	if req.ParentID != nil {
 		pid, err = strconv.ParseInt(*req.ParentID, 10, 64)
 		if err != nil {
-			return errno.CustomError.WithMessage("无效的父评论ID")
+			return errno.ParamInvalid.WithMessage("无效的父评论ID")
 		}
 		if pid == 0 {
-			return errno.CustomError.WithMessage("无效的父评论ID")
+			return errno.ParamInvalid.WithMessage("无效的父评论ID")
 		}
-		exist, err := ac.WithContext(context.Background()).Where(ac.ID.Eq(pid), ac.RootID.Eq(rid)).Count()
+		exist, err := exquery.QueryActivityCommentExistByIdAndRootId(pid, rid)
 		if err != nil {
 			return errno.DatabaseCallError.WithInnerError(err)
 		}
-		if exist == 0 {
+		if !exist {
 			return errno.CustomError.WithMessage("父评论不存在")
 		}
 	}
@@ -307,18 +274,17 @@ func (service *InteractService) NewCommentActivityPublishEvent(req *interact.Int
 
 	activityId, err := strconv.ParseInt(req.ActivityID, 10, 64)
 	if err != nil {
-		return errno.CustomError.WithMessage("无效的活动ID")
+		return errno.ParamInvalid.WithMessage("无效的动态ID")
 	}
-	a := dal.Executor.Activity
-	exist, err := a.WithContext(context.Background()).Where(a.ID.Eq(activityId)).Count()
+	exist, err := exquery.QueryActivityExistById(activityId)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
-		return errno.CustomError.WithMessage("活动不存在")
+	if !exist {
+		return errno.CustomError.WithMessage("动态不存在")
 	}
 
-	err = ac.WithContext(context.Background()).Create(&model.ActivityComment{
+	err = exquery.InsertActivityComment(&model.ActivityComment{
 		ID:         generator.ActivityIDGenerator.Generate(),
 		ActivityID: activityId,
 		UserID:     uid,
@@ -326,31 +292,28 @@ func (service *InteractService) NewCommentActivityPublishEvent(req *interact.Int
 		ParentID:   pid,
 		Content:    req.Content,
 	})
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
+	}
 	return nil
 }
 
 func (service *InteractService) NewCommentVideoListEvent(req *interact.InteractCommentVideoListReq) (*interact.InteractCommentVideoListRespData, error) {
 	videoId, err := strconv.ParseInt(req.VideoID, 10, 64)
 	if err != nil {
-		return nil, errno.CustomError.WithMessage("无效的视频ID")
+		return nil, errno.ParamInvalid.WithMessage("无效的视频ID")
 	}
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 
-	v := dal.Executor.Video
-	exist, err := v.WithContext(context.Background()).Where(v.ID.Eq(videoId)).Count()
+	exist, err := exquery.QueryVideoExistById(videoId)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return nil, errno.CustomError.WithMessage("视频不存在")
 	}
 
-	vc := dal.Executor.VideoComment
-	comments, count, err := vc.WithContext(context.Background()).
-		Where(vc.VideoID.Eq(videoId), vc.RootID.Eq(0), vc.ParentID.Eq(0)).
-		Order(vc.CreatedAt.Desc()).
-		FindByPage(int(req.PageNum*req.PageSize), int(req.PageSize))
-
+	comments, count, err := exquery.QueryVideoRootCommentByVideoIdPaged(videoId, int(req.PageNum), int(req.PageSize))
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -372,25 +335,19 @@ func (service *InteractService) NewCommentVideoListEvent(req *interact.InteractC
 func (service *InteractService) NewCommentActivityListEvent(req *interact.InteractCommentActivityListReq) (*interact.InteractCommentActivityListRespData, error) {
 	activityId, err := strconv.ParseInt(req.ActivityID, 10, 64)
 	if err != nil {
-		return nil, errno.CustomError.WithMessage("无效的动态ID")
+		return nil, errno.ParamInvalid.WithMessage("无效的动态ID")
 	}
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 
-	a := dal.Executor.Activity
-	exist, err := a.WithContext(context.Background()).Where(a.ID.Eq(activityId)).Count()
+	exist, err := exquery.QueryActivityExistById(activityId)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return nil, errno.CustomError.WithMessage("动态不存在")
 	}
 
-	ac := dal.Executor.ActivityComment
-	comments, count, err := ac.WithContext(context.Background()).
-		Where(ac.ActivityID.Eq(activityId), ac.RootID.Eq(0), ac.ParentID.Eq(0)).
-		Order(ac.CreatedAt.Desc()).
-		FindByPage(int(req.PageNum*req.PageSize), int(req.PageSize))
-
+	comments, count, err := exquery.QueryActivityRootCommentByActivityIdPaged(activityId, int(req.PageNum), int(req.PageSize))
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -412,24 +369,19 @@ func (service *InteractService) NewCommentActivityListEvent(req *interact.Intera
 func (service *InteractService) NewChildCommentVideoListEvent(req *interact.InteractVideoChildCommentListReq) (*interact.InteractVideoChildCommentListRespData, error) {
 	commentId, err := strconv.ParseInt(req.CommentID, 10, 64)
 	if err != nil {
-		return nil, errno.CustomError.WithMessage("无效的评论ID")
+		return nil, errno.ParamInvalid.WithMessage("无效的评论ID")
 	}
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 
-	vc := dal.Executor.VideoComment
-	exist, err := vc.WithContext(context.Background()).Where(vc.ID.Eq(commentId)).Count()
+	exist, err := exquery.QueryVideoCommentExistById(commentId)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return nil, errno.CustomError.WithMessage("评论不存在")
 	}
 
-	comments, count, err := vc.WithContext(context.Background()).
-		Where(vc.RootID.Eq(commentId)).
-		Order(vc.CreatedAt.Desc()).
-		FindByPage(int(req.PageNum*req.PageSize), int(req.PageSize))
-
+	comments, count, err := exquery.QueryVideoChildCommentByRootIdPaged(commentId, int(req.PageNum), int(req.PageSize))
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -451,24 +403,19 @@ func (service *InteractService) NewChildCommentVideoListEvent(req *interact.Inte
 func (service *InteractService) NewChildCommentActivityListEvent(req *interact.InteractActivityChildCommentListReq) (*interact.InteractActivityChildCommentListRespData, error) {
 	commentId, err := strconv.ParseInt(req.CommentID, 10, 64)
 	if err != nil {
-		return nil, errno.CustomError.WithMessage("无效的评论ID")
+		return nil, errno.ParamInvalid.WithMessage("无效的评论ID")
 	}
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 
-	ac := dal.Executor.ActivityComment
-	exist, err := ac.WithContext(context.Background()).Where(ac.ID.Eq(commentId)).Count()
+	exist, err := exquery.QueryActivityCommentExistById(commentId)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return nil, errno.CustomError.WithMessage("评论不存在")
 	}
 
-	comments, count, err := ac.WithContext(context.Background()).
-		Where(ac.RootID.Eq(commentId)).
-		Order(ac.CreatedAt.Desc()).
-		FindByPage(int(req.PageNum*req.PageSize), int(req.PageSize))
-
+	comments, count, err := exquery.QueryActivityChildCommentByRootIdPaged(commentId, int(req.PageNum), int(req.PageSize))
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}

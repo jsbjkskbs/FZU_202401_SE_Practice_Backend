@@ -71,7 +71,13 @@ func Initialize() {
 	}
 	loadCategory()
 
-	err := synchronizer.SynchronizeVideoLikeFromDB2Redis()
+	err := synchronizer.SynchronizeVideoVisitInfoDB2Redis()
+	if err != nil {
+		hlog.Fatal("Synchronize Task: synchronize video visit info from db to redis error", err)
+	}
+	hlog.Info("Synchronize Task: sychronize video visit info from db to redis success")
+
+	err = synchronizer.SynchronizeVideoLikeFromDB2Redis()
 	if err != nil {
 		hlog.Fatal("Synchronize Task: synchronize video like from db to redis error", err)
 	}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"sfw/biz/dal"
+	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/report"
 	"sfw/biz/mw/jwt"
@@ -38,31 +39,29 @@ func (service *ReportService) NewReportVideoEvent(req *report.ReportVideoReq) er
 
 	vid, err := strconv.ParseInt(req.VideoID, 10, 64)
 	if err != nil {
-		return errno.CustomError.WithMessage("视频ID错误")
+		return errno.ParamInvalid.WithMessage("视频ID错误")
 	}
 
-	v := dal.Executor.Video
-	exist, err := v.WithContext(context.Background()).Where(v.ID.Eq(vid)).Count()
+	exist, err := exquery.QueryVideoExistById(vid)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("视频不存在")
 	}
 
-	vr := dal.Executor.VideoReport
-	count, err := vr.WithContext(context.Background()).Where(vr.UserID.Eq(uid), vr.VideoID.Eq(vid)).Count()
-	if count > 3 {
+	count, err := exquery.QueryVideoReportCountByUserIdAndVideoId(uid, vid)
+	if count >= common.ReportLimit {
 		return errno.CustomError.WithMessage("您已经举报过该视频多次，请耐心等待处理结果")
 	}
 
-	err = vr.WithContext(context.Background()).Create(&model.VideoReport{
+	err = exquery.InsertVideoReport(&model.VideoReport{
 		ID:      generator.VideoReportIDGenerator.Generate(),
 		UserID:  uid,
 		VideoID: vid,
 		Reason:  req.Content,
 		Label:   req.Label,
-		Status:  "unsolved",
+		Status:  common.ReportUnresolved,
 	})
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
@@ -78,31 +77,29 @@ func (service *ReportService) NewReportActivityEvent(req *report.ReportActivityR
 
 	aid, err := strconv.ParseInt(req.ActivityID, 10, 64)
 	if err != nil {
-		return errno.CustomError.WithMessage("动态ID错误")
+		return errno.ParamInvalid.WithMessage("动态ID错误")
 	}
 
-	a := dal.Executor.Activity
-	exist, err := a.WithContext(context.Background()).Where(a.ID.Eq(aid)).Count()
+	exist, err := exquery.QueryActivityExistById(aid)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("动态不存在")
 	}
 
-	ar := dal.Executor.ActivityReport
-	count, err := ar.WithContext(context.Background()).Where(ar.UserID.Eq(uid), ar.ActivityID.Eq(aid)).Count()
-	if count > 3 {
+	count, err := exquery.QueryActivityReportCountByUserIdAndActivityId(uid, aid)
+	if count >= common.ReportLimit {
 		return errno.CustomError.WithMessage("您已经举报过该动态多次，请耐心等待处理结果")
 	}
 
-	err = ar.WithContext(context.Background()).Create(&model.ActivityReport{
+	err = exquery.InsertActivityReport(&model.ActivityReport{
 		ID:         generator.ActivityReportIDGenerator.Generate(),
 		UserID:     uid,
 		ActivityID: aid,
 		Reason:     req.Content,
 		Label:      req.Label,
-		Status:     "unsolved",
+		Status:     common.ReportUnresolved,
 	})
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
@@ -118,36 +115,34 @@ func (service *ReportService) newReportVideoCommentEvent(req *report.ReportComme
 
 	vid, err := strconv.ParseInt(req.FromMediaID, 10, 64)
 	if err != nil {
-		return errno.CustomError.WithMessage("视频ID错误")
+		return errno.ParamInvalid.WithMessage("视频ID错误")
 	}
 
 	cid, err := strconv.ParseInt(req.CommentID, 10, 64)
 	if err != nil {
-		return errno.CustomError.WithMessage("评论ID错误")
+		return errno.ParamInvalid.WithMessage("评论ID错误")
 	}
 
-	c := dal.Executor.VideoComment
-	exist, err := c.WithContext(context.Background()).Where(c.ID.Eq(cid), c.VideoID.Eq(vid)).Count()
+	exist, err := exquery.QueryVideoCommentExistByIdAndVideoId(cid, vid)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("评论不存在或视频与评论索引不匹配")
 	}
 
-	cr := dal.Executor.VideoCommentReport
-	count, err := cr.WithContext(context.Background()).Where(cr.UserID.Eq(uid), cr.CommentID.Eq(cid)).Count()
-	if count > 3 {
+	count, err := exquery.QueryVideoCommentReportCountByUserIdAndCommentId(uid, cid)
+	if count >= common.ReportLimit {
 		return errno.CustomError.WithMessage("您已经举报过该评论多次，请耐心等待处理结果")
 	}
 
-	err = cr.WithContext(context.Background()).Create(&model.VideoCommentReport{
+	err = exquery.InsertVideoCommentReport(&model.VideoCommentReport{
 		ID:        generator.VideoCommentReportIDGenerator.Generate(),
 		UserID:    uid,
 		CommentID: cid,
 		Reason:    req.Content,
 		Label:     req.Label,
-		Status:    "unsolved",
+		Status:    common.ReportUnresolved,
 	})
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
@@ -163,36 +158,34 @@ func (service *ReportService) newReportActivityCommentEvent(req *report.ReportCo
 
 	aid, err := strconv.ParseInt(req.FromMediaID, 10, 64)
 	if err != nil {
-		return errno.CustomError.WithMessage("动态ID错误")
+		return errno.ParamInvalid.WithMessage("动态ID错误")
 	}
 
 	cid, err := strconv.ParseInt(req.CommentID, 10, 64)
 	if err != nil {
-		return errno.CustomError.WithMessage("评论ID错误")
+		return errno.ParamInvalid.WithMessage("评论ID错误")
 	}
 
-	c := dal.Executor.ActivityComment
-	exist, err := c.WithContext(context.Background()).Where(c.ID.Eq(cid), c.ActivityID.Eq(aid)).Count()
+	exist, err := exquery.QueryActivityCommentExistByIdAndActivityId(cid, aid)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("评论不存在或动态与评论索引不匹配")
 	}
 
-	cr := dal.Executor.ActivityCommentReport
-	count, err := cr.WithContext(context.Background()).Where(cr.UserID.Eq(uid), cr.CommentID.Eq(cid)).Count()
-	if count > 3 {
+	count, err := exquery.QueryActivityCommentReportCountByUserIdAndCommentId(uid, cid)
+	if count >= common.ReportLimit {
 		return errno.CustomError.WithMessage("您已经举报过该评论多次，请耐心等待处理结果")
 	}
 
-	err = cr.WithContext(context.Background()).Create(&model.ActivityCommentReport{
+	err = exquery.InsertActivityCommentReport(&model.ActivityCommentReport{
 		ID:        generator.ActivityCommentReportIDGenerator.Generate(),
 		UserID:    uid,
 		CommentID: cid,
 		Reason:    req.Content,
 		Label:     req.Label,
-		Status:    "unsolved",
+		Status:    common.ReportUnresolved,
 	})
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
@@ -231,6 +224,7 @@ func (service *ReportService) NewAdminVideoReportListEvent(req *report.AdminVide
 	if req.Label != nil {
 		conditions = append(conditions, vr.Label.Eq(*req.Label))
 	}
+	// 此处代码不必提取至exquery
 	items, count, err := vr.WithContext(context.Background()).
 		Where(conditions...).
 		FindByPage((int(req.PageNum * req.PageSize)), int(req.PageSize))
@@ -267,6 +261,7 @@ func (service *ReportService) NewAdminActivityReportListEvent(req *report.AdminA
 	if req.Label != nil {
 		conditions = append(conditions, ar.Label.Eq(*req.Label))
 	}
+	// 此处代码不必提取至exquery
 	items, count, err := ar.WithContext(context.Background()).
 		Where(conditions...).
 		FindByPage((int(req.PageNum * req.PageSize)), int(req.PageSize))
@@ -303,6 +298,7 @@ func (service *ReportService) newAdminVideoCommentListEvent(req *report.AdminCom
 	if req.Label != nil {
 		conditions = append(conditions, cr.Label.Eq(*req.Label))
 	}
+	// 此处代码不必提取至exquery
 	items, count, err := cr.WithContext(context.Background()).
 		Where(conditions...).
 		FindByPage((int(req.PageNum * req.PageSize)), int(req.PageSize))
@@ -339,6 +335,7 @@ func (service *ReportService) newAdminActivityCommentListEvent(req *report.Admin
 	if req.Label != nil {
 		conditions = append(conditions, cr.Label.Eq(*req.Label))
 	}
+	// 此处代码不必提取至exquery
 	items, count, err := cr.WithContext(context.Background()).
 		Where(conditions...).
 		FindByPage((int(req.PageNum * req.PageSize)), int(req.PageSize))
@@ -356,12 +353,12 @@ func (service *ReportService) newAdminActivityCommentListEvent(req *report.Admin
 
 func (service *ReportService) NewAdminCommentReportListEvent(req *report.AdminCommentReportListReq) (*report.AdminCommentReportListRespData, error) {
 	switch req.CommentType {
-	case "video":
+	case common.CommentTypeVideo:
 		return service.newAdminVideoCommentListEvent(req)
-	case "activity":
+	case common.CommentTypeActivity:
 		return service.newAdminActivityCommentListEvent(req)
 	}
-	return nil, errno.CustomError.WithMessage("评论类型错误")
+	return nil, errno.ParamInvalid.WithMessage("评论类型错误")
 }
 
 func (service *ReportService) NewAdminVideoReportHandleEvent(req *report.AdminVideoReportHandleReq) error {
@@ -373,26 +370,25 @@ func (service *ReportService) NewAdminVideoReportHandleEvent(req *report.AdminVi
 	if err != nil {
 		return errno.CustomError.WithMessage("举报ID错误")
 	}
-	vr := dal.Executor.VideoReport
-	exist, err := vr.WithContext(context.Background()).Where(vr.ID.Eq(reportId), vr.Status.Eq("unsolved")).Count()
+	exist, err := exquery.QueryVideoReportExistByIdAndStatus(reportId, common.ReportUnresolved)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("举报不存在或已处理")
 	}
 
 	status := ""
 	switch req.ActionType {
-	case 0:
-		status = "rejected"
-	case 1:
-		status = "solved"
+	case common.ActionTypeOff:
+		status = common.ReportRejected
+	case common.ActionTypeOn:
+		status = common.ReportResolved
 	default:
-		return errno.CustomError.WithMessage("操作类型错误")
+		return errno.ParamInvalid.WithMessage("操作类型错误")
 	}
 
-	_, err = vr.WithContext(context.Background()).Where(vr.ID.Eq(reportId)).Updates(&model.VideoReport{
+	err = exquery.UpdateVideoReportById(&model.VideoReport{
 		Status:  status,
 		AdminID: adminId,
 	})
@@ -409,28 +405,27 @@ func (service *ReportService) NewAdminActivityReportHandleEvent(req *report.Admi
 	}
 	reportId, err := strconv.ParseInt(req.ReportID, 10, 64)
 	if err != nil {
-		return errno.CustomError.WithMessage("举报ID错误")
+		return errno.ParamInvalid.WithMessage("举报ID错误")
 	}
-	ar := dal.Executor.ActivityReport
-	exist, err := ar.WithContext(context.Background()).Where(ar.ID.Eq(reportId), ar.Status.Eq("unsolved")).Count()
+	exist, err := exquery.QueryActivityReportExistByIdAndStatus(reportId, common.ReportUnresolved)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("举报不存在或已处理")
 	}
 
 	status := ""
 	switch req.ActionType {
-	case 0:
-		status = "rejected"
-	case 1:
-		status = "solved"
+	case common.ActionTypeOff:
+		status = common.ReportRejected
+	case common.ActionTypeOn:
+		status = common.ReportResolved
 	default:
-		return errno.CustomError.WithMessage("操作类型错误")
+		return errno.ParamInvalid.WithMessage("操作类型错误")
 	}
 
-	_, err = ar.WithContext(context.Background()).Where(ar.ID.Eq(reportId)).Updates(&model.ActivityReport{
+	err = exquery.UpdateActivityReportById(&model.ActivityReport{
 		Status:  status,
 		AdminID: adminId,
 	})
@@ -447,29 +442,28 @@ func (service *ReportService) newAdminVideoCommentReportHandleEvent(req *report.
 	}
 	reportId, err := strconv.ParseInt(req.ReportID, 10, 64)
 	if err != nil {
-		return errno.CustomError.WithMessage("举报ID错误")
+		return errno.ParamInvalid.WithMessage("举报ID错误")
 	}
 
-	cr := dal.Executor.VideoCommentReport
-	exist, err := cr.WithContext(context.Background()).Where(cr.ID.Eq(reportId), cr.Status.Eq("unsolved")).Count()
+	exist, err := exquery.QueryVideoCommentReportExistByIdAndStatus(reportId, common.ReportUnresolved)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("举报不存在或已处理")
 	}
 
 	status := ""
 	switch req.ActionType {
-	case 0:
-		status = "rejected"
-	case 1:
-		status = "solved"
+	case common.ActionTypeOff:
+		status = common.ReportRejected
+	case common.ActionTypeOn:
+		status = common.ReportResolved
 	default:
-		return errno.CustomError.WithMessage("操作类型错误")
+		return errno.ParamInvalid.WithMessage("操作类型错误")
 	}
 
-	_, err = cr.WithContext(context.Background()).Where(cr.ID.Eq(reportId)).Updates(&model.VideoCommentReport{
+	err = exquery.UpdateVideoCommentReportById(&model.VideoCommentReport{
 		Status:  status,
 		AdminID: adminId,
 	})
@@ -486,29 +480,28 @@ func (service *ReportService) newAdminActivityCommentReportHandleEvent(req *repo
 	}
 	reportId, err := strconv.ParseInt(req.ReportID, 10, 64)
 	if err != nil {
-		return errno.CustomError.WithMessage("举报ID错误")
+		return errno.ParamInvalid.WithMessage("举报ID错误")
 	}
 
-	cr := dal.Executor.ActivityCommentReport
-	exist, err := cr.WithContext(context.Background()).Where(cr.ID.Eq(reportId), cr.Status.Eq("unsolved")).Count()
+	exist, err := exquery.QueryActivityCommentReportExistByIdAndStatus(reportId, common.ReportUnresolved)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("举报不存在或已处理")
 	}
 
 	status := ""
 	switch req.ActionType {
-	case 0:
-		status = "rejected"
-	case 1:
-		status = "solved"
+	case common.ActionTypeOff:
+		status = common.ReportRejected
+	case common.ActionTypeOn:
+		status = common.ReportResolved
 	default:
-		return errno.CustomError.WithMessage("操作类型错误")
+		return errno.ParamInvalid.WithMessage("操作类型错误")
 	}
 
-	_, err = cr.WithContext(context.Background()).Where(cr.ID.Eq(reportId)).Updates(&model.ActivityCommentReport{
+	err = exquery.UpdateActivityCommentReportById(&model.ActivityCommentReport{
 		Status:  status,
 		AdminID: adminId,
 	})
@@ -520,39 +513,40 @@ func (service *ReportService) newAdminActivityCommentReportHandleEvent(req *repo
 
 func (service *ReportService) NewAdminCommentReportHandleEvent(req *report.AdminCommentReportHandleReq) error {
 	switch req.CommentType {
-	case "video":
+	case common.CommentTypeVideo:
 		return service.newAdminVideoCommentReportHandleEvent(req)
-	case "activity":
+	case common.CommentTypeActivity:
 		return service.newAdminActivityCommentReportHandleEvent(req)
 	}
-	return errno.CustomError.WithMessage("评论类型错误")
+	return errno.ParamInvalid.WithMessage("评论类型错误")
 }
 
 func (service *ReportService) NewAdminVideoListEvent(req *report.AdminVideoListReq) (*report.AdminVideoListRespData, error) {
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 
 	v := dal.Executor.Video
-	conditions := []gen.Condition{v.Status.Eq("review")}
+	conditions := []gen.Condition{v.Status.Eq(common.VideoStatusReview)}
 
 	if req.Category != nil {
 		categoryId, ok := checker.CategoryMap[*req.Category]
 		if !ok {
-			return nil, errno.CustomError.WithMessage("视频分区不存在")
+			return nil, errno.ParamInvalid.WithMessage("视频分区不存在")
 		}
 		conditions = append(conditions, v.CategoryID.Eq(categoryId))
 	}
 
-	items, count, err := v.WithContext(context.Background()).
+	// 此处代码不必提取至exquery
+	videos, count, err := v.WithContext(context.Background()).
 		Where(conditions...).FindByPage((int(req.PageNum * req.PageSize)), int(req.PageSize))
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	citems, err := model_converter.VideoListDal2Resp(&items)
+	items, err := model_converter.VideoListDal2Resp(&videos)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 	return &report.AdminVideoListRespData{
-		Items:    citems,
+		Items:    items,
 		Total:    count,
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
@@ -563,29 +557,29 @@ func (service *ReportService) NewAdminVideoListEvent(req *report.AdminVideoListR
 func (service *ReportService) NewAdminVideoHandleEvent(req *report.AdminVideoHandleReq) error {
 	videoId, err := strconv.ParseInt(req.VideoID, 10, 64)
 	if err != nil {
-		return errno.CustomError.WithMessage("视频ID错误")
+		return errno.ParamInvalid.WithMessage("视频ID错误")
 	}
 
-	v := dal.Executor.Video
-	exist, err := v.WithContext(context.Background()).Where(v.ID.Eq(videoId), v.Status.Eq("review")).Count()
+	exist, err := exquery.QueryVideoExistByIdAndStatus(videoId, common.VideoStatusReview)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if exist == 0 {
+	if !exist {
 		return errno.CustomError.WithMessage("视频不存在或已处理")
 	}
 
 	status := ""
 	switch req.ActionType {
-	case 0:
-		status = "locked"
-	case 1:
-		status = "passed"
+	case common.ActionTypeOff:
+		status = common.VideoStatusLocked
+	case common.ActionTypeOn:
+		status = common.VideoStatusPassed
 	default:
-		return errno.CustomError.WithMessage("操作类型错误")
+		return errno.ParamInvalid.WithMessage("操作类型错误")
 	}
 
-	_, err = v.WithContext(context.Background()).Where(v.ID.Eq(videoId)).Updates(&model.Video{
+	err = exquery.UpdateVideoWithId(&model.Video{
+		ID:     videoId,
 		Status: status,
 	})
 	if err != nil {
