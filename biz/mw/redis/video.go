@@ -3,13 +3,11 @@ package redis
 import "time"
 
 func VideoUploadInfoStore(key string, kv map[string]interface{}, ttl time.Duration) error {
-	if err := videoClient.HMSet(key, kv).Err(); err != nil {
+	tx := videoClient.TxPipeline()
+	tx.HMSet(key, kv)
+	tx.Expire(key, ttl)
+	if _, err := tx.Exec(); err != nil {
 		return err
-	}
-	if ttl > 0 {
-		if err := videoClient.Expire(key, ttl).Err(); err != nil {
-			return err
-		}
 	}
 	return nil
 }
