@@ -2,11 +2,50 @@ package redis
 
 import (
 	"sfw/pkg/errno"
-	"strconv"
 	"sync"
 
 	"github.com/go-redis/redis"
 )
+
+func PutIPVisitInfo(vid, ip string) error {
+	_, err := videoInfoClient.SAdd(`video/visit/`+vid, ip).Result()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func IsIPVisited(vid, ip string) (bool, error) {
+	exist, err := videoInfoClient.Exists(`video/visit/` + vid).Result()
+	if err != nil {
+		return false, err
+	}
+	if exist == 0 {
+		return false, nil
+	}
+
+	visited, err := videoInfoClient.SIsMember(`video/visit/`+vid, ip).Result()
+	if err != nil {
+		return false, err
+	}
+	return visited, nil
+}
+
+func IncrVideoVisitCount(vid string) error {
+	_, err := videoInfoClient.ZIncrBy(`visit`, 1, vid).Result()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func DelIPVisitInfo(vid, ip string) error {
+	_, err := videoInfoClient.SRem(`video/visit/`+vid, ip).Result()
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
 func PutVideoLikeInfo(vid string, uidList *[]string) error {
 	pipe := videoInfoClient.TxPipeline()
@@ -21,11 +60,9 @@ func PutVideoLikeInfo(vid string, uidList *[]string) error {
 	return nil
 }
 
-func PutVideoVisitInfo(vid, visitCount, category string) error {
-	score, _ := strconv.ParseFloat(visitCount, 64)
+func PutVideoVisitInfo(vid string, visitCount int64) error {
 	txpipe := videoInfoClient.TxPipeline()
-	txpipe.ZAdd(`visit`, redis.Z{Score: score, Member: vid})
-	txpipe.ZAdd(`visit/`+category, redis.Z{Score: score, Member: vid})
+	txpipe.ZAdd(`visit`, redis.Z{Score: float64(visitCount), Member: vid})
 	_, err := txpipe.Exec()
 	if err != nil {
 		return err
@@ -89,17 +126,6 @@ func RemoveVideoLikeInfo(vid, uid string) error {
 		return err
 	}
 	if _, err := videoInfoClient.SRem(`video/like/`+vid, uid).Result(); err != nil {
-		return err
-	}
-	return nil
-}
-
-func IncrVideoVisitInfo(vid string, category string) error {
-	txpipe := videoInfoClient.TxPipeline()
-	txpipe.ZIncrBy(`visit`, 1, vid)
-	txpipe.ZIncrBy(`visit/`+category, 1, vid)
-	_, err := txpipe.Exec()
-	if err != nil {
 		return err
 	}
 	return nil

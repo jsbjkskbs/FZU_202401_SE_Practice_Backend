@@ -61,9 +61,10 @@ struct Activity {
     4: list<string> image;
     5: string ref_video;
     6: string ref_activity;
-    7: i64 created_at;
-    8: i64 updated_at;
-    9: i64 deleted_at;
+    7: i64 like_count;
+    8: i64 created_at;
+    9: i64 updated_at;
+    10: i64 deleted_at;
 }
 
 struct VideoReport {

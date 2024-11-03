@@ -86,9 +86,21 @@ func QueryUserExistByUsernameOrEmail(username, email string) (bool, error) {
 	return count != 0, nil
 }
 
-func InsertUser(user *model.User) error {
+func QueryUserFuzzyByUsernamePaged(fuzzy string, pageNum, pageSize int64) ([]*model.User, int64, error) {
 	u := dal.Executor.User
-	err := u.WithContext(context.Background()).Create(user)
+	uc := u.WithContext(context.Background())
+	users, count, err := uc.
+		Where(u.Username.Like(fuzzy)).
+		FindByPage(int(pageNum*pageSize), int(pageSize))
+	if err != nil {
+		return nil, 0, err
+	}
+	return users, count, nil
+}
+
+func InsertUser(users ...*model.User) error {
+	u := dal.Executor.User
+	err := u.WithContext(context.Background()).Create(users...)
 	if err != nil {
 		return err
 	}
@@ -98,6 +110,15 @@ func InsertUser(user *model.User) error {
 func UpdateUserWithId(user *model.User) error {
 	u := dal.Executor.User
 	_, err := u.WithContext(context.Background()).Where(u.ID.Eq(user.ID)).Updates(user)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdateUserWithEmail(user *model.User) error {
+	u := dal.Executor.User
+	_, err := u.WithContext(context.Background()).Where(u.Email.Eq(user.Email)).Updates(user)
 	if err != nil {
 		return err
 	}
