@@ -1,38 +1,36 @@
 package generator
 
 var (
-	UserIDGenerator           *Snowflake
-	VideoIDGenerator          *Snowflake
-	ActivityIDGenerator       *Snowflake
-	VideoCommentIDGenerator   *Snowflake
-	ActvityCommentIDGenerator *Snowflake
-	ImageIDGenerator          *Snowflake
+	UserIDGenerator                  *Snowflake
+	VideoIDGenerator                 *Snowflake
+	ActivityIDGenerator              *Snowflake
+	VideoCommentIDGenerator          *Snowflake
+	ActvityCommentIDGenerator        *Snowflake
+	ImageIDGenerator                 *Snowflake
+	VideoReportIDGenerator           *Snowflake
+	ActivityReportIDGenerator        *Snowflake
+	VideoCommentReportIDGenerator    *Snowflake
+	ActivityCommentReportIDGenerator *Snowflake
 )
 
 func Init() {
 	var err error
-	UserIDGenerator, err = NewSnowflake(1)
-	if err != nil {
-		panic(err)
+	list := []**Snowflake{
+		&UserIDGenerator,
+		&VideoIDGenerator,
+		&ActivityIDGenerator,
+		&VideoCommentIDGenerator,
+		&ActvityCommentIDGenerator,
+		&ImageIDGenerator,
+		&VideoReportIDGenerator,
+		&ActivityReportIDGenerator,
+		&VideoCommentReportIDGenerator,
+		&ActivityCommentReportIDGenerator,
 	}
-	VideoIDGenerator, err = NewSnowflake(2)
-	if err != nil {
-		panic(err)
-	}
-	ActivityIDGenerator, err = NewSnowflake(3)
-	if err != nil {
-		panic(err)
-	}
-	VideoCommentIDGenerator, err = NewSnowflake(4)
-	if err != nil {
-		panic(err)
-	}
-	ActvityCommentIDGenerator, err = NewSnowflake(5)
-	if err != nil {
-		panic(err)
-	}
-	ImageIDGenerator, err = NewSnowflake(6)
-	if err != nil {
-		panic(err)
+	for node, v := range list {
+		*v, err = NewSnowflake(int64(node))
+		if err != nil {
+			panic(err)
+		}
 	}
 }

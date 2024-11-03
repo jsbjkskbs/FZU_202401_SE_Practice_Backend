@@ -66,14 +66,39 @@ struct Activity {
     9: i64 deleted_at;
 }
 
-struct Report {
+struct VideoReport {
     1: string id;
-    2: string otype;
-    3: string oid;
-    4: string user_id;
-    5: string content;
-    6: string labels;
+    2: string video_id;
+    3: string user_id;
+    4: string reason;
+    5: string label;
+    6: string status;
     7: i64 created_at;
-    8: i64 updated_at;
-    9: i64 deleted_at;
+    8: i64 resolved_at;
+    9: string admin_id;
+}
+
+struct ActivityReport {
+    1: string id;
+    2: string activity_id;
+    3: string user_id;
+    4: string reason;
+    5: string label;
+    6: string status;
+    7: i64 created_at;
+    8: i64 resolved_at;
+    9: string admin_id;
+}
+
+struct CommentReport {
+    1: string id;
+    2: string comment_type;
+    3: string comment_id;
+    4: string user_id;
+    5: string reason;
+    6: string label;
+    7: string status;
+    8: i64 created_at;
+    9: i64 resolved_at;
+    10: string admin_id;
 }

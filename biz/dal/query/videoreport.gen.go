@@ -31,6 +31,7 @@ func newVideoReport(db *gorm.DB, opts ...gen.DOOption) videoReport {
 	_videoReport.UserID = field.NewInt64(tableName, "user_id")
 	_videoReport.VideoID = field.NewInt64(tableName, "video_id")
 	_videoReport.Reason = field.NewString(tableName, "reason")
+	_videoReport.Label = field.NewString(tableName, "label")
 	_videoReport.CreatedAt = field.NewInt64(tableName, "created_at")
 	_videoReport.Status = field.NewString(tableName, "status")
 	_videoReport.ResolvedAt = field.NewInt64(tableName, "resolved_at")
@@ -50,6 +51,7 @@ type videoReport struct {
 	UserID     field.Int64  // 用户ID
 	VideoID    field.Int64  // 视频ID
 	Reason     field.String // 举报原因
+	Label      field.String // 举报标签
 	CreatedAt  field.Int64  // 创建时间
 	Status     field.String // 举报状态
 	ResolvedAt field.Int64  // 解决时间
@@ -74,6 +76,7 @@ func (v *videoReport) updateTableName(table string) *videoReport {
 	v.UserID = field.NewInt64(table, "user_id")
 	v.VideoID = field.NewInt64(table, "video_id")
 	v.Reason = field.NewString(table, "reason")
+	v.Label = field.NewString(table, "label")
 	v.CreatedAt = field.NewInt64(table, "created_at")
 	v.Status = field.NewString(table, "status")
 	v.ResolvedAt = field.NewInt64(table, "resolved_at")
@@ -104,11 +107,12 @@ func (v *videoReport) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (v *videoReport) fillFieldMap() {
-	v.fieldMap = make(map[string]field.Expr, 8)
+	v.fieldMap = make(map[string]field.Expr, 9)
 	v.fieldMap["id"] = v.ID
 	v.fieldMap["user_id"] = v.UserID
 	v.fieldMap["video_id"] = v.VideoID
 	v.fieldMap["reason"] = v.Reason
+	v.fieldMap["label"] = v.Label
 	v.fieldMap["created_at"] = v.CreatedAt
 	v.fieldMap["status"] = v.Status
 	v.fieldMap["resolved_at"] = v.ResolvedAt
