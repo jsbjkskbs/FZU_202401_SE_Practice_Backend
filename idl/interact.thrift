@@ -27,8 +27,9 @@ struct InteractLikeActivityActionResp {
 struct InteractLikeCommentActionReq {
     1: required string access_token (api.header="Access-Token");
     2: required string comment_type;
-    3: required string comment_id;
-    4: required i64 action_type;
+    3: required string from_media_id;
+    4: required string comment_id;
+    5: required i64 action_type;
 }
 
 struct InteractLikeCommentActionResp {

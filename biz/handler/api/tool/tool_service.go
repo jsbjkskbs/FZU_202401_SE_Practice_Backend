@@ -5,42 +5,14 @@ package tool
 import (
 	"context"
 
+	tool "sfw/biz/model/api/tool"
+	"sfw/biz/service"
+	"sfw/pkg/errno"
+	"sfw/pkg/utils"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	tool "sfw/biz/model/api/tool"
 )
-
-// ToolDelete .
-// @router /api/v1/tool/delete [DELETE]
-func ToolDelete(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req tool.ToolDeleteReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(tool.ToolDeleteResp)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// AdminToolDelete .
-// @router /api/v1/admin/tool/delete [DELETE]
-func AdminToolDelete(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req tool.AdminToolDeleteReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(tool.AdminToolDeleteResp)
-
-	c.JSON(consts.StatusOK, resp)
-}
 
 // ToolUploadImage .
 // @router /api/v1/tool/upload/image [GET]
@@ -49,13 +21,29 @@ func ToolUploadImage(ctx context.Context, c *app.RequestContext) {
 	var req tool.ToolUploadImageReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.ToolUploadImageResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(tool.ToolUploadImageResp)
+	resp, err := service.NewToolService(ctx, c).NewUploadImageEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.ToolUploadImageResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, tool.ToolUploadImageResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }
 
 // ToolGetImage .
@@ -65,27 +53,245 @@ func ToolGetImage(ctx context.Context, c *app.RequestContext) {
 	var req tool.ToolGetImageReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.ToolGetImageResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(tool.ToolGetImageResp)
+	resp, err := service.NewToolService(ctx, c).NewGetImageEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.ToolGetImageResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, tool.ToolGetImageResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }
 
-// UserRefresh .
-// @router /api/v1/user/refresh [GET]
-func UserRefresh(ctx context.Context, c *app.RequestContext) {
+// ToolDeleteVideo .
+// @router /api/v1/tool/delete/video [GET]
+func ToolDeleteVideo(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req tool.UserRefreshReq
+	var req tool.ToolDeleteVideoReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.ToolDeleteVideoResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(tool.UserRefreshResp)
+	err = service.NewToolService(ctx, c).NewDeleteVideoEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.ToolDeleteVideoResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, tool.ToolDeleteVideoResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
+
+// ToolDeleteActivity .
+// @router /api/v1/tool/delete/activity [GET]
+func ToolDeleteActivity(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req tool.ToolDeleteActivityReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.ToolDeleteActivityResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	err = service.NewToolService(ctx, c).NewDeleteActivityEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.ToolDeleteActivityResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, tool.ToolDeleteActivityResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
+
+// ToolDeleteComment .
+// @router /api/v1/tool/delete/comment [GET]
+func ToolDeleteComment(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req tool.ToolDeleteCommentReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.ToolDeleteCommentResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	err = service.NewToolService(ctx, c).NewDeleteCommentEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.ToolDeleteCommentResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, tool.ToolDeleteCommentResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
+
+// AdminToolDeleteVideo .
+// @router /api/v1/admin/tool/delete/video [GET]
+func AdminToolDeleteVideo(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req tool.AdminToolDeleteVideoReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.AdminToolDeleteVideoResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	err = service.NewToolService(ctx, c).NewAdminDeleteVideoEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.AdminToolDeleteVideoResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, tool.AdminToolDeleteVideoResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
+
+// AdminToolDeleteActivity .
+// @router /api/v1/admin/tool/delete/activity [GET]
+func AdminToolDeleteActivity(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req tool.AdminToolDeleteActivityReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.AdminToolDeleteActivityResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	err = service.NewToolService(ctx, c).NewAdminDeleteActivityEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.AdminToolDeleteActivityResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, tool.AdminToolDeleteActivityResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
+
+// AdminToolDeleteComment .
+// @router /api/v1/admin/tool/delete/comment [GET]
+func AdminToolDeleteComment(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req tool.AdminToolDeleteCommentReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.AdminToolDeleteCommentResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	err = service.NewToolService(ctx, c).NewAdminDeleteCommentEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.AdminToolDeleteCommentResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, tool.AdminToolDeleteCommentResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
+
+// ToolTokenRefresh .
+// @router /api/v1/tool/token/refresh [GET]
+func ToolTokenRefresh(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req tool.ToolTokenRefreshReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.ToolTokenRefreshResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	resp, err := service.NewToolService(ctx, c).NewTokenRefreshEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.ToolTokenRefreshResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, tool.ToolTokenRefreshResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }

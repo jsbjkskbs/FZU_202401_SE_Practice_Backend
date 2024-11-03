@@ -6,6 +6,7 @@ var (
 	ActivityIDGenerator       *Snowflake
 	VideoCommentIDGenerator   *Snowflake
 	ActvityCommentIDGenerator *Snowflake
+	ImageIDGenerator          *Snowflake
 )
 
 func Init() {
@@ -27,6 +28,10 @@ func Init() {
 		panic(err)
 	}
 	ActvityCommentIDGenerator, err = NewSnowflake(5)
+	if err != nil {
+		panic(err)
+	}
+	ImageIDGenerator, err = NewSnowflake(6)
 	if err != nil {
 		panic(err)
 	}

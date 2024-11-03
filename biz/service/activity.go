@@ -90,6 +90,23 @@ func (service *ActivityService) NewPublishEvent(req *activity.ActivityPublishReq
 		return errno.CustomError.WithMessage("只能引用一个内容")
 	}
 
+	if len(req.Image) > 0 {
+		img := dal.Executor.Image
+		for _, image := range req.Image {
+			imageId, err := strconv.ParseInt(image, 10, 64)
+			if err != nil {
+				return errno.CustomError.WithMessage("无效的图片ID: " + image).WithInnerError(err)
+			}
+			exist, err := img.WithContext(context.Background()).Where(img.ID.Eq(imageId)).Count()
+			if err != nil {
+				return errno.DatabaseCallError.WithInnerError(err)
+			}
+			if exist == 0 {
+				return errno.CustomError.WithMessage("图片不存在: " + image)
+			}
+		}
+	}
+
 	activity.ID = generator.ActivityIDGenerator.Generate()
 	activity.UserID = uid
 	activity.Content = req.Content
@@ -99,6 +116,21 @@ func (service *ActivityService) NewPublishEvent(req *activity.ActivityPublishReq
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
+
+	if len(req.Image) > 0 {
+		ai := dal.Executor.ActivityImage
+		for _, image := range req.Image {
+			imageId, _ := strconv.ParseInt(image, 10, 64)
+			err = ai.WithContext(context.Background()).Create(&model.ActivityImage{
+				ActivityID: activity.ID,
+				ImageID:    imageId,
+			})
+			if err != nil {
+				return errno.DatabaseCallError.WithInnerError(err)
+			}
+		}
+	}
+
 	return nil
 }
 

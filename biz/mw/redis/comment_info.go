@@ -1,15 +1,17 @@
 package redis
 
 import (
+	"strings"
+
 	"github.com/go-redis/redis"
 )
 
-func PutVideoCommentLikeInfo(cid string, uidList *[]string) error {
+func PutVideoCommentLikeInfo(vid, cid string, uidList *[]string) error {
 	pipe := commentInfoClient.TxPipeline()
-	pipe.Del(`comment/video/like/` + cid)
-	pipe.Del(`comment/video/changed_like/` + cid)
+	pipe.Del(strings.Join([]string{`comment/video/like`, vid, cid}, `/`))
+	pipe.Del(strings.Join([]string{`comment/video/changed_like`, vid, cid}, `/`))
 	for _, item := range *uidList {
-		pipe.SAdd(`comment/video/like/`+cid, item)
+		pipe.SAdd(strings.Join([]string{`comment/video/like`, vid, cid}, `/`), item)
 	}
 	if _, err := pipe.Exec(); err != nil {
 		return err
@@ -17,28 +19,28 @@ func PutVideoCommentLikeInfo(cid string, uidList *[]string) error {
 	return nil
 }
 
-func AppendVideoCommentLikeInfo(cid, uid string) error {
-	_, err := commentInfoClient.ZAdd(`comment/video/changed_like/`+cid, redis.Z{Score: 1, Member: uid}).Result()
+func AppendVideoCommentLikeInfo(vid, cid, uid string) error {
+	_, err := commentInfoClient.ZAdd(strings.Join([]string{`comment/video/changed_like`, vid, cid}, `/`), redis.Z{Score: 1, Member: uid}).Result()
 	if err != nil {
 		return err
 	}
-	if _, err := commentInfoClient.SRem(`comment/video/like/`+cid, uid).Result(); err != nil {
+	if _, err := commentInfoClient.SRem(strings.Join([]string{`comment/video/like`, vid, cid}, `/`), uid).Result(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func AppendVideoCommentLikeInfoToStaticSpace(cid, uid string) error {
-	if _, err := commentInfoClient.SAdd(`comment/video/like/`+cid, uid).Result(); err != nil {
+func AppendVideoCommentLikeInfoToStaticSpace(vid, cid, uid string) error {
+	if _, err := commentInfoClient.SAdd(strings.Join([]string{`comment/video/like`, vid, cid}, `/`), uid).Result(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func AppendVideoCommentLikeListToStaticSpace(cid string, uidList []string) error {
+func AppendVideoCommentLikeListToStaticSpace(vid, cid string, uidList []string) error {
 	tx := commentInfoClient.TxPipeline()
 	for _, uid := range uidList {
-		tx.SAdd(`comment/video/like/`+cid, uid)
+		tx.SAdd(strings.Join([]string{`comment/video/like`, vid, cid}, `/`), uid)
 	}
 	_, err := tx.Exec()
 	if err != nil {
@@ -47,37 +49,37 @@ func AppendVideoCommentLikeListToStaticSpace(cid string, uidList []string) error
 	return nil
 }
 
-func DeleteVideoCommentLikeInfoFromDynamicSpace(cid, uid string) error {
-	if _, err := commentInfoClient.ZRem(`comment/video/changed_like/`+cid, uid).Result(); err != nil {
+func DeleteVideoCommentLikeInfoFromDynamicSpace(vid, cid, uid string) error {
+	if _, err := commentInfoClient.ZRem(strings.Join([]string{`comment/video/changed_like`, vid, cid}, `/`), uid).Result(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func DeleteVideoCommentLikeListFromDynamicSpace(cid string) error {
-	if _, err := commentInfoClient.Del(`comment/video/changed_like/` + cid).Result(); err != nil {
+func DeleteVideoCommentLikeListFromDynamicSpace(vid, cid string) error {
+	if _, err := commentInfoClient.Del(strings.Join([]string{`comment/video/changed_like`, vid, cid}, `/`)).Result(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func RemoveVideoCommentLikeInfo(cid, uid string) error {
-	_, err := commentInfoClient.ZAdd(`comment/video/changed_like/`+cid, redis.Z{Score: 2, Member: uid}).Result()
+func RemoveVideoCommentLikeInfo(vid, cid, uid string) error {
+	_, err := commentInfoClient.ZAdd(strings.Join([]string{`comment/video/changed_like`, vid, cid}, `/`), redis.Z{Score: 2, Member: uid}).Result()
 	if err != nil {
 		return err
 	}
-	if _, err := commentInfoClient.SRem(`comment/video/like/`+cid, uid).Result(); err != nil {
+	if _, err := commentInfoClient.SRem(strings.Join([]string{`comment/video/like`, vid, cid}, `/`), uid).Result(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func GetVideoCommentLikeList(cid string) (*[]string, error) {
-	list, err := commentInfoClient.SMembers(`comment/video/like/` + cid).Result()
+func GetVideoCommentLikeList(vid, cid string) (*[]string, error) {
+	list, err := commentInfoClient.SMembers(strings.Join([]string{`comment/video/like`, vid, cid}, `/`)).Result()
 	if err != nil {
 		return nil, err
 	}
-	nList, err := GetNewUpdateVideoLikeList(cid)
+	nList, err := GetNewUpdateVideoCommentLikeList(vid, cid)
 	if err != nil {
 		return nil, err
 	}
@@ -85,41 +87,73 @@ func GetVideoCommentLikeList(cid string) (*[]string, error) {
 	return &list, nil
 }
 
-func GetNewUpdateVideoCommentLikeList(cid string) (*[]string, error) {
-	list, err := commentInfoClient.ZRangeByScore(`comment/video/changed_like/`+cid, redis.ZRangeBy{Min: `1`, Max: `1`}).Result()
+func GetNewUpdateVideoCommentLikeList(vid, cid string) (*[]string, error) {
+	list, err := commentInfoClient.ZRangeByScore(strings.Join([]string{`comment/video/changed_like`, vid, cid}, `/`), redis.ZRangeBy{Min: `1`, Max: `1`}).Result()
 	if err != nil {
 		return nil, err
 	}
 	return &list, nil
 }
 
-func GetNewDeleteVideoCommentLikeList(cid string) (*[]string, error) {
-	list, err := commentInfoClient.ZRangeByScore(`comment/video/changed_like/`+cid, redis.ZRangeBy{Min: `2`, Max: `2`}).Result()
+func GetNewDeleteVideoCommentLikeList(vid, cid string) (*[]string, error) {
+	list, err := commentInfoClient.ZRangeByScore(strings.Join([]string{`comment/video/changed_like`, vid, cid}, `/`), redis.ZRangeBy{Min: `2`, Max: `2`}).Result()
 	if err != nil {
 		return nil, err
 	}
 	return &list, nil
 }
 
-func GetVideoCommentLikeCount(cid string) (int64, error) {
+func GetVideoCommentLikeCount(vid, cid string) (int64, error) {
 	var count int64
 	var err error
-	if count, err = commentInfoClient.SCard(`comment/video/like/` + cid).Result(); err != nil {
+	if count, err = commentInfoClient.SCard(strings.Join([]string{`comment/video/like`, vid, cid}, `/`)).Result(); err != nil {
 		return -1, err
 	}
-	if nCount, err := commentInfoClient.ZCount(`comment/video/changed_like/`+cid, `1`, `1`).Result(); err != nil {
+	if nCount, err := commentInfoClient.ZCount(strings.Join([]string{`comment/video/changed_like`, vid, cid}, `/`), `1`, `1`).Result(); err != nil {
 		return -1, err
 	} else {
 		return count + nCount, nil
 	}
 }
 
-func PutActivityCommentLikeInfo(cid string, uidList *[]string) error {
+func DeleteVideoComment(vid, cid string) error {
+	tx := commentInfoClient.TxPipeline()
+	tx.Del(strings.Join([]string{`comment/video/like`, vid, cid}, `/`))
+	tx.Del(strings.Join([]string{`comment/video/changed_like`, vid, cid}, `/`))
+	_, err := tx.Exec()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func DeleteVideoCommentInfo(vid string) error {
+	var cursor uint64
+	for {
+		var keys []string
+		var err error
+		keys, cursor, err = commentInfoClient.Scan(cursor, strings.Join([]string{`comment/video/like`, vid, `*`}, `/`), 1000).Result()
+		if err != nil {
+			return err
+		}
+		if len(keys) > 0 {
+			if _, err := commentInfoClient.Del(keys...).Result(); err != nil {
+				return err
+			}
+		}
+		if cursor == 0 {
+			break
+		}
+	}
+	return nil
+}
+
+func PutActivityCommentLikeInfo(aid, cid string, uidList *[]string) error {
 	pipe := commentInfoClient.TxPipeline()
-	pipe.Del(`comment/activity/like/` + cid)
-	pipe.Del(`comment/activity/changed_like/` + cid)
+	pipe.Del(strings.Join([]string{`comment/activity/like`, aid, cid}, `/`))
+	pipe.Del(strings.Join([]string{`comment/activity/changed_like`, aid, cid}, `/`))
 	for _, item := range *uidList {
-		pipe.SAdd(`comment/activity/like/`+cid, item)
+		pipe.SAdd(strings.Join([]string{`comment/activity/like`, aid, cid}, `/`), item)
 	}
 	if _, err := pipe.Exec(); err != nil {
 		return err
@@ -127,28 +161,28 @@ func PutActivityCommentLikeInfo(cid string, uidList *[]string) error {
 	return nil
 }
 
-func AppendActivityCommentLikeInfo(cid, uid string) error {
-	_, err := commentInfoClient.ZAdd(`comment/activity/changed_like/`+cid, redis.Z{Score: 1, Member: uid}).Result()
+func AppendActivityCommentLikeInfo(aid, cid, uid string) error {
+	_, err := commentInfoClient.ZAdd(strings.Join([]string{`comment/activity/changed_like`, aid, cid}, `/`), redis.Z{Score: 1, Member: uid}).Result()
 	if err != nil {
 		return err
 	}
-	if _, err := commentInfoClient.SRem(`comment/activity/like/`+cid, uid).Result(); err != nil {
+	if _, err := commentInfoClient.SRem(strings.Join([]string{`comment/activity/like`, aid, cid}, `/`), uid).Result(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func AppendActivityCommentLikeInfoToStaticSpace(cid, uid string) error {
-	if _, err := commentInfoClient.SAdd(`comment/activity/like/`+cid, uid).Result(); err != nil {
+func AppendActivityCommentLikeInfoToStaticSpace(aid, cid, uid string) error {
+	if _, err := commentInfoClient.SAdd(strings.Join([]string{`comment/activity/like`, aid, cid}, `/`), uid).Result(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func AppendActivityCommentLikeListToStaticSpace(cid string, uidList []string) error {
+func AppendActivityCommentLikeListToStaticSpace(aid, cid string, uidList []string) error {
 	tx := commentInfoClient.TxPipeline()
 	for _, uid := range uidList {
-		tx.SAdd(`comment/activity/like/`+cid, uid)
+		tx.SAdd(strings.Join([]string{`comment/activity/like`, aid, cid}, `/`), uid)
 	}
 	_, err := tx.Exec()
 	if err != nil {
@@ -157,37 +191,37 @@ func AppendActivityCommentLikeListToStaticSpace(cid string, uidList []string) er
 	return nil
 }
 
-func DeleteActivityCommentLikeInfoFromDynamicSpace(cid, uid string) error {
-	if _, err := commentInfoClient.ZRem(`comment/activity/changed_like/`+cid, uid).Result(); err != nil {
+func DeleteActivityCommentLikeInfoFromDynamicSpace(aid, cid, uid string) error {
+	if _, err := commentInfoClient.ZRem(strings.Join([]string{`comment/activity/changed_like`, aid, cid}, `/`), uid).Result(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func DeleteActivityCommentLikeListFromDynamicSpace(cid string) error {
-	if _, err := commentInfoClient.Del(`comment/activity/changed_like/` + cid).Result(); err != nil {
+func DeleteActivityCommentLikeListFromDynamicSpace(aid, cid string) error {
+	if _, err := commentInfoClient.Del(strings.Join([]string{`comment/activity/changed_like`, aid, cid}, `/`)).Result(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func RemoveActivityCommentLikeInfo(cid, uid string) error {
-	_, err := commentInfoClient.ZAdd(`comment/activity/changed_like/`+cid, redis.Z{Score: 2, Member: uid}).Result()
+func RemoveActivityCommentLikeInfo(aid, cid, uid string) error {
+	_, err := commentInfoClient.ZAdd(strings.Join([]string{`comment/activity/changed_like`, aid, cid}, `/`), redis.Z{Score: 2, Member: uid}).Result()
 	if err != nil {
 		return err
 	}
-	if _, err := commentInfoClient.SRem(`comment/activity/like/`+cid, uid).Result(); err != nil {
+	if _, err := commentInfoClient.SRem(strings.Join([]string{`comment/activity/like`, aid, cid}, `/`), uid).Result(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func GetActivityCommentLikeList(cid string) (*[]string, error) {
-	list, err := commentInfoClient.SMembers(`comment/activity/like/` + cid).Result()
+func GetActivityCommentLikeList(aid, cid string) (*[]string, error) {
+	list, err := commentInfoClient.SMembers(strings.Join([]string{`comment/activity/like`, aid, cid}, `/`)).Result()
 	if err != nil {
 		return nil, err
 	}
-	nList, err := GetNewUpdateVideoLikeList(cid)
+	nList, err := GetNewUpdateActivityCommentLikeList(aid, cid)
 	if err != nil {
 		return nil, err
 	}
@@ -195,31 +229,63 @@ func GetActivityCommentLikeList(cid string) (*[]string, error) {
 	return &list, nil
 }
 
-func GetNewUpdateActivityCommentLikeList(cid string) (*[]string, error) {
-	list, err := commentInfoClient.ZRangeByScore(`comment/activity/changed_like/`+cid, redis.ZRangeBy{Min: `1`, Max: `1`}).Result()
+func GetNewUpdateActivityCommentLikeList(aid, cid string) (*[]string, error) {
+	list, err := commentInfoClient.ZRangeByScore(strings.Join([]string{`comment/activity/changed_like`, aid, cid}, `/`), redis.ZRangeBy{Min: `1`, Max: `1`}).Result()
 	if err != nil {
 		return nil, err
 	}
 	return &list, nil
 }
 
-func GetNewDeleteActivityCommentLikeList(cid string) (*[]string, error) {
-	list, err := commentInfoClient.ZRangeByScore(`comment/activity/changed_like/`+cid, redis.ZRangeBy{Min: `2`, Max: `2`}).Result()
+func GetNewDeleteActivityCommentLikeList(aid, cid string) (*[]string, error) {
+	list, err := commentInfoClient.ZRangeByScore(strings.Join([]string{`comment/activity/changed_like`, aid, cid}, `/`), redis.ZRangeBy{Min: `2`, Max: `2`}).Result()
 	if err != nil {
 		return nil, err
 	}
 	return &list, nil
 }
 
-func GetActivityCommentLikeCount(cid string) (int64, error) {
+func GetActivityCommentLikeCount(aid, cid string) (int64, error) {
 	var count int64
 	var err error
-	if count, err = commentInfoClient.SCard(`comment/activity/like/` + cid).Result(); err != nil {
+	if count, err = commentInfoClient.SCard(strings.Join([]string{`comment/activity/like`, aid, cid}, `/`)).Result(); err != nil {
 		return -1, err
 	}
-	if nCount, err := commentInfoClient.ZCount(`comment/activity/changed_like/`+cid, `1`, `1`).Result(); err != nil {
+	if nCount, err := commentInfoClient.ZCount(strings.Join([]string{`comment/activity/changed_like`, aid, cid}, `/`), `1`, `1`).Result(); err != nil {
 		return -1, err
 	} else {
 		return count + nCount, nil
 	}
+}
+
+func DeleteActivityComment(aid, cid string) error {
+	tx := commentInfoClient.TxPipeline()
+	tx.Del(strings.Join([]string{`comment/activity/like`, aid, cid}, `/`))
+	tx.Del(strings.Join([]string{`comment/activity/changed_like`, aid, cid}, `/`))
+	_, err := tx.Exec()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func DeleteActivityCommentInfo(aid string) error {
+	var cursor uint64
+	for {
+		var keys []string
+		var err error
+		keys, cursor, err = commentInfoClient.Scan(cursor, strings.Join([]string{`comment/activity/like`, aid, `*`}, `/`), 1000).Result()
+		if err != nil {
+			return err
+		}
+		if len(keys) > 0 {
+			if _, err := commentInfoClient.Del(keys...).Result(); err != nil {
+				return err
+			}
+		}
+		if cursor == 0 {
+			break
+		}
+	}
+	return nil
 }

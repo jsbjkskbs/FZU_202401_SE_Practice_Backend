@@ -892,8 +892,9 @@ func (p *InteractLikeActivityActionResp) String() string {
 type InteractLikeCommentActionReq struct {
 	AccessToken string `thrift:"access_token,1,required" header:"Access-Token,required" json:"access_token,required"`
 	CommentType string `thrift:"comment_type,2,required" form:"comment_type,required" json:"comment_type,required" query:"comment_type,required"`
-	CommentID   string `thrift:"comment_id,3,required" form:"comment_id,required" json:"comment_id,required" query:"comment_id,required"`
-	ActionType  int64  `thrift:"action_type,4,required" form:"action_type,required" json:"action_type,required" query:"action_type,required"`
+	FromMediaID string `thrift:"from_media_id,3,required" form:"from_media_id,required" json:"from_media_id,required" query:"from_media_id,required"`
+	CommentID   string `thrift:"comment_id,4,required" form:"comment_id,required" json:"comment_id,required" query:"comment_id,required"`
+	ActionType  int64  `thrift:"action_type,5,required" form:"action_type,required" json:"action_type,required" query:"action_type,required"`
 }
 
 func NewInteractLikeCommentActionReq() *InteractLikeCommentActionReq {
@@ -911,6 +912,10 @@ func (p *InteractLikeCommentActionReq) GetCommentType() (v string) {
 	return p.CommentType
 }
 
+func (p *InteractLikeCommentActionReq) GetFromMediaID() (v string) {
+	return p.FromMediaID
+}
+
 func (p *InteractLikeCommentActionReq) GetCommentID() (v string) {
 	return p.CommentID
 }
@@ -922,8 +927,9 @@ func (p *InteractLikeCommentActionReq) GetActionType() (v int64) {
 var fieldIDToName_InteractLikeCommentActionReq = map[int16]string{
 	1: "access_token",
 	2: "comment_type",
-	3: "comment_id",
-	4: "action_type",
+	3: "from_media_id",
+	4: "comment_id",
+	5: "action_type",
 }
 
 func (p *InteractLikeCommentActionReq) Read(iprot thrift.TProtocol) (err error) {
@@ -932,6 +938,7 @@ func (p *InteractLikeCommentActionReq) Read(iprot thrift.TProtocol) (err error) 
 	var fieldId int16
 	var issetAccessToken bool = false
 	var issetCommentType bool = false
+	var issetFromMediaID bool = false
 	var issetCommentID bool = false
 	var issetActionType bool = false
 
@@ -972,13 +979,22 @@ func (p *InteractLikeCommentActionReq) Read(iprot thrift.TProtocol) (err error) 
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetCommentID = true
+				issetFromMediaID = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
 		case 4:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetCommentID = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 				issetActionType = true
@@ -1008,13 +1024,18 @@ func (p *InteractLikeCommentActionReq) Read(iprot thrift.TProtocol) (err error) 
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetCommentID {
+	if !issetFromMediaID {
 		fieldId = 3
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetActionType {
+	if !issetCommentID {
 		fieldId = 4
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetActionType {
+		fieldId = 5
 		goto RequiredFieldNotSetError
 	}
 	return nil
@@ -1065,10 +1086,21 @@ func (p *InteractLikeCommentActionReq) ReadField3(iprot thrift.TProtocol) error 
 	} else {
 		_field = v
 	}
-	p.CommentID = _field
+	p.FromMediaID = _field
 	return nil
 }
 func (p *InteractLikeCommentActionReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.CommentID = _field
+	return nil
+}
+func (p *InteractLikeCommentActionReq) ReadField5(iprot thrift.TProtocol) error {
 
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
@@ -1100,6 +1132,10 @@ func (p *InteractLikeCommentActionReq) Write(oprot thrift.TProtocol) (err error)
 		}
 		if err = p.writeField4(oprot); err != nil {
 			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
 			goto WriteFieldError
 		}
 	}
@@ -1155,10 +1191,10 @@ WriteFieldEndError:
 }
 
 func (p *InteractLikeCommentActionReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("comment_id", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("from_media_id", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.CommentID); err != nil {
+	if err := oprot.WriteString(p.FromMediaID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1172,10 +1208,10 @@ WriteFieldEndError:
 }
 
 func (p *InteractLikeCommentActionReq) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("action_type", thrift.I64, 4); err != nil {
+	if err = oprot.WriteFieldBegin("comment_id", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.ActionType); err != nil {
+	if err := oprot.WriteString(p.CommentID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1186,6 +1222,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *InteractLikeCommentActionReq) writeField5(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("action_type", thrift.I64, 5); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.ActionType); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
 func (p *InteractLikeCommentActionReq) String() string {

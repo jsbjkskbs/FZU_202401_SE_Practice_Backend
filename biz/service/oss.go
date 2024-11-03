@@ -113,3 +113,43 @@ func (service *OssService) NewCallbackVideoEvent(_ *oss.OssCallbackVideoReq) err
 	go gorse.InsertVideo(req.Oid, stat["category"], labels)
 	return nil
 }
+
+type _ImageCallbackReq struct {
+	Key    string `json:"key"`
+	Hash   string `json:"hash"`
+	Fsize  int64  `json:"fsize"`
+	Bucket string `json:"bucket"`
+	Name   string `json:"name"`
+	Otype  string `json:"otype"`
+	Oid    string `json:"oid"`
+	UserId string `json:"user_id"`
+}
+
+func (service *OssService) NewCallbackImageEvent(_ *oss.OssCallbackImageReq) error {
+	body := service.c.Request.Body()
+	req := _ImageCallbackReq{}
+	json.Unmarshal(body, &req)
+	req.Key = strings.ReplaceAll(req.Key, "%2F", "/")
+
+	imageId, err := strconv.ParseInt(req.Oid, 10, 64)
+	if err != nil {
+		return err
+	}
+	userId, err := strconv.ParseInt(req.UserId, 10, 64)
+	if err != nil {
+		return err
+	}
+	img := dal.Executor.Image
+	exist, err := img.WithContext(context.Background()).Where(img.ID.Eq(imageId)).Count()
+	if err != nil {
+		return errno.DatabaseCallError
+	}
+	if exist == 0 {
+		img.WithContext(context.Background()).Create(&model.Image{
+			ID:       imageId,
+			ImageURL: req.Key,
+			UserID:   userId,
+		})
+	}
+	return nil
+}

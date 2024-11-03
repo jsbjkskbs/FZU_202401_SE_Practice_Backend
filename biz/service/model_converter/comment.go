@@ -13,7 +13,7 @@ func VideoCommentDal2Resp(list *[]*model.VideoComment) (*[]*base.Comment, error)
 	vc := dal.Executor.VideoComment
 	resp := &[]*base.Comment{}
 	for _, v := range *list {
-		likeCount, err := redis.GetVideoCommentLikeCount(fmt.Sprint(v.ID))
+		likeCount, err := redis.GetVideoCommentLikeCount(fmt.Sprint(v.VideoID), fmt.Sprint(v.ID))
 		if err != nil {
 			return nil, err
 		}
@@ -43,7 +43,7 @@ func ActivityCommentDal2Resp(list *[]*model.ActivityComment) (*[]*base.Comment, 
 	ac := dal.Executor.ActivityComment
 	resp := &[]*base.Comment{}
 	for _, v := range *list {
-		likeCount, err := redis.GetActivityCommentLikeCount(fmt.Sprint(v.ID))
+		likeCount, err := redis.GetActivityCommentLikeCount(fmt.Sprint(v.ActivityID), fmt.Sprint(v.ID))
 		if err != nil {
 			return nil, err
 		}
