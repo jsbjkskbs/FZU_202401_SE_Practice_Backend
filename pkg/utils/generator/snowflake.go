@@ -50,6 +50,7 @@ type Snowflake struct {
 // NewSnowflake创建一个新的Snowflake实例
 // node is the unique number of the current node
 // node是当前节点的唯一编号
+// node可取值范围为0到1023
 func NewSnowflake(node int64) (*Snowflake, error) {
 	if node < 0 || node > nodeMax {
 		return nil, fmt.Errorf("Node number must be between 0 and %d", nodeMax)

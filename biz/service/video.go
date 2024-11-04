@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"sfw/biz/dal"
+	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/video"
 	"sfw/biz/model/base"
@@ -17,6 +18,7 @@ import (
 	"sfw/biz/service/model_converter"
 	"sfw/pkg/errno"
 	"sfw/pkg/oss"
+	"sfw/pkg/synchronizer"
 	"sfw/pkg/utils/checker"
 	"sfw/pkg/utils/generator"
 	"sfw/pkg/utils/scheduler"
@@ -40,7 +42,7 @@ func NewVideoService(ctx context.Context, c *app.RequestContext) *VideoService {
 func (service *VideoService) NewPublishEvent(req *video.VideoPublishReq) (*video.VideoPublishRespData, error) {
 	id, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
-		return nil, errno.AccessTokenInvalid
+		return nil, errno.AccessTokenInvalid.WithInnerError(err)
 	}
 
 	err = checker.CheckVideoPublish(req.Title, req.Description, req.Category, req.Labels)
@@ -57,21 +59,14 @@ func (service *VideoService) NewPublishEvent(req *video.VideoPublishReq) (*video
 		"labels":      strings.Join(req.Labels, "\t"),
 	}
 
-	err = redis.VideoUploadInfoStore(fmt.Sprint(videoId), kv)
+	err = redis.VideoUploadInfoStore(fmt.Sprint(videoId), kv, oss.VideoUploadTokenDeadline)
 	if err != nil {
-		return nil, errno.DatabaseCallError
+		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	defer scheduler.Schdeduler.Start(
-		"video:"+fmt.Sprint(videoId),
-		oss.VideoUploadTokenDeadline,
-		func() {
-			redis.VideoUploadInfoDel(fmt.Sprint(videoId))
-		},
-	)
 
 	uptoken, uploadKey, err := oss.UploadVideo(fmt.Sprint(videoId), videoId)
 	if err != nil {
-		return nil, errno.InternalServerError
+		return nil, errno.InternalServerError.WithInnerError(err)
 	}
 
 	return &video.VideoPublishRespData{
@@ -91,18 +86,18 @@ func (service *VideoService) NewCoverUploadEvent(req *video.VideoCoverUploadReq)
 	if err != nil {
 		return nil, errno.ParamInvalid
 	}
-	v := dal.Executor.Video
-	count, err := v.WithContext(context.Background()).Where(v.ID.Eq(videoId), v.UserID.Eq(userId)).Count()
+
+	exist, err := exquery.QueryVideoExistByIdAndUserId(videoId, userId)
 	if err != nil {
-		return nil, errno.DatabaseCallError
+		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	if count == 0 {
+	if !exist {
 		return nil, errno.ResourceNotFound
 	}
 
 	uptoken, key, err := oss.UploadVideoCover(req.VideoID, videoId)
 	if err != nil {
-		return nil, errno.InternalServerError
+		return nil, errno.InternalServerError.WithInnerError(err)
 	}
 	return &video.VideoCoverUploadRespData{
 		UploadURL: oss.UploadUrl,
@@ -124,19 +119,21 @@ func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) ([]*base.Vide
 	}
 
 	if err != nil {
-		return nil, errno.InternalServerError
+		return nil, errno.InternalServerError.WithInnerError(err)
 	}
 
-	v := dal.Executor.Video
 	videos := make([]*model.Video, 0)
 	for _, vid := range vids {
 		videoId, err := strconv.ParseInt(vid, 10, 64)
 		if err != nil {
-			return nil, errno.InternalServerError
+			return nil, errno.ParamInvalid
 		}
-		video, err := v.WithContext(context.Background()).Where(v.ID.Eq(videoId)).First()
+		video, err := exquery.QueryVideoById(videoId)
 		if err != nil {
-			return nil, errno.DatabaseCallError
+			return nil, errno.DatabaseCallError.WithInnerError(err)
+		}
+		if video == nil {
+			return nil, errno.ResourceNotFound
 		}
 		videos = append(videos, video)
 	}
@@ -156,16 +153,18 @@ func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) (
 		vids, err = gorse.GetRecommend(fmt.Sprint(userId), 10)
 	}
 
-	v := dal.Executor.Video
 	videos := make([]*model.Video, 0)
 	for _, vid := range vids {
 		videoId, err := strconv.ParseInt(vid, 10, 64)
 		if err != nil {
 			return nil, errno.InternalServerError
 		}
-		video, err := v.WithContext(context.Background()).Where(v.ID.Eq(videoId)).First()
+		video, err := exquery.QueryVideoById(videoId)
 		if err != nil {
 			return nil, errno.DatabaseCallError
+		}
+		if video == nil {
+			return nil, errno.ResourceNotFound
 		}
 		videos = append(videos, video)
 	}
@@ -182,11 +181,39 @@ func (service *VideoService) NewInfoEvent(req *video.VideoInfoReq) (*base.Video,
 		return nil, errno.ParamInvalid
 	}
 
-	v := dal.Executor.Video
-	video, err := v.WithContext(context.Background()).Where(v.ID.Eq(videoId)).First()
+	video, err := exquery.QueryVideoById(videoId)
 	if err != nil {
-		return nil, errno.DatabaseCallError
+		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
+	go func() {
+		visited, err := redis.IsIPVisited(req.VideoID, service.c.ClientIP())
+		if err != nil {
+			return
+		}
+		if !visited {
+			err := redis.IncrVideoVisitCount(req.VideoID)
+			if err != nil {
+				return
+			}
+		}
+		scheduler.Schdeduler.Start(
+			strings.Join([]string{"video_visit_count", req.VideoID}, "/"),
+			common.SyncInterval, func() {
+				synchronizer.SynchronizeVideoVisitInfoRedis2DB(req.VideoID)
+			},
+		)
+
+		err = redis.PutIPVisitInfo(req.VideoID, service.c.ClientIP())
+		if err != nil {
+			return
+		}
+		scheduler.Schdeduler.Start(
+			strings.Join([]string{"video_visit", req.VideoID, service.c.ClientIP()}, "/"),
+			common.VideoVisitInterval, func() {
+				redis.DelIPVisitInfo(req.VideoID, service.c.ClientIP())
+			},
+		)
+	}()
 	return model_converter.VideoDal2Resp(video), nil
 }
 
@@ -197,16 +224,13 @@ func (service *VideoService) NewListEvent(req *video.VideoListReq) (*video.Video
 	if err != nil {
 		return nil, errno.ParamInvalid
 	}
-	v := dal.Executor.Video
-	result, count, err := v.WithContext(context.Background()).
-		Where(v.UserID.Eq(userId), v.Status.Eq("passed")).
-		FindByPage(int(req.PageNum), int(req.PageSize))
+	result, count, err := exquery.QueryVideoByUserIdAndStatusPaged(userId, int(req.PageNum), int(req.PageSize), common.VideoStatusPassed)
 	if err != nil {
-		return nil, errno.DatabaseCallError
+		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 	items, err := model_converter.VideoListDal2Resp(&result)
 	if err != nil {
-		return nil, errno.InternalServerError
+		return nil, errno.InternalServerError.WithInnerError(err)
 	}
 	return &video.VideoListRespData{
 		Items:    items,
@@ -224,13 +248,18 @@ func (service *VideoService) NewSubmitAllEvent(req *video.VideoSubmitAllReq) (*v
 	}
 
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	resp, count, err := common.QueryVideoSubmit(fmt.Sprint(userId), "", req.PageNum, req.PageSize)
+	videos, count, err := exquery.QueryVideoByUserIdPaged(userId, int(req.PageNum), int(req.PageSize))
 	if err != nil {
-		return nil, err
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
+
+	items, err := model_converter.VideoListDal2Resp(&videos)
+	if err != nil {
+		return nil, errno.InternalServerError.WithInnerError(err)
 	}
 
 	return &video.VideoSubmitAllRespData{
-		Items:    *resp,
+		Items:    items,
 		IsEnd:    count <= req.PageSize*(req.PageNum+1),
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
@@ -245,13 +274,18 @@ func (service *VideoService) NewSubmitReviewEvent(req *video.VideoSubmitReviewRe
 	}
 
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	resp, count, err := common.QueryVideoSubmit(fmt.Sprint(userId), "review", req.PageNum, req.PageSize)
+	videos, count, err := exquery.QueryVideoByUserIdAndStatusPaged(userId, int(req.PageNum), int(req.PageSize), common.VideoStatusReview)
 	if err != nil {
 		return nil, err
 	}
 
+	items, err := model_converter.VideoListDal2Resp(&videos)
+	if err != nil {
+		return nil, errno.InternalServerError
+	}
+
 	return &video.VideoSubmitReviewRespData{
-		Items:    *resp,
+		Items:    items,
 		IsEnd:    count <= req.PageSize*(req.PageNum+1),
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
@@ -266,13 +300,18 @@ func (service *VideoService) NewSubmitLockedEvent(req *video.VideoSubmitLockedRe
 	}
 
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	resp, count, err := common.QueryVideoSubmit(fmt.Sprint(userId), "locked", req.PageNum, req.PageSize)
+	videos, count, err := exquery.QueryVideoByUserIdAndStatusPaged(userId, int(req.PageNum), int(req.PageSize), common.VideoStatusLocked)
 	if err != nil {
-		return nil, err
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
+
+	items, err := model_converter.VideoListDal2Resp(&videos)
+	if err != nil {
+		return nil, errno.InternalServerError.WithInnerError(err)
 	}
 
 	return &video.VideoSubmitLockedRespData{
-		Items:    *resp,
+		Items:    items,
 		IsEnd:    count <= req.PageSize*(req.PageNum+1),
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
@@ -287,13 +326,18 @@ func (service *VideoService) NewSumitPassedEvent(req *video.VideoSubmitPassedReq
 	}
 
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	resp, count, err := common.QueryVideoSubmit(fmt.Sprint(userId), "passed", req.PageNum, req.PageSize)
+	videos, count, err := exquery.QueryVideoByUserIdAndStatusPaged(userId, int(req.PageNum), int(req.PageSize), common.VideoStatusPassed)
 	if err != nil {
-		return nil, err
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
+
+	items, err := model_converter.VideoListDal2Resp(&videos)
+	if err != nil {
+		return nil, errno.InternalServerError.WithInnerError(err)
 	}
 
 	return &video.VideoSubmitPassedRespData{
-		Items:    *resp,
+		Items:    items,
 		IsEnd:    count <= req.PageSize*(req.PageNum+1),
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
@@ -313,7 +357,8 @@ func (service *VideoService) NewSearchEvent(req *video.VideoSearchReq) (*video.V
 	if req.ToDate != nil {
 		conditions = append(conditions, v.CreatedAt.Lte(*req.ToDate))
 	}
-	conditions = append(conditions, v.Status.Eq("passed"))
+	conditions = append(conditions, v.Status.Eq(common.VideoStatusPassed))
+	// 此处不必提取代码，因为过于特殊
 	result, count, err := vd.Where(conditions...).
 		Where(vd.Where(v.Title.Like("%"+req.Keyword+"%")).Or(v.Description.Like("%"+req.Keyword+"%"))).
 		FindByPage(int(req.PageNum), int(req.PageSize))
@@ -331,16 +376,16 @@ func (service *VideoService) NewSearchEvent(req *video.VideoSearchReq) (*video.V
 					LIMIT pageSize OFFSET pageNum
 		*/
 	if err != nil {
-		return nil, errno.DatabaseCallError
+		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	resp, err := model_converter.VideoListDal2Resp(&result)
+	items, err := model_converter.VideoListDal2Resp(&result)
 	if err != nil {
-		return nil, errno.InternalServerError
+		return nil, errno.InternalServerError.WithInnerError(err)
 	}
 
 	return &video.VideoSearchRespData{
-		Items:    resp,
+		Items:    items,
 		IsEnd:    count <= req.PageSize*(req.PageNum+1),
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,

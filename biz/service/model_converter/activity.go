@@ -1,26 +1,28 @@
 package model_converter
 
 import (
-	"context"
 	"fmt"
 
 	"sfw/biz/dal"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/base"
+	"sfw/biz/mw/redis"
+	"sfw/pkg/oss"
 )
 
-func ActivityListDal2Resp(list *[]*model.Activity) *[]*base.Activity {
+func ActivityListDal2Resp(list *[]*model.Activity) (*[]*base.Activity, error) {
 	resp := &[]*base.Activity{}
 	for _, v := range *list {
-		ai := dal.Executor.ActivityImage
-		activityImgData, err := ai.WithContext(context.Background()).Where(ai.ActivityID.Eq(v.ID)).Find()
-		if err != nil {
-			continue
-		}
 		images := []string{}
-		for _, img := range activityImgData {
-			images = append(images, fmt.Sprint(img.ImageID))
+		dal.DB.Raw(
+			`SELECT i.image_url  	
+			FROM Image i  
+			JOIN ActivityImages ai ON i.id = ai.image_id  
+			WHERE ai.activity_id = ?;`, v.ID).Scan(&images)
+		for i, image := range images {
+			images[i] = oss.Key2Url(image)
 		}
+
 		refVideoID := ""
 		refActivityID := ""
 		if v.RefVideoID != 0 {
@@ -30,6 +32,11 @@ func ActivityListDal2Resp(list *[]*model.Activity) *[]*base.Activity {
 			refActivityID = fmt.Sprint(v.RefActivityID)
 		}
 
+		likeCount, err := redis.GetActivityLikeCount(fmt.Sprint(v.ID))
+		if err != nil {
+			return nil, err
+		}
+
 		*resp = append(*resp, &base.Activity{
 			ID:          fmt.Sprint(v.ID),
 			UserID:      fmt.Sprint(v.UserID),
@@ -37,10 +44,11 @@ func ActivityListDal2Resp(list *[]*model.Activity) *[]*base.Activity {
 			Image:       images,
 			RefVideo:    refVideoID,
 			RefActivity: refActivityID,
+			LikeCount:   likeCount,
 			CreatedAt:   v.CreatedAt,
 			UpdatedAt:   v.UpdatedAt,
 			DeletedAt:   v.DeletedAt,
 		})
 	}
-	return resp
+	return resp, nil
 }

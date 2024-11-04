@@ -146,24 +146,22 @@ struct UserSearchResp {
     3: UserSearchRespData data;
 }
 
-struct UserPasswordRetrieveReq {
-    1: required string otype (api.vd="$ == 'email' || $ == 'phone'; msg:'类型不正确'");
-    2: required string oid (api.vd="((Otype)$ == 'phone' && phone($)) || ((Otype)$ == 'email' && email($)); msg:'邮箱或电话格式不正确'");
+struct UserPasswordRetrieveEmailReq {
+    1: required string email (api.vd="email($); msg:'邮箱格式不正确'");
 }
 
-struct UserPasswordRetrieveResp {
+struct UserPasswordRetrieveEmailResp {
     1: i64 code;
     2: string msg;
 }
 
-struct UserPasswordResetReq {
-    1: required string otype (api.vd="$ == 'email' || $ == 'phone'; msg:'类型不正确'");
-    2: required string oid (api.vd="((Otype)$ == 'phone' && phone($)) || ((Otype)$ == 'email' && email($)); msg:'邮箱或电话格式不正确'");
-    3: required string password;
-    4: required string code;
+struct UserPasswordResetEmailReq {
+    1: required string email (api.vd="email($); msg:'邮箱格式不正确'");
+    2: required string password;
+    3: required string code;
 }
 
-struct UserPasswordResetResp {
+struct UserPasswordResetEmailResp {
     1: i64 code;
     2: string msg;
 }
@@ -180,6 +178,6 @@ service UserService {
     UserMfaQrcodeResp MfaQrcodeMethod(1: UserMfaQrcodeReq req) (api.get="/api/v1/user/mfa/qrcode");
     UserMfaBindResp MfaBindMethod(1: UserMfaBindReq req) (api.post="/api/v1/user/mfa/bind");
     UserSearchResp SearchMethod(1: UserSearchReq req) (api.get="/api/v1/user/search");
-    UserPasswordRetrieveResp PasswordRetrieveMethod(1: UserPasswordRetrieveReq req) (api.post="/api/v1/user/security/password/retrieve");
-    UserPasswordResetResp PasswordResetMethod(1: UserPasswordResetReq req) (api.post="/api/v1/user/security/password/reset");
+    UserPasswordRetrieveEmailResp PasswordRetrieveMethod(1: UserPasswordRetrieveEmailReq req) (api.post="/api/v1/user/security/password/retrieve/email");
+    UserPasswordResetEmailResp PasswordResetMethod(1: UserPasswordResetEmailReq req) (api.post="/api/v1/user/security/password/reset/email");
 }

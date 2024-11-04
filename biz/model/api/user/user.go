@@ -5,6 +5,7 @@ package user
 import (
 	"context"
 	"fmt"
+
 	"github.com/apache/thrift/lib/go/thrift"
 	"sfw/biz/model/base"
 )
@@ -47,7 +48,6 @@ var fieldIDToName_UserRegisterReq = map[int16]string{
 }
 
 func (p *UserRegisterReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetUsername bool = false
@@ -156,7 +156,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *UserRegisterReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -166,8 +165,8 @@ func (p *UserRegisterReq) ReadField1(iprot thrift.TProtocol) error {
 	p.Username = _field
 	return nil
 }
-func (p *UserRegisterReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserRegisterReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -177,8 +176,8 @@ func (p *UserRegisterReq) ReadField2(iprot thrift.TProtocol) error {
 	p.Password = _field
 	return nil
 }
-func (p *UserRegisterReq) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *UserRegisterReq) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -188,8 +187,8 @@ func (p *UserRegisterReq) ReadField3(iprot thrift.TProtocol) error {
 	p.Email = _field
 	return nil
 }
-func (p *UserRegisterReq) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *UserRegisterReq) ReadField4(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -313,7 +312,6 @@ func (p *UserRegisterReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserRegisterReq(%+v)", *p)
-
 }
 
 type UserRegisterResp struct {
@@ -342,7 +340,6 @@ var fieldIDToName_UserRegisterResp = map[int16]string{
 }
 
 func (p *UserRegisterResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -406,7 +403,6 @@ ReadStructEndError:
 }
 
 func (p *UserRegisterResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -416,8 +412,8 @@ func (p *UserRegisterResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserRegisterResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserRegisterResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -499,7 +495,6 @@ func (p *UserRegisterResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserRegisterResp(%+v)", *p)
-
 }
 
 type UserSecurityEmailCodeReq struct {
@@ -522,7 +517,6 @@ var fieldIDToName_UserSecurityEmailCodeReq = map[int16]string{
 }
 
 func (p *UserSecurityEmailCodeReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetEmail bool = false
@@ -586,7 +580,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *UserSecurityEmailCodeReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -647,7 +640,6 @@ func (p *UserSecurityEmailCodeReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserSecurityEmailCodeReq(%+v)", *p)
-
 }
 
 type UserSecurityEmailCodeResp struct {
@@ -676,7 +668,6 @@ var fieldIDToName_UserSecurityEmailCodeResp = map[int16]string{
 }
 
 func (p *UserSecurityEmailCodeResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -740,7 +731,6 @@ ReadStructEndError:
 }
 
 func (p *UserSecurityEmailCodeResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -750,8 +740,8 @@ func (p *UserSecurityEmailCodeResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserSecurityEmailCodeResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserSecurityEmailCodeResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -833,7 +823,6 @@ func (p *UserSecurityEmailCodeResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserSecurityEmailCodeResp(%+v)", *p)
-
 }
 
 type UserLoginReq struct {
@@ -877,7 +866,6 @@ func (p *UserLoginReq) IsSetMfaCode() bool {
 }
 
 func (p *UserLoginReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetUsername bool = false
@@ -964,7 +952,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *UserLoginReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -974,8 +961,8 @@ func (p *UserLoginReq) ReadField1(iprot thrift.TProtocol) error {
 	p.Username = _field
 	return nil
 }
-func (p *UserLoginReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserLoginReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -985,8 +972,8 @@ func (p *UserLoginReq) ReadField2(iprot thrift.TProtocol) error {
 	p.Password = _field
 	return nil
 }
-func (p *UserLoginReq) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *UserLoginReq) ReadField3(iprot thrift.TProtocol) error {
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1091,7 +1078,6 @@ func (p *UserLoginReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserLoginReq(%+v)", *p)
-
 }
 
 type UserLoginResp struct {
@@ -1135,7 +1121,6 @@ func (p *UserLoginResp) IsSetData() bool {
 }
 
 func (p *UserLoginResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1207,7 +1192,6 @@ ReadStructEndError:
 }
 
 func (p *UserLoginResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1217,8 +1201,8 @@ func (p *UserLoginResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserLoginResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserLoginResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1228,6 +1212,7 @@ func (p *UserLoginResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
+
 func (p *UserLoginResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := base.NewUserWithToken()
 	if err := _field.Read(iprot); err != nil {
@@ -1329,7 +1314,6 @@ func (p *UserLoginResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserLoginResp(%+v)", *p)
-
 }
 
 type UserInfoReq struct {
@@ -1352,7 +1336,6 @@ var fieldIDToName_UserInfoReq = map[int16]string{
 }
 
 func (p *UserInfoReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetUserID bool = false
@@ -1416,7 +1399,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *UserInfoReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1477,7 +1459,6 @@ func (p *UserInfoReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserInfoReq(%+v)", *p)
-
 }
 
 type UserInfoResp struct {
@@ -1521,7 +1502,6 @@ func (p *UserInfoResp) IsSetData() bool {
 }
 
 func (p *UserInfoResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1593,7 +1573,6 @@ ReadStructEndError:
 }
 
 func (p *UserInfoResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1603,8 +1582,8 @@ func (p *UserInfoResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserInfoResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserInfoResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1614,6 +1593,7 @@ func (p *UserInfoResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
+
 func (p *UserInfoResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := base.NewUser()
 	if err := _field.Read(iprot); err != nil {
@@ -1715,7 +1695,6 @@ func (p *UserInfoResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserInfoResp(%+v)", *p)
-
 }
 
 type UserFollowerCountReq struct {
@@ -1738,7 +1717,6 @@ var fieldIDToName_UserFollowerCountReq = map[int16]string{
 }
 
 func (p *UserFollowerCountReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetUserID bool = false
@@ -1802,7 +1780,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *UserFollowerCountReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1863,7 +1840,6 @@ func (p *UserFollowerCountReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserFollowerCountReq(%+v)", *p)
-
 }
 
 type UserFollowerCountRespData struct {
@@ -1892,7 +1868,6 @@ var fieldIDToName_UserFollowerCountRespData = map[int16]string{
 }
 
 func (p *UserFollowerCountRespData) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1956,7 +1931,6 @@ ReadStructEndError:
 }
 
 func (p *UserFollowerCountRespData) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1966,8 +1940,8 @@ func (p *UserFollowerCountRespData) ReadField1(iprot thrift.TProtocol) error {
 	p.ID = _field
 	return nil
 }
-func (p *UserFollowerCountRespData) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserFollowerCountRespData) ReadField2(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2049,7 +2023,6 @@ func (p *UserFollowerCountRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserFollowerCountRespData(%+v)", *p)
-
 }
 
 type UserFollowerCountResp struct {
@@ -2093,7 +2066,6 @@ func (p *UserFollowerCountResp) IsSetData() bool {
 }
 
 func (p *UserFollowerCountResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2165,7 +2137,6 @@ ReadStructEndError:
 }
 
 func (p *UserFollowerCountResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2175,8 +2146,8 @@ func (p *UserFollowerCountResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserFollowerCountResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserFollowerCountResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2186,6 +2157,7 @@ func (p *UserFollowerCountResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
+
 func (p *UserFollowerCountResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewUserFollowerCountRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -2287,7 +2259,6 @@ func (p *UserFollowerCountResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserFollowerCountResp(%+v)", *p)
-
 }
 
 type UserFollowingCountReq struct {
@@ -2310,7 +2281,6 @@ var fieldIDToName_UserFollowingCountReq = map[int16]string{
 }
 
 func (p *UserFollowingCountReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetUserID bool = false
@@ -2374,7 +2344,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *UserFollowingCountReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2435,7 +2404,6 @@ func (p *UserFollowingCountReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserFollowingCountReq(%+v)", *p)
-
 }
 
 type UserFollowingCountRespData struct {
@@ -2464,7 +2432,6 @@ var fieldIDToName_UserFollowingCountRespData = map[int16]string{
 }
 
 func (p *UserFollowingCountRespData) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2528,7 +2495,6 @@ ReadStructEndError:
 }
 
 func (p *UserFollowingCountRespData) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2538,8 +2504,8 @@ func (p *UserFollowingCountRespData) ReadField1(iprot thrift.TProtocol) error {
 	p.ID = _field
 	return nil
 }
-func (p *UserFollowingCountRespData) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserFollowingCountRespData) ReadField2(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2621,7 +2587,6 @@ func (p *UserFollowingCountRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserFollowingCountRespData(%+v)", *p)
-
 }
 
 type UserFollowingCountResp struct {
@@ -2665,7 +2630,6 @@ func (p *UserFollowingCountResp) IsSetData() bool {
 }
 
 func (p *UserFollowingCountResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2737,7 +2701,6 @@ ReadStructEndError:
 }
 
 func (p *UserFollowingCountResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2747,8 +2710,8 @@ func (p *UserFollowingCountResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserFollowingCountResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserFollowingCountResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2758,6 +2721,7 @@ func (p *UserFollowingCountResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
+
 func (p *UserFollowingCountResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewUserFollowingCountRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -2859,7 +2823,6 @@ func (p *UserFollowingCountResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserFollowingCountResp(%+v)", *p)
-
 }
 
 type UserLikeCountReq struct {
@@ -2882,7 +2845,6 @@ var fieldIDToName_UserLikeCountReq = map[int16]string{
 }
 
 func (p *UserLikeCountReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetUserID bool = false
@@ -2946,7 +2908,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *UserLikeCountReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3007,7 +2968,6 @@ func (p *UserLikeCountReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserLikeCountReq(%+v)", *p)
-
 }
 
 type UserLikeCountRespData struct {
@@ -3036,7 +2996,6 @@ var fieldIDToName_UserLikeCountRespData = map[int16]string{
 }
 
 func (p *UserLikeCountRespData) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3100,7 +3059,6 @@ ReadStructEndError:
 }
 
 func (p *UserLikeCountRespData) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3110,8 +3068,8 @@ func (p *UserLikeCountRespData) ReadField1(iprot thrift.TProtocol) error {
 	p.ID = _field
 	return nil
 }
-func (p *UserLikeCountRespData) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserLikeCountRespData) ReadField2(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3193,7 +3151,6 @@ func (p *UserLikeCountRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserLikeCountRespData(%+v)", *p)
-
 }
 
 type UserLikeCountResp struct {
@@ -3237,7 +3194,6 @@ func (p *UserLikeCountResp) IsSetData() bool {
 }
 
 func (p *UserLikeCountResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3309,7 +3265,6 @@ ReadStructEndError:
 }
 
 func (p *UserLikeCountResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3319,8 +3274,8 @@ func (p *UserLikeCountResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserLikeCountResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserLikeCountResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3330,6 +3285,7 @@ func (p *UserLikeCountResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
+
 func (p *UserLikeCountResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewUserLikeCountRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -3431,7 +3387,6 @@ func (p *UserLikeCountResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserLikeCountResp(%+v)", *p)
-
 }
 
 type UserAvatarUploadReq struct {
@@ -3454,7 +3409,6 @@ var fieldIDToName_UserAvatarUploadReq = map[int16]string{
 }
 
 func (p *UserAvatarUploadReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -3518,7 +3472,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *UserAvatarUploadReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3579,7 +3532,6 @@ func (p *UserAvatarUploadReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserAvatarUploadReq(%+v)", *p)
-
 }
 
 type UserAvatarUploadData struct {
@@ -3614,7 +3566,6 @@ var fieldIDToName_UserAvatarUploadData = map[int16]string{
 }
 
 func (p *UserAvatarUploadData) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3686,7 +3637,6 @@ ReadStructEndError:
 }
 
 func (p *UserAvatarUploadData) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3696,8 +3646,8 @@ func (p *UserAvatarUploadData) ReadField1(iprot thrift.TProtocol) error {
 	p.UploadURL = _field
 	return nil
 }
-func (p *UserAvatarUploadData) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserAvatarUploadData) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3707,8 +3657,8 @@ func (p *UserAvatarUploadData) ReadField2(iprot thrift.TProtocol) error {
 	p.Uptoken = _field
 	return nil
 }
-func (p *UserAvatarUploadData) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *UserAvatarUploadData) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3811,7 +3761,6 @@ func (p *UserAvatarUploadData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserAvatarUploadData(%+v)", *p)
-
 }
 
 type UserAvatarUploadResp struct {
@@ -3855,7 +3804,6 @@ func (p *UserAvatarUploadResp) IsSetData() bool {
 }
 
 func (p *UserAvatarUploadResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3927,7 +3875,6 @@ ReadStructEndError:
 }
 
 func (p *UserAvatarUploadResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3937,8 +3884,8 @@ func (p *UserAvatarUploadResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserAvatarUploadResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserAvatarUploadResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3948,6 +3895,7 @@ func (p *UserAvatarUploadResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
+
 func (p *UserAvatarUploadResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewUserAvatarUploadData()
 	if err := _field.Read(iprot); err != nil {
@@ -4049,7 +3997,6 @@ func (p *UserAvatarUploadResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserAvatarUploadResp(%+v)", *p)
-
 }
 
 type UserMfaQrcodeReq struct {
@@ -4072,7 +4019,6 @@ var fieldIDToName_UserMfaQrcodeReq = map[int16]string{
 }
 
 func (p *UserMfaQrcodeReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -4136,7 +4082,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *UserMfaQrcodeReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4197,7 +4142,6 @@ func (p *UserMfaQrcodeReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserMfaQrcodeReq(%+v)", *p)
-
 }
 
 type UserMfaQrcodeData struct {
@@ -4226,7 +4170,6 @@ var fieldIDToName_UserMfaQrcodeData = map[int16]string{
 }
 
 func (p *UserMfaQrcodeData) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4290,7 +4233,6 @@ ReadStructEndError:
 }
 
 func (p *UserMfaQrcodeData) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4300,8 +4242,8 @@ func (p *UserMfaQrcodeData) ReadField1(iprot thrift.TProtocol) error {
 	p.Secret = _field
 	return nil
 }
-func (p *UserMfaQrcodeData) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserMfaQrcodeData) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4383,7 +4325,6 @@ func (p *UserMfaQrcodeData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserMfaQrcodeData(%+v)", *p)
-
 }
 
 type UserMfaQrcodeResp struct {
@@ -4427,7 +4368,6 @@ func (p *UserMfaQrcodeResp) IsSetData() bool {
 }
 
 func (p *UserMfaQrcodeResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4499,7 +4439,6 @@ ReadStructEndError:
 }
 
 func (p *UserMfaQrcodeResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4509,8 +4448,8 @@ func (p *UserMfaQrcodeResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserMfaQrcodeResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserMfaQrcodeResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4520,6 +4459,7 @@ func (p *UserMfaQrcodeResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
+
 func (p *UserMfaQrcodeResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewUserMfaQrcodeData()
 	if err := _field.Read(iprot); err != nil {
@@ -4621,7 +4561,6 @@ func (p *UserMfaQrcodeResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserMfaQrcodeResp(%+v)", *p)
-
 }
 
 type UserMfaBindReq struct {
@@ -4656,7 +4595,6 @@ var fieldIDToName_UserMfaBindReq = map[int16]string{
 }
 
 func (p *UserMfaBindReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -4750,7 +4688,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *UserMfaBindReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4760,8 +4697,8 @@ func (p *UserMfaBindReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-func (p *UserMfaBindReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserMfaBindReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4771,8 +4708,8 @@ func (p *UserMfaBindReq) ReadField2(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserMfaBindReq) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *UserMfaBindReq) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4875,7 +4812,6 @@ func (p *UserMfaBindReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserMfaBindReq(%+v)", *p)
-
 }
 
 type UserMfaBindResp struct {
@@ -4904,7 +4840,6 @@ var fieldIDToName_UserMfaBindResp = map[int16]string{
 }
 
 func (p *UserMfaBindResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4968,7 +4903,6 @@ ReadStructEndError:
 }
 
 func (p *UserMfaBindResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4978,8 +4912,8 @@ func (p *UserMfaBindResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserMfaBindResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserMfaBindResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -5061,7 +4995,6 @@ func (p *UserMfaBindResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserMfaBindResp(%+v)", *p)
-
 }
 
 type UserSearchReq struct {
@@ -5096,7 +5029,6 @@ var fieldIDToName_UserSearchReq = map[int16]string{
 }
 
 func (p *UserSearchReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetKeyword bool = false
@@ -5190,7 +5122,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *UserSearchReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -5200,8 +5131,8 @@ func (p *UserSearchReq) ReadField1(iprot thrift.TProtocol) error {
 	p.Keyword = _field
 	return nil
 }
-func (p *UserSearchReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserSearchReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5211,8 +5142,8 @@ func (p *UserSearchReq) ReadField2(iprot thrift.TProtocol) error {
 	p.PageNum = _field
 	return nil
 }
-func (p *UserSearchReq) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *UserSearchReq) ReadField3(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5315,7 +5246,6 @@ func (p *UserSearchReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserSearchReq(%+v)", *p)
-
 }
 
 type UserSearchRespData struct {
@@ -5362,7 +5292,6 @@ var fieldIDToName_UserSearchRespData = map[int16]string{
 }
 
 func (p *UserSearchRespData) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -5472,8 +5401,8 @@ func (p *UserSearchRespData) ReadField1(iprot thrift.TProtocol) error {
 	p.Items = _field
 	return nil
 }
-func (p *UserSearchRespData) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserSearchRespData) ReadField2(iprot thrift.TProtocol) error {
 	var _field bool
 	if v, err := iprot.ReadBool(); err != nil {
 		return err
@@ -5483,8 +5412,8 @@ func (p *UserSearchRespData) ReadField2(iprot thrift.TProtocol) error {
 	p.IsEnd = _field
 	return nil
 }
-func (p *UserSearchRespData) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *UserSearchRespData) ReadField3(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5494,8 +5423,8 @@ func (p *UserSearchRespData) ReadField3(iprot thrift.TProtocol) error {
 	p.PageNum = _field
 	return nil
 }
-func (p *UserSearchRespData) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *UserSearchRespData) ReadField4(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5505,8 +5434,8 @@ func (p *UserSearchRespData) ReadField4(iprot thrift.TProtocol) error {
 	p.PageSize = _field
 	return nil
 }
-func (p *UserSearchRespData) ReadField5(iprot thrift.TProtocol) error {
 
+func (p *UserSearchRespData) ReadField5(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5659,7 +5588,6 @@ func (p *UserSearchRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserSearchRespData(%+v)", *p)
-
 }
 
 type UserSearchResp struct {
@@ -5703,7 +5631,6 @@ func (p *UserSearchResp) IsSetData() bool {
 }
 
 func (p *UserSearchResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -5775,7 +5702,6 @@ ReadStructEndError:
 }
 
 func (p *UserSearchResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5785,8 +5711,8 @@ func (p *UserSearchResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserSearchResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserSearchResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -5796,6 +5722,7 @@ func (p *UserSearchResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
+
 func (p *UserSearchResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewUserSearchRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -5897,40 +5824,31 @@ func (p *UserSearchResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserSearchResp(%+v)", *p)
-
 }
 
-type UserPasswordRetrieveReq struct {
-	Otype string `thrift:"otype,1,required" form:"otype,required" json:"otype,required" query:"otype,required" vd:"$ == 'email' || $ == 'phone'; msg:'类型不正确'"`
-	Oid   string `thrift:"oid,2,required" form:"oid,required" json:"oid,required" query:"oid,required" vd:"((Otype)$ == 'phone' && phone($)) || ((Otype)$ == 'email' && email($)); msg:'邮箱或电话格式不正确'"`
+type UserPasswordRetrieveEmailReq struct {
+	Email string `thrift:"email,1,required" form:"email,required" json:"email,required" query:"email,required" vd:"email($); msg:'邮箱格式不正确'"`
 }
 
-func NewUserPasswordRetrieveReq() *UserPasswordRetrieveReq {
-	return &UserPasswordRetrieveReq{}
+func NewUserPasswordRetrieveEmailReq() *UserPasswordRetrieveEmailReq {
+	return &UserPasswordRetrieveEmailReq{}
 }
 
-func (p *UserPasswordRetrieveReq) InitDefault() {
+func (p *UserPasswordRetrieveEmailReq) InitDefault() {
 }
 
-func (p *UserPasswordRetrieveReq) GetOtype() (v string) {
-	return p.Otype
+func (p *UserPasswordRetrieveEmailReq) GetEmail() (v string) {
+	return p.Email
 }
 
-func (p *UserPasswordRetrieveReq) GetOid() (v string) {
-	return p.Oid
+var fieldIDToName_UserPasswordRetrieveEmailReq = map[int16]string{
+	1: "email",
 }
 
-var fieldIDToName_UserPasswordRetrieveReq = map[int16]string{
-	1: "otype",
-	2: "oid",
-}
-
-func (p *UserPasswordRetrieveReq) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *UserPasswordRetrieveEmailReq) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetOtype bool = false
-	var issetOid bool = false
+	var issetEmail bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -5951,16 +5869,7 @@ func (p *UserPasswordRetrieveReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetOtype = true
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 2:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField2(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetOid = true
+				issetEmail = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -5977,13 +5886,8 @@ func (p *UserPasswordRetrieveReq) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetOtype {
+	if !issetEmail {
 		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetOid {
-		fieldId = 2
 		goto RequiredFieldNotSetError
 	}
 	return nil
@@ -5992,7 +5896,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserPasswordRetrieveReq[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserPasswordRetrieveEmailReq[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -6001,44 +5905,28 @@ ReadFieldEndError:
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UserPasswordRetrieveReq[fieldId]))
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UserPasswordRetrieveEmailReq[fieldId]))
 }
 
-func (p *UserPasswordRetrieveReq) ReadField1(iprot thrift.TProtocol) error {
-
+func (p *UserPasswordRetrieveEmailReq) ReadField1(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		_field = v
 	}
-	p.Otype = _field
-	return nil
-}
-func (p *UserPasswordRetrieveReq) ReadField2(iprot thrift.TProtocol) error {
-
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.Oid = _field
+	p.Email = _field
 	return nil
 }
 
-func (p *UserPasswordRetrieveReq) Write(oprot thrift.TProtocol) (err error) {
+func (p *UserPasswordRetrieveEmailReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("UserPasswordRetrieveReq"); err != nil {
+	if err = oprot.WriteStructBegin("UserPasswordRetrieveEmailReq"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
 		if err = p.writeField1(oprot); err != nil {
 			fieldId = 1
-			goto WriteFieldError
-		}
-		if err = p.writeField2(oprot); err != nil {
-			fieldId = 2
 			goto WriteFieldError
 		}
 	}
@@ -6059,11 +5947,11 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *UserPasswordRetrieveReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("otype", thrift.STRING, 1); err != nil {
+func (p *UserPasswordRetrieveEmailReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("email", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Otype); err != nil {
+	if err := oprot.WriteString(p.Email); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -6076,58 +5964,39 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *UserPasswordRetrieveReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("oid", thrift.STRING, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Oid); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
-}
-
-func (p *UserPasswordRetrieveReq) String() string {
+func (p *UserPasswordRetrieveEmailReq) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UserPasswordRetrieveReq(%+v)", *p)
-
+	return fmt.Sprintf("UserPasswordRetrieveEmailReq(%+v)", *p)
 }
 
-type UserPasswordRetrieveResp struct {
+type UserPasswordRetrieveEmailResp struct {
 	Code int64  `thrift:"code,1" form:"code" json:"code" query:"code"`
 	Msg  string `thrift:"msg,2" form:"msg" json:"msg" query:"msg"`
 }
 
-func NewUserPasswordRetrieveResp() *UserPasswordRetrieveResp {
-	return &UserPasswordRetrieveResp{}
+func NewUserPasswordRetrieveEmailResp() *UserPasswordRetrieveEmailResp {
+	return &UserPasswordRetrieveEmailResp{}
 }
 
-func (p *UserPasswordRetrieveResp) InitDefault() {
+func (p *UserPasswordRetrieveEmailResp) InitDefault() {
 }
 
-func (p *UserPasswordRetrieveResp) GetCode() (v int64) {
+func (p *UserPasswordRetrieveEmailResp) GetCode() (v int64) {
 	return p.Code
 }
 
-func (p *UserPasswordRetrieveResp) GetMsg() (v string) {
+func (p *UserPasswordRetrieveEmailResp) GetMsg() (v string) {
 	return p.Msg
 }
 
-var fieldIDToName_UserPasswordRetrieveResp = map[int16]string{
+var fieldIDToName_UserPasswordRetrieveEmailResp = map[int16]string{
 	1: "code",
 	2: "msg",
 }
 
-func (p *UserPasswordRetrieveResp) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *UserPasswordRetrieveEmailResp) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -6180,7 +6049,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserPasswordRetrieveResp[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserPasswordRetrieveEmailResp[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -6190,8 +6059,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *UserPasswordRetrieveResp) ReadField1(iprot thrift.TProtocol) error {
-
+func (p *UserPasswordRetrieveEmailResp) ReadField1(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6201,8 +6069,8 @@ func (p *UserPasswordRetrieveResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserPasswordRetrieveResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserPasswordRetrieveEmailResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -6213,9 +6081,9 @@ func (p *UserPasswordRetrieveResp) ReadField2(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *UserPasswordRetrieveResp) Write(oprot thrift.TProtocol) (err error) {
+func (p *UserPasswordRetrieveEmailResp) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("UserPasswordRetrieveResp"); err != nil {
+	if err = oprot.WriteStructBegin("UserPasswordRetrieveEmailResp"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -6245,7 +6113,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *UserPasswordRetrieveResp) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *UserPasswordRetrieveEmailResp) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("code", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -6262,7 +6130,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *UserPasswordRetrieveResp) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *UserPasswordRetrieveEmailResp) writeField2(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -6279,57 +6147,48 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
-func (p *UserPasswordRetrieveResp) String() string {
+func (p *UserPasswordRetrieveEmailResp) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UserPasswordRetrieveResp(%+v)", *p)
-
+	return fmt.Sprintf("UserPasswordRetrieveEmailResp(%+v)", *p)
 }
 
-type UserPasswordResetReq struct {
-	Otype    string `thrift:"otype,1,required" form:"otype,required" json:"otype,required" query:"otype,required" vd:"$ == 'email' || $ == 'phone'; msg:'类型不正确'"`
-	Oid      string `thrift:"oid,2,required" form:"oid,required" json:"oid,required" query:"oid,required" vd:"((Otype)$ == 'phone' && phone($)) || ((Otype)$ == 'email' && email($)); msg:'邮箱或电话格式不正确'"`
-	Password string `thrift:"password,3,required" form:"password,required" json:"password,required" query:"password,required"`
-	Code     string `thrift:"code,4,required" form:"code,required" json:"code,required" query:"code,required"`
+type UserPasswordResetEmailReq struct {
+	Email    string `thrift:"email,1,required" form:"email,required" json:"email,required" query:"email,required" vd:"email($); msg:'邮箱格式不正确'"`
+	Password string `thrift:"password,2,required" form:"password,required" json:"password,required" query:"password,required"`
+	Code     string `thrift:"code,3,required" form:"code,required" json:"code,required" query:"code,required"`
 }
 
-func NewUserPasswordResetReq() *UserPasswordResetReq {
-	return &UserPasswordResetReq{}
+func NewUserPasswordResetEmailReq() *UserPasswordResetEmailReq {
+	return &UserPasswordResetEmailReq{}
 }
 
-func (p *UserPasswordResetReq) InitDefault() {
+func (p *UserPasswordResetEmailReq) InitDefault() {
 }
 
-func (p *UserPasswordResetReq) GetOtype() (v string) {
-	return p.Otype
+func (p *UserPasswordResetEmailReq) GetEmail() (v string) {
+	return p.Email
 }
 
-func (p *UserPasswordResetReq) GetOid() (v string) {
-	return p.Oid
-}
-
-func (p *UserPasswordResetReq) GetPassword() (v string) {
+func (p *UserPasswordResetEmailReq) GetPassword() (v string) {
 	return p.Password
 }
 
-func (p *UserPasswordResetReq) GetCode() (v string) {
+func (p *UserPasswordResetEmailReq) GetCode() (v string) {
 	return p.Code
 }
 
-var fieldIDToName_UserPasswordResetReq = map[int16]string{
-	1: "otype",
-	2: "oid",
-	3: "password",
-	4: "code",
+var fieldIDToName_UserPasswordResetEmailReq = map[int16]string{
+	1: "email",
+	2: "password",
+	3: "code",
 }
 
-func (p *UserPasswordResetReq) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *UserPasswordResetEmailReq) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetOtype bool = false
-	var issetOid bool = false
+	var issetEmail bool = false
 	var issetPassword bool = false
 	var issetCode bool = false
 
@@ -6352,7 +6211,7 @@ func (p *UserPasswordResetReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetOtype = true
+				issetEmail = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -6361,22 +6220,13 @@ func (p *UserPasswordResetReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetOid = true
+				issetPassword = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
 		case 3:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField3(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetPassword = true
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 4:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
 				issetCode = true
@@ -6396,23 +6246,18 @@ func (p *UserPasswordResetReq) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetOtype {
+	if !issetEmail {
 		fieldId = 1
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetOid {
+	if !issetPassword {
 		fieldId = 2
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetPassword {
-		fieldId = 3
-		goto RequiredFieldNotSetError
-	}
-
 	if !issetCode {
-		fieldId = 4
+		fieldId = 3
 		goto RequiredFieldNotSetError
 	}
 	return nil
@@ -6421,7 +6266,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserPasswordResetReq[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserPasswordResetEmailReq[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -6430,33 +6275,21 @@ ReadFieldEndError:
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UserPasswordResetReq[fieldId]))
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UserPasswordResetEmailReq[fieldId]))
 }
 
-func (p *UserPasswordResetReq) ReadField1(iprot thrift.TProtocol) error {
-
+func (p *UserPasswordResetEmailReq) ReadField1(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		_field = v
 	}
-	p.Otype = _field
+	p.Email = _field
 	return nil
 }
-func (p *UserPasswordResetReq) ReadField2(iprot thrift.TProtocol) error {
 
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.Oid = _field
-	return nil
-}
-func (p *UserPasswordResetReq) ReadField3(iprot thrift.TProtocol) error {
-
+func (p *UserPasswordResetEmailReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -6466,8 +6299,8 @@ func (p *UserPasswordResetReq) ReadField3(iprot thrift.TProtocol) error {
 	p.Password = _field
 	return nil
 }
-func (p *UserPasswordResetReq) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *UserPasswordResetEmailReq) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -6478,9 +6311,9 @@ func (p *UserPasswordResetReq) ReadField4(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *UserPasswordResetReq) Write(oprot thrift.TProtocol) (err error) {
+func (p *UserPasswordResetEmailReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("UserPasswordResetReq"); err != nil {
+	if err = oprot.WriteStructBegin("UserPasswordResetEmailReq"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -6494,10 +6327,6 @@ func (p *UserPasswordResetReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
-			goto WriteFieldError
-		}
-		if err = p.writeField4(oprot); err != nil {
-			fieldId = 4
 			goto WriteFieldError
 		}
 	}
@@ -6518,11 +6347,11 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *UserPasswordResetReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("otype", thrift.STRING, 1); err != nil {
+func (p *UserPasswordResetEmailReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("email", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Otype); err != nil {
+	if err := oprot.WriteString(p.Email); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -6535,11 +6364,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *UserPasswordResetReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("oid", thrift.STRING, 2); err != nil {
+func (p *UserPasswordResetEmailReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("password", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Oid); err != nil {
+	if err := oprot.WriteString(p.Password); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -6552,11 +6381,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
-func (p *UserPasswordResetReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("password", thrift.STRING, 3); err != nil {
+func (p *UserPasswordResetEmailReq) writeField3(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("code", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Password); err != nil {
+	if err := oprot.WriteString(p.Code); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -6569,58 +6398,39 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
-func (p *UserPasswordResetReq) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("code", thrift.STRING, 4); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Code); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
-}
-
-func (p *UserPasswordResetReq) String() string {
+func (p *UserPasswordResetEmailReq) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UserPasswordResetReq(%+v)", *p)
-
+	return fmt.Sprintf("UserPasswordResetEmailReq(%+v)", *p)
 }
 
-type UserPasswordResetResp struct {
+type UserPasswordResetEmailResp struct {
 	Code int64  `thrift:"code,1" form:"code" json:"code" query:"code"`
 	Msg  string `thrift:"msg,2" form:"msg" json:"msg" query:"msg"`
 }
 
-func NewUserPasswordResetResp() *UserPasswordResetResp {
-	return &UserPasswordResetResp{}
+func NewUserPasswordResetEmailResp() *UserPasswordResetEmailResp {
+	return &UserPasswordResetEmailResp{}
 }
 
-func (p *UserPasswordResetResp) InitDefault() {
+func (p *UserPasswordResetEmailResp) InitDefault() {
 }
 
-func (p *UserPasswordResetResp) GetCode() (v int64) {
+func (p *UserPasswordResetEmailResp) GetCode() (v int64) {
 	return p.Code
 }
 
-func (p *UserPasswordResetResp) GetMsg() (v string) {
+func (p *UserPasswordResetEmailResp) GetMsg() (v string) {
 	return p.Msg
 }
 
-var fieldIDToName_UserPasswordResetResp = map[int16]string{
+var fieldIDToName_UserPasswordResetEmailResp = map[int16]string{
 	1: "code",
 	2: "msg",
 }
 
-func (p *UserPasswordResetResp) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *UserPasswordResetEmailResp) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -6673,7 +6483,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserPasswordResetResp[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserPasswordResetEmailResp[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -6683,8 +6493,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *UserPasswordResetResp) ReadField1(iprot thrift.TProtocol) error {
-
+func (p *UserPasswordResetEmailResp) ReadField1(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6694,8 +6503,8 @@ func (p *UserPasswordResetResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserPasswordResetResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserPasswordResetEmailResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -6706,9 +6515,9 @@ func (p *UserPasswordResetResp) ReadField2(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *UserPasswordResetResp) Write(oprot thrift.TProtocol) (err error) {
+func (p *UserPasswordResetEmailResp) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("UserPasswordResetResp"); err != nil {
+	if err = oprot.WriteStructBegin("UserPasswordResetEmailResp"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -6738,7 +6547,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *UserPasswordResetResp) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *UserPasswordResetEmailResp) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("code", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -6755,7 +6564,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *UserPasswordResetResp) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *UserPasswordResetEmailResp) writeField2(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -6772,12 +6581,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
-func (p *UserPasswordResetResp) String() string {
+func (p *UserPasswordResetEmailResp) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UserPasswordResetResp(%+v)", *p)
-
+	return fmt.Sprintf("UserPasswordResetEmailResp(%+v)", *p)
 }
 
 type UserService interface {
@@ -6803,9 +6611,9 @@ type UserService interface {
 
 	SearchMethod(ctx context.Context, req *UserSearchReq) (r *UserSearchResp, err error)
 
-	PasswordRetrieveMethod(ctx context.Context, req *UserPasswordRetrieveReq) (r *UserPasswordRetrieveResp, err error)
+	PasswordRetrieveMethod(ctx context.Context, req *UserPasswordRetrieveEmailReq) (r *UserPasswordRetrieveEmailResp, err error)
 
-	PasswordResetMethod(ctx context.Context, req *UserPasswordResetReq) (r *UserPasswordResetResp, err error)
+	PasswordResetMethod(ctx context.Context, req *UserPasswordResetEmailReq) (r *UserPasswordResetEmailResp, err error)
 }
 
 type UserServiceClient struct {
@@ -6843,6 +6651,7 @@ func (p *UserServiceClient) RegisterMethod(ctx context.Context, req *UserRegiste
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *UserServiceClient) SecurityEmailCodeMethod(ctx context.Context, req *UserSecurityEmailCodeReq) (r *UserSecurityEmailCodeResp, err error) {
 	var _args UserServiceSecurityEmailCodeMethodArgs
 	_args.Req = req
@@ -6852,6 +6661,7 @@ func (p *UserServiceClient) SecurityEmailCodeMethod(ctx context.Context, req *Us
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *UserServiceClient) LoginMethod(ctx context.Context, req *UserLoginReq) (r *UserLoginResp, err error) {
 	var _args UserServiceLoginMethodArgs
 	_args.Req = req
@@ -6861,6 +6671,7 @@ func (p *UserServiceClient) LoginMethod(ctx context.Context, req *UserLoginReq) 
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *UserServiceClient) InfoMethod(ctx context.Context, req *UserInfoReq) (r *UserInfoResp, err error) {
 	var _args UserServiceInfoMethodArgs
 	_args.Req = req
@@ -6870,6 +6681,7 @@ func (p *UserServiceClient) InfoMethod(ctx context.Context, req *UserInfoReq) (r
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *UserServiceClient) FollowerCountMethod(ctx context.Context, req *UserFollowerCountReq) (r *UserFollowerCountResp, err error) {
 	var _args UserServiceFollowerCountMethodArgs
 	_args.Req = req
@@ -6879,6 +6691,7 @@ func (p *UserServiceClient) FollowerCountMethod(ctx context.Context, req *UserFo
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *UserServiceClient) FollowingCountMethod(ctx context.Context, req *UserFollowingCountReq) (r *UserFollowingCountResp, err error) {
 	var _args UserServiceFollowingCountMethodArgs
 	_args.Req = req
@@ -6888,6 +6701,7 @@ func (p *UserServiceClient) FollowingCountMethod(ctx context.Context, req *UserF
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *UserServiceClient) LikeCountMethod(ctx context.Context, req *UserLikeCountReq) (r *UserLikeCountResp, err error) {
 	var _args UserServiceLikeCountMethodArgs
 	_args.Req = req
@@ -6897,6 +6711,7 @@ func (p *UserServiceClient) LikeCountMethod(ctx context.Context, req *UserLikeCo
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *UserServiceClient) AvatarUploadMethod(ctx context.Context, req *UserAvatarUploadReq) (r *UserAvatarUploadResp, err error) {
 	var _args UserServiceAvatarUploadMethodArgs
 	_args.Req = req
@@ -6906,6 +6721,7 @@ func (p *UserServiceClient) AvatarUploadMethod(ctx context.Context, req *UserAva
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *UserServiceClient) MfaQrcodeMethod(ctx context.Context, req *UserMfaQrcodeReq) (r *UserMfaQrcodeResp, err error) {
 	var _args UserServiceMfaQrcodeMethodArgs
 	_args.Req = req
@@ -6915,6 +6731,7 @@ func (p *UserServiceClient) MfaQrcodeMethod(ctx context.Context, req *UserMfaQrc
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *UserServiceClient) MfaBindMethod(ctx context.Context, req *UserMfaBindReq) (r *UserMfaBindResp, err error) {
 	var _args UserServiceMfaBindMethodArgs
 	_args.Req = req
@@ -6924,6 +6741,7 @@ func (p *UserServiceClient) MfaBindMethod(ctx context.Context, req *UserMfaBindR
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *UserServiceClient) SearchMethod(ctx context.Context, req *UserSearchReq) (r *UserSearchResp, err error) {
 	var _args UserServiceSearchMethodArgs
 	_args.Req = req
@@ -6933,7 +6751,8 @@ func (p *UserServiceClient) SearchMethod(ctx context.Context, req *UserSearchReq
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *UserServiceClient) PasswordRetrieveMethod(ctx context.Context, req *UserPasswordRetrieveReq) (r *UserPasswordRetrieveResp, err error) {
+
+func (p *UserServiceClient) PasswordRetrieveMethod(ctx context.Context, req *UserPasswordRetrieveEmailReq) (r *UserPasswordRetrieveEmailResp, err error) {
 	var _args UserServicePasswordRetrieveMethodArgs
 	_args.Req = req
 	var _result UserServicePasswordRetrieveMethodResult
@@ -6942,7 +6761,8 @@ func (p *UserServiceClient) PasswordRetrieveMethod(ctx context.Context, req *Use
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *UserServiceClient) PasswordResetMethod(ctx context.Context, req *UserPasswordResetReq) (r *UserPasswordResetResp, err error) {
+
+func (p *UserServiceClient) PasswordResetMethod(ctx context.Context, req *UserPasswordResetEmailReq) (r *UserPasswordResetEmailResp, err error) {
 	var _args UserServicePasswordResetMethodArgs
 	_args.Req = req
 	var _result UserServicePasswordResetMethodResult
@@ -6987,6 +6807,7 @@ func NewUserServiceProcessor(handler UserService) *UserServiceProcessor {
 	self.AddToProcessorMap("PasswordResetMethod", &userServiceProcessorPasswordResetMethod{handler: handler})
 	return self
 }
+
 func (p *UserServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
 	name, _, seqId, err := iprot.ReadMessageBegin()
 	if err != nil {
@@ -7552,7 +7373,7 @@ func (p *userServiceProcessorPasswordRetrieveMethod) Process(ctx context.Context
 	iprot.ReadMessageEnd()
 	var err2 error
 	result := UserServicePasswordRetrieveMethodResult{}
-	var retval *UserPasswordRetrieveResp
+	var retval *UserPasswordRetrieveEmailResp
 	if retval, err2 = p.handler.PasswordRetrieveMethod(ctx, args.Req); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing PasswordRetrieveMethod: "+err2.Error())
 		oprot.WriteMessageBegin("PasswordRetrieveMethod", thrift.EXCEPTION, seqId)
@@ -7600,7 +7421,7 @@ func (p *userServiceProcessorPasswordResetMethod) Process(ctx context.Context, s
 	iprot.ReadMessageEnd()
 	var err2 error
 	result := UserServicePasswordResetMethodResult{}
-	var retval *UserPasswordResetResp
+	var retval *UserPasswordResetEmailResp
 	if retval, err2 = p.handler.PasswordResetMethod(ctx, args.Req); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing PasswordResetMethod: "+err2.Error())
 		oprot.WriteMessageBegin("PasswordResetMethod", thrift.EXCEPTION, seqId)
@@ -7658,7 +7479,6 @@ func (p *UserServiceRegisterMethodArgs) IsSetReq() bool {
 }
 
 func (p *UserServiceRegisterMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -7772,7 +7592,6 @@ func (p *UserServiceRegisterMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceRegisterMethodArgs(%+v)", *p)
-
 }
 
 type UserServiceRegisterMethodResult struct {
@@ -7804,7 +7623,6 @@ func (p *UserServiceRegisterMethodResult) IsSetSuccess() bool {
 }
 
 func (p *UserServiceRegisterMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -7920,7 +7738,6 @@ func (p *UserServiceRegisterMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceRegisterMethodResult(%+v)", *p)
-
 }
 
 type UserServiceSecurityEmailCodeMethodArgs struct {
@@ -7952,7 +7769,6 @@ func (p *UserServiceSecurityEmailCodeMethodArgs) IsSetReq() bool {
 }
 
 func (p *UserServiceSecurityEmailCodeMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8066,7 +7882,6 @@ func (p *UserServiceSecurityEmailCodeMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceSecurityEmailCodeMethodArgs(%+v)", *p)
-
 }
 
 type UserServiceSecurityEmailCodeMethodResult struct {
@@ -8098,7 +7913,6 @@ func (p *UserServiceSecurityEmailCodeMethodResult) IsSetSuccess() bool {
 }
 
 func (p *UserServiceSecurityEmailCodeMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8214,7 +8028,6 @@ func (p *UserServiceSecurityEmailCodeMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceSecurityEmailCodeMethodResult(%+v)", *p)
-
 }
 
 type UserServiceLoginMethodArgs struct {
@@ -8246,7 +8059,6 @@ func (p *UserServiceLoginMethodArgs) IsSetReq() bool {
 }
 
 func (p *UserServiceLoginMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8360,7 +8172,6 @@ func (p *UserServiceLoginMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceLoginMethodArgs(%+v)", *p)
-
 }
 
 type UserServiceLoginMethodResult struct {
@@ -8392,7 +8203,6 @@ func (p *UserServiceLoginMethodResult) IsSetSuccess() bool {
 }
 
 func (p *UserServiceLoginMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8508,7 +8318,6 @@ func (p *UserServiceLoginMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceLoginMethodResult(%+v)", *p)
-
 }
 
 type UserServiceInfoMethodArgs struct {
@@ -8540,7 +8349,6 @@ func (p *UserServiceInfoMethodArgs) IsSetReq() bool {
 }
 
 func (p *UserServiceInfoMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8654,7 +8462,6 @@ func (p *UserServiceInfoMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceInfoMethodArgs(%+v)", *p)
-
 }
 
 type UserServiceInfoMethodResult struct {
@@ -8686,7 +8493,6 @@ func (p *UserServiceInfoMethodResult) IsSetSuccess() bool {
 }
 
 func (p *UserServiceInfoMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8802,7 +8608,6 @@ func (p *UserServiceInfoMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceInfoMethodResult(%+v)", *p)
-
 }
 
 type UserServiceFollowerCountMethodArgs struct {
@@ -8834,7 +8639,6 @@ func (p *UserServiceFollowerCountMethodArgs) IsSetReq() bool {
 }
 
 func (p *UserServiceFollowerCountMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8948,7 +8752,6 @@ func (p *UserServiceFollowerCountMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceFollowerCountMethodArgs(%+v)", *p)
-
 }
 
 type UserServiceFollowerCountMethodResult struct {
@@ -8980,7 +8783,6 @@ func (p *UserServiceFollowerCountMethodResult) IsSetSuccess() bool {
 }
 
 func (p *UserServiceFollowerCountMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9096,7 +8898,6 @@ func (p *UserServiceFollowerCountMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceFollowerCountMethodResult(%+v)", *p)
-
 }
 
 type UserServiceFollowingCountMethodArgs struct {
@@ -9128,7 +8929,6 @@ func (p *UserServiceFollowingCountMethodArgs) IsSetReq() bool {
 }
 
 func (p *UserServiceFollowingCountMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9242,7 +9042,6 @@ func (p *UserServiceFollowingCountMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceFollowingCountMethodArgs(%+v)", *p)
-
 }
 
 type UserServiceFollowingCountMethodResult struct {
@@ -9274,7 +9073,6 @@ func (p *UserServiceFollowingCountMethodResult) IsSetSuccess() bool {
 }
 
 func (p *UserServiceFollowingCountMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9390,7 +9188,6 @@ func (p *UserServiceFollowingCountMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceFollowingCountMethodResult(%+v)", *p)
-
 }
 
 type UserServiceLikeCountMethodArgs struct {
@@ -9422,7 +9219,6 @@ func (p *UserServiceLikeCountMethodArgs) IsSetReq() bool {
 }
 
 func (p *UserServiceLikeCountMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9536,7 +9332,6 @@ func (p *UserServiceLikeCountMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceLikeCountMethodArgs(%+v)", *p)
-
 }
 
 type UserServiceLikeCountMethodResult struct {
@@ -9568,7 +9363,6 @@ func (p *UserServiceLikeCountMethodResult) IsSetSuccess() bool {
 }
 
 func (p *UserServiceLikeCountMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9684,7 +9478,6 @@ func (p *UserServiceLikeCountMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceLikeCountMethodResult(%+v)", *p)
-
 }
 
 type UserServiceAvatarUploadMethodArgs struct {
@@ -9716,7 +9509,6 @@ func (p *UserServiceAvatarUploadMethodArgs) IsSetReq() bool {
 }
 
 func (p *UserServiceAvatarUploadMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9830,7 +9622,6 @@ func (p *UserServiceAvatarUploadMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceAvatarUploadMethodArgs(%+v)", *p)
-
 }
 
 type UserServiceAvatarUploadMethodResult struct {
@@ -9862,7 +9653,6 @@ func (p *UserServiceAvatarUploadMethodResult) IsSetSuccess() bool {
 }
 
 func (p *UserServiceAvatarUploadMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9978,7 +9768,6 @@ func (p *UserServiceAvatarUploadMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceAvatarUploadMethodResult(%+v)", *p)
-
 }
 
 type UserServiceMfaQrcodeMethodArgs struct {
@@ -10010,7 +9799,6 @@ func (p *UserServiceMfaQrcodeMethodArgs) IsSetReq() bool {
 }
 
 func (p *UserServiceMfaQrcodeMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10124,7 +9912,6 @@ func (p *UserServiceMfaQrcodeMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceMfaQrcodeMethodArgs(%+v)", *p)
-
 }
 
 type UserServiceMfaQrcodeMethodResult struct {
@@ -10156,7 +9943,6 @@ func (p *UserServiceMfaQrcodeMethodResult) IsSetSuccess() bool {
 }
 
 func (p *UserServiceMfaQrcodeMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10272,7 +10058,6 @@ func (p *UserServiceMfaQrcodeMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceMfaQrcodeMethodResult(%+v)", *p)
-
 }
 
 type UserServiceMfaBindMethodArgs struct {
@@ -10304,7 +10089,6 @@ func (p *UserServiceMfaBindMethodArgs) IsSetReq() bool {
 }
 
 func (p *UserServiceMfaBindMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10418,7 +10202,6 @@ func (p *UserServiceMfaBindMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceMfaBindMethodArgs(%+v)", *p)
-
 }
 
 type UserServiceMfaBindMethodResult struct {
@@ -10450,7 +10233,6 @@ func (p *UserServiceMfaBindMethodResult) IsSetSuccess() bool {
 }
 
 func (p *UserServiceMfaBindMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10566,7 +10348,6 @@ func (p *UserServiceMfaBindMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceMfaBindMethodResult(%+v)", *p)
-
 }
 
 type UserServiceSearchMethodArgs struct {
@@ -10598,7 +10379,6 @@ func (p *UserServiceSearchMethodArgs) IsSetReq() bool {
 }
 
 func (p *UserServiceSearchMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10712,7 +10492,6 @@ func (p *UserServiceSearchMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceSearchMethodArgs(%+v)", *p)
-
 }
 
 type UserServiceSearchMethodResult struct {
@@ -10744,7 +10523,6 @@ func (p *UserServiceSearchMethodResult) IsSetSuccess() bool {
 }
 
 func (p *UserServiceSearchMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10860,11 +10638,10 @@ func (p *UserServiceSearchMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceSearchMethodResult(%+v)", *p)
-
 }
 
 type UserServicePasswordRetrieveMethodArgs struct {
-	Req *UserPasswordRetrieveReq `thrift:"req,1"`
+	Req *UserPasswordRetrieveEmailReq `thrift:"req,1"`
 }
 
 func NewUserServicePasswordRetrieveMethodArgs() *UserServicePasswordRetrieveMethodArgs {
@@ -10874,9 +10651,9 @@ func NewUserServicePasswordRetrieveMethodArgs() *UserServicePasswordRetrieveMeth
 func (p *UserServicePasswordRetrieveMethodArgs) InitDefault() {
 }
 
-var UserServicePasswordRetrieveMethodArgs_Req_DEFAULT *UserPasswordRetrieveReq
+var UserServicePasswordRetrieveMethodArgs_Req_DEFAULT *UserPasswordRetrieveEmailReq
 
-func (p *UserServicePasswordRetrieveMethodArgs) GetReq() (v *UserPasswordRetrieveReq) {
+func (p *UserServicePasswordRetrieveMethodArgs) GetReq() (v *UserPasswordRetrieveEmailReq) {
 	if !p.IsSetReq() {
 		return UserServicePasswordRetrieveMethodArgs_Req_DEFAULT
 	}
@@ -10892,7 +10669,6 @@ func (p *UserServicePasswordRetrieveMethodArgs) IsSetReq() bool {
 }
 
 func (p *UserServicePasswordRetrieveMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10948,7 +10724,7 @@ ReadStructEndError:
 }
 
 func (p *UserServicePasswordRetrieveMethodArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewUserPasswordRetrieveReq()
+	_field := NewUserPasswordRetrieveEmailReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -11006,11 +10782,10 @@ func (p *UserServicePasswordRetrieveMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServicePasswordRetrieveMethodArgs(%+v)", *p)
-
 }
 
 type UserServicePasswordRetrieveMethodResult struct {
-	Success *UserPasswordRetrieveResp `thrift:"success,0,optional"`
+	Success *UserPasswordRetrieveEmailResp `thrift:"success,0,optional"`
 }
 
 func NewUserServicePasswordRetrieveMethodResult() *UserServicePasswordRetrieveMethodResult {
@@ -11020,9 +10795,9 @@ func NewUserServicePasswordRetrieveMethodResult() *UserServicePasswordRetrieveMe
 func (p *UserServicePasswordRetrieveMethodResult) InitDefault() {
 }
 
-var UserServicePasswordRetrieveMethodResult_Success_DEFAULT *UserPasswordRetrieveResp
+var UserServicePasswordRetrieveMethodResult_Success_DEFAULT *UserPasswordRetrieveEmailResp
 
-func (p *UserServicePasswordRetrieveMethodResult) GetSuccess() (v *UserPasswordRetrieveResp) {
+func (p *UserServicePasswordRetrieveMethodResult) GetSuccess() (v *UserPasswordRetrieveEmailResp) {
 	if !p.IsSetSuccess() {
 		return UserServicePasswordRetrieveMethodResult_Success_DEFAULT
 	}
@@ -11038,7 +10813,6 @@ func (p *UserServicePasswordRetrieveMethodResult) IsSetSuccess() bool {
 }
 
 func (p *UserServicePasswordRetrieveMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -11094,7 +10868,7 @@ ReadStructEndError:
 }
 
 func (p *UserServicePasswordRetrieveMethodResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := NewUserPasswordRetrieveResp()
+	_field := NewUserPasswordRetrieveEmailResp()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -11154,11 +10928,10 @@ func (p *UserServicePasswordRetrieveMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServicePasswordRetrieveMethodResult(%+v)", *p)
-
 }
 
 type UserServicePasswordResetMethodArgs struct {
-	Req *UserPasswordResetReq `thrift:"req,1"`
+	Req *UserPasswordResetEmailReq `thrift:"req,1"`
 }
 
 func NewUserServicePasswordResetMethodArgs() *UserServicePasswordResetMethodArgs {
@@ -11168,9 +10941,9 @@ func NewUserServicePasswordResetMethodArgs() *UserServicePasswordResetMethodArgs
 func (p *UserServicePasswordResetMethodArgs) InitDefault() {
 }
 
-var UserServicePasswordResetMethodArgs_Req_DEFAULT *UserPasswordResetReq
+var UserServicePasswordResetMethodArgs_Req_DEFAULT *UserPasswordResetEmailReq
 
-func (p *UserServicePasswordResetMethodArgs) GetReq() (v *UserPasswordResetReq) {
+func (p *UserServicePasswordResetMethodArgs) GetReq() (v *UserPasswordResetEmailReq) {
 	if !p.IsSetReq() {
 		return UserServicePasswordResetMethodArgs_Req_DEFAULT
 	}
@@ -11186,7 +10959,6 @@ func (p *UserServicePasswordResetMethodArgs) IsSetReq() bool {
 }
 
 func (p *UserServicePasswordResetMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -11242,7 +11014,7 @@ ReadStructEndError:
 }
 
 func (p *UserServicePasswordResetMethodArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewUserPasswordResetReq()
+	_field := NewUserPasswordResetEmailReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -11300,11 +11072,10 @@ func (p *UserServicePasswordResetMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServicePasswordResetMethodArgs(%+v)", *p)
-
 }
 
 type UserServicePasswordResetMethodResult struct {
-	Success *UserPasswordResetResp `thrift:"success,0,optional"`
+	Success *UserPasswordResetEmailResp `thrift:"success,0,optional"`
 }
 
 func NewUserServicePasswordResetMethodResult() *UserServicePasswordResetMethodResult {
@@ -11314,9 +11085,9 @@ func NewUserServicePasswordResetMethodResult() *UserServicePasswordResetMethodRe
 func (p *UserServicePasswordResetMethodResult) InitDefault() {
 }
 
-var UserServicePasswordResetMethodResult_Success_DEFAULT *UserPasswordResetResp
+var UserServicePasswordResetMethodResult_Success_DEFAULT *UserPasswordResetEmailResp
 
-func (p *UserServicePasswordResetMethodResult) GetSuccess() (v *UserPasswordResetResp) {
+func (p *UserServicePasswordResetMethodResult) GetSuccess() (v *UserPasswordResetEmailResp) {
 	if !p.IsSetSuccess() {
 		return UserServicePasswordResetMethodResult_Success_DEFAULT
 	}
@@ -11332,7 +11103,6 @@ func (p *UserServicePasswordResetMethodResult) IsSetSuccess() bool {
 }
 
 func (p *UserServicePasswordResetMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -11388,7 +11158,7 @@ ReadStructEndError:
 }
 
 func (p *UserServicePasswordResetMethodResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := NewUserPasswordResetResp()
+	_field := NewUserPasswordResetEmailResp()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -11448,5 +11218,4 @@ func (p *UserServicePasswordResetMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServicePasswordResetMethodResult(%+v)", *p)
-
 }

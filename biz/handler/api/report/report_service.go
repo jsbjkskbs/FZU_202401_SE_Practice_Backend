@@ -5,58 +5,14 @@ package report
 import (
 	"context"
 
+	"sfw/biz/model/api/report"
+	"sfw/biz/service"
+	"sfw/pkg/errno"
+	"sfw/pkg/utils"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	report "sfw/biz/model/api/report"
 )
-
-// Report .
-// @router /api/v1/report [POST]
-func Report(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req report.ReportReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(report.ReportResp)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// AdminReportList .
-// @router /api/v1/admin/report/list [GET]
-func AdminReportList(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req report.AdminReportListReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(report.AdminReportListResp)
-
-	c.JSON(consts.StatusOK, resp)
-}
-
-// AdminReportHandle .
-// @router /api/v1/admin/report/handle [POST]
-func AdminReportHandle(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req report.AdminReportHandleReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	resp := new(report.AdminReportHandleResp)
-
-	c.JSON(consts.StatusOK, resp)
-}
 
 // AdminVideoList .
 // @router /api/v1/admin/video/list [GET]
@@ -65,13 +21,29 @@ func AdminVideoList(ctx context.Context, c *app.RequestContext) {
 	var req report.AdminVideoListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminVideoListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(report.AdminVideoListResp)
+	resp, err := service.NewReportService(ctx, c).NewAdminVideoListEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminVideoListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, report.AdminVideoListResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
 }
 
 // AdminVideoHandle .
@@ -81,11 +53,308 @@ func AdminVideoHandle(ctx context.Context, c *app.RequestContext) {
 	var req report.AdminVideoHandleReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminVideoHandleResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
 		return
 	}
 
-	resp := new(report.AdminVideoHandleResp)
+	err = service.NewReportService(ctx, c).NewAdminVideoHandleEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminVideoHandleResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, report.AdminVideoHandleResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
+
+// ReportVideo .
+// @router /api/v1/report/video [POST]
+func ReportVideo(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req report.ReportVideoReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.ReportVideoResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	err = service.NewReportService(ctx, c).NewReportVideoEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.ReportVideoResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, report.ReportVideoResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
+
+// ReportActivity .
+// @router /api/v1/report/activity [POST]
+func ReportActivity(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req report.ReportActivityReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.ReportActivityResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	err = service.NewReportService(ctx, c).NewReportActivityEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.ReportActivityResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, report.ReportActivityResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
+
+// ReportComment .
+// @router /api/v1/report/comment [POST]
+func ReportComment(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req report.ReportCommentReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.ReportCommentResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	err = service.NewReportService(ctx, c).NewReportCommentEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.ReportCommentResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, report.ReportCommentResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
+
+// AdminVideoReportList .
+// @router /api/v1/admin/video/report/list [GET]
+func AdminVideoReportList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req report.AdminVideoReportListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminVideoReportListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	resp, err := service.NewReportService(ctx, c).NewAdminVideoReportListEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminVideoReportListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, report.AdminVideoReportListResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
+}
+
+// AdminActivityReportList .
+// @router /api/v1/admin/activity/report/list [GET]
+func AdminActivityReportList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req report.AdminActivityReportListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminActivityReportListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	resp, err := service.NewReportService(ctx, c).NewAdminActivityReportListEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminActivityReportListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, report.AdminActivityReportListResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
+}
+
+// AdminCommentReportList .
+// @router /api/v1/admin/comment/report/list [GET]
+func AdminCommentReportList(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req report.AdminCommentReportListReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminCommentReportListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	resp, err := service.NewReportService(ctx, c).NewAdminCommentReportListEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminCommentReportListResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, report.AdminCommentReportListResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
+}
+
+// AdminVideoReportHandle .
+// @router /api/v1/admin/video/report/handle [POST]
+func AdminVideoReportHandle(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req report.AdminVideoReportHandleReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminVideoReportHandleResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	err = service.NewReportService(ctx, c).NewAdminVideoReportHandleEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminVideoReportHandleResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, report.AdminVideoReportHandleResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
+
+// AdminActivityReportHandle .
+// @router /api/v1/admin/activity/report/handle [POST]
+func AdminActivityReportHandle(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req report.AdminActivityReportHandleReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminActivityReportHandleResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	err = service.NewReportService(ctx, c).NewAdminActivityReportHandleEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminActivityReportHandleResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, report.AdminActivityReportHandleResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
+
+// AdminCommentHandle .
+// @router /api/v1/admin/comment/report/handle [POST]
+func AdminCommentHandle(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req report.AdminCommentReportHandleReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminCommentReportHandleResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	err = service.NewReportService(ctx, c).NewAdminCommentReportHandleEvent(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, report.AdminCommentReportHandleResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, report.AdminCommentReportHandleResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
 }

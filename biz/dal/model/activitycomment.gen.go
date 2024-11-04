@@ -12,6 +12,7 @@ type ActivityComment struct {
 	UserID     int64  `gorm:"column:user_id;not null;comment:用户ID" json:"user_id"`            // 用户ID
 	ActivityID int64  `gorm:"column:activity_id;not null;comment:动态ID" json:"activity_id"`    // 动态ID
 	ParentID   int64  `gorm:"column:parent_id;not null;comment:父评论ID" json:"parent_id"`       // 父评论ID
+	RootID     int64  `gorm:"column:root_id;not null;comment:根评论ID" json:"root_id"`           // 根评论ID
 	Content    string `gorm:"column:content;not null;comment:评论内容" json:"content"`            // 评论内容
 	CreatedAt  int64  `gorm:"column:created_at;not null;comment:创建时间" json:"created_at"`      // 创建时间
 	UpdatedAt  int64  `gorm:"column:updated_at;not null;comment:修改时间" json:"updated_at"`      // 修改时间

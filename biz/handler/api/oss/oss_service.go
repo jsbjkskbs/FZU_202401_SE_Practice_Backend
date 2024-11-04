@@ -11,6 +11,7 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/adaptor"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
@@ -112,5 +113,39 @@ func OssCallbackVideoCoverMethod(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.JSON(consts.StatusOK, consts.StatusOK)
+	c.Status(consts.StatusOK)
+}
+
+// OssCallbackImageMethod .
+// @router /api/v1/oss/callback/image [POST]
+func OssCallbackImageMethod(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req oss.OssCallbackImageReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		hlog.Error("bind and validate error", err)
+		c.Status(consts.StatusBadRequest)
+		return
+	}
+	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
+	if err != nil {
+		hlog.Error("get compat request error", err)
+		c.Status(consts.StatusBadRequest)
+		return
+	}
+	ok, err := osspk.Verify(httpReq)
+	if err != nil || !ok {
+		hlog.Error("verify error", err)
+		c.Status(consts.StatusBadRequest)
+		return
+	}
+
+	err = service.NewOssService(ctx, c).NewCallbackImageEvent(&req)
+	if err != nil {
+		hlog.Error("new callback image event error", err)
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.Status(consts.StatusOK)
 }

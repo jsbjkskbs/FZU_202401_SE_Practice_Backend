@@ -11,6 +11,7 @@ type VideoComment struct {
 	ID        int64  `gorm:"column:id;primaryKey;autoIncrement:true;comment:评论ID" json:"id"` // 评论ID
 	UserID    int64  `gorm:"column:user_id;not null;comment:用户ID" json:"user_id"`            // 用户ID
 	VideoID   int64  `gorm:"column:video_id;not null;comment:视频ID" json:"video_id"`          // 视频ID
+	RootID    int64  `gorm:"column:root_id;not null;comment:根评论ID" json:"root_id"`           // 根评论ID
 	ParentID  int64  `gorm:"column:parent_id;not null;comment:父评论ID" json:"parent_id"`       // 父评论ID
 	Content   string `gorm:"column:content;not null;comment:评论内容" json:"content"`            // 评论内容
 	CreatedAt int64  `gorm:"column:created_at;not null;comment:创建时间" json:"created_at"`      // 创建时间

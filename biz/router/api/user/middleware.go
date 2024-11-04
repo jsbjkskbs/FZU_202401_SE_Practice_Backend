@@ -122,3 +122,13 @@ func _passwordretrievemethodMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _resetMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _retrieveMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

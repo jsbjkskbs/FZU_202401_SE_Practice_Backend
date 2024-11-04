@@ -15,25 +15,45 @@ import (
 
 // Register register routes based on the IDL 'api.${HTTP Method}' annotation.
 func Register(r *server.Hertz) {
-
 	root := r.Group("/", rootMw()...)
 	{
 		_api := root.Group("/api", _apiMw()...)
 		{
 			_v1 := _api.Group("/v1", _v1Mw()...)
-			_v1.POST("/report", append(_reportMw(), report.Report)...)
 			{
 				_admin := _v1.Group("/admin", _adminMw()...)
 				{
-					_report0 := _admin.Group("/report", _report0Mw()...)
-					_report0.POST("/handle", append(_adminreporthandleMw(), report.AdminReportHandle)...)
-					_report0.GET("/list", append(_adminreportlistMw(), report.AdminReportList)...)
+					_activity := _admin.Group("/activity", _activityMw()...)
+					{
+						_report := _activity.Group("/report", _reportMw()...)
+						_report.POST("/handle", append(_adminactivityreporthandleMw(), report.AdminActivityReportHandle)...)
+						_report.GET("/list", append(_adminactivityreportlistMw(), report.AdminActivityReportList)...)
+					}
+				}
+				{
+					_comment := _admin.Group("/comment", _commentMw()...)
+					{
+						_report0 := _comment.Group("/report", _report0Mw()...)
+						_report0.POST("/handle", append(_admincommenthandleMw(), report.AdminCommentHandle)...)
+						_report0.GET("/list", append(_admincommentreportlistMw(), report.AdminCommentReportList)...)
+					}
 				}
 				{
 					_video := _admin.Group("/video", _videoMw()...)
 					_video.POST("/handle", append(_adminvideohandleMw(), report.AdminVideoHandle)...)
 					_video.GET("/list", append(_adminvideolistMw(), report.AdminVideoList)...)
+					{
+						_report1 := _video.Group("/report", _report1Mw()...)
+						_report1.POST("/handle", append(_adminvideoreporthandleMw(), report.AdminVideoReportHandle)...)
+						_report1.GET("/list", append(_adminvideoreportlistMw(), report.AdminVideoReportList)...)
+					}
 				}
+			}
+			{
+				_report2 := _v1.Group("/report", _report2Mw()...)
+				_report2.POST("/activity", append(_reportactivityMw(), report.ReportActivity)...)
+				_report2.POST("/comment", append(_reportcommentMw(), report.ReportComment)...)
+				_report2.POST("/video", append(_reportvideoMw(), report.ReportVideo)...)
 			}
 		}
 	}

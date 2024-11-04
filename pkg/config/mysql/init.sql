@@ -48,12 +48,12 @@ CREATE TABLE `Video` (
     KEY `idx_title` (`title`) USING BTREE COMMENT '标题查询索引'
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COMMENT='视频表';
 
-
 DROP TABLE IF EXISTS `VideoComment`;
 CREATE TABLE `VideoComment` (
     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '评论ID',
     `user_id` BIGINT NOT NULL COMMENT '用户ID',
     `video_id` BIGINT NOT NULL COMMENT '视频ID',
+    `root_id` BIGINT NOT NULL COMMENT '根评论ID',
     `parent_id` BIGINT NOT NULL COMMENT '父评论ID',
     `content` VARCHAR(255) NOT NULL COMMENT '评论内容',
     `created_at` BIGINT NOT NULL COMMENT '创建时间',
@@ -119,6 +119,7 @@ CREATE TABLE `VideoReport` (
     `user_id` BIGINT NOT NULL COMMENT '用户ID',
     `video_id` BIGINT NOT NULL COMMENT '视频ID',
     `reason` VARCHAR(255) NOT NULL COMMENT '举报原因',
+    `label` VARCHAR(255) NOT NULL COMMENT '举报标签',
     `created_at` BIGINT NOT NULL COMMENT '创建时间',
     `status` VARCHAR(255) NOT NULL COMMENT '举报状态',
     `resolved_at` BIGINT DEFAULT NULL COMMENT '解决时间',
@@ -146,6 +147,7 @@ CREATE TABLE `ActivityComment` (
     `user_id` BIGINT NOT NULL COMMENT '用户ID',
     `activity_id` BIGINT NOT NULL COMMENT '动态ID',
     `parent_id` BIGINT NOT NULL COMMENT '父评论ID',
+    `root_id` BIGINT NOT NULL COMMENT '根评论ID',
     `content` VARCHAR(255) NOT NULL COMMENT '评论内容',
     `created_at` BIGINT NOT NULL COMMENT '创建时间',
     `updated_at` BIGINT NOT NULL COMMENT '修改时间',
@@ -181,6 +183,7 @@ CREATE TABLE `ActivityCommentReport` (
     `user_id` BIGINT NOT NULL COMMENT '用户ID',
     `comment_id` BIGINT NOT NULL COMMENT '动态评论ID',
     `reason` VARCHAR(255) NOT NULL COMMENT '举报原因',
+    `label` VARCHAR(255) NOT NULL COMMENT '举报标签',
     `created_at` BIGINT NOT NULL COMMENT '创建时间',
     `status` VARCHAR(255) NOT NULL COMMENT '举报状态',
     `resolved_at` BIGINT DEFAULT NULL COMMENT '解决时间',
@@ -197,6 +200,7 @@ CREATE TABLE `ActivityReport` (
     `user_id` BIGINT NOT NULL COMMENT '用户ID',
     `activity_id` BIGINT NOT NULL COMMENT '动态ID',
     `reason` VARCHAR(255) NOT NULL COMMENT '举报原因',
+    `label` VARCHAR(255) NOT NULL COMMENT '举报标签',
     `created_at` BIGINT NOT NULL COMMENT '创建时间',
     `status` VARCHAR(255) NOT NULL COMMENT '举报状态',
     `resolved_at` BIGINT DEFAULT NULL COMMENT '解决时间',
@@ -258,6 +262,7 @@ CREATE TABLE `VideoCommentReport` (
     `user_id` BIGINT NOT NULL COMMENT '用户ID',
     `comment_id` BIGINT NOT NULL COMMENT '视频评论ID',
     `reason` VARCHAR(255) NOT NULL COMMENT '举报原因',
+    `label` VARCHAR(255) NOT NULL COMMENT '举报标签',
     `created_at` BIGINT NOT NULL COMMENT '创建时间',
     `status` VARCHAR(255) NOT NULL COMMENT '举报状态',
     `resolved_at` BIGINT DEFAULT NULL COMMENT '解决时间',

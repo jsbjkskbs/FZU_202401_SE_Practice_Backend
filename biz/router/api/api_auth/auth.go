@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 
+	"sfw/biz/dal/exquery"
 	"sfw/biz/mw/jwt"
 	"sfw/biz/mw/redis"
 	"sfw/pkg/errno"
@@ -15,21 +16,10 @@ import (
 func Auth() []app.HandlerFunc {
 	return append(make([]app.HandlerFunc, 0),
 		checkTokenVaild,
-		checkTokenExpireTime,
 	)
 }
 
 func checkTokenVaild(ctx context.Context, c *app.RequestContext) {
-	if !jwt.AccessTokenJwtMiddleware.IsTokenAvailable(ctx, c) {
-		c.JSON(consts.StatusOK, utils.H{
-			"code": errno.AccessTokenInvalid.Code,
-			"msg":  errno.AccessTokenInvalid.Message,
-		})
-		c.Abort()
-	}
-}
-
-func checkTokenExpireTime(ctx context.Context, c *app.RequestContext) {
 	token := string(c.GetHeader("Access-Token"))
 	payload, expire, err := jwt.AccessTokenJwtMiddleware.GetBasicDataFromToken(token)
 	if err != nil {
@@ -68,6 +58,35 @@ func checkTokenExpireTime(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, utils.H{
 			"code": errno.AccessTokenForbidden.Code,
 			"msg":  errno.AccessTokenForbidden.Message,
+		})
+		c.Abort()
+		return
+	}
+}
+
+func AdminAuth() []app.HandlerFunc {
+	return append(make([]app.HandlerFunc, 0),
+		checkTokenVaild,
+		checkAdmin,
+	)
+}
+
+func checkAdmin(ctx context.Context, c *app.RequestContext) {
+	token := string(c.GetHeader("Access-Token"))
+	uid, _ := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(token)
+	u, err := exquery.QueryUserByID(uid)
+	if err != nil {
+		c.JSON(consts.StatusOK, utils.H{
+			"code": errno.DatabaseCallError.Code,
+			"msg":  errno.DatabaseCallError.Message,
+		})
+		c.Abort()
+		return
+	}
+	if u.Role != "admin" {
+		c.JSON(consts.StatusOK, utils.H{
+			"code": errno.PowerNotEnough.Code,
+			"msg":  errno.PowerNotEnough.Message,
 		})
 		c.Abort()
 		return

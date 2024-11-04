@@ -1,19 +1,59 @@
 package redis
 
 import (
-	"strconv"
+	"sync"
 
 	"sfw/pkg/errno"
 
 	"github.com/go-redis/redis"
 )
 
+func PutIPVisitInfo(vid, ip string) error {
+	_, err := videoInfoClient.SAdd(`video/visit/`+vid, ip).Result()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func IsIPVisited(vid, ip string) (bool, error) {
+	exist, err := videoInfoClient.Exists(`video/visit/` + vid).Result()
+	if err != nil {
+		return false, err
+	}
+	if exist == 0 {
+		return false, nil
+	}
+
+	visited, err := videoInfoClient.SIsMember(`video/visit/`+vid, ip).Result()
+	if err != nil {
+		return false, err
+	}
+	return visited, nil
+}
+
+func IncrVideoVisitCount(vid string) error {
+	_, err := videoInfoClient.ZIncrBy(`visit`, 1, vid).Result()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func DelIPVisitInfo(vid, ip string) error {
+	_, err := videoInfoClient.SRem(`video/visit/`+vid, ip).Result()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func PutVideoLikeInfo(vid string, uidList *[]string) error {
 	pipe := videoInfoClient.TxPipeline()
-	pipe.Del(`l:` + vid)
-	pipe.Del(`nl:` + vid)
+	pipe.Del(`video/like/` + vid)
+	pipe.Del(`video/changed_like/` + vid)
 	for _, item := range *uidList {
-		pipe.SAdd(`l:`+vid, item)
+		pipe.SAdd(`video/like/`+vid, item)
 	}
 	if _, err := pipe.Exec(); err != nil {
 		return err
@@ -21,11 +61,9 @@ func PutVideoLikeInfo(vid string, uidList *[]string) error {
 	return nil
 }
 
-func PutVideoVisitInfo(vid, visitCount, category string) error {
-	score, _ := strconv.ParseFloat(visitCount, 64)
+func PutVideoVisitInfo(vid string, visitCount int64) error {
 	txpipe := videoInfoClient.TxPipeline()
-	txpipe.ZAdd(`visit`, redis.Z{Score: score, Member: vid})
-	txpipe.ZAdd(`visit_`+category, redis.Z{Score: score, Member: vid})
+	txpipe.ZAdd(`visit`, redis.Z{Score: float64(visitCount), Member: vid})
 	_, err := txpipe.Exec()
 	if err != nil {
 		return err
@@ -37,25 +75,44 @@ func AppendVideoLikeInfo(vid, uid string) error {
 	if !IsVideoExist(vid) {
 		return errno.ResourceNotFound
 	}
-	_, err := videoInfoClient.ZAdd(`nl:`+vid, redis.Z{Score: 1, Member: uid}).Result()
+	_, err := videoInfoClient.ZAdd(`video/changed_like/`+vid, redis.Z{Score: 1, Member: uid}).Result()
 	if err != nil {
 		return err
 	}
-	if _, err := videoInfoClient.SRem(`l:`+vid, uid).Result(); err != nil {
+	if _, err := videoInfoClient.SRem(`video/like/`+vid, uid).Result(); err != nil {
 		return err
 	}
 	return nil
 }
 
 func AppendVideoLikeInfoToStaticSpace(vid, uid string) error {
-	if _, err := videoInfoClient.SAdd(`l:`+vid, uid).Result(); err != nil {
+	if _, err := videoInfoClient.SAdd(`video/like/`+vid, uid).Result(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func AppendVideoLikeListToStaticSpace(vid string, uidList []string) error {
+	tx := videoInfoClient.TxPipeline()
+	for _, uid := range uidList {
+		tx.SAdd(`video/like/`+vid, uid)
+	}
+	_, err := tx.Exec()
+	if err != nil {
 		return err
 	}
 	return nil
 }
 
 func DeleteVideoLikeInfoFromDynamicSpace(vid, uid string) error {
-	if _, err := videoInfoClient.ZRem(`nl:`+vid, uid).Result(); err != nil {
+	if _, err := videoInfoClient.ZRem(`video/changed_like/`+vid, uid).Result(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func DeleteVideoLikeListFromDynamicSpace(vid string) error {
+	if _, err := videoInfoClient.Del(`video/changed_like/` + vid).Result(); err != nil {
 		return err
 	}
 	return nil
@@ -65,45 +122,18 @@ func RemoveVideoLikeInfo(vid, uid string) error {
 	if !IsVideoExist(vid) {
 		return errno.ResourceNotFound
 	}
-	_, err := videoInfoClient.ZAdd(`nl:`+vid, redis.Z{Score: 2, Member: uid}).Result()
+	_, err := videoInfoClient.ZAdd(`video/changed_like/`+vid, redis.Z{Score: 2, Member: uid}).Result()
 	if err != nil {
 		return err
 	}
-	if _, err := videoInfoClient.SRem(`l:`+vid, uid).Result(); err != nil {
-		return err
-	}
-	return nil
-}
-
-func IncrVideoVisitInfo(vid string, category string) error {
-	txpipe := videoInfoClient.TxPipeline()
-	txpipe.ZIncrBy(`visit`, 1, vid)
-	txpipe.ZIncrBy(`visit_`+category, 1, vid)
-	_, err := txpipe.Exec()
-	if err != nil {
+	if _, err := videoInfoClient.SRem(`video/like/`+vid, uid).Result(); err != nil {
 		return err
 	}
 	return nil
-}
-
-func IsVideoLikedByUser(vid, uid string) (bool, error) {
-	exist, err := videoInfoClient.SIsMember(`l:`+vid, uid).Result()
-	if err != nil {
-		return false, err
-	}
-	if !exist {
-		_, err := videoInfoClient.ZRank(`nl:`+vid, uid).Result()
-		if err != nil {
-			return false, err
-		}
-		return true, nil
-	} else {
-		return true, nil
-	}
 }
 
 func GetVideoLikeList(vid string) (*[]string, error) {
-	list, err := videoInfoClient.SMembers(`l:` + vid).Result()
+	list, err := videoInfoClient.SMembers(`video/like/` + vid).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -116,7 +146,7 @@ func GetVideoLikeList(vid string) (*[]string, error) {
 }
 
 func GetNewUpdateVideoLikeList(vid string) (*[]string, error) {
-	list, err := videoInfoClient.ZRangeByScore(`nl:`+vid, redis.ZRangeBy{Min: `1`, Max: `1`}).Result()
+	list, err := videoInfoClient.ZRangeByScore(`video/changed_like/`+vid, redis.ZRangeBy{Min: `1`, Max: `1`}).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +154,7 @@ func GetNewUpdateVideoLikeList(vid string) (*[]string, error) {
 }
 
 func GetNewDeleteVideoLikeList(vid string) (*[]string, error) {
-	list, err := videoInfoClient.ZRangeByScore(`nl:`+vid, redis.ZRangeBy{Min: `2`, Max: `2`}).Result()
+	list, err := videoInfoClient.ZRangeByScore(`video/changed_like/`+vid, redis.ZRangeBy{Min: `2`, Max: `2`}).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -134,10 +164,10 @@ func GetNewDeleteVideoLikeList(vid string) (*[]string, error) {
 func GetVideoLikeCount(vid string) (int64, error) {
 	var count int64
 	var err error
-	if count, err = videoInfoClient.SCard(`l:` + vid).Result(); err != nil {
+	if count, err = videoInfoClient.SCard(`video/like/` + vid).Result(); err != nil {
 		return -1, err
 	}
-	if nCount, err := videoInfoClient.ZCount(`nl:`+vid, `1`, `1`).Result(); err != nil {
+	if nCount, err := videoInfoClient.ZCount(`video/changed_like/`+vid, `1`, `1`).Result(); err != nil {
 		return -1, err
 	} else {
 		return count + nCount, nil
@@ -167,4 +197,45 @@ func GetVideoPopularList(pageNum, pageSize int64) (*[]string, error) {
 func IsVideoExist(vid string) bool {
 	_, err := videoInfoClient.ZScore(`visit`, vid).Result()
 	return err == nil
+}
+
+func DeleteVideo(vid string) error {
+	wg := sync.WaitGroup{}
+	wg.Add(4)
+	errs := make(chan error, 4)
+	go func() {
+		err := DeleteVideoCommentInfo(vid)
+		if err != nil {
+			errs <- err
+		}
+		wg.Done()
+	}()
+	go func() {
+		_, err := videoInfoClient.Del(`video/like/` + vid).Result()
+		if err != nil {
+			errs <- err
+		}
+		wg.Done()
+	}()
+	go func() {
+		_, err := videoInfoClient.Del(`video/changed_like/` + vid).Result()
+		if err != nil {
+			errs <- err
+		}
+		wg.Done()
+	}()
+	go func() {
+		_, err := videoInfoClient.ZRem(`visit`, vid).Result()
+		if err != nil {
+			errs <- err
+		}
+		wg.Done()
+	}()
+	wg.Wait()
+	select {
+	case err := <-errs:
+		return err
+	default:
+		return nil
+	}
 }

@@ -4,7 +4,7 @@ import (
 	"context"
 	"strconv"
 
-	"sfw/biz/dal"
+	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/activity"
 	"sfw/biz/mw/jwt"
@@ -34,31 +34,17 @@ func (service *ActivityService) NewFeedEvent(req *activity.ActivityFeedReq) (*ac
 		return nil, errno.AccessTokenInvalid
 	}
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	rows, err := dal.DB.Raw("SELECT * FROM Activity WHERE user_id IN (SELECT followed_id FROM Follow WHERE follower_id = ?) OR user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?", uid, uid, req.PageSize, (req.PageNum)*req.PageSize).Rows()
+	activities, count, err := exquery.QueryActivityByFollowedIdPaged(uid, int(req.PageNum), int(req.PageSize))
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	defer rows.Close()
-	activities := []*model.Activity{}
-	for rows.Next() {
-		var activity model.Activity
-		err = dal.DB.ScanRows(rows, &activity)
-		if err != nil {
-			return nil, errno.DatabaseCallError.WithInnerError(err)
-		}
-		activities = append(activities, &activity)
-	}
-	row, err := dal.DB.Raw("SELECT COUNT(*) FROM Activity WHERE user_id IN (SELECT followed_id FROM Follow WHERE follower_id = ?)", uid).Rows()
-	if err != nil {
-		return nil, errno.DatabaseCallError.WithInnerError(err)
-	}
-	defer row.Close()
-	var count int64
-	row.Next()
-	row.Scan(&count)
 
+	items, err := model_converter.ActivityListDal2Resp(&activities)
+	if err != nil {
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
 	return &activity.ActivityFeedRespData{
-		Items:    *model_converter.ActivityListDal2Resp(&activities),
+		Items:    *items,
 		IsEnd:    count <= req.PageNum*req.PageSize,
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
@@ -76,51 +62,82 @@ func (service *ActivityService) NewPublishEvent(req *activity.ActivityPublishReq
 	if req.RefActivity != nil {
 		activity.RefActivityID, err = strconv.ParseInt(*req.RefActivity, 10, 64)
 		if err != nil {
-			return errno.CustomError.WithMessage("无效的内容ID").WithInnerError(err)
+			return errno.ParamInvalid.WithMessage("无效的动态ID")
 		}
 		refCount++
 	}
 	if req.RefVideo != nil {
 		activity.RefVideoID, err = strconv.ParseInt(*req.RefVideo, 10, 64)
 		if err != nil {
-			return errno.CustomError.WithMessage("无效的视频ID").WithInnerError(err)
+			return errno.ParamInvalid.WithMessage("无效的视频ID")
 		}
 		refCount++
 	}
 	if refCount >= 2 {
-		return errno.CustomError.WithMessage("只能引用一个内容")
+		return errno.ParamInvalid.WithMessage("只能引用一个视频或一个动态")
+	}
+
+	if len(req.Image) > 0 {
+		for _, image := range req.Image {
+			imageId, err := strconv.ParseInt(image, 10, 64)
+			if err != nil {
+				return errno.ParamInvalid.WithMessage("无效的图片ID: " + image).WithInnerError(err)
+			}
+			exist, err := exquery.QueryImageExistById(imageId)
+			if err != nil {
+				return errno.DatabaseCallError.WithInnerError(err)
+			}
+			if !exist {
+				return errno.ParamInvalid.WithMessage("图片不存在: " + image)
+			}
+		}
 	}
 
 	activity.ID = generator.ActivityIDGenerator.Generate()
 	activity.UserID = uid
 	activity.Content = req.Content
 
-	a := dal.Executor.Activity
-	err = a.WithContext(context.Background()).Create(&activity)
+	err = exquery.InsertActivity(&activity)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
+
+	if len(req.Image) > 0 {
+		imgs := make([]*model.ActivityImage, 0, len(req.Image))
+		for _, image := range req.Image {
+			imageId, _ := strconv.ParseInt(image, 10, 64)
+			imgs = append(imgs, &model.ActivityImage{
+				ActivityID: activity.ID,
+				ImageID:    imageId,
+			})
+		}
+		err = exquery.InsertActivityImage(imgs...)
+		if err != nil {
+			return errno.DatabaseCallError.WithInnerError(err)
+		}
+	}
+
 	return nil
 }
 
 func (service *ActivityService) NewListEvent(req *activity.ActivityListReq) (*activity.ActivityListRespData, error) {
 	uid, err := strconv.ParseInt(req.UserID, 10, 64)
 	if err != nil {
-		return nil, errno.CustomError.WithMessage("无效的用户ID").WithInnerError(err)
+		return nil, errno.ParamInvalid.WithMessage("无效的用户ID")
 	}
 
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 
-	a := dal.Executor.Activity
-	activities, count, err := a.WithContext(context.Background()).
-		Where(a.UserID.Eq(uid)).
-		FindByPage(int(req.PageNum*req.PageSize), int(req.PageSize))
+	activities, count, err := exquery.QueryActivityByUserIdPaged(uid, int(req.PageNum), int(req.PageSize))
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-
+	items, err := model_converter.ActivityListDal2Resp(&activities)
+	if err != nil {
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
 	return &activity.ActivityListRespData{
-		Items:    *model_converter.ActivityListDal2Resp(&activities),
+		Items:    *items,
 		IsEnd:    count <= (req.PageNum+1)*req.PageSize,
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,

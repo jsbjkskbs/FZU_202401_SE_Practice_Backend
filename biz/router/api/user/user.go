@@ -15,7 +15,6 @@ import (
 
 // Register register routes based on the IDL 'api.${HTTP Method}' annotation.
 func Register(r *server.Hertz) {
-
 	root := r.Group("/", rootMw()...)
 	{
 		_api := root.Group("/api", _apiMw()...)
@@ -47,8 +46,14 @@ func Register(r *server.Hertz) {
 					}
 					{
 						_password := _security.Group("/password", _passwordMw()...)
-						_password.POST("/reset", append(_passwordresetmethodMw(), user.PasswordResetMethod)...)
-						_password.POST("/retrieve", append(_passwordretrievemethodMw(), user.PasswordRetrieveMethod)...)
+						{
+							_reset := _password.Group("/reset", _resetMw()...)
+							_reset.POST("/email", append(_passwordresetmethodMw(), user.PasswordResetMethod)...)
+						}
+						{
+							_retrieve := _password.Group("/retrieve", _retrieveMw()...)
+							_retrieve.POST("/email", append(_passwordretrievemethodMw(), user.PasswordRetrieveMethod)...)
+						}
 					}
 				}
 			}

@@ -9,6 +9,8 @@ var (
 	tokenExpireTimeClient *redis.Client
 	videoClient           *redis.Client
 	videoInfoClient       *redis.Client
+	activityInfoClient    *redis.Client
+	commentInfoClient     *redis.Client
 )
 
 func Load() {
@@ -36,6 +38,18 @@ func Load() {
 		DB:       VideoInfoClient.DB,
 	})
 
+	activityInfoClient = redis.NewClient(&redis.Options{
+		Addr:     ActivityInfoClient.Addr,
+		Password: ActivityInfoClient.Password,
+		DB:       ActivityInfoClient.DB,
+	})
+
+	commentInfoClient = redis.NewClient(&redis.Options{
+		Addr:     CommentInfoClient.Addr,
+		Password: CommentInfoClient.Password,
+		DB:       CommentInfoClient.DB,
+	})
+
 	if _, err := emailRedisClient.Ping().Result(); err != nil {
 		panic(err)
 	}
@@ -49,6 +63,14 @@ func Load() {
 	}
 
 	if _, err := videoInfoClient.Ping().Result(); err != nil {
+		panic(err)
+	}
+
+	if _, err := activityInfoClient.Ping().Result(); err != nil {
+		panic(err)
+	}
+
+	if _, err := commentInfoClient.Ping().Result(); err != nil {
 		panic(err)
 	}
 }

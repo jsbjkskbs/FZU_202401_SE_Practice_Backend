@@ -5,47 +5,40 @@ package tool
 import (
 	"context"
 	"fmt"
+
 	"github.com/apache/thrift/lib/go/thrift"
 )
 
-type ToolDeleteReq struct {
+type ToolDeleteVideoReq struct {
 	AccessToken string `thrift:"access_token,1,required" header:"Access-Token,required" json:"access_token,required"`
-	Otype       string `thrift:"otype,2,required" form:"otype,required" json:"otype,required" query:"otype,required"`
-	Oid         string `thrift:"oid,3,required" form:"oid,required" json:"oid,required" query:"oid,required"`
+	VideoID     string `thrift:"video_id,2,required" form:"video_id,required" json:"video_id,required" query:"video_id,required"`
 }
 
-func NewToolDeleteReq() *ToolDeleteReq {
-	return &ToolDeleteReq{}
+func NewToolDeleteVideoReq() *ToolDeleteVideoReq {
+	return &ToolDeleteVideoReq{}
 }
 
-func (p *ToolDeleteReq) InitDefault() {
+func (p *ToolDeleteVideoReq) InitDefault() {
 }
 
-func (p *ToolDeleteReq) GetAccessToken() (v string) {
+func (p *ToolDeleteVideoReq) GetAccessToken() (v string) {
 	return p.AccessToken
 }
 
-func (p *ToolDeleteReq) GetOtype() (v string) {
-	return p.Otype
+func (p *ToolDeleteVideoReq) GetVideoID() (v string) {
+	return p.VideoID
 }
 
-func (p *ToolDeleteReq) GetOid() (v string) {
-	return p.Oid
-}
-
-var fieldIDToName_ToolDeleteReq = map[int16]string{
+var fieldIDToName_ToolDeleteVideoReq = map[int16]string{
 	1: "access_token",
-	2: "otype",
-	3: "oid",
+	2: "video_id",
 }
 
-func (p *ToolDeleteReq) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *ToolDeleteVideoReq) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
-	var issetOtype bool = false
-	var issetOid bool = false
+	var issetVideoID bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -75,16 +68,7 @@ func (p *ToolDeleteReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetOtype = true
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 3:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField3(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetOid = true
+				issetVideoID = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -106,13 +90,8 @@ func (p *ToolDeleteReq) Read(iprot thrift.TProtocol) (err error) {
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetOtype {
+	if !issetVideoID {
 		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetOid {
-		fieldId = 3
 		goto RequiredFieldNotSetError
 	}
 	return nil
@@ -121,7 +100,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolDeleteReq[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolDeleteVideoReq[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -130,11 +109,10 @@ ReadFieldEndError:
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_ToolDeleteReq[fieldId]))
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_ToolDeleteVideoReq[fieldId]))
 }
 
-func (p *ToolDeleteReq) ReadField1(iprot thrift.TProtocol) error {
-
+func (p *ToolDeleteVideoReq) ReadField1(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -144,32 +122,21 @@ func (p *ToolDeleteReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-func (p *ToolDeleteReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolDeleteVideoReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		_field = v
 	}
-	p.Otype = _field
-	return nil
-}
-func (p *ToolDeleteReq) ReadField3(iprot thrift.TProtocol) error {
-
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.Oid = _field
+	p.VideoID = _field
 	return nil
 }
 
-func (p *ToolDeleteReq) Write(oprot thrift.TProtocol) (err error) {
+func (p *ToolDeleteVideoReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("ToolDeleteReq"); err != nil {
+	if err = oprot.WriteStructBegin("ToolDeleteVideoReq"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -179,10 +146,6 @@ func (p *ToolDeleteReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField2(oprot); err != nil {
 			fieldId = 2
-			goto WriteFieldError
-		}
-		if err = p.writeField3(oprot); err != nil {
-			fieldId = 3
 			goto WriteFieldError
 		}
 	}
@@ -203,7 +166,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *ToolDeleteReq) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *ToolDeleteVideoReq) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -220,11 +183,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *ToolDeleteReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("otype", thrift.STRING, 2); err != nil {
+func (p *ToolDeleteVideoReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("video_id", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Otype); err != nil {
+	if err := oprot.WriteString(p.VideoID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -237,58 +200,39 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
-func (p *ToolDeleteReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("oid", thrift.STRING, 3); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Oid); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
-}
-
-func (p *ToolDeleteReq) String() string {
+func (p *ToolDeleteVideoReq) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("ToolDeleteReq(%+v)", *p)
-
+	return fmt.Sprintf("ToolDeleteVideoReq(%+v)", *p)
 }
 
-type ToolDeleteResp struct {
+type ToolDeleteVideoResp struct {
 	Code int64  `thrift:"code,1" form:"code" json:"code" query:"code"`
 	Msg  string `thrift:"msg,2" form:"msg" json:"msg" query:"msg"`
 }
 
-func NewToolDeleteResp() *ToolDeleteResp {
-	return &ToolDeleteResp{}
+func NewToolDeleteVideoResp() *ToolDeleteVideoResp {
+	return &ToolDeleteVideoResp{}
 }
 
-func (p *ToolDeleteResp) InitDefault() {
+func (p *ToolDeleteVideoResp) InitDefault() {
 }
 
-func (p *ToolDeleteResp) GetCode() (v int64) {
+func (p *ToolDeleteVideoResp) GetCode() (v int64) {
 	return p.Code
 }
 
-func (p *ToolDeleteResp) GetMsg() (v string) {
+func (p *ToolDeleteVideoResp) GetMsg() (v string) {
 	return p.Msg
 }
 
-var fieldIDToName_ToolDeleteResp = map[int16]string{
+var fieldIDToName_ToolDeleteVideoResp = map[int16]string{
 	1: "code",
 	2: "msg",
 }
 
-func (p *ToolDeleteResp) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *ToolDeleteVideoResp) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -341,7 +285,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolDeleteResp[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolDeleteVideoResp[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -351,8 +295,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ToolDeleteResp) ReadField1(iprot thrift.TProtocol) error {
-
+func (p *ToolDeleteVideoResp) ReadField1(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -362,8 +305,8 @@ func (p *ToolDeleteResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *ToolDeleteResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolDeleteVideoResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -374,9 +317,9 @@ func (p *ToolDeleteResp) ReadField2(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *ToolDeleteResp) Write(oprot thrift.TProtocol) (err error) {
+func (p *ToolDeleteVideoResp) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("ToolDeleteResp"); err != nil {
+	if err = oprot.WriteStructBegin("ToolDeleteVideoResp"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -406,7 +349,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *ToolDeleteResp) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *ToolDeleteVideoResp) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("code", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -423,7 +366,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *ToolDeleteResp) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *ToolDeleteVideoResp) writeField2(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -440,52 +383,43 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
-func (p *ToolDeleteResp) String() string {
+func (p *ToolDeleteVideoResp) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("ToolDeleteResp(%+v)", *p)
-
+	return fmt.Sprintf("ToolDeleteVideoResp(%+v)", *p)
 }
 
-type AdminToolDeleteReq struct {
+type ToolDeleteActivityReq struct {
 	AccessToken string `thrift:"access_token,1,required" header:"Access-Token,required" json:"access_token,required"`
-	Otype       string `thrift:"otype,2,required" form:"otype,required" json:"otype,required" query:"otype,required"`
-	Oid         string `thrift:"oid,3,required" form:"oid,required" json:"oid,required" query:"oid,required"`
+	ActivityID  string `thrift:"activity_id,2,required" form:"activity_id,required" json:"activity_id,required" query:"activity_id,required"`
 }
 
-func NewAdminToolDeleteReq() *AdminToolDeleteReq {
-	return &AdminToolDeleteReq{}
+func NewToolDeleteActivityReq() *ToolDeleteActivityReq {
+	return &ToolDeleteActivityReq{}
 }
 
-func (p *AdminToolDeleteReq) InitDefault() {
+func (p *ToolDeleteActivityReq) InitDefault() {
 }
 
-func (p *AdminToolDeleteReq) GetAccessToken() (v string) {
+func (p *ToolDeleteActivityReq) GetAccessToken() (v string) {
 	return p.AccessToken
 }
 
-func (p *AdminToolDeleteReq) GetOtype() (v string) {
-	return p.Otype
+func (p *ToolDeleteActivityReq) GetActivityID() (v string) {
+	return p.ActivityID
 }
 
-func (p *AdminToolDeleteReq) GetOid() (v string) {
-	return p.Oid
-}
-
-var fieldIDToName_AdminToolDeleteReq = map[int16]string{
+var fieldIDToName_ToolDeleteActivityReq = map[int16]string{
 	1: "access_token",
-	2: "otype",
-	3: "oid",
+	2: "activity_id",
 }
 
-func (p *AdminToolDeleteReq) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *ToolDeleteActivityReq) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
-	var issetOtype bool = false
-	var issetOid bool = false
+	var issetActivityID bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -515,16 +449,7 @@ func (p *AdminToolDeleteReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetOtype = true
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 3:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField3(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetOid = true
+				issetActivityID = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -546,13 +471,8 @@ func (p *AdminToolDeleteReq) Read(iprot thrift.TProtocol) (err error) {
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetOtype {
+	if !issetActivityID {
 		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetOid {
-		fieldId = 3
 		goto RequiredFieldNotSetError
 	}
 	return nil
@@ -561,7 +481,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_AdminToolDeleteReq[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolDeleteActivityReq[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -570,11 +490,10 @@ ReadFieldEndError:
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_AdminToolDeleteReq[fieldId]))
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_ToolDeleteActivityReq[fieldId]))
 }
 
-func (p *AdminToolDeleteReq) ReadField1(iprot thrift.TProtocol) error {
-
+func (p *ToolDeleteActivityReq) ReadField1(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -584,32 +503,21 @@ func (p *AdminToolDeleteReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-func (p *AdminToolDeleteReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolDeleteActivityReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		_field = v
 	}
-	p.Otype = _field
-	return nil
-}
-func (p *AdminToolDeleteReq) ReadField3(iprot thrift.TProtocol) error {
-
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.Oid = _field
+	p.ActivityID = _field
 	return nil
 }
 
-func (p *AdminToolDeleteReq) Write(oprot thrift.TProtocol) (err error) {
+func (p *ToolDeleteActivityReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("AdminToolDeleteReq"); err != nil {
+	if err = oprot.WriteStructBegin("ToolDeleteActivityReq"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -619,10 +527,6 @@ func (p *AdminToolDeleteReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField2(oprot); err != nil {
 			fieldId = 2
-			goto WriteFieldError
-		}
-		if err = p.writeField3(oprot); err != nil {
-			fieldId = 3
 			goto WriteFieldError
 		}
 	}
@@ -643,7 +547,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *AdminToolDeleteReq) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *ToolDeleteActivityReq) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -660,11 +564,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *AdminToolDeleteReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("otype", thrift.STRING, 2); err != nil {
+func (p *ToolDeleteActivityReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("activity_id", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Otype); err != nil {
+	if err := oprot.WriteString(p.ActivityID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -677,11 +581,464 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
-func (p *AdminToolDeleteReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("oid", thrift.STRING, 3); err != nil {
+func (p *ToolDeleteActivityReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ToolDeleteActivityReq(%+v)", *p)
+}
+
+type ToolDeleteActivityResp struct {
+	Code int64  `thrift:"code,1" form:"code" json:"code" query:"code"`
+	Msg  string `thrift:"msg,2" form:"msg" json:"msg" query:"msg"`
+}
+
+func NewToolDeleteActivityResp() *ToolDeleteActivityResp {
+	return &ToolDeleteActivityResp{}
+}
+
+func (p *ToolDeleteActivityResp) InitDefault() {
+}
+
+func (p *ToolDeleteActivityResp) GetCode() (v int64) {
+	return p.Code
+}
+
+func (p *ToolDeleteActivityResp) GetMsg() (v string) {
+	return p.Msg
+}
+
+var fieldIDToName_ToolDeleteActivityResp = map[int16]string{
+	1: "code",
+	2: "msg",
+}
+
+func (p *ToolDeleteActivityResp) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolDeleteActivityResp[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ToolDeleteActivityResp) ReadField1(iprot thrift.TProtocol) error {
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Code = _field
+	return nil
+}
+
+func (p *ToolDeleteActivityResp) ReadField2(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Msg = _field
+	return nil
+}
+
+func (p *ToolDeleteActivityResp) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("ToolDeleteActivityResp"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ToolDeleteActivityResp) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("code", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Oid); err != nil {
+	if err := oprot.WriteI64(p.Code); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ToolDeleteActivityResp) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Msg); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *ToolDeleteActivityResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ToolDeleteActivityResp(%+v)", *p)
+}
+
+type ToolDeleteCommentReq struct {
+	AccessToken string `thrift:"access_token,1,required" header:"Access-Token,required" json:"access_token,required"`
+	CommentType string `thrift:"comment_type,2,required" form:"comment_type,required" json:"comment_type,required" query:"comment_type,required"`
+	FromMediaID string `thrift:"from_media_id,3,required" form:"from_media_id,required" json:"from_media_id,required" query:"from_media_id,required"`
+	CommentID   string `thrift:"comment_id,4,required" form:"comment_id,required" json:"comment_id,required" query:"comment_id,required"`
+}
+
+func NewToolDeleteCommentReq() *ToolDeleteCommentReq {
+	return &ToolDeleteCommentReq{}
+}
+
+func (p *ToolDeleteCommentReq) InitDefault() {
+}
+
+func (p *ToolDeleteCommentReq) GetAccessToken() (v string) {
+	return p.AccessToken
+}
+
+func (p *ToolDeleteCommentReq) GetCommentType() (v string) {
+	return p.CommentType
+}
+
+func (p *ToolDeleteCommentReq) GetFromMediaID() (v string) {
+	return p.FromMediaID
+}
+
+func (p *ToolDeleteCommentReq) GetCommentID() (v string) {
+	return p.CommentID
+}
+
+var fieldIDToName_ToolDeleteCommentReq = map[int16]string{
+	1: "access_token",
+	2: "comment_type",
+	3: "from_media_id",
+	4: "comment_id",
+}
+
+func (p *ToolDeleteCommentReq) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+	var issetAccessToken bool = false
+	var issetCommentType bool = false
+	var issetFromMediaID bool = false
+	var issetCommentID bool = false
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetAccessToken = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetCommentType = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetFromMediaID = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetCommentID = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	if !issetAccessToken {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetCommentType {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetFromMediaID {
+		fieldId = 3
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetCommentID {
+		fieldId = 4
+		goto RequiredFieldNotSetError
+	}
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolDeleteCommentReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_ToolDeleteCommentReq[fieldId]))
+}
+
+func (p *ToolDeleteCommentReq) ReadField1(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.AccessToken = _field
+	return nil
+}
+
+func (p *ToolDeleteCommentReq) ReadField2(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.CommentType = _field
+	return nil
+}
+
+func (p *ToolDeleteCommentReq) ReadField3(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.FromMediaID = _field
+	return nil
+}
+
+func (p *ToolDeleteCommentReq) ReadField4(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.CommentID = _field
+	return nil
+}
+
+func (p *ToolDeleteCommentReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("ToolDeleteCommentReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ToolDeleteCommentReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.AccessToken); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ToolDeleteCommentReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("comment_type", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.CommentType); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *ToolDeleteCommentReq) writeField3(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("from_media_id", thrift.STRING, 3); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.FromMediaID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -694,12 +1051,1460 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
-func (p *AdminToolDeleteReq) String() string {
+func (p *ToolDeleteCommentReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("comment_id", thrift.STRING, 4); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.CommentID); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *ToolDeleteCommentReq) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("AdminToolDeleteReq(%+v)", *p)
+	return fmt.Sprintf("ToolDeleteCommentReq(%+v)", *p)
+}
 
+type ToolDeleteCommentResp struct {
+	Code int64  `thrift:"code,1" form:"code" json:"code" query:"code"`
+	Msg  string `thrift:"msg,2" form:"msg" json:"msg" query:"msg"`
+}
+
+func NewToolDeleteCommentResp() *ToolDeleteCommentResp {
+	return &ToolDeleteCommentResp{}
+}
+
+func (p *ToolDeleteCommentResp) InitDefault() {
+}
+
+func (p *ToolDeleteCommentResp) GetCode() (v int64) {
+	return p.Code
+}
+
+func (p *ToolDeleteCommentResp) GetMsg() (v string) {
+	return p.Msg
+}
+
+var fieldIDToName_ToolDeleteCommentResp = map[int16]string{
+	1: "code",
+	2: "msg",
+}
+
+func (p *ToolDeleteCommentResp) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolDeleteCommentResp[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ToolDeleteCommentResp) ReadField1(iprot thrift.TProtocol) error {
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Code = _field
+	return nil
+}
+
+func (p *ToolDeleteCommentResp) ReadField2(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Msg = _field
+	return nil
+}
+
+func (p *ToolDeleteCommentResp) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("ToolDeleteCommentResp"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ToolDeleteCommentResp) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("code", thrift.I64, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.Code); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ToolDeleteCommentResp) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Msg); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *ToolDeleteCommentResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ToolDeleteCommentResp(%+v)", *p)
+}
+
+type AdminToolDeleteVideoReq struct {
+	AccessToken string `thrift:"access_token,1,required" header:"Access-Token,required" json:"access_token,required"`
+	VideoID     string `thrift:"video_id,2,required" form:"video_id,required" json:"video_id,required" query:"video_id,required"`
+}
+
+func NewAdminToolDeleteVideoReq() *AdminToolDeleteVideoReq {
+	return &AdminToolDeleteVideoReq{}
+}
+
+func (p *AdminToolDeleteVideoReq) InitDefault() {
+}
+
+func (p *AdminToolDeleteVideoReq) GetAccessToken() (v string) {
+	return p.AccessToken
+}
+
+func (p *AdminToolDeleteVideoReq) GetVideoID() (v string) {
+	return p.VideoID
+}
+
+var fieldIDToName_AdminToolDeleteVideoReq = map[int16]string{
+	1: "access_token",
+	2: "video_id",
+}
+
+func (p *AdminToolDeleteVideoReq) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+	var issetAccessToken bool = false
+	var issetVideoID bool = false
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetAccessToken = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetVideoID = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	if !issetAccessToken {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetVideoID {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_AdminToolDeleteVideoReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_AdminToolDeleteVideoReq[fieldId]))
+}
+
+func (p *AdminToolDeleteVideoReq) ReadField1(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.AccessToken = _field
+	return nil
+}
+
+func (p *AdminToolDeleteVideoReq) ReadField2(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VideoID = _field
+	return nil
+}
+
+func (p *AdminToolDeleteVideoReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminToolDeleteVideoReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *AdminToolDeleteVideoReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.AccessToken); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *AdminToolDeleteVideoReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("video_id", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.VideoID); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *AdminToolDeleteVideoReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("AdminToolDeleteVideoReq(%+v)", *p)
+}
+
+type AdminToolDeleteVideoResp struct {
+	Code int64  `thrift:"code,1" form:"code" json:"code" query:"code"`
+	Msg  string `thrift:"msg,2" form:"msg" json:"msg" query:"msg"`
+}
+
+func NewAdminToolDeleteVideoResp() *AdminToolDeleteVideoResp {
+	return &AdminToolDeleteVideoResp{}
+}
+
+func (p *AdminToolDeleteVideoResp) InitDefault() {
+}
+
+func (p *AdminToolDeleteVideoResp) GetCode() (v int64) {
+	return p.Code
+}
+
+func (p *AdminToolDeleteVideoResp) GetMsg() (v string) {
+	return p.Msg
+}
+
+var fieldIDToName_AdminToolDeleteVideoResp = map[int16]string{
+	1: "code",
+	2: "msg",
+}
+
+func (p *AdminToolDeleteVideoResp) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_AdminToolDeleteVideoResp[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *AdminToolDeleteVideoResp) ReadField1(iprot thrift.TProtocol) error {
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Code = _field
+	return nil
+}
+
+func (p *AdminToolDeleteVideoResp) ReadField2(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Msg = _field
+	return nil
+}
+
+func (p *AdminToolDeleteVideoResp) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminToolDeleteVideoResp"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *AdminToolDeleteVideoResp) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("code", thrift.I64, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.Code); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *AdminToolDeleteVideoResp) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Msg); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *AdminToolDeleteVideoResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("AdminToolDeleteVideoResp(%+v)", *p)
+}
+
+type AdminToolDeleteActivityReq struct {
+	AccessToken string `thrift:"access_token,1,required" header:"Access-Token,required" json:"access_token,required"`
+	ActivityID  string `thrift:"activity_id,2,required" form:"activity_id,required" json:"activity_id,required" query:"activity_id,required"`
+}
+
+func NewAdminToolDeleteActivityReq() *AdminToolDeleteActivityReq {
+	return &AdminToolDeleteActivityReq{}
+}
+
+func (p *AdminToolDeleteActivityReq) InitDefault() {
+}
+
+func (p *AdminToolDeleteActivityReq) GetAccessToken() (v string) {
+	return p.AccessToken
+}
+
+func (p *AdminToolDeleteActivityReq) GetActivityID() (v string) {
+	return p.ActivityID
+}
+
+var fieldIDToName_AdminToolDeleteActivityReq = map[int16]string{
+	1: "access_token",
+	2: "activity_id",
+}
+
+func (p *AdminToolDeleteActivityReq) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+	var issetAccessToken bool = false
+	var issetActivityID bool = false
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetAccessToken = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetActivityID = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	if !issetAccessToken {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetActivityID {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_AdminToolDeleteActivityReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_AdminToolDeleteActivityReq[fieldId]))
+}
+
+func (p *AdminToolDeleteActivityReq) ReadField1(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.AccessToken = _field
+	return nil
+}
+
+func (p *AdminToolDeleteActivityReq) ReadField2(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.ActivityID = _field
+	return nil
+}
+
+func (p *AdminToolDeleteActivityReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminToolDeleteActivityReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *AdminToolDeleteActivityReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.AccessToken); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *AdminToolDeleteActivityReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("activity_id", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.ActivityID); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *AdminToolDeleteActivityReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("AdminToolDeleteActivityReq(%+v)", *p)
+}
+
+type AdminToolDeleteActivityResp struct {
+	Code int64  `thrift:"code,1" form:"code" json:"code" query:"code"`
+	Msg  string `thrift:"msg,2" form:"msg" json:"msg" query:"msg"`
+}
+
+func NewAdminToolDeleteActivityResp() *AdminToolDeleteActivityResp {
+	return &AdminToolDeleteActivityResp{}
+}
+
+func (p *AdminToolDeleteActivityResp) InitDefault() {
+}
+
+func (p *AdminToolDeleteActivityResp) GetCode() (v int64) {
+	return p.Code
+}
+
+func (p *AdminToolDeleteActivityResp) GetMsg() (v string) {
+	return p.Msg
+}
+
+var fieldIDToName_AdminToolDeleteActivityResp = map[int16]string{
+	1: "code",
+	2: "msg",
+}
+
+func (p *AdminToolDeleteActivityResp) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_AdminToolDeleteActivityResp[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *AdminToolDeleteActivityResp) ReadField1(iprot thrift.TProtocol) error {
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Code = _field
+	return nil
+}
+
+func (p *AdminToolDeleteActivityResp) ReadField2(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Msg = _field
+	return nil
+}
+
+func (p *AdminToolDeleteActivityResp) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminToolDeleteActivityResp"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *AdminToolDeleteActivityResp) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("code", thrift.I64, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.Code); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *AdminToolDeleteActivityResp) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Msg); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *AdminToolDeleteActivityResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("AdminToolDeleteActivityResp(%+v)", *p)
+}
+
+type AdminToolDeleteCommentReq struct {
+	AccessToken string `thrift:"access_token,1,required" header:"Access-Token,required" json:"access_token,required"`
+	CommentType string `thrift:"comment_type,2,required" form:"comment_type,required" json:"comment_type,required" query:"comment_type,required"`
+	FromMediaID string `thrift:"from_media_id,3,required" form:"from_media_id,required" json:"from_media_id,required" query:"from_media_id,required"`
+	CommentID   string `thrift:"comment_id,4,required" form:"comment_id,required" json:"comment_id,required" query:"comment_id,required"`
+}
+
+func NewAdminToolDeleteCommentReq() *AdminToolDeleteCommentReq {
+	return &AdminToolDeleteCommentReq{}
+}
+
+func (p *AdminToolDeleteCommentReq) InitDefault() {
+}
+
+func (p *AdminToolDeleteCommentReq) GetAccessToken() (v string) {
+	return p.AccessToken
+}
+
+func (p *AdminToolDeleteCommentReq) GetCommentType() (v string) {
+	return p.CommentType
+}
+
+func (p *AdminToolDeleteCommentReq) GetFromMediaID() (v string) {
+	return p.FromMediaID
+}
+
+func (p *AdminToolDeleteCommentReq) GetCommentID() (v string) {
+	return p.CommentID
+}
+
+var fieldIDToName_AdminToolDeleteCommentReq = map[int16]string{
+	1: "access_token",
+	2: "comment_type",
+	3: "from_media_id",
+	4: "comment_id",
+}
+
+func (p *AdminToolDeleteCommentReq) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+	var issetAccessToken bool = false
+	var issetCommentType bool = false
+	var issetFromMediaID bool = false
+	var issetCommentID bool = false
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetAccessToken = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetCommentType = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetFromMediaID = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetCommentID = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	if !issetAccessToken {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetCommentType {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetFromMediaID {
+		fieldId = 3
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetCommentID {
+		fieldId = 4
+		goto RequiredFieldNotSetError
+	}
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_AdminToolDeleteCommentReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_AdminToolDeleteCommentReq[fieldId]))
+}
+
+func (p *AdminToolDeleteCommentReq) ReadField1(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.AccessToken = _field
+	return nil
+}
+
+func (p *AdminToolDeleteCommentReq) ReadField2(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.CommentType = _field
+	return nil
+}
+
+func (p *AdminToolDeleteCommentReq) ReadField3(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.FromMediaID = _field
+	return nil
+}
+
+func (p *AdminToolDeleteCommentReq) ReadField4(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.CommentID = _field
+	return nil
+}
+
+func (p *AdminToolDeleteCommentReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminToolDeleteCommentReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *AdminToolDeleteCommentReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.AccessToken); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *AdminToolDeleteCommentReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("comment_type", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.CommentType); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *AdminToolDeleteCommentReq) writeField3(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("from_media_id", thrift.STRING, 3); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.FromMediaID); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *AdminToolDeleteCommentReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("comment_id", thrift.STRING, 4); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.CommentID); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *AdminToolDeleteCommentReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("AdminToolDeleteCommentReq(%+v)", *p)
+}
+
+type AdminToolDeleteCommentResp struct {
+	Code int64  `thrift:"code,1" form:"code" json:"code" query:"code"`
+	Msg  string `thrift:"msg,2" form:"msg" json:"msg" query:"msg"`
+}
+
+func NewAdminToolDeleteCommentResp() *AdminToolDeleteCommentResp {
+	return &AdminToolDeleteCommentResp{}
+}
+
+func (p *AdminToolDeleteCommentResp) InitDefault() {
+}
+
+func (p *AdminToolDeleteCommentResp) GetCode() (v int64) {
+	return p.Code
+}
+
+func (p *AdminToolDeleteCommentResp) GetMsg() (v string) {
+	return p.Msg
+}
+
+var fieldIDToName_AdminToolDeleteCommentResp = map[int16]string{
+	1: "code",
+	2: "msg",
+}
+
+func (p *AdminToolDeleteCommentResp) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_AdminToolDeleteCommentResp[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *AdminToolDeleteCommentResp) ReadField1(iprot thrift.TProtocol) error {
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Code = _field
+	return nil
+}
+
+func (p *AdminToolDeleteCommentResp) ReadField2(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Msg = _field
+	return nil
+}
+
+func (p *AdminToolDeleteCommentResp) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminToolDeleteCommentResp"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *AdminToolDeleteCommentResp) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("code", thrift.I64, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.Code); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *AdminToolDeleteCommentResp) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Msg); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *AdminToolDeleteCommentResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("AdminToolDeleteCommentResp(%+v)", *p)
 }
 
 type AdminToolDeleteResp struct {
@@ -728,7 +2533,6 @@ var fieldIDToName_AdminToolDeleteResp = map[int16]string{
 }
 
 func (p *AdminToolDeleteResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -792,7 +2596,6 @@ ReadStructEndError:
 }
 
 func (p *AdminToolDeleteResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -802,8 +2605,8 @@ func (p *AdminToolDeleteResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *AdminToolDeleteResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *AdminToolDeleteResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -885,7 +2688,6 @@ func (p *AdminToolDeleteResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminToolDeleteResp(%+v)", *p)
-
 }
 
 type ToolUploadImageReq struct {
@@ -908,7 +2710,6 @@ var fieldIDToName_ToolUploadImageReq = map[int16]string{
 }
 
 func (p *ToolUploadImageReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -972,7 +2773,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *ToolUploadImageReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1033,12 +2833,13 @@ func (p *ToolUploadImageReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolUploadImageReq(%+v)", *p)
-
 }
 
 type ToolUploadImageRespData struct {
-	URL     string `thrift:"url,1" form:"url" json:"url" query:"url"`
-	ImageID string `thrift:"image_id,2" form:"image_id" json:"image_id" query:"image_id"`
+	ImageID   string `thrift:"image_id,1" form:"image_id" json:"image_id" query:"image_id"`
+	UploadURL string `thrift:"upload_url,2" form:"upload_url" json:"upload_url" query:"upload_url"`
+	UploadKey string `thrift:"upload_key,3" form:"upload_key" json:"upload_key" query:"upload_key"`
+	Uptoken   string `thrift:"uptoken,4" form:"uptoken" json:"uptoken" query:"uptoken"`
 }
 
 func NewToolUploadImageRespData() *ToolUploadImageRespData {
@@ -1048,21 +2849,30 @@ func NewToolUploadImageRespData() *ToolUploadImageRespData {
 func (p *ToolUploadImageRespData) InitDefault() {
 }
 
-func (p *ToolUploadImageRespData) GetURL() (v string) {
-	return p.URL
-}
-
 func (p *ToolUploadImageRespData) GetImageID() (v string) {
 	return p.ImageID
 }
 
+func (p *ToolUploadImageRespData) GetUploadURL() (v string) {
+	return p.UploadURL
+}
+
+func (p *ToolUploadImageRespData) GetUploadKey() (v string) {
+	return p.UploadKey
+}
+
+func (p *ToolUploadImageRespData) GetUptoken() (v string) {
+	return p.Uptoken
+}
+
 var fieldIDToName_ToolUploadImageRespData = map[int16]string{
-	1: "url",
-	2: "image_id",
+	1: "image_id",
+	2: "upload_url",
+	3: "upload_key",
+	4: "uptoken",
 }
 
 func (p *ToolUploadImageRespData) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1091,6 +2901,22 @@ func (p *ToolUploadImageRespData) Read(iprot thrift.TProtocol) (err error) {
 		case 2:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1126,18 +2952,6 @@ ReadStructEndError:
 }
 
 func (p *ToolUploadImageRespData) ReadField1(iprot thrift.TProtocol) error {
-
-	var _field string
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.URL = _field
-	return nil
-}
-func (p *ToolUploadImageRespData) ReadField2(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1145,6 +2959,39 @@ func (p *ToolUploadImageRespData) ReadField2(iprot thrift.TProtocol) error {
 		_field = v
 	}
 	p.ImageID = _field
+	return nil
+}
+
+func (p *ToolUploadImageRespData) ReadField2(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.UploadURL = _field
+	return nil
+}
+
+func (p *ToolUploadImageRespData) ReadField3(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.UploadKey = _field
+	return nil
+}
+
+func (p *ToolUploadImageRespData) ReadField4(iprot thrift.TProtocol) error {
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Uptoken = _field
 	return nil
 }
 
@@ -1160,6 +3007,14 @@ func (p *ToolUploadImageRespData) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField2(oprot); err != nil {
 			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
 			goto WriteFieldError
 		}
 	}
@@ -1181,10 +3036,10 @@ WriteStructEndError:
 }
 
 func (p *ToolUploadImageRespData) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("url", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("image_id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.URL); err != nil {
+	if err := oprot.WriteString(p.ImageID); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1198,10 +3053,10 @@ WriteFieldEndError:
 }
 
 func (p *ToolUploadImageRespData) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("image_id", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("upload_url", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.ImageID); err != nil {
+	if err := oprot.WriteString(p.UploadURL); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1214,12 +3069,45 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
+func (p *ToolUploadImageRespData) writeField3(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("upload_key", thrift.STRING, 3); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.UploadKey); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *ToolUploadImageRespData) writeField4(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("uptoken", thrift.STRING, 4); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Uptoken); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
 func (p *ToolUploadImageRespData) String() string {
 	if p == nil {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolUploadImageRespData(%+v)", *p)
-
 }
 
 type ToolUploadImageResp struct {
@@ -1263,7 +3151,6 @@ func (p *ToolUploadImageResp) IsSetData() bool {
 }
 
 func (p *ToolUploadImageResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1335,7 +3222,6 @@ ReadStructEndError:
 }
 
 func (p *ToolUploadImageResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1345,8 +3231,8 @@ func (p *ToolUploadImageResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *ToolUploadImageResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolUploadImageResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1356,6 +3242,7 @@ func (p *ToolUploadImageResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
+
 func (p *ToolUploadImageResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewToolUploadImageRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -1457,7 +3344,6 @@ func (p *ToolUploadImageResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolUploadImageResp(%+v)", *p)
-
 }
 
 type ToolGetImageReq struct {
@@ -1480,7 +3366,6 @@ var fieldIDToName_ToolGetImageReq = map[int16]string{
 }
 
 func (p *ToolGetImageReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetImageID bool = false
@@ -1544,7 +3429,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *ToolGetImageReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1605,7 +3489,6 @@ func (p *ToolGetImageReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolGetImageReq(%+v)", *p)
-
 }
 
 type ToolGetImageRespData struct {
@@ -1628,7 +3511,6 @@ var fieldIDToName_ToolGetImageRespData = map[int16]string{
 }
 
 func (p *ToolGetImageRespData) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1684,7 +3566,6 @@ ReadStructEndError:
 }
 
 func (p *ToolGetImageRespData) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1745,7 +3626,6 @@ func (p *ToolGetImageRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolGetImageRespData(%+v)", *p)
-
 }
 
 type ToolGetImageResp struct {
@@ -1789,7 +3669,6 @@ func (p *ToolGetImageResp) IsSetData() bool {
 }
 
 func (p *ToolGetImageResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1861,7 +3740,6 @@ ReadStructEndError:
 }
 
 func (p *ToolGetImageResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1871,8 +3749,8 @@ func (p *ToolGetImageResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *ToolGetImageResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolGetImageResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1882,6 +3760,7 @@ func (p *ToolGetImageResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
+
 func (p *ToolGetImageResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewToolGetImageRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -1983,30 +3862,28 @@ func (p *ToolGetImageResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolGetImageResp(%+v)", *p)
-
 }
 
-type UserRefreshReq struct {
+type ToolTokenRefreshReq struct {
 	RefreshToken string `thrift:"refresh_token,1,required" header:"Refresh-Token,required" json:"refresh_token,required"`
 }
 
-func NewUserRefreshReq() *UserRefreshReq {
-	return &UserRefreshReq{}
+func NewToolTokenRefreshReq() *ToolTokenRefreshReq {
+	return &ToolTokenRefreshReq{}
 }
 
-func (p *UserRefreshReq) InitDefault() {
+func (p *ToolTokenRefreshReq) InitDefault() {
 }
 
-func (p *UserRefreshReq) GetRefreshToken() (v string) {
+func (p *ToolTokenRefreshReq) GetRefreshToken() (v string) {
 	return p.RefreshToken
 }
 
-var fieldIDToName_UserRefreshReq = map[int16]string{
+var fieldIDToName_ToolTokenRefreshReq = map[int16]string{
 	1: "refresh_token",
 }
 
-func (p *UserRefreshReq) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *ToolTokenRefreshReq) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetRefreshToken bool = false
@@ -2057,7 +3934,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserRefreshReq[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolTokenRefreshReq[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -2066,11 +3943,10 @@ ReadFieldEndError:
 ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UserRefreshReq[fieldId]))
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_ToolTokenRefreshReq[fieldId]))
 }
 
-func (p *UserRefreshReq) ReadField1(iprot thrift.TProtocol) error {
-
+func (p *ToolTokenRefreshReq) ReadField1(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2081,9 +3957,9 @@ func (p *UserRefreshReq) ReadField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *UserRefreshReq) Write(oprot thrift.TProtocol) (err error) {
+func (p *ToolTokenRefreshReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("UserRefreshReq"); err != nil {
+	if err = oprot.WriteStructBegin("ToolTokenRefreshReq"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -2109,7 +3985,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *UserRefreshReq) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *ToolTokenRefreshReq) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("refresh_token", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -2126,41 +4002,39 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *UserRefreshReq) String() string {
+func (p *ToolTokenRefreshReq) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UserRefreshReq(%+v)", *p)
-
+	return fmt.Sprintf("ToolTokenRefreshReq(%+v)", *p)
 }
 
-type UserRefreshRespData struct {
+type ToolTokenRefreshRespData struct {
 	ID          string `thrift:"id,1" form:"id" json:"id" query:"id"`
 	AccessToken string `thrift:"access_token,2" form:"access_token" json:"access_token" query:"access_token"`
 }
 
-func NewUserRefreshRespData() *UserRefreshRespData {
-	return &UserRefreshRespData{}
+func NewToolTokenRefreshRespData() *ToolTokenRefreshRespData {
+	return &ToolTokenRefreshRespData{}
 }
 
-func (p *UserRefreshRespData) InitDefault() {
+func (p *ToolTokenRefreshRespData) InitDefault() {
 }
 
-func (p *UserRefreshRespData) GetID() (v string) {
+func (p *ToolTokenRefreshRespData) GetID() (v string) {
 	return p.ID
 }
 
-func (p *UserRefreshRespData) GetAccessToken() (v string) {
+func (p *ToolTokenRefreshRespData) GetAccessToken() (v string) {
 	return p.AccessToken
 }
 
-var fieldIDToName_UserRefreshRespData = map[int16]string{
+var fieldIDToName_ToolTokenRefreshRespData = map[int16]string{
 	1: "id",
 	2: "access_token",
 }
 
-func (p *UserRefreshRespData) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *ToolTokenRefreshRespData) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2213,7 +4087,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserRefreshRespData[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolTokenRefreshRespData[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -2223,8 +4097,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *UserRefreshRespData) ReadField1(iprot thrift.TProtocol) error {
-
+func (p *ToolTokenRefreshRespData) ReadField1(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2234,8 +4107,8 @@ func (p *UserRefreshRespData) ReadField1(iprot thrift.TProtocol) error {
 	p.ID = _field
 	return nil
 }
-func (p *UserRefreshRespData) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolTokenRefreshRespData) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2246,9 +4119,9 @@ func (p *UserRefreshRespData) ReadField2(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *UserRefreshRespData) Write(oprot thrift.TProtocol) (err error) {
+func (p *ToolTokenRefreshRespData) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("UserRefreshRespData"); err != nil {
+	if err = oprot.WriteStructBegin("ToolTokenRefreshRespData"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -2278,7 +4151,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *UserRefreshRespData) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *ToolTokenRefreshRespData) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -2295,7 +4168,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *UserRefreshRespData) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *ToolTokenRefreshRespData) writeField2(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -2312,56 +4185,54 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
-func (p *UserRefreshRespData) String() string {
+func (p *ToolTokenRefreshRespData) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UserRefreshRespData(%+v)", *p)
-
+	return fmt.Sprintf("ToolTokenRefreshRespData(%+v)", *p)
 }
 
-type UserRefreshResp struct {
-	Code int64                `thrift:"code,1" form:"code" json:"code" query:"code"`
-	Msg  string               `thrift:"msg,2" form:"msg" json:"msg" query:"msg"`
-	Data *UserRefreshRespData `thrift:"data,3" form:"data" json:"data" query:"data"`
+type ToolTokenRefreshResp struct {
+	Code int64                     `thrift:"code,1" form:"code" json:"code" query:"code"`
+	Msg  string                    `thrift:"msg,2" form:"msg" json:"msg" query:"msg"`
+	Data *ToolTokenRefreshRespData `thrift:"data,3" form:"data" json:"data" query:"data"`
 }
 
-func NewUserRefreshResp() *UserRefreshResp {
-	return &UserRefreshResp{}
+func NewToolTokenRefreshResp() *ToolTokenRefreshResp {
+	return &ToolTokenRefreshResp{}
 }
 
-func (p *UserRefreshResp) InitDefault() {
+func (p *ToolTokenRefreshResp) InitDefault() {
 }
 
-func (p *UserRefreshResp) GetCode() (v int64) {
+func (p *ToolTokenRefreshResp) GetCode() (v int64) {
 	return p.Code
 }
 
-func (p *UserRefreshResp) GetMsg() (v string) {
+func (p *ToolTokenRefreshResp) GetMsg() (v string) {
 	return p.Msg
 }
 
-var UserRefreshResp_Data_DEFAULT *UserRefreshRespData
+var ToolTokenRefreshResp_Data_DEFAULT *ToolTokenRefreshRespData
 
-func (p *UserRefreshResp) GetData() (v *UserRefreshRespData) {
+func (p *ToolTokenRefreshResp) GetData() (v *ToolTokenRefreshRespData) {
 	if !p.IsSetData() {
-		return UserRefreshResp_Data_DEFAULT
+		return ToolTokenRefreshResp_Data_DEFAULT
 	}
 	return p.Data
 }
 
-var fieldIDToName_UserRefreshResp = map[int16]string{
+var fieldIDToName_ToolTokenRefreshResp = map[int16]string{
 	1: "code",
 	2: "msg",
 	3: "data",
 }
 
-func (p *UserRefreshResp) IsSetData() bool {
+func (p *ToolTokenRefreshResp) IsSetData() bool {
 	return p.Data != nil
 }
 
-func (p *UserRefreshResp) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *ToolTokenRefreshResp) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2422,7 +4293,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserRefreshResp[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolTokenRefreshResp[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -2432,8 +4303,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *UserRefreshResp) ReadField1(iprot thrift.TProtocol) error {
-
+func (p *ToolTokenRefreshResp) ReadField1(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2443,8 +4313,8 @@ func (p *UserRefreshResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *UserRefreshResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolTokenRefreshResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2454,8 +4324,9 @@ func (p *UserRefreshResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
-func (p *UserRefreshResp) ReadField3(iprot thrift.TProtocol) error {
-	_field := NewUserRefreshRespData()
+
+func (p *ToolTokenRefreshResp) ReadField3(iprot thrift.TProtocol) error {
+	_field := NewToolTokenRefreshRespData()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -2463,9 +4334,9 @@ func (p *UserRefreshResp) ReadField3(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *UserRefreshResp) Write(oprot thrift.TProtocol) (err error) {
+func (p *ToolTokenRefreshResp) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("UserRefreshResp"); err != nil {
+	if err = oprot.WriteStructBegin("ToolTokenRefreshResp"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -2499,7 +4370,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *UserRefreshResp) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *ToolTokenRefreshResp) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("code", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -2516,7 +4387,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *UserRefreshResp) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *ToolTokenRefreshResp) writeField2(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -2533,7 +4404,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
-func (p *UserRefreshResp) writeField3(oprot thrift.TProtocol) (err error) {
+func (p *ToolTokenRefreshResp) writeField3(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("data", thrift.STRUCT, 3); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -2550,24 +4421,31 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
-func (p *UserRefreshResp) String() string {
+func (p *ToolTokenRefreshResp) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("UserRefreshResp(%+v)", *p)
-
+	return fmt.Sprintf("ToolTokenRefreshResp(%+v)", *p)
 }
 
 type ToolService interface {
-	ToolDelete(ctx context.Context, req *ToolDeleteReq) (r *ToolDeleteResp, err error)
+	ToolDeleteVideo(ctx context.Context, req *ToolDeleteVideoReq) (r *ToolDeleteVideoResp, err error)
 
-	AdminToolDelete(ctx context.Context, req *AdminToolDeleteReq) (r *AdminToolDeleteResp, err error)
+	ToolDeleteActivity(ctx context.Context, req *ToolDeleteActivityReq) (r *ToolDeleteActivityResp, err error)
+
+	ToolDeleteComment(ctx context.Context, req *ToolDeleteCommentReq) (r *ToolDeleteCommentResp, err error)
+
+	AdminToolDeleteVideo(ctx context.Context, req *AdminToolDeleteVideoReq) (r *AdminToolDeleteVideoResp, err error)
+
+	AdminToolDeleteActivity(ctx context.Context, req *AdminToolDeleteActivityReq) (r *AdminToolDeleteActivityResp, err error)
+
+	AdminToolDeleteComment(ctx context.Context, req *AdminToolDeleteCommentReq) (r *AdminToolDeleteCommentResp, err error)
 
 	ToolUploadImage(ctx context.Context, req *ToolUploadImageReq) (r *ToolUploadImageResp, err error)
 
 	ToolGetImage(ctx context.Context, req *ToolGetImageReq) (r *ToolGetImageResp, err error)
 
-	UserRefresh(ctx context.Context, req *UserRefreshReq) (r *UserRefreshResp, err error)
+	ToolTokenRefresh(ctx context.Context, req *ToolTokenRefreshReq) (r *ToolTokenRefreshResp, err error)
 }
 
 type ToolServiceClient struct {
@@ -2596,24 +4474,66 @@ func (p *ToolServiceClient) Client_() thrift.TClient {
 	return p.c
 }
 
-func (p *ToolServiceClient) ToolDelete(ctx context.Context, req *ToolDeleteReq) (r *ToolDeleteResp, err error) {
-	var _args ToolServiceToolDeleteArgs
+func (p *ToolServiceClient) ToolDeleteVideo(ctx context.Context, req *ToolDeleteVideoReq) (r *ToolDeleteVideoResp, err error) {
+	var _args ToolServiceToolDeleteVideoArgs
 	_args.Req = req
-	var _result ToolServiceToolDeleteResult
-	if err = p.Client_().Call(ctx, "ToolDelete", &_args, &_result); err != nil {
+	var _result ToolServiceToolDeleteVideoResult
+	if err = p.Client_().Call(ctx, "ToolDeleteVideo", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *ToolServiceClient) AdminToolDelete(ctx context.Context, req *AdminToolDeleteReq) (r *AdminToolDeleteResp, err error) {
-	var _args ToolServiceAdminToolDeleteArgs
+
+func (p *ToolServiceClient) ToolDeleteActivity(ctx context.Context, req *ToolDeleteActivityReq) (r *ToolDeleteActivityResp, err error) {
+	var _args ToolServiceToolDeleteActivityArgs
 	_args.Req = req
-	var _result ToolServiceAdminToolDeleteResult
-	if err = p.Client_().Call(ctx, "AdminToolDelete", &_args, &_result); err != nil {
+	var _result ToolServiceToolDeleteActivityResult
+	if err = p.Client_().Call(ctx, "ToolDeleteActivity", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
 }
+
+func (p *ToolServiceClient) ToolDeleteComment(ctx context.Context, req *ToolDeleteCommentReq) (r *ToolDeleteCommentResp, err error) {
+	var _args ToolServiceToolDeleteCommentArgs
+	_args.Req = req
+	var _result ToolServiceToolDeleteCommentResult
+	if err = p.Client_().Call(ctx, "ToolDeleteComment", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *ToolServiceClient) AdminToolDeleteVideo(ctx context.Context, req *AdminToolDeleteVideoReq) (r *AdminToolDeleteVideoResp, err error) {
+	var _args ToolServiceAdminToolDeleteVideoArgs
+	_args.Req = req
+	var _result ToolServiceAdminToolDeleteVideoResult
+	if err = p.Client_().Call(ctx, "AdminToolDeleteVideo", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *ToolServiceClient) AdminToolDeleteActivity(ctx context.Context, req *AdminToolDeleteActivityReq) (r *AdminToolDeleteActivityResp, err error) {
+	var _args ToolServiceAdminToolDeleteActivityArgs
+	_args.Req = req
+	var _result ToolServiceAdminToolDeleteActivityResult
+	if err = p.Client_().Call(ctx, "AdminToolDeleteActivity", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *ToolServiceClient) AdminToolDeleteComment(ctx context.Context, req *AdminToolDeleteCommentReq) (r *AdminToolDeleteCommentResp, err error) {
+	var _args ToolServiceAdminToolDeleteCommentArgs
+	_args.Req = req
+	var _result ToolServiceAdminToolDeleteCommentResult
+	if err = p.Client_().Call(ctx, "AdminToolDeleteComment", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
 func (p *ToolServiceClient) ToolUploadImage(ctx context.Context, req *ToolUploadImageReq) (r *ToolUploadImageResp, err error) {
 	var _args ToolServiceToolUploadImageArgs
 	_args.Req = req
@@ -2623,6 +4543,7 @@ func (p *ToolServiceClient) ToolUploadImage(ctx context.Context, req *ToolUpload
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *ToolServiceClient) ToolGetImage(ctx context.Context, req *ToolGetImageReq) (r *ToolGetImageResp, err error) {
 	var _args ToolServiceToolGetImageArgs
 	_args.Req = req
@@ -2632,11 +4553,12 @@ func (p *ToolServiceClient) ToolGetImage(ctx context.Context, req *ToolGetImageR
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *ToolServiceClient) UserRefresh(ctx context.Context, req *UserRefreshReq) (r *UserRefreshResp, err error) {
-	var _args ToolServiceUserRefreshArgs
+
+func (p *ToolServiceClient) ToolTokenRefresh(ctx context.Context, req *ToolTokenRefreshReq) (r *ToolTokenRefreshResp, err error) {
+	var _args ToolServiceToolTokenRefreshArgs
 	_args.Req = req
-	var _result ToolServiceUserRefreshResult
-	if err = p.Client_().Call(ctx, "UserRefresh", &_args, &_result); err != nil {
+	var _result ToolServiceToolTokenRefreshResult
+	if err = p.Client_().Call(ctx, "ToolTokenRefresh", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -2662,13 +4584,18 @@ func (p *ToolServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFuncti
 
 func NewToolServiceProcessor(handler ToolService) *ToolServiceProcessor {
 	self := &ToolServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self.AddToProcessorMap("ToolDelete", &toolServiceProcessorToolDelete{handler: handler})
-	self.AddToProcessorMap("AdminToolDelete", &toolServiceProcessorAdminToolDelete{handler: handler})
+	self.AddToProcessorMap("ToolDeleteVideo", &toolServiceProcessorToolDeleteVideo{handler: handler})
+	self.AddToProcessorMap("ToolDeleteActivity", &toolServiceProcessorToolDeleteActivity{handler: handler})
+	self.AddToProcessorMap("ToolDeleteComment", &toolServiceProcessorToolDeleteComment{handler: handler})
+	self.AddToProcessorMap("AdminToolDeleteVideo", &toolServiceProcessorAdminToolDeleteVideo{handler: handler})
+	self.AddToProcessorMap("AdminToolDeleteActivity", &toolServiceProcessorAdminToolDeleteActivity{handler: handler})
+	self.AddToProcessorMap("AdminToolDeleteComment", &toolServiceProcessorAdminToolDeleteComment{handler: handler})
 	self.AddToProcessorMap("ToolUploadImage", &toolServiceProcessorToolUploadImage{handler: handler})
 	self.AddToProcessorMap("ToolGetImage", &toolServiceProcessorToolGetImage{handler: handler})
-	self.AddToProcessorMap("UserRefresh", &toolServiceProcessorUserRefresh{handler: handler})
+	self.AddToProcessorMap("ToolTokenRefresh", &toolServiceProcessorToolTokenRefresh{handler: handler})
 	return self
 }
+
 func (p *ToolServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
 	name, _, seqId, err := iprot.ReadMessageBegin()
 	if err != nil {
@@ -2687,16 +4614,16 @@ func (p *ToolServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.
 	return false, x
 }
 
-type toolServiceProcessorToolDelete struct {
+type toolServiceProcessorToolDeleteVideo struct {
 	handler ToolService
 }
 
-func (p *toolServiceProcessorToolDelete) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := ToolServiceToolDeleteArgs{}
+func (p *toolServiceProcessorToolDeleteVideo) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := ToolServiceToolDeleteVideoArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("ToolDelete", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("ToolDeleteVideo", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -2705,11 +4632,11 @@ func (p *toolServiceProcessorToolDelete) Process(ctx context.Context, seqId int3
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := ToolServiceToolDeleteResult{}
-	var retval *ToolDeleteResp
-	if retval, err2 = p.handler.ToolDelete(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ToolDelete: "+err2.Error())
-		oprot.WriteMessageBegin("ToolDelete", thrift.EXCEPTION, seqId)
+	result := ToolServiceToolDeleteVideoResult{}
+	var retval *ToolDeleteVideoResp
+	if retval, err2 = p.handler.ToolDeleteVideo(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ToolDeleteVideo: "+err2.Error())
+		oprot.WriteMessageBegin("ToolDeleteVideo", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -2717,7 +4644,7 @@ func (p *toolServiceProcessorToolDelete) Process(ctx context.Context, seqId int3
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("ToolDelete", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("ToolDeleteVideo", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -2735,16 +4662,16 @@ func (p *toolServiceProcessorToolDelete) Process(ctx context.Context, seqId int3
 	return true, err
 }
 
-type toolServiceProcessorAdminToolDelete struct {
+type toolServiceProcessorToolDeleteActivity struct {
 	handler ToolService
 }
 
-func (p *toolServiceProcessorAdminToolDelete) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := ToolServiceAdminToolDeleteArgs{}
+func (p *toolServiceProcessorToolDeleteActivity) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := ToolServiceToolDeleteActivityArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("AdminToolDelete", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("ToolDeleteActivity", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -2753,11 +4680,11 @@ func (p *toolServiceProcessorAdminToolDelete) Process(ctx context.Context, seqId
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := ToolServiceAdminToolDeleteResult{}
-	var retval *AdminToolDeleteResp
-	if retval, err2 = p.handler.AdminToolDelete(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing AdminToolDelete: "+err2.Error())
-		oprot.WriteMessageBegin("AdminToolDelete", thrift.EXCEPTION, seqId)
+	result := ToolServiceToolDeleteActivityResult{}
+	var retval *ToolDeleteActivityResp
+	if retval, err2 = p.handler.ToolDeleteActivity(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ToolDeleteActivity: "+err2.Error())
+		oprot.WriteMessageBegin("ToolDeleteActivity", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -2765,7 +4692,199 @@ func (p *toolServiceProcessorAdminToolDelete) Process(ctx context.Context, seqId
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("AdminToolDelete", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("ToolDeleteActivity", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type toolServiceProcessorToolDeleteComment struct {
+	handler ToolService
+}
+
+func (p *toolServiceProcessorToolDeleteComment) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := ToolServiceToolDeleteCommentArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("ToolDeleteComment", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := ToolServiceToolDeleteCommentResult{}
+	var retval *ToolDeleteCommentResp
+	if retval, err2 = p.handler.ToolDeleteComment(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ToolDeleteComment: "+err2.Error())
+		oprot.WriteMessageBegin("ToolDeleteComment", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("ToolDeleteComment", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type toolServiceProcessorAdminToolDeleteVideo struct {
+	handler ToolService
+}
+
+func (p *toolServiceProcessorAdminToolDeleteVideo) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := ToolServiceAdminToolDeleteVideoArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("AdminToolDeleteVideo", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := ToolServiceAdminToolDeleteVideoResult{}
+	var retval *AdminToolDeleteVideoResp
+	if retval, err2 = p.handler.AdminToolDeleteVideo(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing AdminToolDeleteVideo: "+err2.Error())
+		oprot.WriteMessageBegin("AdminToolDeleteVideo", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("AdminToolDeleteVideo", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type toolServiceProcessorAdminToolDeleteActivity struct {
+	handler ToolService
+}
+
+func (p *toolServiceProcessorAdminToolDeleteActivity) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := ToolServiceAdminToolDeleteActivityArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("AdminToolDeleteActivity", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := ToolServiceAdminToolDeleteActivityResult{}
+	var retval *AdminToolDeleteActivityResp
+	if retval, err2 = p.handler.AdminToolDeleteActivity(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing AdminToolDeleteActivity: "+err2.Error())
+		oprot.WriteMessageBegin("AdminToolDeleteActivity", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("AdminToolDeleteActivity", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type toolServiceProcessorAdminToolDeleteComment struct {
+	handler ToolService
+}
+
+func (p *toolServiceProcessorAdminToolDeleteComment) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := ToolServiceAdminToolDeleteCommentArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("AdminToolDeleteComment", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := ToolServiceAdminToolDeleteCommentResult{}
+	var retval *AdminToolDeleteCommentResp
+	if retval, err2 = p.handler.AdminToolDeleteComment(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing AdminToolDeleteComment: "+err2.Error())
+		oprot.WriteMessageBegin("AdminToolDeleteComment", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("AdminToolDeleteComment", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -2879,16 +4998,16 @@ func (p *toolServiceProcessorToolGetImage) Process(ctx context.Context, seqId in
 	return true, err
 }
 
-type toolServiceProcessorUserRefresh struct {
+type toolServiceProcessorToolTokenRefresh struct {
 	handler ToolService
 }
 
-func (p *toolServiceProcessorUserRefresh) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := ToolServiceUserRefreshArgs{}
+func (p *toolServiceProcessorToolTokenRefresh) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := ToolServiceToolTokenRefreshArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("UserRefresh", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("ToolTokenRefresh", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -2897,11 +5016,11 @@ func (p *toolServiceProcessorUserRefresh) Process(ctx context.Context, seqId int
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := ToolServiceUserRefreshResult{}
-	var retval *UserRefreshResp
-	if retval, err2 = p.handler.UserRefresh(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing UserRefresh: "+err2.Error())
-		oprot.WriteMessageBegin("UserRefresh", thrift.EXCEPTION, seqId)
+	result := ToolServiceToolTokenRefreshResult{}
+	var retval *ToolTokenRefreshResp
+	if retval, err2 = p.handler.ToolTokenRefresh(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ToolTokenRefresh: "+err2.Error())
+		oprot.WriteMessageBegin("ToolTokenRefresh", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -2909,7 +5028,7 @@ func (p *toolServiceProcessorUserRefresh) Process(ctx context.Context, seqId int
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("UserRefresh", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("ToolTokenRefresh", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -2927,36 +5046,35 @@ func (p *toolServiceProcessorUserRefresh) Process(ctx context.Context, seqId int
 	return true, err
 }
 
-type ToolServiceToolDeleteArgs struct {
-	Req *ToolDeleteReq `thrift:"req,1"`
+type ToolServiceToolDeleteVideoArgs struct {
+	Req *ToolDeleteVideoReq `thrift:"req,1"`
 }
 
-func NewToolServiceToolDeleteArgs() *ToolServiceToolDeleteArgs {
-	return &ToolServiceToolDeleteArgs{}
+func NewToolServiceToolDeleteVideoArgs() *ToolServiceToolDeleteVideoArgs {
+	return &ToolServiceToolDeleteVideoArgs{}
 }
 
-func (p *ToolServiceToolDeleteArgs) InitDefault() {
+func (p *ToolServiceToolDeleteVideoArgs) InitDefault() {
 }
 
-var ToolServiceToolDeleteArgs_Req_DEFAULT *ToolDeleteReq
+var ToolServiceToolDeleteVideoArgs_Req_DEFAULT *ToolDeleteVideoReq
 
-func (p *ToolServiceToolDeleteArgs) GetReq() (v *ToolDeleteReq) {
+func (p *ToolServiceToolDeleteVideoArgs) GetReq() (v *ToolDeleteVideoReq) {
 	if !p.IsSetReq() {
-		return ToolServiceToolDeleteArgs_Req_DEFAULT
+		return ToolServiceToolDeleteVideoArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-var fieldIDToName_ToolServiceToolDeleteArgs = map[int16]string{
+var fieldIDToName_ToolServiceToolDeleteVideoArgs = map[int16]string{
 	1: "req",
 }
 
-func (p *ToolServiceToolDeleteArgs) IsSetReq() bool {
+func (p *ToolServiceToolDeleteVideoArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *ToolServiceToolDeleteArgs) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *ToolServiceToolDeleteVideoArgs) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3001,7 +5119,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceToolDeleteArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceToolDeleteVideoArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -3011,8 +5129,8 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ToolServiceToolDeleteArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewToolDeleteReq()
+func (p *ToolServiceToolDeleteVideoArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewToolDeleteVideoReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -3020,9 +5138,9 @@ func (p *ToolServiceToolDeleteArgs) ReadField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *ToolServiceToolDeleteArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *ToolServiceToolDeleteVideoArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("ToolDelete_args"); err != nil {
+	if err = oprot.WriteStructBegin("ToolDeleteVideo_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -3048,7 +5166,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *ToolServiceToolDeleteArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *ToolServiceToolDeleteVideoArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -3065,44 +5183,42 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *ToolServiceToolDeleteArgs) String() string {
+func (p *ToolServiceToolDeleteVideoArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("ToolServiceToolDeleteArgs(%+v)", *p)
-
+	return fmt.Sprintf("ToolServiceToolDeleteVideoArgs(%+v)", *p)
 }
 
-type ToolServiceToolDeleteResult struct {
-	Success *ToolDeleteResp `thrift:"success,0,optional"`
+type ToolServiceToolDeleteVideoResult struct {
+	Success *ToolDeleteVideoResp `thrift:"success,0,optional"`
 }
 
-func NewToolServiceToolDeleteResult() *ToolServiceToolDeleteResult {
-	return &ToolServiceToolDeleteResult{}
+func NewToolServiceToolDeleteVideoResult() *ToolServiceToolDeleteVideoResult {
+	return &ToolServiceToolDeleteVideoResult{}
 }
 
-func (p *ToolServiceToolDeleteResult) InitDefault() {
+func (p *ToolServiceToolDeleteVideoResult) InitDefault() {
 }
 
-var ToolServiceToolDeleteResult_Success_DEFAULT *ToolDeleteResp
+var ToolServiceToolDeleteVideoResult_Success_DEFAULT *ToolDeleteVideoResp
 
-func (p *ToolServiceToolDeleteResult) GetSuccess() (v *ToolDeleteResp) {
+func (p *ToolServiceToolDeleteVideoResult) GetSuccess() (v *ToolDeleteVideoResp) {
 	if !p.IsSetSuccess() {
-		return ToolServiceToolDeleteResult_Success_DEFAULT
+		return ToolServiceToolDeleteVideoResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-var fieldIDToName_ToolServiceToolDeleteResult = map[int16]string{
+var fieldIDToName_ToolServiceToolDeleteVideoResult = map[int16]string{
 	0: "success",
 }
 
-func (p *ToolServiceToolDeleteResult) IsSetSuccess() bool {
+func (p *ToolServiceToolDeleteVideoResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *ToolServiceToolDeleteResult) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *ToolServiceToolDeleteVideoResult) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3147,7 +5263,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceToolDeleteResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceToolDeleteVideoResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -3157,8 +5273,8 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ToolServiceToolDeleteResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := NewToolDeleteResp()
+func (p *ToolServiceToolDeleteVideoResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := NewToolDeleteVideoResp()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -3166,9 +5282,9 @@ func (p *ToolServiceToolDeleteResult) ReadField0(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *ToolServiceToolDeleteResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *ToolServiceToolDeleteVideoResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("ToolDelete_result"); err != nil {
+	if err = oprot.WriteStructBegin("ToolDeleteVideo_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -3194,7 +5310,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *ToolServiceToolDeleteResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *ToolServiceToolDeleteVideoResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -3213,44 +5329,42 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *ToolServiceToolDeleteResult) String() string {
+func (p *ToolServiceToolDeleteVideoResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("ToolServiceToolDeleteResult(%+v)", *p)
-
+	return fmt.Sprintf("ToolServiceToolDeleteVideoResult(%+v)", *p)
 }
 
-type ToolServiceAdminToolDeleteArgs struct {
-	Req *AdminToolDeleteReq `thrift:"req,1"`
+type ToolServiceToolDeleteActivityArgs struct {
+	Req *ToolDeleteActivityReq `thrift:"req,1"`
 }
 
-func NewToolServiceAdminToolDeleteArgs() *ToolServiceAdminToolDeleteArgs {
-	return &ToolServiceAdminToolDeleteArgs{}
+func NewToolServiceToolDeleteActivityArgs() *ToolServiceToolDeleteActivityArgs {
+	return &ToolServiceToolDeleteActivityArgs{}
 }
 
-func (p *ToolServiceAdminToolDeleteArgs) InitDefault() {
+func (p *ToolServiceToolDeleteActivityArgs) InitDefault() {
 }
 
-var ToolServiceAdminToolDeleteArgs_Req_DEFAULT *AdminToolDeleteReq
+var ToolServiceToolDeleteActivityArgs_Req_DEFAULT *ToolDeleteActivityReq
 
-func (p *ToolServiceAdminToolDeleteArgs) GetReq() (v *AdminToolDeleteReq) {
+func (p *ToolServiceToolDeleteActivityArgs) GetReq() (v *ToolDeleteActivityReq) {
 	if !p.IsSetReq() {
-		return ToolServiceAdminToolDeleteArgs_Req_DEFAULT
+		return ToolServiceToolDeleteActivityArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-var fieldIDToName_ToolServiceAdminToolDeleteArgs = map[int16]string{
+var fieldIDToName_ToolServiceToolDeleteActivityArgs = map[int16]string{
 	1: "req",
 }
 
-func (p *ToolServiceAdminToolDeleteArgs) IsSetReq() bool {
+func (p *ToolServiceToolDeleteActivityArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *ToolServiceAdminToolDeleteArgs) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *ToolServiceToolDeleteActivityArgs) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3295,7 +5409,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceAdminToolDeleteArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceToolDeleteActivityArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -3305,8 +5419,8 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ToolServiceAdminToolDeleteArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewAdminToolDeleteReq()
+func (p *ToolServiceToolDeleteActivityArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewToolDeleteActivityReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -3314,9 +5428,9 @@ func (p *ToolServiceAdminToolDeleteArgs) ReadField1(iprot thrift.TProtocol) erro
 	return nil
 }
 
-func (p *ToolServiceAdminToolDeleteArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *ToolServiceToolDeleteActivityArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("AdminToolDelete_args"); err != nil {
+	if err = oprot.WriteStructBegin("ToolDeleteActivity_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -3342,7 +5456,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *ToolServiceAdminToolDeleteArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *ToolServiceToolDeleteActivityArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -3359,44 +5473,42 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *ToolServiceAdminToolDeleteArgs) String() string {
+func (p *ToolServiceToolDeleteActivityArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("ToolServiceAdminToolDeleteArgs(%+v)", *p)
-
+	return fmt.Sprintf("ToolServiceToolDeleteActivityArgs(%+v)", *p)
 }
 
-type ToolServiceAdminToolDeleteResult struct {
-	Success *AdminToolDeleteResp `thrift:"success,0,optional"`
+type ToolServiceToolDeleteActivityResult struct {
+	Success *ToolDeleteActivityResp `thrift:"success,0,optional"`
 }
 
-func NewToolServiceAdminToolDeleteResult() *ToolServiceAdminToolDeleteResult {
-	return &ToolServiceAdminToolDeleteResult{}
+func NewToolServiceToolDeleteActivityResult() *ToolServiceToolDeleteActivityResult {
+	return &ToolServiceToolDeleteActivityResult{}
 }
 
-func (p *ToolServiceAdminToolDeleteResult) InitDefault() {
+func (p *ToolServiceToolDeleteActivityResult) InitDefault() {
 }
 
-var ToolServiceAdminToolDeleteResult_Success_DEFAULT *AdminToolDeleteResp
+var ToolServiceToolDeleteActivityResult_Success_DEFAULT *ToolDeleteActivityResp
 
-func (p *ToolServiceAdminToolDeleteResult) GetSuccess() (v *AdminToolDeleteResp) {
+func (p *ToolServiceToolDeleteActivityResult) GetSuccess() (v *ToolDeleteActivityResp) {
 	if !p.IsSetSuccess() {
-		return ToolServiceAdminToolDeleteResult_Success_DEFAULT
+		return ToolServiceToolDeleteActivityResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-var fieldIDToName_ToolServiceAdminToolDeleteResult = map[int16]string{
+var fieldIDToName_ToolServiceToolDeleteActivityResult = map[int16]string{
 	0: "success",
 }
 
-func (p *ToolServiceAdminToolDeleteResult) IsSetSuccess() bool {
+func (p *ToolServiceToolDeleteActivityResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *ToolServiceAdminToolDeleteResult) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *ToolServiceToolDeleteActivityResult) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3441,7 +5553,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceAdminToolDeleteResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceToolDeleteActivityResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -3451,8 +5563,8 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ToolServiceAdminToolDeleteResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := NewAdminToolDeleteResp()
+func (p *ToolServiceToolDeleteActivityResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := NewToolDeleteActivityResp()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -3460,9 +5572,9 @@ func (p *ToolServiceAdminToolDeleteResult) ReadField0(iprot thrift.TProtocol) er
 	return nil
 }
 
-func (p *ToolServiceAdminToolDeleteResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *ToolServiceToolDeleteActivityResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("AdminToolDelete_result"); err != nil {
+	if err = oprot.WriteStructBegin("ToolDeleteActivity_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -3488,7 +5600,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *ToolServiceAdminToolDeleteResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *ToolServiceToolDeleteActivityResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -3507,12 +5619,1171 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *ToolServiceAdminToolDeleteResult) String() string {
+func (p *ToolServiceToolDeleteActivityResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("ToolServiceAdminToolDeleteResult(%+v)", *p)
+	return fmt.Sprintf("ToolServiceToolDeleteActivityResult(%+v)", *p)
+}
 
+type ToolServiceToolDeleteCommentArgs struct {
+	Req *ToolDeleteCommentReq `thrift:"req,1"`
+}
+
+func NewToolServiceToolDeleteCommentArgs() *ToolServiceToolDeleteCommentArgs {
+	return &ToolServiceToolDeleteCommentArgs{}
+}
+
+func (p *ToolServiceToolDeleteCommentArgs) InitDefault() {
+}
+
+var ToolServiceToolDeleteCommentArgs_Req_DEFAULT *ToolDeleteCommentReq
+
+func (p *ToolServiceToolDeleteCommentArgs) GetReq() (v *ToolDeleteCommentReq) {
+	if !p.IsSetReq() {
+		return ToolServiceToolDeleteCommentArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_ToolServiceToolDeleteCommentArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *ToolServiceToolDeleteCommentArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *ToolServiceToolDeleteCommentArgs) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceToolDeleteCommentArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ToolServiceToolDeleteCommentArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewToolDeleteCommentReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *ToolServiceToolDeleteCommentArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("ToolDeleteComment_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ToolServiceToolDeleteCommentArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ToolServiceToolDeleteCommentArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ToolServiceToolDeleteCommentArgs(%+v)", *p)
+}
+
+type ToolServiceToolDeleteCommentResult struct {
+	Success *ToolDeleteCommentResp `thrift:"success,0,optional"`
+}
+
+func NewToolServiceToolDeleteCommentResult() *ToolServiceToolDeleteCommentResult {
+	return &ToolServiceToolDeleteCommentResult{}
+}
+
+func (p *ToolServiceToolDeleteCommentResult) InitDefault() {
+}
+
+var ToolServiceToolDeleteCommentResult_Success_DEFAULT *ToolDeleteCommentResp
+
+func (p *ToolServiceToolDeleteCommentResult) GetSuccess() (v *ToolDeleteCommentResp) {
+	if !p.IsSetSuccess() {
+		return ToolServiceToolDeleteCommentResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_ToolServiceToolDeleteCommentResult = map[int16]string{
+	0: "success",
+}
+
+func (p *ToolServiceToolDeleteCommentResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *ToolServiceToolDeleteCommentResult) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceToolDeleteCommentResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ToolServiceToolDeleteCommentResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := NewToolDeleteCommentResp()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *ToolServiceToolDeleteCommentResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("ToolDeleteComment_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ToolServiceToolDeleteCommentResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *ToolServiceToolDeleteCommentResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ToolServiceToolDeleteCommentResult(%+v)", *p)
+}
+
+type ToolServiceAdminToolDeleteVideoArgs struct {
+	Req *AdminToolDeleteVideoReq `thrift:"req,1"`
+}
+
+func NewToolServiceAdminToolDeleteVideoArgs() *ToolServiceAdminToolDeleteVideoArgs {
+	return &ToolServiceAdminToolDeleteVideoArgs{}
+}
+
+func (p *ToolServiceAdminToolDeleteVideoArgs) InitDefault() {
+}
+
+var ToolServiceAdminToolDeleteVideoArgs_Req_DEFAULT *AdminToolDeleteVideoReq
+
+func (p *ToolServiceAdminToolDeleteVideoArgs) GetReq() (v *AdminToolDeleteVideoReq) {
+	if !p.IsSetReq() {
+		return ToolServiceAdminToolDeleteVideoArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_ToolServiceAdminToolDeleteVideoArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *ToolServiceAdminToolDeleteVideoArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *ToolServiceAdminToolDeleteVideoArgs) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceAdminToolDeleteVideoArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteVideoArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewAdminToolDeleteVideoReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *ToolServiceAdminToolDeleteVideoArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminToolDeleteVideo_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteVideoArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteVideoArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ToolServiceAdminToolDeleteVideoArgs(%+v)", *p)
+}
+
+type ToolServiceAdminToolDeleteVideoResult struct {
+	Success *AdminToolDeleteVideoResp `thrift:"success,0,optional"`
+}
+
+func NewToolServiceAdminToolDeleteVideoResult() *ToolServiceAdminToolDeleteVideoResult {
+	return &ToolServiceAdminToolDeleteVideoResult{}
+}
+
+func (p *ToolServiceAdminToolDeleteVideoResult) InitDefault() {
+}
+
+var ToolServiceAdminToolDeleteVideoResult_Success_DEFAULT *AdminToolDeleteVideoResp
+
+func (p *ToolServiceAdminToolDeleteVideoResult) GetSuccess() (v *AdminToolDeleteVideoResp) {
+	if !p.IsSetSuccess() {
+		return ToolServiceAdminToolDeleteVideoResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_ToolServiceAdminToolDeleteVideoResult = map[int16]string{
+	0: "success",
+}
+
+func (p *ToolServiceAdminToolDeleteVideoResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *ToolServiceAdminToolDeleteVideoResult) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceAdminToolDeleteVideoResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteVideoResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := NewAdminToolDeleteVideoResp()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *ToolServiceAdminToolDeleteVideoResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminToolDeleteVideo_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteVideoResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteVideoResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ToolServiceAdminToolDeleteVideoResult(%+v)", *p)
+}
+
+type ToolServiceAdminToolDeleteActivityArgs struct {
+	Req *AdminToolDeleteActivityReq `thrift:"req,1"`
+}
+
+func NewToolServiceAdminToolDeleteActivityArgs() *ToolServiceAdminToolDeleteActivityArgs {
+	return &ToolServiceAdminToolDeleteActivityArgs{}
+}
+
+func (p *ToolServiceAdminToolDeleteActivityArgs) InitDefault() {
+}
+
+var ToolServiceAdminToolDeleteActivityArgs_Req_DEFAULT *AdminToolDeleteActivityReq
+
+func (p *ToolServiceAdminToolDeleteActivityArgs) GetReq() (v *AdminToolDeleteActivityReq) {
+	if !p.IsSetReq() {
+		return ToolServiceAdminToolDeleteActivityArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_ToolServiceAdminToolDeleteActivityArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *ToolServiceAdminToolDeleteActivityArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *ToolServiceAdminToolDeleteActivityArgs) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceAdminToolDeleteActivityArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteActivityArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewAdminToolDeleteActivityReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *ToolServiceAdminToolDeleteActivityArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminToolDeleteActivity_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteActivityArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteActivityArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ToolServiceAdminToolDeleteActivityArgs(%+v)", *p)
+}
+
+type ToolServiceAdminToolDeleteActivityResult struct {
+	Success *AdminToolDeleteActivityResp `thrift:"success,0,optional"`
+}
+
+func NewToolServiceAdminToolDeleteActivityResult() *ToolServiceAdminToolDeleteActivityResult {
+	return &ToolServiceAdminToolDeleteActivityResult{}
+}
+
+func (p *ToolServiceAdminToolDeleteActivityResult) InitDefault() {
+}
+
+var ToolServiceAdminToolDeleteActivityResult_Success_DEFAULT *AdminToolDeleteActivityResp
+
+func (p *ToolServiceAdminToolDeleteActivityResult) GetSuccess() (v *AdminToolDeleteActivityResp) {
+	if !p.IsSetSuccess() {
+		return ToolServiceAdminToolDeleteActivityResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_ToolServiceAdminToolDeleteActivityResult = map[int16]string{
+	0: "success",
+}
+
+func (p *ToolServiceAdminToolDeleteActivityResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *ToolServiceAdminToolDeleteActivityResult) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceAdminToolDeleteActivityResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteActivityResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := NewAdminToolDeleteActivityResp()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *ToolServiceAdminToolDeleteActivityResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminToolDeleteActivity_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteActivityResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteActivityResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ToolServiceAdminToolDeleteActivityResult(%+v)", *p)
+}
+
+type ToolServiceAdminToolDeleteCommentArgs struct {
+	Req *AdminToolDeleteCommentReq `thrift:"req,1"`
+}
+
+func NewToolServiceAdminToolDeleteCommentArgs() *ToolServiceAdminToolDeleteCommentArgs {
+	return &ToolServiceAdminToolDeleteCommentArgs{}
+}
+
+func (p *ToolServiceAdminToolDeleteCommentArgs) InitDefault() {
+}
+
+var ToolServiceAdminToolDeleteCommentArgs_Req_DEFAULT *AdminToolDeleteCommentReq
+
+func (p *ToolServiceAdminToolDeleteCommentArgs) GetReq() (v *AdminToolDeleteCommentReq) {
+	if !p.IsSetReq() {
+		return ToolServiceAdminToolDeleteCommentArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_ToolServiceAdminToolDeleteCommentArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *ToolServiceAdminToolDeleteCommentArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *ToolServiceAdminToolDeleteCommentArgs) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceAdminToolDeleteCommentArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteCommentArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewAdminToolDeleteCommentReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *ToolServiceAdminToolDeleteCommentArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminToolDeleteComment_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteCommentArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteCommentArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ToolServiceAdminToolDeleteCommentArgs(%+v)", *p)
+}
+
+type ToolServiceAdminToolDeleteCommentResult struct {
+	Success *AdminToolDeleteCommentResp `thrift:"success,0,optional"`
+}
+
+func NewToolServiceAdminToolDeleteCommentResult() *ToolServiceAdminToolDeleteCommentResult {
+	return &ToolServiceAdminToolDeleteCommentResult{}
+}
+
+func (p *ToolServiceAdminToolDeleteCommentResult) InitDefault() {
+}
+
+var ToolServiceAdminToolDeleteCommentResult_Success_DEFAULT *AdminToolDeleteCommentResp
+
+func (p *ToolServiceAdminToolDeleteCommentResult) GetSuccess() (v *AdminToolDeleteCommentResp) {
+	if !p.IsSetSuccess() {
+		return ToolServiceAdminToolDeleteCommentResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_ToolServiceAdminToolDeleteCommentResult = map[int16]string{
+	0: "success",
+}
+
+func (p *ToolServiceAdminToolDeleteCommentResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *ToolServiceAdminToolDeleteCommentResult) Read(iprot thrift.TProtocol) (err error) {
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceAdminToolDeleteCommentResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteCommentResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := NewAdminToolDeleteCommentResp()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *ToolServiceAdminToolDeleteCommentResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("AdminToolDeleteComment_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteCommentResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *ToolServiceAdminToolDeleteCommentResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("ToolServiceAdminToolDeleteCommentResult(%+v)", *p)
 }
 
 type ToolServiceToolUploadImageArgs struct {
@@ -3544,7 +6815,6 @@ func (p *ToolServiceToolUploadImageArgs) IsSetReq() bool {
 }
 
 func (p *ToolServiceToolUploadImageArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3658,7 +6928,6 @@ func (p *ToolServiceToolUploadImageArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolUploadImageArgs(%+v)", *p)
-
 }
 
 type ToolServiceToolUploadImageResult struct {
@@ -3690,7 +6959,6 @@ func (p *ToolServiceToolUploadImageResult) IsSetSuccess() bool {
 }
 
 func (p *ToolServiceToolUploadImageResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3806,7 +7074,6 @@ func (p *ToolServiceToolUploadImageResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolUploadImageResult(%+v)", *p)
-
 }
 
 type ToolServiceToolGetImageArgs struct {
@@ -3838,7 +7105,6 @@ func (p *ToolServiceToolGetImageArgs) IsSetReq() bool {
 }
 
 func (p *ToolServiceToolGetImageArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3952,7 +7218,6 @@ func (p *ToolServiceToolGetImageArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolGetImageArgs(%+v)", *p)
-
 }
 
 type ToolServiceToolGetImageResult struct {
@@ -3984,7 +7249,6 @@ func (p *ToolServiceToolGetImageResult) IsSetSuccess() bool {
 }
 
 func (p *ToolServiceToolGetImageResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4100,39 +7364,37 @@ func (p *ToolServiceToolGetImageResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolGetImageResult(%+v)", *p)
-
 }
 
-type ToolServiceUserRefreshArgs struct {
-	Req *UserRefreshReq `thrift:"req,1"`
+type ToolServiceToolTokenRefreshArgs struct {
+	Req *ToolTokenRefreshReq `thrift:"req,1"`
 }
 
-func NewToolServiceUserRefreshArgs() *ToolServiceUserRefreshArgs {
-	return &ToolServiceUserRefreshArgs{}
+func NewToolServiceToolTokenRefreshArgs() *ToolServiceToolTokenRefreshArgs {
+	return &ToolServiceToolTokenRefreshArgs{}
 }
 
-func (p *ToolServiceUserRefreshArgs) InitDefault() {
+func (p *ToolServiceToolTokenRefreshArgs) InitDefault() {
 }
 
-var ToolServiceUserRefreshArgs_Req_DEFAULT *UserRefreshReq
+var ToolServiceToolTokenRefreshArgs_Req_DEFAULT *ToolTokenRefreshReq
 
-func (p *ToolServiceUserRefreshArgs) GetReq() (v *UserRefreshReq) {
+func (p *ToolServiceToolTokenRefreshArgs) GetReq() (v *ToolTokenRefreshReq) {
 	if !p.IsSetReq() {
-		return ToolServiceUserRefreshArgs_Req_DEFAULT
+		return ToolServiceToolTokenRefreshArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-var fieldIDToName_ToolServiceUserRefreshArgs = map[int16]string{
+var fieldIDToName_ToolServiceToolTokenRefreshArgs = map[int16]string{
 	1: "req",
 }
 
-func (p *ToolServiceUserRefreshArgs) IsSetReq() bool {
+func (p *ToolServiceToolTokenRefreshArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *ToolServiceUserRefreshArgs) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *ToolServiceToolTokenRefreshArgs) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4177,7 +7439,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceUserRefreshArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceToolTokenRefreshArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -4187,8 +7449,8 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ToolServiceUserRefreshArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewUserRefreshReq()
+func (p *ToolServiceToolTokenRefreshArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewToolTokenRefreshReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -4196,9 +7458,9 @@ func (p *ToolServiceUserRefreshArgs) ReadField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *ToolServiceUserRefreshArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *ToolServiceToolTokenRefreshArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("UserRefresh_args"); err != nil {
+	if err = oprot.WriteStructBegin("ToolTokenRefresh_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -4224,7 +7486,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *ToolServiceUserRefreshArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *ToolServiceToolTokenRefreshArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -4241,44 +7503,42 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *ToolServiceUserRefreshArgs) String() string {
+func (p *ToolServiceToolTokenRefreshArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("ToolServiceUserRefreshArgs(%+v)", *p)
-
+	return fmt.Sprintf("ToolServiceToolTokenRefreshArgs(%+v)", *p)
 }
 
-type ToolServiceUserRefreshResult struct {
-	Success *UserRefreshResp `thrift:"success,0,optional"`
+type ToolServiceToolTokenRefreshResult struct {
+	Success *ToolTokenRefreshResp `thrift:"success,0,optional"`
 }
 
-func NewToolServiceUserRefreshResult() *ToolServiceUserRefreshResult {
-	return &ToolServiceUserRefreshResult{}
+func NewToolServiceToolTokenRefreshResult() *ToolServiceToolTokenRefreshResult {
+	return &ToolServiceToolTokenRefreshResult{}
 }
 
-func (p *ToolServiceUserRefreshResult) InitDefault() {
+func (p *ToolServiceToolTokenRefreshResult) InitDefault() {
 }
 
-var ToolServiceUserRefreshResult_Success_DEFAULT *UserRefreshResp
+var ToolServiceToolTokenRefreshResult_Success_DEFAULT *ToolTokenRefreshResp
 
-func (p *ToolServiceUserRefreshResult) GetSuccess() (v *UserRefreshResp) {
+func (p *ToolServiceToolTokenRefreshResult) GetSuccess() (v *ToolTokenRefreshResp) {
 	if !p.IsSetSuccess() {
-		return ToolServiceUserRefreshResult_Success_DEFAULT
+		return ToolServiceToolTokenRefreshResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-var fieldIDToName_ToolServiceUserRefreshResult = map[int16]string{
+var fieldIDToName_ToolServiceToolTokenRefreshResult = map[int16]string{
 	0: "success",
 }
 
-func (p *ToolServiceUserRefreshResult) IsSetSuccess() bool {
+func (p *ToolServiceToolTokenRefreshResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *ToolServiceUserRefreshResult) Read(iprot thrift.TProtocol) (err error) {
-
+func (p *ToolServiceToolTokenRefreshResult) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4323,7 +7583,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceUserRefreshResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ToolServiceToolTokenRefreshResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -4333,8 +7593,8 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *ToolServiceUserRefreshResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := NewUserRefreshResp()
+func (p *ToolServiceToolTokenRefreshResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := NewToolTokenRefreshResp()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -4342,9 +7602,9 @@ func (p *ToolServiceUserRefreshResult) ReadField0(iprot thrift.TProtocol) error 
 	return nil
 }
 
-func (p *ToolServiceUserRefreshResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *ToolServiceToolTokenRefreshResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("UserRefresh_result"); err != nil {
+	if err = oprot.WriteStructBegin("ToolTokenRefresh_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -4370,7 +7630,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *ToolServiceUserRefreshResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *ToolServiceToolTokenRefreshResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -4389,10 +7649,9 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *ToolServiceUserRefreshResult) String() string {
+func (p *ToolServiceToolTokenRefreshResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("ToolServiceUserRefreshResult(%+v)", *p)
-
+	return fmt.Sprintf("ToolServiceToolTokenRefreshResult(%+v)", *p)
 }

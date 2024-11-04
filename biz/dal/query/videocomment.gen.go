@@ -30,6 +30,7 @@ func newVideoComment(db *gorm.DB, opts ...gen.DOOption) videoComment {
 	_videoComment.ID = field.NewInt64(tableName, "id")
 	_videoComment.UserID = field.NewInt64(tableName, "user_id")
 	_videoComment.VideoID = field.NewInt64(tableName, "video_id")
+	_videoComment.RootID = field.NewInt64(tableName, "root_id")
 	_videoComment.ParentID = field.NewInt64(tableName, "parent_id")
 	_videoComment.Content = field.NewString(tableName, "content")
 	_videoComment.CreatedAt = field.NewInt64(tableName, "created_at")
@@ -49,6 +50,7 @@ type videoComment struct {
 	ID        field.Int64  // 评论ID
 	UserID    field.Int64  // 用户ID
 	VideoID   field.Int64  // 视频ID
+	RootID    field.Int64  // 根评论ID
 	ParentID  field.Int64  // 父评论ID
 	Content   field.String // 评论内容
 	CreatedAt field.Int64  // 创建时间
@@ -73,6 +75,7 @@ func (v *videoComment) updateTableName(table string) *videoComment {
 	v.ID = field.NewInt64(table, "id")
 	v.UserID = field.NewInt64(table, "user_id")
 	v.VideoID = field.NewInt64(table, "video_id")
+	v.RootID = field.NewInt64(table, "root_id")
 	v.ParentID = field.NewInt64(table, "parent_id")
 	v.Content = field.NewString(table, "content")
 	v.CreatedAt = field.NewInt64(table, "created_at")
@@ -106,10 +109,11 @@ func (v *videoComment) GetFieldByName(fieldName string) (field.OrderExpr, bool) 
 }
 
 func (v *videoComment) fillFieldMap() {
-	v.fieldMap = make(map[string]field.Expr, 8)
+	v.fieldMap = make(map[string]field.Expr, 9)
 	v.fieldMap["id"] = v.ID
 	v.fieldMap["user_id"] = v.UserID
 	v.fieldMap["video_id"] = v.VideoID
+	v.fieldMap["root_id"] = v.RootID
 	v.fieldMap["parent_id"] = v.ParentID
 	v.fieldMap["content"] = v.Content
 	v.fieldMap["created_at"] = v.CreatedAt

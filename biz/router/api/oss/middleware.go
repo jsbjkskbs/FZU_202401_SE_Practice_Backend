@@ -60,3 +60,8 @@ func _osscallbackvideocovermethodMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _osscallbackimagemethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

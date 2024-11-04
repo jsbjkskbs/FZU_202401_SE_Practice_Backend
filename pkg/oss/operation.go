@@ -44,20 +44,32 @@ const (
 	}`
 	// coverFopFormat = "imageMogr2/thumbnail/160000@/format/jpg/blur/1x0/quality/75|saveas/"
 
+	imageUploadCallbackBody = `{
+		"key": "$(key)",
+		"hash": "$(etag)",
+		"fsize": $(fsize),
+		"bucket": "$(bucket)",
+		"name": "$(x:name)",
+		"otype": "image",
+		"oid": "%v",
+		"user_id": "%v"
+	}`
+	imageFopFormat = "imageMogr2/format/webp/blur/1x0/quality/75|saveas/"
+
 	AvatarUploadTokenDeadline = 1 * time.Hour
 	VideoUploadTokenDeadline  = 1 * time.Hour
 	CoverUploadTokenDeadline  = 1 * time.Hour
 )
 
 func UploadAvatar(filename string, oid int64) (string, string, error) {
-	putPolicy, err := uptoken.NewPutPolicyWithKey(Bucket, "avatar/"+filename, time.Now().Add(AvatarUploadTokenDeadline))
+	putPolicy, err := uptoken.NewPutPolicyWithKey(Bucket, "avatar/"+filename+".webp", time.Now().Add(AvatarUploadTokenDeadline))
 	if err != nil {
 		return "", "", err
 	}
 	putPolicy.SetCallbackUrl(CallbackUrl + "/avatar")
 	putPolicy.SetCallbackBody(fmt.Sprintf(avatarUploadCallbackBody, oid))
 
-	saveAvatarEntry := base64.URLEncoding.EncodeToString([]byte(Bucket + ":avatar/" + filename))
+	saveAvatarEntry := base64.URLEncoding.EncodeToString([]byte(Bucket + ":avatar/" + filename + ".webp"))
 	avatarFop := avatarFopFormat + saveAvatarEntry
 
 	persistentOps := strings.Join([]string{avatarFop}, ";")
@@ -67,7 +79,28 @@ func UploadAvatar(filename string, oid int64) (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
-	return upToken, "avatar/" + filename, nil
+	return upToken, "avatar/" + filename + ".webp", nil
+}
+
+func UploadImage(filename string, oid int64, userId string) (string, string, error) {
+	putPolicy, err := uptoken.NewPutPolicyWithKey(Bucket, "image/"+filename+".webp", time.Now().Add(AvatarUploadTokenDeadline))
+	if err != nil {
+		return "", "", err
+	}
+	putPolicy.SetCallbackUrl(CallbackUrl + "/image")
+	putPolicy.SetCallbackBody(fmt.Sprintf(imageUploadCallbackBody, oid, userId))
+
+	saveImageEntry := base64.URLEncoding.EncodeToString([]byte(Bucket + ":image/" + filename + ".webp"))
+	imageFop := imageFopFormat + saveImageEntry
+
+	persistentOps := strings.Join([]string{imageFop}, ";")
+	persistentType := int64(0)
+	putPolicy.SetPersistentOps(persistentOps).SetPersistentNotifyUrl(CallbackUrl + "/fop").SetPersistentType(persistentType)
+	upToken, err := uptoken.NewSigner(putPolicy, Mac).GetUpToken(context.Background())
+	if err != nil {
+		return "", "", err
+	}
+	return upToken, "image/" + filename + ".webp", nil
 }
 
 func UploadVideo(filename string, oid int64) (string, string, error) {

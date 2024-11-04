@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"sfw/biz/dal"
 	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/relation"
@@ -32,7 +31,7 @@ func NewRelationService(ctx context.Context, c *app.RequestContext) *RelationSer
 func (service *RelationService) NewFollowActionEvent(req *relation.RelationFollowActionReq) error {
 	uid, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
-		return err
+		return errno.AccessTokenInvalid
 	}
 	if fmt.Sprint(uid) == req.ToUserID {
 		return errno.CustomError.WithMessage("不能关注自己")
@@ -40,7 +39,7 @@ func (service *RelationService) NewFollowActionEvent(req *relation.RelationFollo
 
 	toUserId, err := strconv.ParseInt(req.ToUserID, 10, 64)
 	if err != nil {
-		return errno.CustomError.WithMessage("无效的用户ID").WithInnerError(err)
+		return errno.ParamInvalid.WithMessage("无效的用户ID").WithInnerError(err)
 	}
 
 	exist, err := exquery.QueryUserExistByID(toUserId)
@@ -51,25 +50,23 @@ func (service *RelationService) NewFollowActionEvent(req *relation.RelationFollo
 		return errno.CustomError.WithMessage("用户不存在")
 	}
 
-	f := dal.Executor.Follow
 	switch req.ActionType {
 	case common.ActionTypeOff:
-		_, err = f.WithContext(context.Background()).Delete(&model.Follow{
-			FollowedID: toUserId,
-			FollowerID: uid,
-		})
+		err = exquery.DeleteFollowRecord(uid, toUserId)
 	case common.ActionTypeOn:
-		count, err := f.WithContext(context.Background()).Where(f.FollowedID.Eq(toUserId), f.FollowerID.Eq(uid)).Count()
+		exist, err := exquery.QueryFollowExistByFollowerIDAndFollowedID(uid, toUserId)
 		if err != nil {
 			return errno.DatabaseCallError.WithInnerError(err)
 		}
-		if count > 0 {
+		if exist {
 			return errno.CustomError.WithMessage("已关注")
 		}
-		err = f.WithContext(context.Background()).Create(&model.Follow{
+		err = exquery.InsertFollowRecord(&model.Follow{
 			FollowedID: toUserId,
 			FollowerID: uid,
 		})
+	default:
+		return errno.CustomError.WithMessage("无效的操作类型")
 	}
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
@@ -80,13 +77,10 @@ func (service *RelationService) NewFollowActionEvent(req *relation.RelationFollo
 func (service *RelationService) NewFollowListEvent(req *relation.RelationFollowListReq) (*relation.RelationFollowListRespData, error) {
 	uid, err := strconv.ParseInt(req.UserID, 10, 64)
 	if err != nil {
-		return nil, errno.CustomError.WithMessage("无效的用户ID").WithInnerError(err)
+		return nil, errno.ParamInvalid.WithMessage("无效的用户ID")
 	}
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	f := dal.Executor.Follow
-	follows, count, err := f.WithContext(context.Background()).
-		Where(f.FollowerID.Eq(uid)).
-		FindByPage(int(req.PageNum*req.PageSize), int(req.PageSize))
+	follows, count, err := exquery.QueryFollowingByUserIdPaged(uid, req.PageNum, req.PageSize)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -115,10 +109,7 @@ func (service *RelationService) NewFollowerListEvent(req *relation.RelationFollo
 		return nil, errno.CustomError.WithMessage("无效的用户ID").WithInnerError(err)
 	}
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	f := dal.Executor.Follow
-	followers, count, err := f.WithContext(context.Background()).
-		Where(f.FollowedID.Eq(uid)).
-		FindByPage(int(req.PageNum*req.PageSize), int(req.PageSize))
+	followers, count, err := exquery.QueryFollowerByUserIdPaged(uid, req.PageNum, req.PageSize)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -147,25 +138,7 @@ func (service *RelationService) NewFriendListEvent(req *relation.RelationFriendL
 		return nil, errno.AccessTokenInvalid
 	}
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	rows, err := dal.DB.Raw("SELECT followed_id FROM Follow WHERE follower_id = ? AND followed_id IN (SELECT follower_id FROM Follow WHERE followed_id = ?) LIMIT ?, ?", uid, uid, int(req.PageNum*req.PageSize), int(req.PageSize)).Rows()
-	if err != nil {
-		return nil, errno.DatabaseCallError.WithInnerError(err)
-	}
-	defer rows.Close()
-	friends := []int64{}
-	for rows.Next() {
-		var friendId int64
-		rows.Scan(&friendId)
-		friends = append(friends, friendId)
-	}
-	row, err := dal.DB.Raw("SELECT COUNT(*) FROM Follow WHERE follower_id = ? AND followed_id IN (SELECT follower_id FROM Follow WHERE followed_id = ?)", uid, uid).Rows()
-	if err != nil {
-		return nil, errno.DatabaseCallError.WithInnerError(err)
-	}
-	defer row.Close()
-	var count int64
-	row.Next()
-	row.Scan(&count)
+	friends, count, err := exquery.QueryFriendByUserIDPaged(uid, req.PageNum, req.PageSize)
 
 	users := []*model.User{}
 	for _, item := range friends {
