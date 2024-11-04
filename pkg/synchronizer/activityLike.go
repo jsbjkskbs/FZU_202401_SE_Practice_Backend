@@ -3,11 +3,12 @@ package synchronizer
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"sync"
+
 	"sfw/biz/dal"
 	"sfw/biz/dal/model"
 	"sfw/biz/mw/redis"
-	"strconv"
-	"sync"
 )
 
 func SynchronizeActivityLikeFromRedis2DB(vid string) error {

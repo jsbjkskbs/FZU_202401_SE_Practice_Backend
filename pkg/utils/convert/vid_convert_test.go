@@ -1,8 +1,9 @@
 package convert_test
 
 import (
-	"sfw/pkg/utils/convert"
 	"testing"
+
+	"sfw/pkg/utils/convert"
 )
 
 func TestVideoIDConvert(t *testing.T) {

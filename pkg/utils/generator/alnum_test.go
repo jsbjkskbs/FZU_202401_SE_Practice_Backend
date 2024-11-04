@@ -1,8 +1,9 @@
 package generator_test
 
 import (
-	"sfw/pkg/utils/generator"
 	"testing"
+
+	"sfw/pkg/utils/generator"
 )
 
 func TestAlnumAll(t *testing.T) {

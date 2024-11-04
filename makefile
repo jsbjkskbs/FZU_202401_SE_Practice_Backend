@@ -23,3 +23,6 @@ docker_build:
 
 docker_run:
 	docker-compose -f docker/docker-compose.yml up -d
+
+test:
+	go test -v -gcflags="all=-l -N" -coverprofile=coverage.txt -parallel=16 -p=16 -covermode=atomic -race -coverpkg=./... ./biz/service

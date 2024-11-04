@@ -1,8 +1,9 @@
 package redis
 
 import (
-	"sfw/pkg/errno"
 	"sync"
+
+	"sfw/pkg/errno"
 
 	"github.com/go-redis/redis"
 )

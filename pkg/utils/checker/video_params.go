@@ -1,8 +1,9 @@
 package checker
 
 import (
-	"sfw/pkg/errno"
 	"strings"
+
+	"sfw/pkg/errno"
 )
 
 func CheckVideoPublish(title, desc, category string, labels []string) error {

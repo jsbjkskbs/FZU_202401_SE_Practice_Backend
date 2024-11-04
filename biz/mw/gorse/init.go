@@ -2,6 +2,7 @@ package gorse
 
 import (
 	"context"
+
 	"sfw/pkg/errno"
 
 	"github.com/zhenghaoz/gorse/client"

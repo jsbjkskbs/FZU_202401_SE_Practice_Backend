@@ -19,14 +19,12 @@ func CheckUsername(username string) error {
 	return nil
 }
 
-var (
-	passwordReg = []*regexp2.Regexp{
-		regexp2.MustCompile(`(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,}`, regexp2.None),
-		regexp2.MustCompile(`(?=.*[0-9])(?=.*[a-zA-Z]).{8,}`, regexp2.None),
-		regexp2.MustCompile(`(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}`, regexp2.None),
-		regexp2.MustCompile(`(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,}`, regexp2.None),
-	}
-)
+var passwordReg = []*regexp2.Regexp{
+	regexp2.MustCompile(`(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,}`, regexp2.None),
+	regexp2.MustCompile(`(?=.*[0-9])(?=.*[a-zA-Z]).{8,}`, regexp2.None),
+	regexp2.MustCompile(`(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}`, regexp2.None),
+	regexp2.MustCompile(`(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,}`, regexp2.None),
+}
 
 func CheckPassword(password string) error {
 	if len(password) == 0 {
