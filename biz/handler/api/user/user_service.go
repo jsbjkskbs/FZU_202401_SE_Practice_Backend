@@ -12,6 +12,7 @@ import (
 	"sfw/biz/service"
 	"sfw/pkg/errno"
 	"sfw/pkg/utils"
+	"sfw/pkg/utils/logger"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -34,6 +35,7 @@ func RegisterMethod(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewUserService(ctx, c).NewRegisterEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserRegisterResp{
 			Code: resp.Code,
@@ -65,6 +67,7 @@ func SecurityEmailCodeMethod(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewUserService(ctx, c).NewSecurityEmailCodeEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserSecurityEmailCodeResp{
 			Code: resp.Code,
@@ -96,6 +99,7 @@ func LoginMethod(ctx context.Context, c *app.RequestContext) {
 
 	data, err := service.NewUserService(ctx, c).NewLoginEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserLoginResp{
 			Code: resp.Code,
@@ -138,6 +142,7 @@ func InfoMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewUserService(ctx, c).NewInfoEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserInfoResp{
 			Code: resp.Code,
@@ -170,6 +175,7 @@ func FollowerCountMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewUserService(ctx, c).NewFollowerCountEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserFollowerCountResp{
 			Code: resp.Code,
@@ -205,6 +211,7 @@ func FollowingCountMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewUserService(ctx, c).NewFollowingCountEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserFollowingCountResp{
 			Code: resp.Code,
@@ -240,6 +247,7 @@ func LikeCountMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewUserService(ctx, c).NewLikeCountEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserLikeCountResp{
 			Code: resp.Code,
@@ -275,6 +283,7 @@ func AvatarUploadMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewUserService(ctx, c).NewAvatarUploadEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserAvatarUploadResp{
 			Code: resp.Code,
@@ -307,6 +316,7 @@ func MfaQrcodeMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewUserService(ctx, c).NewMfaQrcodeEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserMfaQrcodeResp{
 			Code: resp.Code,
@@ -339,6 +349,7 @@ func MfaBindMethod(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewUserService(ctx, c).NewMfaBindEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserMfaBindResp{
 			Code: resp.Code,
@@ -369,6 +380,7 @@ func SearchMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewUserService(ctx, c).NewSearchEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserSearchResp{
 			Code: resp.Code,
@@ -401,6 +413,7 @@ func PasswordRetrieveMethod(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewUserService(ctx, c).NewSecurityPasswordRetrieveEmail(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserPasswordRetrieveEmailResp{
 			Code: resp.Code,
@@ -432,6 +445,7 @@ func PasswordResetMethod(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewUserService(ctx, c).NewSecurityPasswordResetEmailEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, user.UserPasswordResetEmailResp{
 			Code: resp.Code,

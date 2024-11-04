@@ -63,8 +63,7 @@ func kvDocument(v *Document, caller _Caller, status string) map[string]interface
 		"content": v.Content,
 		"status":  status,
 		"caller": map[string]interface{}{
-			"name": caller.Name,
-			"loc":  caller.Location,
+			"loc": caller.Location,
 		},
 	}
 }

@@ -9,6 +9,7 @@ import (
 	"sfw/biz/service"
 	"sfw/pkg/errno"
 	"sfw/pkg/utils"
+	"sfw/pkg/utils/logger"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -47,6 +48,7 @@ func InteractLikeVideoActionMethod(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewInteractService(ctx, c).NewLikeVideoActionEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, interact.InteractLikeVideoActionResp{
 			Code: resp.Code,
@@ -78,6 +80,7 @@ func InteractLikeActivityActionMethod(ctx context.Context, c *app.RequestContext
 
 	err = service.NewInteractService(ctx, c).NewLikeActivityActionEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, interact.InteractLikeActivityActionResp{
 			Code: resp.Code,
@@ -109,6 +112,7 @@ func InteractLikeCommentActionMethod(ctx context.Context, c *app.RequestContext)
 
 	err = service.NewInteractService(ctx, c).NewLikeCommentEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, interact.InteractLikeCommentActionResp{
 			Code: resp.Code,
@@ -140,6 +144,7 @@ func InteractLikeVideoListMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewInteractService(ctx, c).NewLikeVideoListEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, interact.InteractLikeVideoListResp{
 			Code: resp.Code,
@@ -172,6 +177,7 @@ func InteractCommentVideoPublishMethod(ctx context.Context, c *app.RequestContex
 
 	err = service.NewInteractService(ctx, c).NewCommentVideoPublishEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, interact.InteractCommentVideoPublishResp{
 			Code: resp.Code,
@@ -203,6 +209,7 @@ func InteractCommentActivityPublishMethod(ctx context.Context, c *app.RequestCon
 
 	err = service.NewInteractService(ctx, c).NewCommentActivityPublishEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, interact.InteractCommentActivityPublishResp{
 			Code: resp.Code,
@@ -234,6 +241,7 @@ func InteractCommentVideoListMethod(ctx context.Context, c *app.RequestContext) 
 
 	resp, err := service.NewInteractService(ctx, c).NewCommentVideoListEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, interact.InteractCommentVideoListResp{
 			Code: resp.Code,
@@ -266,6 +274,7 @@ func InteractCommentActivityListMethod(ctx context.Context, c *app.RequestContex
 
 	resp, err := service.NewInteractService(ctx, c).NewCommentActivityListEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, interact.InteractCommentActivityListResp{
 			Code: resp.Code,
@@ -298,6 +307,7 @@ func InteractVideoChildCommentListMethod(ctx context.Context, c *app.RequestCont
 
 	resp, err := service.NewInteractService(ctx, c).NewChildCommentVideoListEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, interact.InteractVideoChildCommentListResp{
 			Code: resp.Code,
@@ -330,6 +340,7 @@ func InteractActivityChildCommentListMethod(ctx context.Context, c *app.RequestC
 
 	resp, err := service.NewInteractService(ctx, c).NewChildCommentActivityListEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, interact.InteractActivityChildCommentListResp{
 			Code: resp.Code,

@@ -9,6 +9,7 @@ import (
 	"sfw/biz/service"
 	"sfw/pkg/errno"
 	"sfw/pkg/utils"
+	"sfw/pkg/utils/logger"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -31,6 +32,7 @@ func FollowActionMethod(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewRelationService(ctx, c).NewFollowActionEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, relation.RelationFollowActionResp{
 			Code: resp.Code,
@@ -62,6 +64,7 @@ func FollowListMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewRelationService(ctx, c).NewFollowListEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, relation.RelationFollowListResp{
 			Code: resp.Code,
@@ -94,6 +97,7 @@ func FollowerListMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewRelationService(ctx, c).NewFollowerListEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, relation.RelationFollowerListResp{
 			Code: resp.Code,
@@ -126,6 +130,7 @@ func FriendListMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewRelationService(ctx, c).NewFriendListEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, relation.RelationFriendListResp{
 			Code: resp.Code,
