@@ -141,7 +141,16 @@ func (service *InteractService) NewLikeVideoListEvent(req *interact.InteractLike
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.VideoListDal2Resp(&videos)
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.VideoListDal2Resp(&videos, fromUser)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -318,7 +327,16 @@ func (service *InteractService) NewCommentVideoListEvent(req *interact.InteractC
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.VideoCommentDal2Resp(&comments)
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.VideoCommentDal2Resp(&comments, fromUser)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -352,7 +370,16 @@ func (service *InteractService) NewCommentActivityListEvent(req *interact.Intera
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.ActivityCommentDal2Resp(&comments)
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.ActivityCommentDal2Resp(&comments, fromUser)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -386,7 +413,16 @@ func (service *InteractService) NewChildCommentVideoListEvent(req *interact.Inte
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.VideoCommentDal2Resp(&comments)
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.VideoCommentDal2Resp(&comments, fromUser)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -420,7 +456,16 @@ func (service *InteractService) NewChildCommentActivityListEvent(req *interact.I
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.ActivityCommentDal2Resp(&comments)
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.ActivityCommentDal2Resp(&comments, fromUser)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}

@@ -9,7 +9,7 @@ import (
 	"sfw/pkg/oss"
 )
 
-func ActivityListDal2Resp(list *[]*model.Activity) (*[]*base.Activity, error) {
+func ActivityListDal2Resp(list *[]*model.Activity, fromUser *string) (*[]*base.Activity, error) {
 	resp := &[]*base.Activity{}
 	for _, v := range *list {
 		images := []string{}
@@ -36,6 +36,14 @@ func ActivityListDal2Resp(list *[]*model.Activity) (*[]*base.Activity, error) {
 			return nil, err
 		}
 
+		isLiked := false
+		if fromUser != nil {
+			isLiked, err = redis.IsActivityLikedByUser(fmt.Sprint(v.ID), *fromUser)
+			if err != nil {
+				return nil, err
+			}
+		}
+
 		*resp = append(*resp, &base.Activity{
 			ID:          fmt.Sprint(v.ID),
 			UserID:      fmt.Sprint(v.UserID),
@@ -47,6 +55,7 @@ func ActivityListDal2Resp(list *[]*model.Activity) (*[]*base.Activity, error) {
 			CreatedAt:   v.CreatedAt,
 			UpdatedAt:   v.UpdatedAt,
 			DeletedAt:   v.DeletedAt,
+			IsLiked:     isLiked,
 		})
 	}
 	return resp, nil
