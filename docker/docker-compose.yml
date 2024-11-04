@@ -57,7 +57,20 @@ services:
     networks:
       custom_network:
         ipv4_address: 20.20.20.4
-  
+
+  zincsearch:
+    image: public.ecr.aws/zinclabs/zincsearch:latest
+    container_name: zincsearch
+    ports:
+      - '4080:4080'
+    environment:
+      ZINC_FIRST_ADMIN_USER: 'admin'
+      ZINC_FIRST_ADMIN_PASSWORD: '123456'
+      TZ: 'Asia/Shanghai'
+    networks:
+      custom_network:
+        ipv4_address: 20.20.20.5
+
   # ignore this when testing
   #app:
   #  image: app:latest
@@ -68,7 +81,7 @@ services:
   #    - gorse
   #  networks:
   #    custom_network:
-  #      ipv4_address: 20.20.20.5
+  #      ipv4_address: 20.20.20.6
         
 
 networks:
