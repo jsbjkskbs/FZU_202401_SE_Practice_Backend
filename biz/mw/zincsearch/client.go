@@ -6,19 +6,19 @@ import (
 	zincsearch "github.com/zinclabs/sdk-go-zincsearch"
 )
 
-// LoggerOption is a struct that contains the host, username, and password.
+// ZincClientOption is a struct that contains the host, username, and password.
 // It is used to initialize the logger.
 // It has the following fields:
 // - Host(don't include http:// or https:// and don't forget the port)
 // - Username
 // - Password
-type LoggerOption struct {
+type ZincClientOption struct {
 	Host     string
 	Username string
 	Password string
 }
 
-// Logger is a struct that contains the context and the client.
+// ZincClient is a struct that contains the context and the client.
 // It is used to log the data to the zincsearch.
 // It has the following methods:
 // - Info
@@ -28,15 +28,16 @@ type LoggerOption struct {
 // - Fatal
 // - Panic
 // - Trace
+// - Notice
 // - Custom
-type Logger struct {
+type ZincClient struct {
 	ctx    context.Context
 	client *zincsearch.APIClient
 }
 
-// NewLogger initializes the logger with the given options.
+// NewZincClient initializes the logger with the given options.
 // It returns the logger.
-func NewLogger(opt *LoggerOption) *Logger {
+func NewZincClient(opt *ZincClientOption) *ZincClient {
 	ctx := context.WithValue(context.Background(), zincsearch.ContextBasicAuth, zincsearch.BasicAuth{
 		UserName: opt.Username,
 		Password: opt.Password,
@@ -44,7 +45,7 @@ func NewLogger(opt *LoggerOption) *Logger {
 	configuration := zincsearch.NewConfiguration()
 	configuration.Host = opt.Host
 	client := zincsearch.NewAPIClient(configuration)
-	return &Logger{
+	return &ZincClient{
 		ctx:    ctx,
 		client: client,
 	}

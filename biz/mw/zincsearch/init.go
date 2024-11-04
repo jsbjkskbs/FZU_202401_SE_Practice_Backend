@@ -1,12 +1,12 @@
 package zincsearch
 
 var (
-	Client    *Logger
-	ClientOpt LoggerOption
+	Client    *ZincClient
+	ClientOpt ZincClientOption
 )
 
 func Load() {
-	Client = NewLogger(&ClientOpt)
+	Client = NewZincClient(&ClientOpt)
 	if err := Client.Ping(); err != nil {
 		panic(err)
 	}

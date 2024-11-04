@@ -31,6 +31,8 @@ import (
 	"github.com/hertz-contrib/opensergo/sentinel/adapter"
 )
 
+var InitializeLogger *zincsearch.Logger
+
 func InstallSentinel(h *server.Hertz) {
 	h.Use(
 		adapter.SentinelServerMiddleware(
@@ -71,40 +73,43 @@ func Initialize() {
 	if err := configureLoader.Run(); err != nil {
 		hlog.Fatal("Config Loader: ", err)
 	}
+
+	InitializeLogger = zincsearch.Client.NewLoggerWithOtherOutput("Initialize", hlog.Info, hlog.Infof)
+
 	loadCategory()
 
 	err := synchronizer.SynchronizeVideoVisitInfoDB2Redis()
 	if err != nil {
-		hlog.Fatal("Synchronize Task: synchronize video visit info from db to redis error", err)
+		InitializeLogger.Fatal("Synchronize Task: synchronize video visit info from db to redis error", err)
 	}
-	hlog.Info("Synchronize Task: sychronize video visit info from db to redis success")
+	InitializeLogger.Info("Synchronize Task: sychronize video visit info from db to redis success")
 
 	err = synchronizer.SynchronizeVideoLikeFromDB2Redis()
 	if err != nil {
-		hlog.Fatal("Synchronize Task: synchronize video like from db to redis error", err)
+		InitializeLogger.Fatal("Synchronize Task: synchronize video like from db to redis error", err)
 	}
-	hlog.Info("Synchronize Task: sychronize video like from db to redis success")
+	InitializeLogger.Info("Synchronize Task: sychronize video like from db to redis success")
 
 	err = synchronizer.SynchronizeActivityLikeFromDB2Redis()
 	if err != nil {
-		hlog.Fatal("Synchronize Task: synchronize activity like from db to redis error", err)
+		InitializeLogger.Fatal("Synchronize Task: synchronize activity like from db to redis error", err)
 	}
-	hlog.Info("Synchronize Task: sychronize activity like from db to redis success")
+	InitializeLogger.Info("Synchronize Task: sychronize activity like from db to redis success")
 
 	err = synchronizer.SynchronizeVideoCommentLikeFromDB2Redis()
 	if err != nil {
-		hlog.Fatal("Synchronize Task: synchronize video comment like from db to redis error", err)
+		InitializeLogger.Fatal("Synchronize Task: synchronize video comment like from db to redis error", err)
 	}
-	hlog.Info("Synchronize Task: sychronize video comment like from db to redis success")
+	InitializeLogger.Info("Synchronize Task: sychronize video comment like from db to redis success")
 
 	err = synchronizer.SynchronizeActivityCommentLikeFromDB2Redis()
 	if err != nil {
-		hlog.Fatal("Synchronize Task: synchronize activity comment like from db to redis error", err)
+		InitializeLogger.Fatal("Synchronize Task: synchronize activity comment like from db to redis error", err)
 	}
-	hlog.Info("Synchronize Task: sychronize activity comment like from db to redis success")
-	hlog.Info("Synchronize Task: all synchronize task success")
+	InitializeLogger.Info("Synchronize Task: sychronize activity comment like from db to redis success")
+	InitializeLogger.Info("Synchronize Task: all synchronize task success")
 
-	hlog.Info("Initialize success, ready to serve after 3 seconds")
+	InitializeLogger.Info("Initialize success, ready to serve after 3 seconds")
 	time.Sleep(3 * time.Second)
 }
 
@@ -118,7 +123,7 @@ func loadCategory() {
 				list := []model.Category{}
 				err := c.WithContext(context.Background()).Scan(&list)
 				if err != nil {
-					hlog.Error("load category error", err)
+					InitializeLogger.Error("load category error", err)
 				}
 				for _, v := range list {
 					checker.CategoryMap[v.CategoryName] = v.ID
@@ -128,7 +133,7 @@ func loadCategory() {
 					checker.Categories[v] = k
 				}
 				checker.Categories = checker.Categories[1:]
-				hlog.Infof("Synchronizer: category loaded success[%v]", checker.CategoryMap)
+				InitializeLogger.Infof("Synchronizer: category loaded success[%v]", checker.CategoryMap)
 				ticker.Reset(1 * time.Hour)
 			}
 		}
