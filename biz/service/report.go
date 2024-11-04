@@ -542,7 +542,7 @@ func (service *ReportService) NewAdminVideoListEvent(req *report.AdminVideoListR
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	items, err := model_converter.VideoListDal2Resp(&videos)
+	items, err := model_converter.VideoListDal2Resp(&videos, nil)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}

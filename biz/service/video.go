@@ -137,7 +137,7 @@ func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) ([]*base.Vide
 		}
 		videos = append(videos, video)
 	}
-	return model_converter.VideoListDal2Resp(&videos)
+	return model_converter.VideoListDal2Resp(&videos, nil)
 }
 
 func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) ([]*base.Video, error) {
@@ -168,7 +168,10 @@ func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) (
 		}
 		videos = append(videos, video)
 	}
-	return model_converter.VideoListDal2Resp(&videos)
+
+	fromUser := fmt.Sprint(userId)
+
+	return model_converter.VideoListDal2Resp(&videos, &fromUser)
 }
 
 func (service *VideoService) NewCategoriesEvent(req *video.VideoCategoriesReq) ([]string, error) {
@@ -214,7 +217,22 @@ func (service *VideoService) NewInfoEvent(req *video.VideoInfoReq) (*base.Video,
 			},
 		)
 	}()
-	return model_converter.VideoDal2Resp(video), nil
+
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	resp, err := model_converter.VideoDal2Resp(video, fromUser)
+	if err != nil {
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
+
+	return resp, nil
 }
 
 func (service *VideoService) NewListEvent(req *video.VideoListReq) (*video.VideoListRespData, error) {
@@ -228,7 +246,17 @@ func (service *VideoService) NewListEvent(req *video.VideoListReq) (*video.Video
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	items, err := model_converter.VideoListDal2Resp(&result)
+
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.VideoListDal2Resp(&result, fromUser)
 	if err != nil {
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}
@@ -253,7 +281,7 @@ func (service *VideoService) NewSubmitAllEvent(req *video.VideoSubmitAllReq) (*v
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.VideoListDal2Resp(&videos)
+	items, err := model_converter.VideoListDal2Resp(&videos, nil)
 	if err != nil {
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}
@@ -279,7 +307,7 @@ func (service *VideoService) NewSubmitReviewEvent(req *video.VideoSubmitReviewRe
 		return nil, err
 	}
 
-	items, err := model_converter.VideoListDal2Resp(&videos)
+	items, err := model_converter.VideoListDal2Resp(&videos, nil)
 	if err != nil {
 		return nil, errno.InternalServerError
 	}
@@ -305,7 +333,7 @@ func (service *VideoService) NewSubmitLockedEvent(req *video.VideoSubmitLockedRe
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.VideoListDal2Resp(&videos)
+	items, err := model_converter.VideoListDal2Resp(&videos, nil)
 	if err != nil {
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}
@@ -331,7 +359,7 @@ func (service *VideoService) NewSumitPassedEvent(req *video.VideoSubmitPassedReq
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.VideoListDal2Resp(&videos)
+	items, err := model_converter.VideoListDal2Resp(&videos, nil)
 	if err != nil {
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}
@@ -379,7 +407,16 @@ func (service *VideoService) NewSearchEvent(req *video.VideoSearchReq) (*video.V
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.VideoListDal2Resp(&result)
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.VideoListDal2Resp(&result, fromUser)
 	if err != nil {
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}

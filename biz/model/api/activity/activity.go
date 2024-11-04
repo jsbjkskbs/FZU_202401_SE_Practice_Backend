@@ -1810,9 +1810,10 @@ func (p *ActivityPublishResp) String() string {
 }
 
 type ActivityListReq struct {
-	UserID   string `thrift:"user_id,1,required" form:"user_id,required" json:"user_id,required" query:"user_id,required"`
-	PageNum  int64  `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
-	PageSize int64  `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	UserID      string  `thrift:"user_id,1,required" form:"user_id,required" json:"user_id,required" query:"user_id,required"`
+	PageNum     int64   `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
+	PageSize    int64   `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	AccessToken *string `thrift:"access_token,4,optional" header:"Access-Token" json:"access_token,omitempty"`
 }
 
 func NewActivityListReq() *ActivityListReq {
@@ -1834,10 +1835,24 @@ func (p *ActivityListReq) GetPageSize() (v int64) {
 	return p.PageSize
 }
 
+var ActivityListReq_AccessToken_DEFAULT string
+
+func (p *ActivityListReq) GetAccessToken() (v string) {
+	if !p.IsSetAccessToken() {
+		return ActivityListReq_AccessToken_DEFAULT
+	}
+	return *p.AccessToken
+}
+
 var fieldIDToName_ActivityListReq = map[int16]string{
 	1: "user_id",
 	2: "page_num",
 	3: "page_size",
+	4: "access_token",
+}
+
+func (p *ActivityListReq) IsSetAccessToken() bool {
+	return p.AccessToken != nil
 }
 
 func (p *ActivityListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -1886,6 +1901,14 @@ func (p *ActivityListReq) Read(iprot thrift.TProtocol) (err error) {
 					goto ReadFieldError
 				}
 				issetPageSize = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -1967,6 +1990,17 @@ func (p *ActivityListReq) ReadField3(iprot thrift.TProtocol) error {
 	p.PageSize = _field
 	return nil
 }
+func (p *ActivityListReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field *string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = &v
+	}
+	p.AccessToken = _field
+	return nil
+}
 
 func (p *ActivityListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -1984,6 +2018,10 @@ func (p *ActivityListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
 			goto WriteFieldError
 		}
 	}
@@ -2053,6 +2091,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *ActivityListReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetAccessToken() {
+		if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.AccessToken); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *ActivityListReq) String() string {

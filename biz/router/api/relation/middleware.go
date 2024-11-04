@@ -3,6 +3,8 @@
 package relation
 
 import (
+	auth "sfw/biz/router/api/api_auth"
+
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -33,7 +35,7 @@ func _followMw() []app.HandlerFunc {
 
 func _followactionmethodMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _followlistmethodMw() []app.HandlerFunc {
@@ -58,7 +60,7 @@ func _friendMw() []app.HandlerFunc {
 
 func _friendlistmethodMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _followerMw() []app.HandlerFunc {

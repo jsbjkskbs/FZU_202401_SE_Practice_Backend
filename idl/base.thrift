@@ -37,6 +37,7 @@ struct Video {
     13: i64 created_at;
     14: i64 updated_at;
     15: i64 deleted_at;
+    16: bool is_liked;
 }
 
 struct Comment {
@@ -52,6 +53,7 @@ struct Comment {
     10: i64 created_at;
     11: i64 updated_at;
     12: i64 deleted_at;
+    13: bool is_liked;
 }
 
 struct Activity {
@@ -65,6 +67,7 @@ struct Activity {
     8: i64 created_at;
     9: i64 updated_at;
     10: i64 deleted_at;
+    11: bool is_liked;
 }
 
 struct VideoReport {

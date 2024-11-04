@@ -1162,7 +1162,8 @@ func (p *VideoCustomFeedResp) String() string {
 }
 
 type VideoInfoReq struct {
-	VideoID string `thrift:"video_id,1,required" form:"video_id,required" json:"video_id,required" query:"video_id,required"`
+	VideoID     string  `thrift:"video_id,1,required" form:"video_id,required" json:"video_id,required" query:"video_id,required"`
+	AccessToken *string `thrift:"access_token,2,optional" header:"Access-Token" json:"access_token,omitempty"`
 }
 
 func NewVideoInfoReq() *VideoInfoReq {
@@ -1176,8 +1177,22 @@ func (p *VideoInfoReq) GetVideoID() (v string) {
 	return p.VideoID
 }
 
+var VideoInfoReq_AccessToken_DEFAULT string
+
+func (p *VideoInfoReq) GetAccessToken() (v string) {
+	if !p.IsSetAccessToken() {
+		return VideoInfoReq_AccessToken_DEFAULT
+	}
+	return *p.AccessToken
+}
+
 var fieldIDToName_VideoInfoReq = map[int16]string{
 	1: "video_id",
+	2: "access_token",
+}
+
+func (p *VideoInfoReq) IsSetAccessToken() bool {
+	return p.AccessToken != nil
 }
 
 func (p *VideoInfoReq) Read(iprot thrift.TProtocol) (err error) {
@@ -1206,6 +1221,14 @@ func (p *VideoInfoReq) Read(iprot thrift.TProtocol) (err error) {
 					goto ReadFieldError
 				}
 				issetVideoID = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -1255,6 +1278,17 @@ func (p *VideoInfoReq) ReadField1(iprot thrift.TProtocol) error {
 	p.VideoID = _field
 	return nil
 }
+func (p *VideoInfoReq) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field *string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = &v
+	}
+	p.AccessToken = _field
+	return nil
+}
 
 func (p *VideoInfoReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -1264,6 +1298,10 @@ func (p *VideoInfoReq) Write(oprot thrift.TProtocol) (err error) {
 	if p != nil {
 		if err = p.writeField1(oprot); err != nil {
 			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
 			goto WriteFieldError
 		}
 	}
@@ -1299,6 +1337,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *VideoInfoReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetAccessToken() {
+		if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.AccessToken); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
 func (p *VideoInfoReq) String() string {
@@ -3550,9 +3607,10 @@ func (p *VideoCategoriesResp) String() string {
 }
 
 type VideoListReq struct {
-	UserID   string `thrift:"user_id,1,required" form:"user_id,required" json:"user_id,required" query:"user_id,required"`
-	PageNum  int64  `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
-	PageSize int64  `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	UserID      string  `thrift:"user_id,1,required" form:"user_id,required" json:"user_id,required" query:"user_id,required"`
+	PageNum     int64   `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
+	PageSize    int64   `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	AccessToken *string `thrift:"access_token,4,optional" header:"Access-Token" json:"access_token,omitempty"`
 }
 
 func NewVideoListReq() *VideoListReq {
@@ -3574,10 +3632,24 @@ func (p *VideoListReq) GetPageSize() (v int64) {
 	return p.PageSize
 }
 
+var VideoListReq_AccessToken_DEFAULT string
+
+func (p *VideoListReq) GetAccessToken() (v string) {
+	if !p.IsSetAccessToken() {
+		return VideoListReq_AccessToken_DEFAULT
+	}
+	return *p.AccessToken
+}
+
 var fieldIDToName_VideoListReq = map[int16]string{
 	1: "user_id",
 	2: "page_num",
 	3: "page_size",
+	4: "access_token",
+}
+
+func (p *VideoListReq) IsSetAccessToken() bool {
+	return p.AccessToken != nil
 }
 
 func (p *VideoListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -3626,6 +3698,14 @@ func (p *VideoListReq) Read(iprot thrift.TProtocol) (err error) {
 					goto ReadFieldError
 				}
 				issetPageSize = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -3707,6 +3787,17 @@ func (p *VideoListReq) ReadField3(iprot thrift.TProtocol) error {
 	p.PageSize = _field
 	return nil
 }
+func (p *VideoListReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field *string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = &v
+	}
+	p.AccessToken = _field
+	return nil
+}
 
 func (p *VideoListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -3724,6 +3815,10 @@ func (p *VideoListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
 			goto WriteFieldError
 		}
 	}
@@ -3793,6 +3888,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *VideoListReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetAccessToken() {
+		if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.AccessToken); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *VideoListReq) String() string {
@@ -7730,11 +7844,12 @@ func (p *VideoSubmitPassedResp) String() string {
 }
 
 type VideoSearchReq struct {
-	Keyword  string `thrift:"keyword,1,required" form:"keyword,required" json:"keyword,required" query:"keyword,required"`
-	PageNum  int64  `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
-	PageSize int64  `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
-	FromDate *int64 `thrift:"from_date,4,optional" form:"from_date" json:"from_date,omitempty" query:"from_date"`
-	ToDate   *int64 `thrift:"to_date,5,optional" form:"to_date" json:"to_date,omitempty" query:"to_date"`
+	Keyword     string  `thrift:"keyword,1,required" form:"keyword,required" json:"keyword,required" query:"keyword,required"`
+	PageNum     int64   `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
+	PageSize    int64   `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	FromDate    *int64  `thrift:"from_date,4,optional" form:"from_date" json:"from_date,omitempty" query:"from_date"`
+	ToDate      *int64  `thrift:"to_date,5,optional" form:"to_date" json:"to_date,omitempty" query:"to_date"`
+	AccessToken *string `thrift:"access_token,6,optional" header:"Access-Token" json:"access_token,omitempty"`
 }
 
 func NewVideoSearchReq() *VideoSearchReq {
@@ -7774,12 +7889,22 @@ func (p *VideoSearchReq) GetToDate() (v int64) {
 	return *p.ToDate
 }
 
+var VideoSearchReq_AccessToken_DEFAULT string
+
+func (p *VideoSearchReq) GetAccessToken() (v string) {
+	if !p.IsSetAccessToken() {
+		return VideoSearchReq_AccessToken_DEFAULT
+	}
+	return *p.AccessToken
+}
+
 var fieldIDToName_VideoSearchReq = map[int16]string{
 	1: "keyword",
 	2: "page_num",
 	3: "page_size",
 	4: "from_date",
 	5: "to_date",
+	6: "access_token",
 }
 
 func (p *VideoSearchReq) IsSetFromDate() bool {
@@ -7788,6 +7913,10 @@ func (p *VideoSearchReq) IsSetFromDate() bool {
 
 func (p *VideoSearchReq) IsSetToDate() bool {
 	return p.ToDate != nil
+}
+
+func (p *VideoSearchReq) IsSetAccessToken() bool {
+	return p.AccessToken != nil
 }
 
 func (p *VideoSearchReq) Read(iprot thrift.TProtocol) (err error) {
@@ -7850,6 +7979,14 @@ func (p *VideoSearchReq) Read(iprot thrift.TProtocol) (err error) {
 		case 5:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 6:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -7955,6 +8092,17 @@ func (p *VideoSearchReq) ReadField5(iprot thrift.TProtocol) error {
 	p.ToDate = _field
 	return nil
 }
+func (p *VideoSearchReq) ReadField6(iprot thrift.TProtocol) error {
+
+	var _field *string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = &v
+	}
+	p.AccessToken = _field
+	return nil
+}
 
 func (p *VideoSearchReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -7980,6 +8128,10 @@ func (p *VideoSearchReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField5(oprot); err != nil {
 			fieldId = 5
+			goto WriteFieldError
+		}
+		if err = p.writeField6(oprot); err != nil {
+			fieldId = 6
 			goto WriteFieldError
 		}
 	}
@@ -8087,6 +8239,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
+func (p *VideoSearchReq) writeField6(oprot thrift.TProtocol) (err error) {
+	if p.IsSetAccessToken() {
+		if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 6); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.AccessToken); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
 }
 
 func (p *VideoSearchReq) String() string {

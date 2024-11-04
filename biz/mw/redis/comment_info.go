@@ -258,6 +258,113 @@ func GetActivityCommentLikeCount(aid, cid string) (int64, error) {
 	}
 }
 
+func isVideoCommentLikedByUserInStaticSpace(vid, cid, uid string) (bool, error) {
+	exist, err := commentInfoClient.Exists(strings.Join([]string{`comment/video/like`, vid, cid}, `/`)).Result()
+	if err != nil {
+		return false, err
+	}
+
+	if exist == 0 {
+		return false, nil
+	}
+
+	isLiked, err := commentInfoClient.SIsMember(strings.Join([]string{`comment/video/like`, vid, cid}, `/`), uid).Result()
+	if err != nil {
+		return false, err
+	}
+
+	return isLiked, nil
+}
+
+func isVideoCommentLikedByUserInDynamicSpace(vid, cid, uid string) (bool, error) {
+	exist, err := commentInfoClient.Exists(strings.Join([]string{`comment/video/changed_like`, vid, cid}, `/`)).Result()
+	if err != nil {
+		return false, err
+	}
+
+	if exist == 0 {
+		return false, nil
+	}
+
+	score, err := commentInfoClient.ZScore(strings.Join([]string{`comment/video/changed_like`, vid, cid}, `/`), uid).Result()
+	if err != nil {
+		return false, err
+	}
+
+	return score == 1, nil
+}
+
+func isActivityCommentLikedByUserInStaticSpace(aid, cid, uid string) (bool, error) {
+	exist, err := commentInfoClient.Exists(strings.Join([]string{`comment/activity/like`, aid, cid}, `/`)).Result()
+	if err != nil {
+		return false, err
+	}
+
+	if exist == 0 {
+		return false, nil
+	}
+
+	isLiked, err := commentInfoClient.SIsMember(strings.Join([]string{`comment/activity/like`, aid, cid}, `/`), uid).Result()
+	if err != nil {
+		return false, err
+	}
+	return isLiked, nil
+}
+
+func isActivityCommentLikedByUserInDynamicSpace(aid, uid string) (bool, error) {
+	exist, err := commentInfoClient.Exists(strings.Join([]string{`comment/activity/changed_like`, aid}, `/`)).Result()
+	if err != nil {
+		return false, err
+	}
+
+	if exist == 0 {
+		return false, nil
+	}
+
+	score, err := commentInfoClient.ZScore(strings.Join([]string{`comment/activity/changed_like`, aid}, `/`), uid).Result()
+	if err != nil {
+		return false, err
+	}
+
+	return score == 1, nil
+}
+
+func IsVideoCommentLikedByUser(vid, cid, uid string) (bool, error) {
+	inStaticSpace, err := isVideoCommentLikedByUserInStaticSpace(vid, cid, uid)
+	if err != nil {
+		return false, err
+	}
+
+	if inStaticSpace {
+		return true, nil
+	}
+
+	inDynamicSpace, err := isVideoCommentLikedByUserInDynamicSpace(vid, cid, uid)
+	if err != nil {
+		return false, err
+	}
+
+	return inDynamicSpace, nil
+}
+
+func IsActivityCommentLikedByUser(aid, cid, uid string) (bool, error) {
+	inStaticSpace, err := isActivityCommentLikedByUserInStaticSpace(aid, cid, uid)
+	if err != nil {
+		return false, err
+	}
+
+	if inStaticSpace {
+		return true, nil
+	}
+
+	inDynamicSpace, err := isActivityCommentLikedByUserInDynamicSpace(aid, uid)
+	if err != nil {
+		return false, err
+	}
+
+	return inDynamicSpace, nil
+}
+
 func DeleteActivityComment(aid, cid string) error {
 	tx := commentInfoClient.TxPipeline()
 	tx.Del(strings.Join([]string{`comment/activity/like`, aid, cid}, `/`))

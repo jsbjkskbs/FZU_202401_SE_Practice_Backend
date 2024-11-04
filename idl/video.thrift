@@ -31,6 +31,7 @@ struct VideoCustomFeedResp {
 
 struct VideoInfoReq {
     1: required string video_id;
+    2: optional string access_token (api.header="Access-Token");
 }
 
 struct VideoInfoResp {
@@ -90,6 +91,7 @@ struct VideoListReq {
     1: required string user_id;
     2: required i64 page_num;
     3: required i64 page_size;
+    4: optional string access_token (api.header="Access-Token");
 }
 
 struct VideoListRespData {
@@ -187,6 +189,7 @@ struct VideoSearchReq {
     3: required i64 page_size;
     4: optional i64 from_date;
     5: optional i64 to_date;
+    6: optional string access_token (api.header="Access-Token");
 }
 
 struct VideoSearchRespData {

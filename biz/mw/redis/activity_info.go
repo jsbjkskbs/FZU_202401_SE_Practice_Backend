@@ -116,6 +116,59 @@ func GetActivityLikeCount(aid string) (int64, error) {
 	}
 }
 
+func IsActivityLikedByUserInStaticSpace(aid, uid string) (bool, error) {
+	exist, err := activityInfoClient.Exists(`activity/like/` + aid).Result()
+	if err != nil {
+		return false, err
+	}
+
+	if exist == 0 {
+		return false, nil
+	}
+
+	isLiked, err := activityInfoClient.SIsMember(`activity/like/`+aid, uid).Result()
+	if err != nil {
+		return false, err
+	}
+	return isLiked, nil
+}
+
+func IsActivityLikedByUserInDynamicSpace(aid, uid string) (bool, error) {
+	exist, err := activityInfoClient.Exists(`activity/changed_like/` + aid).Result()
+	if err != nil {
+		return false, err
+	}
+
+	if exist == 0 {
+		return false, nil
+	}
+
+	score, err := activityInfoClient.ZScore(`activity/changed_like/`+aid, uid).Result()
+	if err != nil {
+		return false, err
+	}
+
+	return score == 1, nil
+}
+
+func IsActivityLikedByUser(aid, uid string) (bool, error) {
+	inStaticSpace, err := IsActivityLikedByUserInStaticSpace(aid, uid)
+	if err != nil {
+		return false, err
+	}
+
+	if inStaticSpace {
+		return true, nil
+	}
+
+	inDynamicSpace, err := IsActivityLikedByUserInDynamicSpace(aid, uid)
+	if err != nil {
+		return false, err
+	}
+
+	return inDynamicSpace, nil
+}
+
 func DeleteActivity(aid string) error {
 	wg := sync.WaitGroup{}
 	wg.Add(3)
