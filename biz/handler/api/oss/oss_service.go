@@ -8,10 +8,10 @@ import (
 	"sfw/biz/model/api/oss"
 	"sfw/biz/service"
 	osspk "sfw/pkg/oss"
+	"sfw/pkg/utils/logger"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/adaptor"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
@@ -22,23 +22,27 @@ func OssCallbackAvatarMethod(ctx context.Context, c *app.RequestContext) {
 	var req oss.OssCallbackAvatarReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
+		logger.RuntimeLogger.Infof("bind and validate err: %v, ip: %v", err, c.ClientIP())
 		c.Status(consts.StatusBadRequest)
 		return
 	}
 
 	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
 	if err != nil {
+		logger.RuntimeLogger.Infof("get compat request err: %v, ip: %v", err, c.ClientIP())
 		c.Status(consts.StatusBadRequest)
 		return
 	}
 	ok, err := osspk.Verify(httpReq)
 	if err != nil || !ok {
+		logger.RuntimeLogger.Infof("oss verify error: %v, ip: %v", err, c.ClientIP())
 		c.Status(consts.StatusBadRequest)
 		return
 	}
 
 	err = service.NewOssService(ctx, c).NewCallbackAvatarEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		c.Status(consts.StatusOK)
 		return
 	}
@@ -69,22 +73,26 @@ func OssCallbackVideoMethod(ctx context.Context, c *app.RequestContext) {
 	var req oss.OssCallbackVideoReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
+		logger.RuntimeLogger.Infof("bind and validate err: %v, ip: %v", err, c.ClientIP())
 		c.Status(consts.StatusBadRequest)
 		return
 	}
 	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
 	if err != nil {
+		logger.RuntimeLogger.Infof("get compat request err: %v, ip: %v", err, c.ClientIP())
 		c.Status(consts.StatusBadRequest)
 		return
 	}
 	ok, err := osspk.Verify(httpReq)
 	if err != nil || !ok {
+		logger.RuntimeLogger.Infof("oss verify error: %v, ip: %v", err, c.ClientIP())
 		c.Status(consts.StatusBadRequest)
 		return
 	}
 
 	err = service.NewOssService(ctx, c).NewCallbackVideoEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		c.Status(consts.StatusBadRequest)
 		return
 	}
@@ -99,16 +107,19 @@ func OssCallbackVideoCoverMethod(ctx context.Context, c *app.RequestContext) {
 	var req oss.OssCallbackVideoCoverReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
+		logger.RuntimeLogger.Infof("bind and validate err: %v, ip: %v", err, c.ClientIP())
 		c.Status(consts.StatusBadRequest)
 		return
 	}
 	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
 	if err != nil {
+		logger.RuntimeLogger.Infof("get compat request err: %v, ip: %v", err, c.ClientIP())
 		c.Status(consts.StatusBadRequest)
 		return
 	}
 	ok, err := osspk.Verify(httpReq)
 	if err != nil || !ok {
+		logger.RuntimeLogger.Infof("oss verify error: %v, ip: %v", err, c.ClientIP())
 		c.Status(consts.StatusBadRequest)
 		return
 	}
@@ -123,26 +134,26 @@ func OssCallbackImageMethod(ctx context.Context, c *app.RequestContext) {
 	var req oss.OssCallbackImageReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		hlog.Error("bind and validate error", err)
+		logger.RuntimeLogger.Infof("bind and validate err: %v, ip: %v", err, c.ClientIP())
 		c.Status(consts.StatusBadRequest)
 		return
 	}
 	httpReq, err := adaptor.GetCompatRequest(c.GetRequest())
 	if err != nil {
-		hlog.Error("get compat request error", err)
+		logger.RuntimeLogger.Infof("get compat request err: %v, ip: %v", err, c.ClientIP())
 		c.Status(consts.StatusBadRequest)
 		return
 	}
 	ok, err := osspk.Verify(httpReq)
 	if err != nil || !ok {
-		hlog.Error("verify error", err)
+		logger.RuntimeLogger.Infof("oss verify error: %v, ip: %v", err, c.ClientIP())
 		c.Status(consts.StatusBadRequest)
 		return
 	}
 
 	err = service.NewOssService(ctx, c).NewCallbackImageEvent(&req)
 	if err != nil {
-		hlog.Error("new callback image event error", err)
+		logger.LogRuntimeError(err)
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}

@@ -9,6 +9,7 @@ import (
 	"sfw/biz/service"
 	"sfw/pkg/errno"
 	"sfw/pkg/utils"
+	"sfw/pkg/utils/logger"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -31,6 +32,7 @@ func AdminVideoList(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewReportService(ctx, c).NewAdminVideoListEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, report.AdminVideoListResp{
 			Code: resp.Code,
@@ -63,6 +65,7 @@ func AdminVideoHandle(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewReportService(ctx, c).NewAdminVideoHandleEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, report.AdminVideoHandleResp{
 			Code: resp.Code,
@@ -94,6 +97,7 @@ func ReportVideo(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewReportService(ctx, c).NewReportVideoEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, report.ReportVideoResp{
 			Code: resp.Code,
@@ -125,6 +129,7 @@ func ReportActivity(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewReportService(ctx, c).NewReportActivityEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, report.ReportActivityResp{
 			Code: resp.Code,
@@ -156,6 +161,7 @@ func ReportComment(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewReportService(ctx, c).NewReportCommentEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, report.ReportCommentResp{
 			Code: resp.Code,
@@ -187,6 +193,7 @@ func AdminVideoReportList(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewReportService(ctx, c).NewAdminVideoReportListEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, report.AdminVideoReportListResp{
 			Code: resp.Code,
@@ -219,6 +226,7 @@ func AdminActivityReportList(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewReportService(ctx, c).NewAdminActivityReportListEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, report.AdminActivityReportListResp{
 			Code: resp.Code,
@@ -251,6 +259,7 @@ func AdminCommentReportList(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewReportService(ctx, c).NewAdminCommentReportListEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, report.AdminCommentReportListResp{
 			Code: resp.Code,
@@ -283,6 +292,7 @@ func AdminVideoReportHandle(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewReportService(ctx, c).NewAdminVideoReportHandleEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, report.AdminVideoReportHandleResp{
 			Code: resp.Code,
@@ -314,6 +324,7 @@ func AdminActivityReportHandle(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewReportService(ctx, c).NewAdminActivityReportHandleEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, report.AdminActivityReportHandleResp{
 			Code: resp.Code,
@@ -345,6 +356,7 @@ func AdminCommentHandle(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewReportService(ctx, c).NewAdminCommentReportHandleEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, report.AdminCommentReportHandleResp{
 			Code: resp.Code,

@@ -28,6 +28,16 @@ func (e *Errno) WithMessage(message string) *Errno {
 	return e
 }
 
+func (e *Errno) RecommendToPrintStack() bool {
+	if e.InnerErrno == nil {
+		return true
+	}
+	if e.InnerErrno.Code == 0 {
+		return false
+	}
+	return true
+}
+
 func (e *Errno) WithInnerError(err error) *Errno {
 	_, file, line, ok := runtime.Caller(1)
 	e.goid = goid.Get()
