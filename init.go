@@ -11,6 +11,7 @@ import (
 	"sfw/biz/mw/jwt"
 	"sfw/biz/mw/redis"
 	"sfw/biz/mw/sentinel"
+	"sfw/biz/mw/zincsearch"
 	"sfw/pkg/errno"
 	"sfw/pkg/oss"
 	"sfw/pkg/synchronizer"
@@ -221,88 +222,28 @@ func ConfigureRegister(...any) {
 			LoadMethodParam: []interface{}{},
 			LoadMethod: func(v ...any) error {
 				cmap := configure.GlobalConfig.GetStringMap("Redis")
-				emap, ok := cmap["email"].(map[string]interface{})
-				if !ok {
-					return errno.InternalServerError
+				ConfigKV := map[string]*redis.RedisConf{
+					"email":             &redis.EmailRedisClient,
+					"token_expire_time": &redis.TokenExpireTimeClient,
+					"video":             &redis.VideoClient,
+					"video_info":        &redis.VideoInfoClient,
+					"activity_info":     &redis.ActivityInfoClient,
+					"comment_info":      &redis.CommentInfoClient,
 				}
-				if redis.EmailRedisClient.Addr, ok = emap["addr"].(string); !ok {
-					return errno.InternalServerError
-				}
-				if redis.EmailRedisClient.Password, ok = emap["password"].(string); !ok {
-					return errno.InternalServerError
-				}
-				if redis.EmailRedisClient.DB, ok = emap["db"].(int); !ok {
-					return errno.InternalServerError
-				}
-
-				tmap, ok := cmap["token_expire_time"].(map[string]interface{})
-				if !ok {
-					return errno.InternalServerError
-				}
-				if redis.TokenExpireTimeClient.Addr, ok = tmap["addr"].(string); !ok {
-					return errno.InternalServerError
-				}
-				if redis.TokenExpireTimeClient.Password, ok = tmap["password"].(string); !ok {
-					return errno.InternalServerError
-				}
-				if redis.TokenExpireTimeClient.DB, ok = tmap["db"].(int); !ok {
-					return errno.InternalServerError
-				}
-
-				vmap, ok := cmap["video"].(map[string]interface{})
-				if !ok {
-					return errno.InternalServerError
-				}
-				if redis.VideoClient.Addr, ok = vmap["addr"].(string); !ok {
-					return errno.InternalServerError
-				}
-				if redis.VideoClient.Password, ok = vmap["password"].(string); !ok {
-					return errno.InternalServerError
-				}
-				if redis.VideoClient.DB, ok = vmap["db"].(int); !ok {
-					return errno.InternalServerError
-				}
-
-				vimap, ok := cmap["video_info"].(map[string]interface{})
-				if !ok {
-					return errno.InternalServerError
-				}
-				if redis.VideoInfoClient.Addr, ok = vimap["addr"].(string); !ok {
-					return errno.InternalServerError
-				}
-				if redis.VideoInfoClient.Password, ok = vimap["password"].(string); !ok {
-					return errno.InternalServerError
-				}
-				if redis.VideoInfoClient.DB, ok = vimap["db"].(int); !ok {
-					return errno.InternalServerError
-				}
-
-				aimap, ok := cmap["activity_info"].(map[string]interface{})
-				if !ok {
-					return errno.InternalServerError
-				}
-				if redis.ActivityInfoClient.Addr, ok = aimap["addr"].(string); !ok {
-					return errno.InternalServerError
-				}
-				if redis.ActivityInfoClient.Password, ok = aimap["password"].(string); !ok {
-					return errno.InternalServerError
-				}
-				if redis.ActivityInfoClient.DB, ok = aimap["db"].(int); !ok {
-					return errno.InternalServerError
-				}
-
-				cimap, ok := cmap["comment_info"].(map[string]interface{})
-				if !ok {
-					return errno.InternalServerError
-				}
-				if redis.CommentInfoClient.Addr, ok = cimap["addr"].(string); !ok {
-					return errno.InternalServerError
-				}
-				if redis.CommentInfoClient.Password, ok = cimap["password"].(string); !ok {
-					return errno.InternalServerError
-				}
-				if redis.CommentInfoClient.DB, ok = cimap["db"].(int); !ok {
-					return errno.InternalServerError
+				for k, _ := range ConfigKV {
+					c, ok := cmap[k].(map[string]interface{})
+					if !ok {
+						return errno.InternalServerError
+					}
+					if ConfigKV[k].Addr, ok = c["addr"].(string); !ok {
+						return errno.InternalServerError
+					}
+					if ConfigKV[k].Password, ok = c["password"].(string); !ok {
+						return errno.InternalServerError
+					}
+					if ConfigKV[k].DB, ok = c["db"].(int); !ok {
+						return errno.InternalServerError
+					}
 				}
 				redis.Load()
 				return nil
@@ -358,6 +299,33 @@ func ConfigureRegister(...any) {
 					return errno.InternalServerError
 				}
 				oss.Load()
+				return nil
+			},
+
+			SuccessTriggerParam: []interface{}{},
+			SuccessTrigger:      func(v ...any) {},
+
+			FailedTriggerParam: []interface{}{},
+			FailedTrigger:      func(v ...any) {},
+		},
+		{
+			RuleName: "Zincsearch",
+			Level:    configure.LevelFatal,
+
+			LoadMethodParam: []interface{}{},
+			LoadMethod: func(v ...any) error {
+				zmap := configure.GlobalConfig.GetStringMap("Zincsearch")
+				ok := false
+				if zincsearch.ClientOpt.Host, ok = zmap["host"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if zincsearch.ClientOpt.Username, ok = zmap["username"].(string); !ok {
+					return errno.InternalServerError
+				}
+				if zincsearch.ClientOpt.Password, ok = zmap["password"].(string); !ok {
+					return errno.InternalServerError
+				}
+				zincsearch.Load()
 				return nil
 			},
 
