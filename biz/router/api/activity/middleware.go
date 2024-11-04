@@ -3,6 +3,8 @@
 package activity
 
 import (
+	auth "sfw/biz/router/api/api_auth"
+
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -28,7 +30,7 @@ func _activityMw() []app.HandlerFunc {
 
 func _activityfeedmethodMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _activityinfomethodMw() []app.HandlerFunc {
@@ -43,5 +45,5 @@ func _activitylistmethodMw() []app.HandlerFunc {
 
 func _activitypublishmethodMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }

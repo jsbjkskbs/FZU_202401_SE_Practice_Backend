@@ -125,5 +125,5 @@ func _adminvideoreportlistMw() []app.HandlerFunc {
 
 func _report2Mw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }

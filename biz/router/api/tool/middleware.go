@@ -65,7 +65,7 @@ func _uploadMw() []app.HandlerFunc {
 
 func _tooluploadimageMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _userMw() []app.HandlerFunc {
@@ -100,7 +100,7 @@ func _admintooldeletevideoMw() []app.HandlerFunc {
 
 func _delete0Mw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _tooldeleteactivityMw() []app.HandlerFunc {

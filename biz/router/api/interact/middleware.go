@@ -3,6 +3,8 @@
 package interact
 
 import (
+	auth "sfw/biz/router/api/api_auth"
+
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -73,7 +75,7 @@ func _activityMw() []app.HandlerFunc {
 
 func _interactlikeactivityactionmethodMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _comment0Mw() []app.HandlerFunc {
@@ -93,7 +95,7 @@ func _videoMw() []app.HandlerFunc {
 
 func _interactlikevideoactionmethodMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _interactlikevideolistmethodMw() []app.HandlerFunc {
@@ -103,17 +105,17 @@ func _interactlikevideolistmethodMw() []app.HandlerFunc {
 
 func _interactlikecommentactionmethodMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _interactcommentactivitypublishmethodMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _interactcommentvideopublishmethodMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _activity0Mw() []app.HandlerFunc {
