@@ -73,5 +73,4 @@ func Load() {
 	if _, err := commentInfoClient.Ping().Result(); err != nil {
 		panic(err)
 	}
-
 }

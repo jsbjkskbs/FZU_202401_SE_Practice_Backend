@@ -2,10 +2,11 @@ package scheduler_test
 
 import (
 	"math/rand"
-	"sfw/pkg/utils/scheduler"
 	"sync"
 	"testing"
 	"time"
+
+	"sfw/pkg/utils/scheduler"
 )
 
 func TestStartNoCrash(t *testing.T) {

@@ -2,10 +2,11 @@ package mail_test
 
 import (
 	"fmt"
-	"sfw/pkg/utils/generator"
-	"sfw/pkg/utils/mail"
 	"testing"
 	"time"
+
+	"sfw/pkg/utils/generator"
+	"sfw/pkg/utils/mail"
 )
 
 func TestMail(t *testing.T) {

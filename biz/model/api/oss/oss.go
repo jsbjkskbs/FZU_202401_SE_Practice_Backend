@@ -5,6 +5,7 @@ package oss
 import (
 	"context"
 	"fmt"
+
 	"github.com/apache/thrift/lib/go/thrift"
 )
 
@@ -70,7 +71,6 @@ var fieldIDToName_OssCallbackAvatarReq = map[int16]string{
 }
 
 func (p *OssCallbackAvatarReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAuthorization bool = false
@@ -190,7 +190,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *OssCallbackAvatarReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -200,8 +199,8 @@ func (p *OssCallbackAvatarReq) ReadField1(iprot thrift.TProtocol) error {
 	p.Authorization = _field
 	return nil
 }
-func (p *OssCallbackAvatarReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackAvatarReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -211,8 +210,8 @@ func (p *OssCallbackAvatarReq) ReadField2(iprot thrift.TProtocol) error {
 	p.Key = _field
 	return nil
 }
-func (p *OssCallbackAvatarReq) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackAvatarReq) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -222,8 +221,8 @@ func (p *OssCallbackAvatarReq) ReadField3(iprot thrift.TProtocol) error {
 	p.Bucket = _field
 	return nil
 }
-func (p *OssCallbackAvatarReq) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackAvatarReq) ReadField4(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -233,8 +232,8 @@ func (p *OssCallbackAvatarReq) ReadField4(iprot thrift.TProtocol) error {
 	p.Name = _field
 	return nil
 }
-func (p *OssCallbackAvatarReq) ReadField5(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackAvatarReq) ReadField5(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -244,8 +243,8 @@ func (p *OssCallbackAvatarReq) ReadField5(iprot thrift.TProtocol) error {
 	p.Fsize = _field
 	return nil
 }
-func (p *OssCallbackAvatarReq) ReadField6(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackAvatarReq) ReadField6(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -255,8 +254,8 @@ func (p *OssCallbackAvatarReq) ReadField6(iprot thrift.TProtocol) error {
 	p.Hash = _field
 	return nil
 }
-func (p *OssCallbackAvatarReq) ReadField7(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackAvatarReq) ReadField7(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -266,8 +265,8 @@ func (p *OssCallbackAvatarReq) ReadField7(iprot thrift.TProtocol) error {
 	p.Otype = _field
 	return nil
 }
-func (p *OssCallbackAvatarReq) ReadField8(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackAvatarReq) ReadField8(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -475,11 +474,9 @@ func (p *OssCallbackAvatarReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssCallbackAvatarReq(%+v)", *p)
-
 }
 
-type OssCallbackAvatarResp struct {
-}
+type OssCallbackAvatarResp struct{}
 
 func NewOssCallbackAvatarResp() *OssCallbackAvatarResp {
 	return &OssCallbackAvatarResp{}
@@ -491,7 +488,6 @@ func (p *OssCallbackAvatarResp) InitDefault() {
 var fieldIDToName_OssCallbackAvatarResp = map[int16]string{}
 
 func (p *OssCallbackAvatarResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -558,7 +554,6 @@ func (p *OssCallbackAvatarResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssCallbackAvatarResp(%+v)", *p)
-
 }
 
 type OssCallbackVideoReq struct {
@@ -623,7 +618,6 @@ var fieldIDToName_OssCallbackVideoReq = map[int16]string{
 }
 
 func (p *OssCallbackVideoReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAuthorization bool = false
@@ -743,7 +737,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *OssCallbackVideoReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -753,8 +746,8 @@ func (p *OssCallbackVideoReq) ReadField1(iprot thrift.TProtocol) error {
 	p.Authorization = _field
 	return nil
 }
-func (p *OssCallbackVideoReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackVideoReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -764,8 +757,8 @@ func (p *OssCallbackVideoReq) ReadField2(iprot thrift.TProtocol) error {
 	p.Key = _field
 	return nil
 }
-func (p *OssCallbackVideoReq) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackVideoReq) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -775,8 +768,8 @@ func (p *OssCallbackVideoReq) ReadField3(iprot thrift.TProtocol) error {
 	p.Bucket = _field
 	return nil
 }
-func (p *OssCallbackVideoReq) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackVideoReq) ReadField4(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -786,8 +779,8 @@ func (p *OssCallbackVideoReq) ReadField4(iprot thrift.TProtocol) error {
 	p.Name = _field
 	return nil
 }
-func (p *OssCallbackVideoReq) ReadField5(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackVideoReq) ReadField5(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -797,8 +790,8 @@ func (p *OssCallbackVideoReq) ReadField5(iprot thrift.TProtocol) error {
 	p.Fsize = _field
 	return nil
 }
-func (p *OssCallbackVideoReq) ReadField6(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackVideoReq) ReadField6(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -808,8 +801,8 @@ func (p *OssCallbackVideoReq) ReadField6(iprot thrift.TProtocol) error {
 	p.Hash = _field
 	return nil
 }
-func (p *OssCallbackVideoReq) ReadField7(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackVideoReq) ReadField7(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -819,8 +812,8 @@ func (p *OssCallbackVideoReq) ReadField7(iprot thrift.TProtocol) error {
 	p.Otype = _field
 	return nil
 }
-func (p *OssCallbackVideoReq) ReadField8(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackVideoReq) ReadField8(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1028,7 +1021,6 @@ func (p *OssCallbackVideoReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssCallbackVideoReq(%+v)", *p)
-
 }
 
 type OssCallbackVideoCoverReq struct {
@@ -1093,7 +1085,6 @@ var fieldIDToName_OssCallbackVideoCoverReq = map[int16]string{
 }
 
 func (p *OssCallbackVideoCoverReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAuthorization bool = false
@@ -1213,7 +1204,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *OssCallbackVideoCoverReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1223,8 +1213,8 @@ func (p *OssCallbackVideoCoverReq) ReadField1(iprot thrift.TProtocol) error {
 	p.Authorization = _field
 	return nil
 }
-func (p *OssCallbackVideoCoverReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackVideoCoverReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1234,8 +1224,8 @@ func (p *OssCallbackVideoCoverReq) ReadField2(iprot thrift.TProtocol) error {
 	p.Key = _field
 	return nil
 }
-func (p *OssCallbackVideoCoverReq) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackVideoCoverReq) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1245,8 +1235,8 @@ func (p *OssCallbackVideoCoverReq) ReadField3(iprot thrift.TProtocol) error {
 	p.Bucket = _field
 	return nil
 }
-func (p *OssCallbackVideoCoverReq) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackVideoCoverReq) ReadField4(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1256,8 +1246,8 @@ func (p *OssCallbackVideoCoverReq) ReadField4(iprot thrift.TProtocol) error {
 	p.Name = _field
 	return nil
 }
-func (p *OssCallbackVideoCoverReq) ReadField5(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackVideoCoverReq) ReadField5(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1267,8 +1257,8 @@ func (p *OssCallbackVideoCoverReq) ReadField5(iprot thrift.TProtocol) error {
 	p.Fsize = _field
 	return nil
 }
-func (p *OssCallbackVideoCoverReq) ReadField6(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackVideoCoverReq) ReadField6(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1278,8 +1268,8 @@ func (p *OssCallbackVideoCoverReq) ReadField6(iprot thrift.TProtocol) error {
 	p.Hash = _field
 	return nil
 }
-func (p *OssCallbackVideoCoverReq) ReadField7(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackVideoCoverReq) ReadField7(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1289,8 +1279,8 @@ func (p *OssCallbackVideoCoverReq) ReadField7(iprot thrift.TProtocol) error {
 	p.Otype = _field
 	return nil
 }
-func (p *OssCallbackVideoCoverReq) ReadField8(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackVideoCoverReq) ReadField8(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1498,11 +1488,9 @@ func (p *OssCallbackVideoCoverReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssCallbackVideoCoverReq(%+v)", *p)
-
 }
 
-type OssCallbackVideoResp struct {
-}
+type OssCallbackVideoResp struct{}
 
 func NewOssCallbackVideoResp() *OssCallbackVideoResp {
 	return &OssCallbackVideoResp{}
@@ -1514,7 +1502,6 @@ func (p *OssCallbackVideoResp) InitDefault() {
 var fieldIDToName_OssCallbackVideoResp = map[int16]string{}
 
 func (p *OssCallbackVideoResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1581,7 +1568,6 @@ func (p *OssCallbackVideoResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssCallbackVideoResp(%+v)", *p)
-
 }
 
 type OssCallbackImageReq struct {
@@ -1652,7 +1638,6 @@ var fieldIDToName_OssCallbackImageReq = map[int16]string{
 }
 
 func (p *OssCallbackImageReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAuthorization bool = false
@@ -1780,7 +1765,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *OssCallbackImageReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1790,8 +1774,8 @@ func (p *OssCallbackImageReq) ReadField1(iprot thrift.TProtocol) error {
 	p.Authorization = _field
 	return nil
 }
-func (p *OssCallbackImageReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackImageReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1801,8 +1785,8 @@ func (p *OssCallbackImageReq) ReadField2(iprot thrift.TProtocol) error {
 	p.Key = _field
 	return nil
 }
-func (p *OssCallbackImageReq) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackImageReq) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1812,8 +1796,8 @@ func (p *OssCallbackImageReq) ReadField3(iprot thrift.TProtocol) error {
 	p.Bucket = _field
 	return nil
 }
-func (p *OssCallbackImageReq) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackImageReq) ReadField4(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1823,8 +1807,8 @@ func (p *OssCallbackImageReq) ReadField4(iprot thrift.TProtocol) error {
 	p.Name = _field
 	return nil
 }
-func (p *OssCallbackImageReq) ReadField5(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackImageReq) ReadField5(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1834,8 +1818,8 @@ func (p *OssCallbackImageReq) ReadField5(iprot thrift.TProtocol) error {
 	p.Fsize = _field
 	return nil
 }
-func (p *OssCallbackImageReq) ReadField6(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackImageReq) ReadField6(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1845,8 +1829,8 @@ func (p *OssCallbackImageReq) ReadField6(iprot thrift.TProtocol) error {
 	p.Hash = _field
 	return nil
 }
-func (p *OssCallbackImageReq) ReadField7(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackImageReq) ReadField7(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1856,8 +1840,8 @@ func (p *OssCallbackImageReq) ReadField7(iprot thrift.TProtocol) error {
 	p.Otype = _field
 	return nil
 }
-func (p *OssCallbackImageReq) ReadField8(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackImageReq) ReadField8(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1867,8 +1851,8 @@ func (p *OssCallbackImageReq) ReadField8(iprot thrift.TProtocol) error {
 	p.Oid = _field
 	return nil
 }
-func (p *OssCallbackImageReq) ReadField9(iprot thrift.TProtocol) error {
 
+func (p *OssCallbackImageReq) ReadField9(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2097,11 +2081,9 @@ func (p *OssCallbackImageReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssCallbackImageReq(%+v)", *p)
-
 }
 
-type OssCallbackImageResp struct {
-}
+type OssCallbackImageResp struct{}
 
 func NewOssCallbackImageResp() *OssCallbackImageResp {
 	return &OssCallbackImageResp{}
@@ -2113,7 +2095,6 @@ func (p *OssCallbackImageResp) InitDefault() {
 var fieldIDToName_OssCallbackImageResp = map[int16]string{}
 
 func (p *OssCallbackImageResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2180,7 +2161,6 @@ func (p *OssCallbackImageResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssCallbackImageResp(%+v)", *p)
-
 }
 
 type OssCallbackFopReq struct {
@@ -2203,7 +2183,6 @@ var fieldIDToName_OssCallbackFopReq = map[int16]string{
 }
 
 func (p *OssCallbackFopReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAuthorization bool = false
@@ -2267,7 +2246,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *OssCallbackFopReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2328,11 +2306,9 @@ func (p *OssCallbackFopReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssCallbackFopReq(%+v)", *p)
-
 }
 
-type OssCallbackFopResp struct {
-}
+type OssCallbackFopResp struct{}
 
 func NewOssCallbackFopResp() *OssCallbackFopResp {
 	return &OssCallbackFopResp{}
@@ -2344,7 +2320,6 @@ func (p *OssCallbackFopResp) InitDefault() {
 var fieldIDToName_OssCallbackFopResp = map[int16]string{}
 
 func (p *OssCallbackFopResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2411,7 +2386,6 @@ func (p *OssCallbackFopResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssCallbackFopResp(%+v)", *p)
-
 }
 
 type OssService interface {
@@ -2461,6 +2435,7 @@ func (p *OssServiceClient) OssCallbackAvatarMethod(ctx context.Context, req *Oss
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *OssServiceClient) OssCallbackVideoMethod(ctx context.Context, req *OssCallbackVideoReq) (r *OssCallbackFopResp, err error) {
 	var _args OssServiceOssCallbackVideoMethodArgs
 	_args.Req = req
@@ -2470,6 +2445,7 @@ func (p *OssServiceClient) OssCallbackVideoMethod(ctx context.Context, req *OssC
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *OssServiceClient) OssCallbackVideoCoverMethod(ctx context.Context, req *OssCallbackVideoCoverReq) (r *OssCallbackFopResp, err error) {
 	var _args OssServiceOssCallbackVideoCoverMethodArgs
 	_args.Req = req
@@ -2479,6 +2455,7 @@ func (p *OssServiceClient) OssCallbackVideoCoverMethod(ctx context.Context, req 
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *OssServiceClient) OssCallbackImageMethod(ctx context.Context, req *OssCallbackImageReq) (r *OssCallbackImageResp, err error) {
 	var _args OssServiceOssCallbackImageMethodArgs
 	_args.Req = req
@@ -2488,6 +2465,7 @@ func (p *OssServiceClient) OssCallbackImageMethod(ctx context.Context, req *OssC
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *OssServiceClient) OssCallbackFopMethod(ctx context.Context, req *OssCallbackFopReq) (r *OssCallbackFopResp, err error) {
 	var _args OssServiceOssCallbackFopMethodArgs
 	_args.Req = req
@@ -2525,6 +2503,7 @@ func NewOssServiceProcessor(handler OssService) *OssServiceProcessor {
 	self.AddToProcessorMap("OssCallbackFopMethod", &ossServiceProcessorOssCallbackFopMethod{handler: handler})
 	return self
 }
+
 func (p *OssServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
 	name, _, seqId, err := iprot.ReadMessageBegin()
 	if err != nil {
@@ -2812,7 +2791,6 @@ func (p *OssServiceOssCallbackAvatarMethodArgs) IsSetReq() bool {
 }
 
 func (p *OssServiceOssCallbackAvatarMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2926,7 +2904,6 @@ func (p *OssServiceOssCallbackAvatarMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssServiceOssCallbackAvatarMethodArgs(%+v)", *p)
-
 }
 
 type OssServiceOssCallbackAvatarMethodResult struct {
@@ -2958,7 +2935,6 @@ func (p *OssServiceOssCallbackAvatarMethodResult) IsSetSuccess() bool {
 }
 
 func (p *OssServiceOssCallbackAvatarMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3074,7 +3050,6 @@ func (p *OssServiceOssCallbackAvatarMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssServiceOssCallbackAvatarMethodResult(%+v)", *p)
-
 }
 
 type OssServiceOssCallbackVideoMethodArgs struct {
@@ -3106,7 +3081,6 @@ func (p *OssServiceOssCallbackVideoMethodArgs) IsSetReq() bool {
 }
 
 func (p *OssServiceOssCallbackVideoMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3220,7 +3194,6 @@ func (p *OssServiceOssCallbackVideoMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssServiceOssCallbackVideoMethodArgs(%+v)", *p)
-
 }
 
 type OssServiceOssCallbackVideoMethodResult struct {
@@ -3252,7 +3225,6 @@ func (p *OssServiceOssCallbackVideoMethodResult) IsSetSuccess() bool {
 }
 
 func (p *OssServiceOssCallbackVideoMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3368,7 +3340,6 @@ func (p *OssServiceOssCallbackVideoMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssServiceOssCallbackVideoMethodResult(%+v)", *p)
-
 }
 
 type OssServiceOssCallbackVideoCoverMethodArgs struct {
@@ -3400,7 +3371,6 @@ func (p *OssServiceOssCallbackVideoCoverMethodArgs) IsSetReq() bool {
 }
 
 func (p *OssServiceOssCallbackVideoCoverMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3514,7 +3484,6 @@ func (p *OssServiceOssCallbackVideoCoverMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssServiceOssCallbackVideoCoverMethodArgs(%+v)", *p)
-
 }
 
 type OssServiceOssCallbackVideoCoverMethodResult struct {
@@ -3546,7 +3515,6 @@ func (p *OssServiceOssCallbackVideoCoverMethodResult) IsSetSuccess() bool {
 }
 
 func (p *OssServiceOssCallbackVideoCoverMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3662,7 +3630,6 @@ func (p *OssServiceOssCallbackVideoCoverMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssServiceOssCallbackVideoCoverMethodResult(%+v)", *p)
-
 }
 
 type OssServiceOssCallbackImageMethodArgs struct {
@@ -3694,7 +3661,6 @@ func (p *OssServiceOssCallbackImageMethodArgs) IsSetReq() bool {
 }
 
 func (p *OssServiceOssCallbackImageMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3808,7 +3774,6 @@ func (p *OssServiceOssCallbackImageMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssServiceOssCallbackImageMethodArgs(%+v)", *p)
-
 }
 
 type OssServiceOssCallbackImageMethodResult struct {
@@ -3840,7 +3805,6 @@ func (p *OssServiceOssCallbackImageMethodResult) IsSetSuccess() bool {
 }
 
 func (p *OssServiceOssCallbackImageMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3956,7 +3920,6 @@ func (p *OssServiceOssCallbackImageMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssServiceOssCallbackImageMethodResult(%+v)", *p)
-
 }
 
 type OssServiceOssCallbackFopMethodArgs struct {
@@ -3988,7 +3951,6 @@ func (p *OssServiceOssCallbackFopMethodArgs) IsSetReq() bool {
 }
 
 func (p *OssServiceOssCallbackFopMethodArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4102,7 +4064,6 @@ func (p *OssServiceOssCallbackFopMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssServiceOssCallbackFopMethodArgs(%+v)", *p)
-
 }
 
 type OssServiceOssCallbackFopMethodResult struct {
@@ -4134,7 +4095,6 @@ func (p *OssServiceOssCallbackFopMethodResult) IsSetSuccess() bool {
 }
 
 func (p *OssServiceOssCallbackFopMethodResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4250,5 +4210,4 @@ func (p *OssServiceOssCallbackFopMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("OssServiceOssCallbackFopMethodResult(%+v)", *p)
-
 }

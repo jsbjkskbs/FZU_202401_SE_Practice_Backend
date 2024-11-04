@@ -1,13 +1,10 @@
 package scheduler
 
 import (
-
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 )
 
-var (
-	Schdeduler *Scheduler
-)
+var Schdeduler *Scheduler
 
 func Init() {
 	Schdeduler = NewScheduler(SchedulerOption{

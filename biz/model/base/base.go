@@ -4,6 +4,7 @@ package base
 
 import (
 	"fmt"
+
 	"github.com/apache/thrift/lib/go/thrift"
 )
 
@@ -57,7 +58,6 @@ var fieldIDToName_User = map[int16]string{
 }
 
 func (p *User) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -153,7 +153,6 @@ ReadStructEndError:
 }
 
 func (p *User) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -163,8 +162,8 @@ func (p *User) ReadField1(iprot thrift.TProtocol) error {
 	p.ID = _field
 	return nil
 }
-func (p *User) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *User) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -174,8 +173,8 @@ func (p *User) ReadField2(iprot thrift.TProtocol) error {
 	p.Username = _field
 	return nil
 }
-func (p *User) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *User) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -185,8 +184,8 @@ func (p *User) ReadField3(iprot thrift.TProtocol) error {
 	p.AvatarURL = _field
 	return nil
 }
-func (p *User) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *User) ReadField4(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -196,8 +195,8 @@ func (p *User) ReadField4(iprot thrift.TProtocol) error {
 	p.CreatedAt = _field
 	return nil
 }
-func (p *User) ReadField5(iprot thrift.TProtocol) error {
 
+func (p *User) ReadField5(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -207,8 +206,8 @@ func (p *User) ReadField5(iprot thrift.TProtocol) error {
 	p.UpdatedAt = _field
 	return nil
 }
-func (p *User) ReadField6(iprot thrift.TProtocol) error {
 
+func (p *User) ReadField6(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -374,7 +373,6 @@ func (p *User) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("User(%+v)", *p)
-
 }
 
 type UserWithToken struct {
@@ -445,7 +443,6 @@ var fieldIDToName_UserWithToken = map[int16]string{
 }
 
 func (p *UserWithToken) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -565,7 +562,6 @@ ReadStructEndError:
 }
 
 func (p *UserWithToken) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -575,8 +571,8 @@ func (p *UserWithToken) ReadField1(iprot thrift.TProtocol) error {
 	p.ID = _field
 	return nil
 }
-func (p *UserWithToken) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *UserWithToken) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -586,8 +582,8 @@ func (p *UserWithToken) ReadField2(iprot thrift.TProtocol) error {
 	p.Username = _field
 	return nil
 }
-func (p *UserWithToken) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *UserWithToken) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -597,8 +593,8 @@ func (p *UserWithToken) ReadField3(iprot thrift.TProtocol) error {
 	p.AvatarURL = _field
 	return nil
 }
-func (p *UserWithToken) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *UserWithToken) ReadField4(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -608,8 +604,8 @@ func (p *UserWithToken) ReadField4(iprot thrift.TProtocol) error {
 	p.CreatedAt = _field
 	return nil
 }
-func (p *UserWithToken) ReadField5(iprot thrift.TProtocol) error {
 
+func (p *UserWithToken) ReadField5(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -619,8 +615,8 @@ func (p *UserWithToken) ReadField5(iprot thrift.TProtocol) error {
 	p.UpdatedAt = _field
 	return nil
 }
-func (p *UserWithToken) ReadField6(iprot thrift.TProtocol) error {
 
+func (p *UserWithToken) ReadField6(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -630,8 +626,8 @@ func (p *UserWithToken) ReadField6(iprot thrift.TProtocol) error {
 	p.DeletedAt = _field
 	return nil
 }
-func (p *UserWithToken) ReadField7(iprot thrift.TProtocol) error {
 
+func (p *UserWithToken) ReadField7(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -641,8 +637,8 @@ func (p *UserWithToken) ReadField7(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-func (p *UserWithToken) ReadField8(iprot thrift.TProtocol) error {
 
+func (p *UserWithToken) ReadField8(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -652,8 +648,8 @@ func (p *UserWithToken) ReadField8(iprot thrift.TProtocol) error {
 	p.RefreshToken = _field
 	return nil
 }
-func (p *UserWithToken) ReadField9(iprot thrift.TProtocol) error {
 
+func (p *UserWithToken) ReadField9(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -882,7 +878,6 @@ func (p *UserWithToken) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserWithToken(%+v)", *p)
-
 }
 
 type Video struct {
@@ -989,7 +984,6 @@ var fieldIDToName_Video = map[int16]string{
 }
 
 func (p *Video) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1157,7 +1151,6 @@ ReadStructEndError:
 }
 
 func (p *Video) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1167,8 +1160,8 @@ func (p *Video) ReadField1(iprot thrift.TProtocol) error {
 	p.ID = _field
 	return nil
 }
-func (p *Video) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *Video) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1178,8 +1171,8 @@ func (p *Video) ReadField2(iprot thrift.TProtocol) error {
 	p.UserID = _field
 	return nil
 }
-func (p *Video) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *Video) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1189,8 +1182,8 @@ func (p *Video) ReadField3(iprot thrift.TProtocol) error {
 	p.VideoURL = _field
 	return nil
 }
-func (p *Video) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *Video) ReadField4(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1200,8 +1193,8 @@ func (p *Video) ReadField4(iprot thrift.TProtocol) error {
 	p.CoverURL = _field
 	return nil
 }
-func (p *Video) ReadField5(iprot thrift.TProtocol) error {
 
+func (p *Video) ReadField5(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1211,8 +1204,8 @@ func (p *Video) ReadField5(iprot thrift.TProtocol) error {
 	p.Title = _field
 	return nil
 }
-func (p *Video) ReadField6(iprot thrift.TProtocol) error {
 
+func (p *Video) ReadField6(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1222,8 +1215,8 @@ func (p *Video) ReadField6(iprot thrift.TProtocol) error {
 	p.Description = _field
 	return nil
 }
-func (p *Video) ReadField7(iprot thrift.TProtocol) error {
 
+func (p *Video) ReadField7(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1233,8 +1226,8 @@ func (p *Video) ReadField7(iprot thrift.TProtocol) error {
 	p.VisitCount = _field
 	return nil
 }
-func (p *Video) ReadField8(iprot thrift.TProtocol) error {
 
+func (p *Video) ReadField8(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1244,8 +1237,8 @@ func (p *Video) ReadField8(iprot thrift.TProtocol) error {
 	p.LikeCount = _field
 	return nil
 }
-func (p *Video) ReadField9(iprot thrift.TProtocol) error {
 
+func (p *Video) ReadField9(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1255,8 +1248,8 @@ func (p *Video) ReadField9(iprot thrift.TProtocol) error {
 	p.CommentCount = _field
 	return nil
 }
-func (p *Video) ReadField10(iprot thrift.TProtocol) error {
 
+func (p *Video) ReadField10(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1266,6 +1259,7 @@ func (p *Video) ReadField10(iprot thrift.TProtocol) error {
 	p.Category = _field
 	return nil
 }
+
 func (p *Video) ReadField11(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
@@ -1289,8 +1283,8 @@ func (p *Video) ReadField11(iprot thrift.TProtocol) error {
 	p.Labels = _field
 	return nil
 }
-func (p *Video) ReadField12(iprot thrift.TProtocol) error {
 
+func (p *Video) ReadField12(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1300,8 +1294,8 @@ func (p *Video) ReadField12(iprot thrift.TProtocol) error {
 	p.Status = _field
 	return nil
 }
-func (p *Video) ReadField13(iprot thrift.TProtocol) error {
 
+func (p *Video) ReadField13(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1311,8 +1305,8 @@ func (p *Video) ReadField13(iprot thrift.TProtocol) error {
 	p.CreatedAt = _field
 	return nil
 }
-func (p *Video) ReadField14(iprot thrift.TProtocol) error {
 
+func (p *Video) ReadField14(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1322,8 +1316,8 @@ func (p *Video) ReadField14(iprot thrift.TProtocol) error {
 	p.UpdatedAt = _field
 	return nil
 }
-func (p *Video) ReadField15(iprot thrift.TProtocol) error {
 
+func (p *Video) ReadField15(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1686,7 +1680,6 @@ func (p *Video) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("Video(%+v)", *p)
-
 }
 
 type Comment struct {
@@ -1775,7 +1768,6 @@ var fieldIDToName_Comment = map[int16]string{
 }
 
 func (p *Comment) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1919,7 +1911,6 @@ ReadStructEndError:
 }
 
 func (p *Comment) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1929,8 +1920,8 @@ func (p *Comment) ReadField1(iprot thrift.TProtocol) error {
 	p.ID = _field
 	return nil
 }
-func (p *Comment) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *Comment) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1940,8 +1931,8 @@ func (p *Comment) ReadField2(iprot thrift.TProtocol) error {
 	p.UserID = _field
 	return nil
 }
-func (p *Comment) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *Comment) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1951,8 +1942,8 @@ func (p *Comment) ReadField3(iprot thrift.TProtocol) error {
 	p.Otype = _field
 	return nil
 }
-func (p *Comment) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *Comment) ReadField4(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1962,8 +1953,8 @@ func (p *Comment) ReadField4(iprot thrift.TProtocol) error {
 	p.Oid = _field
 	return nil
 }
-func (p *Comment) ReadField5(iprot thrift.TProtocol) error {
 
+func (p *Comment) ReadField5(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1973,8 +1964,8 @@ func (p *Comment) ReadField5(iprot thrift.TProtocol) error {
 	p.RootID = _field
 	return nil
 }
-func (p *Comment) ReadField6(iprot thrift.TProtocol) error {
 
+func (p *Comment) ReadField6(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1984,8 +1975,8 @@ func (p *Comment) ReadField6(iprot thrift.TProtocol) error {
 	p.ParentID = _field
 	return nil
 }
-func (p *Comment) ReadField7(iprot thrift.TProtocol) error {
 
+func (p *Comment) ReadField7(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1995,8 +1986,8 @@ func (p *Comment) ReadField7(iprot thrift.TProtocol) error {
 	p.LikeCount = _field
 	return nil
 }
-func (p *Comment) ReadField8(iprot thrift.TProtocol) error {
 
+func (p *Comment) ReadField8(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2006,8 +1997,8 @@ func (p *Comment) ReadField8(iprot thrift.TProtocol) error {
 	p.ChildCount = _field
 	return nil
 }
-func (p *Comment) ReadField9(iprot thrift.TProtocol) error {
 
+func (p *Comment) ReadField9(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2017,8 +2008,8 @@ func (p *Comment) ReadField9(iprot thrift.TProtocol) error {
 	p.Content = _field
 	return nil
 }
-func (p *Comment) ReadField10(iprot thrift.TProtocol) error {
 
+func (p *Comment) ReadField10(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2028,8 +2019,8 @@ func (p *Comment) ReadField10(iprot thrift.TProtocol) error {
 	p.CreatedAt = _field
 	return nil
 }
-func (p *Comment) ReadField11(iprot thrift.TProtocol) error {
 
+func (p *Comment) ReadField11(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2039,8 +2030,8 @@ func (p *Comment) ReadField11(iprot thrift.TProtocol) error {
 	p.UpdatedAt = _field
 	return nil
 }
-func (p *Comment) ReadField12(iprot thrift.TProtocol) error {
 
+func (p *Comment) ReadField12(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2332,7 +2323,6 @@ func (p *Comment) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("Comment(%+v)", *p)
-
 }
 
 type Activity struct {
@@ -2409,7 +2399,6 @@ var fieldIDToName_Activity = map[int16]string{
 }
 
 func (p *Activity) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2537,7 +2526,6 @@ ReadStructEndError:
 }
 
 func (p *Activity) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2547,8 +2535,8 @@ func (p *Activity) ReadField1(iprot thrift.TProtocol) error {
 	p.ID = _field
 	return nil
 }
-func (p *Activity) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *Activity) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2558,8 +2546,8 @@ func (p *Activity) ReadField2(iprot thrift.TProtocol) error {
 	p.UserID = _field
 	return nil
 }
-func (p *Activity) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *Activity) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2569,6 +2557,7 @@ func (p *Activity) ReadField3(iprot thrift.TProtocol) error {
 	p.Content = _field
 	return nil
 }
+
 func (p *Activity) ReadField4(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
@@ -2592,8 +2581,8 @@ func (p *Activity) ReadField4(iprot thrift.TProtocol) error {
 	p.Image = _field
 	return nil
 }
-func (p *Activity) ReadField5(iprot thrift.TProtocol) error {
 
+func (p *Activity) ReadField5(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2603,8 +2592,8 @@ func (p *Activity) ReadField5(iprot thrift.TProtocol) error {
 	p.RefVideo = _field
 	return nil
 }
-func (p *Activity) ReadField6(iprot thrift.TProtocol) error {
 
+func (p *Activity) ReadField6(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2614,8 +2603,8 @@ func (p *Activity) ReadField6(iprot thrift.TProtocol) error {
 	p.RefActivity = _field
 	return nil
 }
-func (p *Activity) ReadField7(iprot thrift.TProtocol) error {
 
+func (p *Activity) ReadField7(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2625,8 +2614,8 @@ func (p *Activity) ReadField7(iprot thrift.TProtocol) error {
 	p.LikeCount = _field
 	return nil
 }
-func (p *Activity) ReadField8(iprot thrift.TProtocol) error {
 
+func (p *Activity) ReadField8(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2636,8 +2625,8 @@ func (p *Activity) ReadField8(iprot thrift.TProtocol) error {
 	p.CreatedAt = _field
 	return nil
 }
-func (p *Activity) ReadField9(iprot thrift.TProtocol) error {
 
+func (p *Activity) ReadField9(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2647,8 +2636,8 @@ func (p *Activity) ReadField9(iprot thrift.TProtocol) error {
 	p.UpdatedAt = _field
 	return nil
 }
-func (p *Activity) ReadField10(iprot thrift.TProtocol) error {
 
+func (p *Activity) ReadField10(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2906,7 +2895,6 @@ func (p *Activity) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("Activity(%+v)", *p)
-
 }
 
 type VideoReport struct {
@@ -2977,7 +2965,6 @@ var fieldIDToName_VideoReport = map[int16]string{
 }
 
 func (p *VideoReport) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3097,7 +3084,6 @@ ReadStructEndError:
 }
 
 func (p *VideoReport) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3107,8 +3093,8 @@ func (p *VideoReport) ReadField1(iprot thrift.TProtocol) error {
 	p.ID = _field
 	return nil
 }
-func (p *VideoReport) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *VideoReport) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3118,8 +3104,8 @@ func (p *VideoReport) ReadField2(iprot thrift.TProtocol) error {
 	p.VideoID = _field
 	return nil
 }
-func (p *VideoReport) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *VideoReport) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3129,8 +3115,8 @@ func (p *VideoReport) ReadField3(iprot thrift.TProtocol) error {
 	p.UserID = _field
 	return nil
 }
-func (p *VideoReport) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *VideoReport) ReadField4(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3140,8 +3126,8 @@ func (p *VideoReport) ReadField4(iprot thrift.TProtocol) error {
 	p.Reason = _field
 	return nil
 }
-func (p *VideoReport) ReadField5(iprot thrift.TProtocol) error {
 
+func (p *VideoReport) ReadField5(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3151,8 +3137,8 @@ func (p *VideoReport) ReadField5(iprot thrift.TProtocol) error {
 	p.Label = _field
 	return nil
 }
-func (p *VideoReport) ReadField6(iprot thrift.TProtocol) error {
 
+func (p *VideoReport) ReadField6(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3162,8 +3148,8 @@ func (p *VideoReport) ReadField6(iprot thrift.TProtocol) error {
 	p.Status = _field
 	return nil
 }
-func (p *VideoReport) ReadField7(iprot thrift.TProtocol) error {
 
+func (p *VideoReport) ReadField7(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3173,8 +3159,8 @@ func (p *VideoReport) ReadField7(iprot thrift.TProtocol) error {
 	p.CreatedAt = _field
 	return nil
 }
-func (p *VideoReport) ReadField8(iprot thrift.TProtocol) error {
 
+func (p *VideoReport) ReadField8(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3184,8 +3170,8 @@ func (p *VideoReport) ReadField8(iprot thrift.TProtocol) error {
 	p.ResolvedAt = _field
 	return nil
 }
-func (p *VideoReport) ReadField9(iprot thrift.TProtocol) error {
 
+func (p *VideoReport) ReadField9(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3414,7 +3400,6 @@ func (p *VideoReport) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("VideoReport(%+v)", *p)
-
 }
 
 type ActivityReport struct {
@@ -3485,7 +3470,6 @@ var fieldIDToName_ActivityReport = map[int16]string{
 }
 
 func (p *ActivityReport) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3605,7 +3589,6 @@ ReadStructEndError:
 }
 
 func (p *ActivityReport) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3615,8 +3598,8 @@ func (p *ActivityReport) ReadField1(iprot thrift.TProtocol) error {
 	p.ID = _field
 	return nil
 }
-func (p *ActivityReport) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ActivityReport) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3626,8 +3609,8 @@ func (p *ActivityReport) ReadField2(iprot thrift.TProtocol) error {
 	p.ActivityID = _field
 	return nil
 }
-func (p *ActivityReport) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *ActivityReport) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3637,8 +3620,8 @@ func (p *ActivityReport) ReadField3(iprot thrift.TProtocol) error {
 	p.UserID = _field
 	return nil
 }
-func (p *ActivityReport) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *ActivityReport) ReadField4(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3648,8 +3631,8 @@ func (p *ActivityReport) ReadField4(iprot thrift.TProtocol) error {
 	p.Reason = _field
 	return nil
 }
-func (p *ActivityReport) ReadField5(iprot thrift.TProtocol) error {
 
+func (p *ActivityReport) ReadField5(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3659,8 +3642,8 @@ func (p *ActivityReport) ReadField5(iprot thrift.TProtocol) error {
 	p.Label = _field
 	return nil
 }
-func (p *ActivityReport) ReadField6(iprot thrift.TProtocol) error {
 
+func (p *ActivityReport) ReadField6(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3670,8 +3653,8 @@ func (p *ActivityReport) ReadField6(iprot thrift.TProtocol) error {
 	p.Status = _field
 	return nil
 }
-func (p *ActivityReport) ReadField7(iprot thrift.TProtocol) error {
 
+func (p *ActivityReport) ReadField7(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3681,8 +3664,8 @@ func (p *ActivityReport) ReadField7(iprot thrift.TProtocol) error {
 	p.CreatedAt = _field
 	return nil
 }
-func (p *ActivityReport) ReadField8(iprot thrift.TProtocol) error {
 
+func (p *ActivityReport) ReadField8(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3692,8 +3675,8 @@ func (p *ActivityReport) ReadField8(iprot thrift.TProtocol) error {
 	p.ResolvedAt = _field
 	return nil
 }
-func (p *ActivityReport) ReadField9(iprot thrift.TProtocol) error {
 
+func (p *ActivityReport) ReadField9(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3922,7 +3905,6 @@ func (p *ActivityReport) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ActivityReport(%+v)", *p)
-
 }
 
 type CommentReport struct {
@@ -3999,7 +3981,6 @@ var fieldIDToName_CommentReport = map[int16]string{
 }
 
 func (p *CommentReport) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4127,7 +4108,6 @@ ReadStructEndError:
 }
 
 func (p *CommentReport) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4137,8 +4117,8 @@ func (p *CommentReport) ReadField1(iprot thrift.TProtocol) error {
 	p.ID = _field
 	return nil
 }
-func (p *CommentReport) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *CommentReport) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4148,8 +4128,8 @@ func (p *CommentReport) ReadField2(iprot thrift.TProtocol) error {
 	p.CommentType = _field
 	return nil
 }
-func (p *CommentReport) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *CommentReport) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4159,8 +4139,8 @@ func (p *CommentReport) ReadField3(iprot thrift.TProtocol) error {
 	p.CommentID = _field
 	return nil
 }
-func (p *CommentReport) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *CommentReport) ReadField4(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4170,8 +4150,8 @@ func (p *CommentReport) ReadField4(iprot thrift.TProtocol) error {
 	p.UserID = _field
 	return nil
 }
-func (p *CommentReport) ReadField5(iprot thrift.TProtocol) error {
 
+func (p *CommentReport) ReadField5(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4181,8 +4161,8 @@ func (p *CommentReport) ReadField5(iprot thrift.TProtocol) error {
 	p.Reason = _field
 	return nil
 }
-func (p *CommentReport) ReadField6(iprot thrift.TProtocol) error {
 
+func (p *CommentReport) ReadField6(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4192,8 +4172,8 @@ func (p *CommentReport) ReadField6(iprot thrift.TProtocol) error {
 	p.Label = _field
 	return nil
 }
-func (p *CommentReport) ReadField7(iprot thrift.TProtocol) error {
 
+func (p *CommentReport) ReadField7(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4203,8 +4183,8 @@ func (p *CommentReport) ReadField7(iprot thrift.TProtocol) error {
 	p.Status = _field
 	return nil
 }
-func (p *CommentReport) ReadField8(iprot thrift.TProtocol) error {
 
+func (p *CommentReport) ReadField8(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4214,8 +4194,8 @@ func (p *CommentReport) ReadField8(iprot thrift.TProtocol) error {
 	p.CreatedAt = _field
 	return nil
 }
-func (p *CommentReport) ReadField9(iprot thrift.TProtocol) error {
 
+func (p *CommentReport) ReadField9(iprot thrift.TProtocol) error {
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4225,8 +4205,8 @@ func (p *CommentReport) ReadField9(iprot thrift.TProtocol) error {
 	p.ResolvedAt = _field
 	return nil
 }
-func (p *CommentReport) ReadField10(iprot thrift.TProtocol) error {
 
+func (p *CommentReport) ReadField10(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4476,5 +4456,4 @@ func (p *CommentReport) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("CommentReport(%+v)", *p)
-
 }
