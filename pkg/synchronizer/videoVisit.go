@@ -2,11 +2,12 @@ package synchronizer
 
 import (
 	"context"
+	"strconv"
+
 	"sfw/biz/dal"
 	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/mw/redis"
-	"strconv"
 )
 
 func SynchronizeVideoVisitInfoRedis2DB(vid string) error {

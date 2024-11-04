@@ -5,6 +5,7 @@ package tool
 import (
 	"context"
 	"fmt"
+
 	"github.com/apache/thrift/lib/go/thrift"
 )
 
@@ -34,7 +35,6 @@ var fieldIDToName_ToolDeleteVideoReq = map[int16]string{
 }
 
 func (p *ToolDeleteVideoReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -113,7 +113,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *ToolDeleteVideoReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -123,8 +122,8 @@ func (p *ToolDeleteVideoReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-func (p *ToolDeleteVideoReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolDeleteVideoReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -206,7 +205,6 @@ func (p *ToolDeleteVideoReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolDeleteVideoReq(%+v)", *p)
-
 }
 
 type ToolDeleteVideoResp struct {
@@ -235,7 +233,6 @@ var fieldIDToName_ToolDeleteVideoResp = map[int16]string{
 }
 
 func (p *ToolDeleteVideoResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -299,7 +296,6 @@ ReadStructEndError:
 }
 
 func (p *ToolDeleteVideoResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -309,8 +305,8 @@ func (p *ToolDeleteVideoResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *ToolDeleteVideoResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolDeleteVideoResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -392,7 +388,6 @@ func (p *ToolDeleteVideoResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolDeleteVideoResp(%+v)", *p)
-
 }
 
 type ToolDeleteActivityReq struct {
@@ -421,7 +416,6 @@ var fieldIDToName_ToolDeleteActivityReq = map[int16]string{
 }
 
 func (p *ToolDeleteActivityReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -500,7 +494,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *ToolDeleteActivityReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -510,8 +503,8 @@ func (p *ToolDeleteActivityReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-func (p *ToolDeleteActivityReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolDeleteActivityReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -593,7 +586,6 @@ func (p *ToolDeleteActivityReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolDeleteActivityReq(%+v)", *p)
-
 }
 
 type ToolDeleteActivityResp struct {
@@ -622,7 +614,6 @@ var fieldIDToName_ToolDeleteActivityResp = map[int16]string{
 }
 
 func (p *ToolDeleteActivityResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -686,7 +677,6 @@ ReadStructEndError:
 }
 
 func (p *ToolDeleteActivityResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -696,8 +686,8 @@ func (p *ToolDeleteActivityResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *ToolDeleteActivityResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolDeleteActivityResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -779,7 +769,6 @@ func (p *ToolDeleteActivityResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolDeleteActivityResp(%+v)", *p)
-
 }
 
 type ToolDeleteCommentReq struct {
@@ -820,7 +809,6 @@ var fieldIDToName_ToolDeleteCommentReq = map[int16]string{
 }
 
 func (p *ToolDeleteCommentReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -929,7 +917,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *ToolDeleteCommentReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -939,8 +926,8 @@ func (p *ToolDeleteCommentReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-func (p *ToolDeleteCommentReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolDeleteCommentReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -950,8 +937,8 @@ func (p *ToolDeleteCommentReq) ReadField2(iprot thrift.TProtocol) error {
 	p.CommentType = _field
 	return nil
 }
-func (p *ToolDeleteCommentReq) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *ToolDeleteCommentReq) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -961,8 +948,8 @@ func (p *ToolDeleteCommentReq) ReadField3(iprot thrift.TProtocol) error {
 	p.FromMediaID = _field
 	return nil
 }
-func (p *ToolDeleteCommentReq) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *ToolDeleteCommentReq) ReadField4(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1086,7 +1073,6 @@ func (p *ToolDeleteCommentReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolDeleteCommentReq(%+v)", *p)
-
 }
 
 type ToolDeleteCommentResp struct {
@@ -1115,7 +1101,6 @@ var fieldIDToName_ToolDeleteCommentResp = map[int16]string{
 }
 
 func (p *ToolDeleteCommentResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1179,7 +1164,6 @@ ReadStructEndError:
 }
 
 func (p *ToolDeleteCommentResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1189,8 +1173,8 @@ func (p *ToolDeleteCommentResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *ToolDeleteCommentResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolDeleteCommentResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1272,7 +1256,6 @@ func (p *ToolDeleteCommentResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolDeleteCommentResp(%+v)", *p)
-
 }
 
 type AdminToolDeleteVideoReq struct {
@@ -1301,7 +1284,6 @@ var fieldIDToName_AdminToolDeleteVideoReq = map[int16]string{
 }
 
 func (p *AdminToolDeleteVideoReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -1380,7 +1362,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *AdminToolDeleteVideoReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1390,8 +1371,8 @@ func (p *AdminToolDeleteVideoReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-func (p *AdminToolDeleteVideoReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *AdminToolDeleteVideoReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1473,7 +1454,6 @@ func (p *AdminToolDeleteVideoReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminToolDeleteVideoReq(%+v)", *p)
-
 }
 
 type AdminToolDeleteVideoResp struct {
@@ -1502,7 +1482,6 @@ var fieldIDToName_AdminToolDeleteVideoResp = map[int16]string{
 }
 
 func (p *AdminToolDeleteVideoResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1566,7 +1545,6 @@ ReadStructEndError:
 }
 
 func (p *AdminToolDeleteVideoResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1576,8 +1554,8 @@ func (p *AdminToolDeleteVideoResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *AdminToolDeleteVideoResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *AdminToolDeleteVideoResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1659,7 +1637,6 @@ func (p *AdminToolDeleteVideoResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminToolDeleteVideoResp(%+v)", *p)
-
 }
 
 type AdminToolDeleteActivityReq struct {
@@ -1688,7 +1665,6 @@ var fieldIDToName_AdminToolDeleteActivityReq = map[int16]string{
 }
 
 func (p *AdminToolDeleteActivityReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -1767,7 +1743,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *AdminToolDeleteActivityReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1777,8 +1752,8 @@ func (p *AdminToolDeleteActivityReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-func (p *AdminToolDeleteActivityReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *AdminToolDeleteActivityReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1860,7 +1835,6 @@ func (p *AdminToolDeleteActivityReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminToolDeleteActivityReq(%+v)", *p)
-
 }
 
 type AdminToolDeleteActivityResp struct {
@@ -1889,7 +1863,6 @@ var fieldIDToName_AdminToolDeleteActivityResp = map[int16]string{
 }
 
 func (p *AdminToolDeleteActivityResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1953,7 +1926,6 @@ ReadStructEndError:
 }
 
 func (p *AdminToolDeleteActivityResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1963,8 +1935,8 @@ func (p *AdminToolDeleteActivityResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *AdminToolDeleteActivityResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *AdminToolDeleteActivityResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2046,7 +2018,6 @@ func (p *AdminToolDeleteActivityResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminToolDeleteActivityResp(%+v)", *p)
-
 }
 
 type AdminToolDeleteCommentReq struct {
@@ -2087,7 +2058,6 @@ var fieldIDToName_AdminToolDeleteCommentReq = map[int16]string{
 }
 
 func (p *AdminToolDeleteCommentReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -2196,7 +2166,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *AdminToolDeleteCommentReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2206,8 +2175,8 @@ func (p *AdminToolDeleteCommentReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-func (p *AdminToolDeleteCommentReq) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *AdminToolDeleteCommentReq) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2217,8 +2186,8 @@ func (p *AdminToolDeleteCommentReq) ReadField2(iprot thrift.TProtocol) error {
 	p.CommentType = _field
 	return nil
 }
-func (p *AdminToolDeleteCommentReq) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *AdminToolDeleteCommentReq) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2228,8 +2197,8 @@ func (p *AdminToolDeleteCommentReq) ReadField3(iprot thrift.TProtocol) error {
 	p.FromMediaID = _field
 	return nil
 }
-func (p *AdminToolDeleteCommentReq) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *AdminToolDeleteCommentReq) ReadField4(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2353,7 +2322,6 @@ func (p *AdminToolDeleteCommentReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminToolDeleteCommentReq(%+v)", *p)
-
 }
 
 type AdminToolDeleteCommentResp struct {
@@ -2382,7 +2350,6 @@ var fieldIDToName_AdminToolDeleteCommentResp = map[int16]string{
 }
 
 func (p *AdminToolDeleteCommentResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2446,7 +2413,6 @@ ReadStructEndError:
 }
 
 func (p *AdminToolDeleteCommentResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2456,8 +2422,8 @@ func (p *AdminToolDeleteCommentResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *AdminToolDeleteCommentResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *AdminToolDeleteCommentResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2539,7 +2505,6 @@ func (p *AdminToolDeleteCommentResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminToolDeleteCommentResp(%+v)", *p)
-
 }
 
 type AdminToolDeleteResp struct {
@@ -2568,7 +2533,6 @@ var fieldIDToName_AdminToolDeleteResp = map[int16]string{
 }
 
 func (p *AdminToolDeleteResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2632,7 +2596,6 @@ ReadStructEndError:
 }
 
 func (p *AdminToolDeleteResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2642,8 +2605,8 @@ func (p *AdminToolDeleteResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *AdminToolDeleteResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *AdminToolDeleteResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2725,7 +2688,6 @@ func (p *AdminToolDeleteResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminToolDeleteResp(%+v)", *p)
-
 }
 
 type ToolUploadImageReq struct {
@@ -2748,7 +2710,6 @@ var fieldIDToName_ToolUploadImageReq = map[int16]string{
 }
 
 func (p *ToolUploadImageReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -2812,7 +2773,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *ToolUploadImageReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2873,7 +2833,6 @@ func (p *ToolUploadImageReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolUploadImageReq(%+v)", *p)
-
 }
 
 type ToolUploadImageRespData struct {
@@ -2914,7 +2873,6 @@ var fieldIDToName_ToolUploadImageRespData = map[int16]string{
 }
 
 func (p *ToolUploadImageRespData) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2994,7 +2952,6 @@ ReadStructEndError:
 }
 
 func (p *ToolUploadImageRespData) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3004,8 +2961,8 @@ func (p *ToolUploadImageRespData) ReadField1(iprot thrift.TProtocol) error {
 	p.ImageID = _field
 	return nil
 }
-func (p *ToolUploadImageRespData) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolUploadImageRespData) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3015,8 +2972,8 @@ func (p *ToolUploadImageRespData) ReadField2(iprot thrift.TProtocol) error {
 	p.UploadURL = _field
 	return nil
 }
-func (p *ToolUploadImageRespData) ReadField3(iprot thrift.TProtocol) error {
 
+func (p *ToolUploadImageRespData) ReadField3(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3026,8 +2983,8 @@ func (p *ToolUploadImageRespData) ReadField3(iprot thrift.TProtocol) error {
 	p.UploadKey = _field
 	return nil
 }
-func (p *ToolUploadImageRespData) ReadField4(iprot thrift.TProtocol) error {
 
+func (p *ToolUploadImageRespData) ReadField4(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3151,7 +3108,6 @@ func (p *ToolUploadImageRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolUploadImageRespData(%+v)", *p)
-
 }
 
 type ToolUploadImageResp struct {
@@ -3195,7 +3151,6 @@ func (p *ToolUploadImageResp) IsSetData() bool {
 }
 
 func (p *ToolUploadImageResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3267,7 +3222,6 @@ ReadStructEndError:
 }
 
 func (p *ToolUploadImageResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3277,8 +3231,8 @@ func (p *ToolUploadImageResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *ToolUploadImageResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolUploadImageResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3288,6 +3242,7 @@ func (p *ToolUploadImageResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
+
 func (p *ToolUploadImageResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewToolUploadImageRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -3389,7 +3344,6 @@ func (p *ToolUploadImageResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolUploadImageResp(%+v)", *p)
-
 }
 
 type ToolGetImageReq struct {
@@ -3412,7 +3366,6 @@ var fieldIDToName_ToolGetImageReq = map[int16]string{
 }
 
 func (p *ToolGetImageReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetImageID bool = false
@@ -3476,7 +3429,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *ToolGetImageReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3537,7 +3489,6 @@ func (p *ToolGetImageReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolGetImageReq(%+v)", *p)
-
 }
 
 type ToolGetImageRespData struct {
@@ -3560,7 +3511,6 @@ var fieldIDToName_ToolGetImageRespData = map[int16]string{
 }
 
 func (p *ToolGetImageRespData) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3616,7 +3566,6 @@ ReadStructEndError:
 }
 
 func (p *ToolGetImageRespData) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3677,7 +3626,6 @@ func (p *ToolGetImageRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolGetImageRespData(%+v)", *p)
-
 }
 
 type ToolGetImageResp struct {
@@ -3721,7 +3669,6 @@ func (p *ToolGetImageResp) IsSetData() bool {
 }
 
 func (p *ToolGetImageResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3793,7 +3740,6 @@ ReadStructEndError:
 }
 
 func (p *ToolGetImageResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3803,8 +3749,8 @@ func (p *ToolGetImageResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *ToolGetImageResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolGetImageResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3814,6 +3760,7 @@ func (p *ToolGetImageResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
+
 func (p *ToolGetImageResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewToolGetImageRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -3915,7 +3862,6 @@ func (p *ToolGetImageResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolGetImageResp(%+v)", *p)
-
 }
 
 type ToolTokenRefreshReq struct {
@@ -3938,7 +3884,6 @@ var fieldIDToName_ToolTokenRefreshReq = map[int16]string{
 }
 
 func (p *ToolTokenRefreshReq) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetRefreshToken bool = false
@@ -4002,7 +3947,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *ToolTokenRefreshReq) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4063,7 +4007,6 @@ func (p *ToolTokenRefreshReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolTokenRefreshReq(%+v)", *p)
-
 }
 
 type ToolTokenRefreshRespData struct {
@@ -4092,7 +4035,6 @@ var fieldIDToName_ToolTokenRefreshRespData = map[int16]string{
 }
 
 func (p *ToolTokenRefreshRespData) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4156,7 +4098,6 @@ ReadStructEndError:
 }
 
 func (p *ToolTokenRefreshRespData) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4166,8 +4107,8 @@ func (p *ToolTokenRefreshRespData) ReadField1(iprot thrift.TProtocol) error {
 	p.ID = _field
 	return nil
 }
-func (p *ToolTokenRefreshRespData) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolTokenRefreshRespData) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4249,7 +4190,6 @@ func (p *ToolTokenRefreshRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolTokenRefreshRespData(%+v)", *p)
-
 }
 
 type ToolTokenRefreshResp struct {
@@ -4293,7 +4233,6 @@ func (p *ToolTokenRefreshResp) IsSetData() bool {
 }
 
 func (p *ToolTokenRefreshResp) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4365,7 +4304,6 @@ ReadStructEndError:
 }
 
 func (p *ToolTokenRefreshResp) ReadField1(iprot thrift.TProtocol) error {
-
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4375,8 +4313,8 @@ func (p *ToolTokenRefreshResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *ToolTokenRefreshResp) ReadField2(iprot thrift.TProtocol) error {
 
+func (p *ToolTokenRefreshResp) ReadField2(iprot thrift.TProtocol) error {
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4386,6 +4324,7 @@ func (p *ToolTokenRefreshResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
+
 func (p *ToolTokenRefreshResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewToolTokenRefreshRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -4487,7 +4426,6 @@ func (p *ToolTokenRefreshResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolTokenRefreshResp(%+v)", *p)
-
 }
 
 type ToolService interface {
@@ -4545,6 +4483,7 @@ func (p *ToolServiceClient) ToolDeleteVideo(ctx context.Context, req *ToolDelete
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *ToolServiceClient) ToolDeleteActivity(ctx context.Context, req *ToolDeleteActivityReq) (r *ToolDeleteActivityResp, err error) {
 	var _args ToolServiceToolDeleteActivityArgs
 	_args.Req = req
@@ -4554,6 +4493,7 @@ func (p *ToolServiceClient) ToolDeleteActivity(ctx context.Context, req *ToolDel
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *ToolServiceClient) ToolDeleteComment(ctx context.Context, req *ToolDeleteCommentReq) (r *ToolDeleteCommentResp, err error) {
 	var _args ToolServiceToolDeleteCommentArgs
 	_args.Req = req
@@ -4563,6 +4503,7 @@ func (p *ToolServiceClient) ToolDeleteComment(ctx context.Context, req *ToolDele
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *ToolServiceClient) AdminToolDeleteVideo(ctx context.Context, req *AdminToolDeleteVideoReq) (r *AdminToolDeleteVideoResp, err error) {
 	var _args ToolServiceAdminToolDeleteVideoArgs
 	_args.Req = req
@@ -4572,6 +4513,7 @@ func (p *ToolServiceClient) AdminToolDeleteVideo(ctx context.Context, req *Admin
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *ToolServiceClient) AdminToolDeleteActivity(ctx context.Context, req *AdminToolDeleteActivityReq) (r *AdminToolDeleteActivityResp, err error) {
 	var _args ToolServiceAdminToolDeleteActivityArgs
 	_args.Req = req
@@ -4581,6 +4523,7 @@ func (p *ToolServiceClient) AdminToolDeleteActivity(ctx context.Context, req *Ad
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *ToolServiceClient) AdminToolDeleteComment(ctx context.Context, req *AdminToolDeleteCommentReq) (r *AdminToolDeleteCommentResp, err error) {
 	var _args ToolServiceAdminToolDeleteCommentArgs
 	_args.Req = req
@@ -4590,6 +4533,7 @@ func (p *ToolServiceClient) AdminToolDeleteComment(ctx context.Context, req *Adm
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *ToolServiceClient) ToolUploadImage(ctx context.Context, req *ToolUploadImageReq) (r *ToolUploadImageResp, err error) {
 	var _args ToolServiceToolUploadImageArgs
 	_args.Req = req
@@ -4599,6 +4543,7 @@ func (p *ToolServiceClient) ToolUploadImage(ctx context.Context, req *ToolUpload
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *ToolServiceClient) ToolGetImage(ctx context.Context, req *ToolGetImageReq) (r *ToolGetImageResp, err error) {
 	var _args ToolServiceToolGetImageArgs
 	_args.Req = req
@@ -4608,6 +4553,7 @@ func (p *ToolServiceClient) ToolGetImage(ctx context.Context, req *ToolGetImageR
 	}
 	return _result.GetSuccess(), nil
 }
+
 func (p *ToolServiceClient) ToolTokenRefresh(ctx context.Context, req *ToolTokenRefreshReq) (r *ToolTokenRefreshResp, err error) {
 	var _args ToolServiceToolTokenRefreshArgs
 	_args.Req = req
@@ -4649,6 +4595,7 @@ func NewToolServiceProcessor(handler ToolService) *ToolServiceProcessor {
 	self.AddToProcessorMap("ToolTokenRefresh", &toolServiceProcessorToolTokenRefresh{handler: handler})
 	return self
 }
+
 func (p *ToolServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
 	name, _, seqId, err := iprot.ReadMessageBegin()
 	if err != nil {
@@ -5128,7 +5075,6 @@ func (p *ToolServiceToolDeleteVideoArgs) IsSetReq() bool {
 }
 
 func (p *ToolServiceToolDeleteVideoArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -5242,7 +5188,6 @@ func (p *ToolServiceToolDeleteVideoArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolDeleteVideoArgs(%+v)", *p)
-
 }
 
 type ToolServiceToolDeleteVideoResult struct {
@@ -5274,7 +5219,6 @@ func (p *ToolServiceToolDeleteVideoResult) IsSetSuccess() bool {
 }
 
 func (p *ToolServiceToolDeleteVideoResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -5390,7 +5334,6 @@ func (p *ToolServiceToolDeleteVideoResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolDeleteVideoResult(%+v)", *p)
-
 }
 
 type ToolServiceToolDeleteActivityArgs struct {
@@ -5422,7 +5365,6 @@ func (p *ToolServiceToolDeleteActivityArgs) IsSetReq() bool {
 }
 
 func (p *ToolServiceToolDeleteActivityArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -5536,7 +5478,6 @@ func (p *ToolServiceToolDeleteActivityArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolDeleteActivityArgs(%+v)", *p)
-
 }
 
 type ToolServiceToolDeleteActivityResult struct {
@@ -5568,7 +5509,6 @@ func (p *ToolServiceToolDeleteActivityResult) IsSetSuccess() bool {
 }
 
 func (p *ToolServiceToolDeleteActivityResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -5684,7 +5624,6 @@ func (p *ToolServiceToolDeleteActivityResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolDeleteActivityResult(%+v)", *p)
-
 }
 
 type ToolServiceToolDeleteCommentArgs struct {
@@ -5716,7 +5655,6 @@ func (p *ToolServiceToolDeleteCommentArgs) IsSetReq() bool {
 }
 
 func (p *ToolServiceToolDeleteCommentArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -5830,7 +5768,6 @@ func (p *ToolServiceToolDeleteCommentArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolDeleteCommentArgs(%+v)", *p)
-
 }
 
 type ToolServiceToolDeleteCommentResult struct {
@@ -5862,7 +5799,6 @@ func (p *ToolServiceToolDeleteCommentResult) IsSetSuccess() bool {
 }
 
 func (p *ToolServiceToolDeleteCommentResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -5978,7 +5914,6 @@ func (p *ToolServiceToolDeleteCommentResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolDeleteCommentResult(%+v)", *p)
-
 }
 
 type ToolServiceAdminToolDeleteVideoArgs struct {
@@ -6010,7 +5945,6 @@ func (p *ToolServiceAdminToolDeleteVideoArgs) IsSetReq() bool {
 }
 
 func (p *ToolServiceAdminToolDeleteVideoArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -6124,7 +6058,6 @@ func (p *ToolServiceAdminToolDeleteVideoArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceAdminToolDeleteVideoArgs(%+v)", *p)
-
 }
 
 type ToolServiceAdminToolDeleteVideoResult struct {
@@ -6156,7 +6089,6 @@ func (p *ToolServiceAdminToolDeleteVideoResult) IsSetSuccess() bool {
 }
 
 func (p *ToolServiceAdminToolDeleteVideoResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -6272,7 +6204,6 @@ func (p *ToolServiceAdminToolDeleteVideoResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceAdminToolDeleteVideoResult(%+v)", *p)
-
 }
 
 type ToolServiceAdminToolDeleteActivityArgs struct {
@@ -6304,7 +6235,6 @@ func (p *ToolServiceAdminToolDeleteActivityArgs) IsSetReq() bool {
 }
 
 func (p *ToolServiceAdminToolDeleteActivityArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -6418,7 +6348,6 @@ func (p *ToolServiceAdminToolDeleteActivityArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceAdminToolDeleteActivityArgs(%+v)", *p)
-
 }
 
 type ToolServiceAdminToolDeleteActivityResult struct {
@@ -6450,7 +6379,6 @@ func (p *ToolServiceAdminToolDeleteActivityResult) IsSetSuccess() bool {
 }
 
 func (p *ToolServiceAdminToolDeleteActivityResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -6566,7 +6494,6 @@ func (p *ToolServiceAdminToolDeleteActivityResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceAdminToolDeleteActivityResult(%+v)", *p)
-
 }
 
 type ToolServiceAdminToolDeleteCommentArgs struct {
@@ -6598,7 +6525,6 @@ func (p *ToolServiceAdminToolDeleteCommentArgs) IsSetReq() bool {
 }
 
 func (p *ToolServiceAdminToolDeleteCommentArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -6712,7 +6638,6 @@ func (p *ToolServiceAdminToolDeleteCommentArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceAdminToolDeleteCommentArgs(%+v)", *p)
-
 }
 
 type ToolServiceAdminToolDeleteCommentResult struct {
@@ -6744,7 +6669,6 @@ func (p *ToolServiceAdminToolDeleteCommentResult) IsSetSuccess() bool {
 }
 
 func (p *ToolServiceAdminToolDeleteCommentResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -6860,7 +6784,6 @@ func (p *ToolServiceAdminToolDeleteCommentResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceAdminToolDeleteCommentResult(%+v)", *p)
-
 }
 
 type ToolServiceToolUploadImageArgs struct {
@@ -6892,7 +6815,6 @@ func (p *ToolServiceToolUploadImageArgs) IsSetReq() bool {
 }
 
 func (p *ToolServiceToolUploadImageArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -7006,7 +6928,6 @@ func (p *ToolServiceToolUploadImageArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolUploadImageArgs(%+v)", *p)
-
 }
 
 type ToolServiceToolUploadImageResult struct {
@@ -7038,7 +6959,6 @@ func (p *ToolServiceToolUploadImageResult) IsSetSuccess() bool {
 }
 
 func (p *ToolServiceToolUploadImageResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -7154,7 +7074,6 @@ func (p *ToolServiceToolUploadImageResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolUploadImageResult(%+v)", *p)
-
 }
 
 type ToolServiceToolGetImageArgs struct {
@@ -7186,7 +7105,6 @@ func (p *ToolServiceToolGetImageArgs) IsSetReq() bool {
 }
 
 func (p *ToolServiceToolGetImageArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -7300,7 +7218,6 @@ func (p *ToolServiceToolGetImageArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolGetImageArgs(%+v)", *p)
-
 }
 
 type ToolServiceToolGetImageResult struct {
@@ -7332,7 +7249,6 @@ func (p *ToolServiceToolGetImageResult) IsSetSuccess() bool {
 }
 
 func (p *ToolServiceToolGetImageResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -7448,7 +7364,6 @@ func (p *ToolServiceToolGetImageResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolGetImageResult(%+v)", *p)
-
 }
 
 type ToolServiceToolTokenRefreshArgs struct {
@@ -7480,7 +7395,6 @@ func (p *ToolServiceToolTokenRefreshArgs) IsSetReq() bool {
 }
 
 func (p *ToolServiceToolTokenRefreshArgs) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -7594,7 +7508,6 @@ func (p *ToolServiceToolTokenRefreshArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolTokenRefreshArgs(%+v)", *p)
-
 }
 
 type ToolServiceToolTokenRefreshResult struct {
@@ -7626,7 +7539,6 @@ func (p *ToolServiceToolTokenRefreshResult) IsSetSuccess() bool {
 }
 
 func (p *ToolServiceToolTokenRefreshResult) Read(iprot thrift.TProtocol) (err error) {
-
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -7742,5 +7654,4 @@ func (p *ToolServiceToolTokenRefreshResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ToolServiceToolTokenRefreshResult(%+v)", *p)
-
 }

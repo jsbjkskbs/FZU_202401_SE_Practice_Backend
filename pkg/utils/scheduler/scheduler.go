@@ -79,7 +79,7 @@ func NewScheduler(option SchedulerOption) *Scheduler {
 	if option.NShard <= 32 {
 		option.NShard = 32
 	}
-	var partitionMutex = make([]*sync.Mutex, option.NShard)
+	partitionMutex := make([]*sync.Mutex, option.NShard)
 	for i := 0; i < option.NShard; i++ {
 		partitionMutex[i] = &sync.Mutex{}
 	}

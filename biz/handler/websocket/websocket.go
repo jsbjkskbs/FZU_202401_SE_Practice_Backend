@@ -3,6 +3,7 @@ package websocket
 import (
 	"context"
 	"fmt"
+
 	"sfw/biz/mw/jwt"
 	"sfw/biz/service"
 	"sfw/pkg/errno"
@@ -56,7 +57,6 @@ func Handler(ctx context.Context, c *app.RequestContext) {
 			conn.WriteMessage(websocket.TextMessage, []byte("you shouldn't send message to me"))
 		}
 	})
-
 	if err != nil {
 		c.JSON(consts.StatusOK, utils.H{
 			"code": errno.InternalServerError,

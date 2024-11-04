@@ -3,12 +3,13 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"strconv"
+
 	"sfw/biz/dal"
 	"sfw/biz/dal/model"
 	"sfw/biz/mw/jwt"
 	"sfw/pkg/errno"
 	"sfw/pkg/utils/encrypt"
-	"strconv"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
@@ -27,9 +28,7 @@ type _user struct {
 	rsa      *encrypt.RsaService
 }
 
-var (
-	userMap = make(map[int64]*_user)
-)
+var userMap = make(map[int64]*_user)
 
 func NewChatService(ctx context.Context, c *app.RequestContext, conn *websocket.Conn) *ChatService {
 	return &ChatService{

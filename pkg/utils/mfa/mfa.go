@@ -51,7 +51,6 @@ func (ac *AuthController) GenerateTOTP() (*MfaAuthInfo, error) {
 		Issuer:      "FuliFuli",
 		AccountName: ac.payload,
 	})
-
 	if err != nil {
 		return nil, err
 	}
