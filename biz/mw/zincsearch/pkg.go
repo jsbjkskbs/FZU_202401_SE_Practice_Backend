@@ -116,7 +116,7 @@ func (l *ZincClient) custom(v *Document, status string) error {
 // It is used to log the caller of the function.
 // Automatically invoked by the logging functions.
 func (l *ZincClient) getCaller() _Caller {
-	_, file, line, ok := runtime.Caller(2)
+	_, file, line, ok := runtime.Caller(3)
 	if !ok {
 		return _Caller{}
 	}
