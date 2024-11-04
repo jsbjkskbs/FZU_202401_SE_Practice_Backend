@@ -20,6 +20,7 @@ import (
 	"sfw/pkg/utils/checker"
 	"sfw/pkg/utils/configure"
 	"sfw/pkg/utils/generator"
+	"sfw/pkg/utils/logger"
 	"sfw/pkg/utils/mail"
 	"sfw/pkg/utils/scheduler"
 
@@ -51,9 +52,6 @@ func InstallSentinel(h *server.Hertz) {
 
 func Initialize() {
 	checkEnv()
-	generator.Init()
-	scheduler.Init()
-	jwt.Init()
 
 	// Initialize your application here.
 	configureLoader := configure.NewConfLoader(&configure.ConfigureOption{
@@ -73,6 +71,10 @@ func Initialize() {
 	if err := configureLoader.Run(); err != nil {
 		hlog.Fatal("Config Loader: ", err)
 	}
+
+	generator.Init()
+	scheduler.Init()
+	jwt.Init()
 
 	InitializeLogger = zincsearch.Client.NewLoggerWithOtherOutput("Initialize", hlog.Info, hlog.Infof)
 
@@ -332,6 +334,7 @@ func ConfigureRegister(...any) {
 					return errno.InternalServerError
 				}
 				zincsearch.Load()
+				logger.InitLogger()
 				return nil
 			},
 

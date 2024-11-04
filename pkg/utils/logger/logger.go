@@ -6,10 +6,16 @@ import (
 )
 
 var (
-	RuntimeLogger     = zincsearch.Client.NewLogger("runtime")
-	SynchronizeLogger = zincsearch.Client.NewLogger("synchronize")
-	ShutdownLogger    = zincsearch.Client.NewLogger("shutdown")
+	RuntimeLogger     *zincsearch.Logger
+	SynchronizeLogger *zincsearch.Logger
+	ShutdownLogger    *zincsearch.Logger
 )
+
+func InitLogger() {
+	RuntimeLogger = zincsearch.Client.NewLogger("runtime")
+	SynchronizeLogger = zincsearch.Client.NewLogger("synchronize")
+	ShutdownLogger = zincsearch.Client.NewLogger("shutdown")
+}
 
 func LogRuntimeError(e error) {
 	if e == nil {
