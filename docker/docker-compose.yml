@@ -61,6 +61,10 @@ services:
   zincsearch:
     image: public.ecr.aws/zinclabs/zincsearch:latest
     container_name: zincsearch
+    deploy:
+      resources:
+        limits:
+          memory: 40M
     ports:
       - '4080:4080'
     environment:
