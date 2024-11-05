@@ -10,7 +10,6 @@ type Document struct {
 // Caller is a struct that represents the caller of the logger.
 // It has two fields: Name and Location.
 type _Caller struct {
-	Name     string
 	Location string
 }
 

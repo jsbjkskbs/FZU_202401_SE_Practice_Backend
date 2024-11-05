@@ -2,10 +2,23 @@ package exquery
 
 import (
 	"context"
+	"fmt"
+	"strconv"
 
 	"sfw/biz/dal"
 	"sfw/biz/dal/model"
+
+	"gorm.io/gen"
 )
+
+func QueryVideoCommentAllIdAndVideoId() ([]*model.VideoComment, error) {
+	vc := dal.Executor.VideoComment
+	comments, err := vc.WithContext(context.Background()).Select(vc.ID, vc.VideoID).Find()
+	if err != nil {
+		return nil, err
+	}
+	return comments, nil
+}
 
 func QueryVideoCommentExistById(id int64) (bool, error) {
 	vc := dal.Executor.VideoComment
@@ -74,6 +87,58 @@ func QueryVideoChildCommentByRootIdPaged(rootID int64, pageNum, pageSize int) ([
 		return nil, 0, err
 	}
 	return comments, count, nil
+}
+
+func QueryVideoCommentReportByBasicInfoPaged(status, keyword, userId, label *string, pageNum, pageSize int64) ([]*model.VideoCommentReport, int64, error) {
+	vcr := dal.Executor.VideoCommentReport
+	conditions := []gen.Condition{}
+	if status != nil {
+		conditions = append(conditions, vcr.Status.Eq(*status))
+	}
+	if keyword != nil {
+		conditions = append(conditions, vcr.Reason.Like(fmt.Sprint("%", *keyword, "%")))
+	}
+	if userId != nil {
+		userId, err := strconv.ParseInt(*userId, 10, 64)
+		if err != nil {
+			return nil, 0, err
+		}
+		conditions = append(conditions, vcr.UserID.Eq(userId))
+	}
+	if label != nil {
+		conditions = append(conditions, vcr.Label.Eq(*label))
+	}
+	// 此处代码不必提取至exquery
+	items, count, err := vcr.WithContext(context.Background()).
+		Where(conditions...).
+		FindByPage((int(pageNum * pageSize)), int(pageSize))
+	if err != nil {
+		return nil, 0, err
+	}
+	return items, count, nil
+}
+
+func QueryVideoCommentIdAndVidByCommentId(commentId int64) ([]model.VideoComment, error) {
+	vc := dal.Executor.VideoComment
+	list := []model.VideoComment{}
+	err := vc.WithContext(context.Background()).
+		Where(vc.ID.Eq(commentId)).
+		Or(vc.RootID.Eq(commentId)).
+		Select(vc.ID, vc.VideoID).
+		Scan(&list)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
+func QueryActivityCommentAllIdAndActivityId() ([]*model.ActivityComment, error) {
+	ac := dal.Executor.ActivityComment
+	comments, err := ac.WithContext(context.Background()).Select(ac.ID, ac.ActivityID).Find()
+	if err != nil {
+		return nil, err
+	}
+	return comments, nil
 }
 
 func QueryActivityCommentExistByIdAndUserId(id, userId int64) (bool, error) {
@@ -145,6 +210,48 @@ func QueryActivityChildCommentByRootIdPaged(rootID int64, pageNum, pageSize int)
 	return comments, count, nil
 }
 
+func QueryActivityCommentReportByBasicInfoPaged(status, keyword, userId, label *string, pageNum, pageSize int64) ([]*model.ActivityCommentReport, int64, error) {
+	ac := dal.Executor.ActivityCommentReport
+	conditions := []gen.Condition{}
+	if status != nil {
+		conditions = append(conditions, ac.Status.Eq(*status))
+	}
+	if keyword != nil {
+		conditions = append(conditions, ac.Reason.Like(fmt.Sprint("%", *keyword, "%")))
+	}
+	if userId != nil {
+		userId, err := strconv.ParseInt(*userId, 10, 64)
+		if err != nil {
+			return nil, 0, err
+		}
+		conditions = append(conditions, ac.UserID.Eq(userId))
+	}
+	if label != nil {
+		conditions = append(conditions, ac.Label.Eq(*label))
+	}
+	items, count, err := ac.WithContext(context.Background()).
+		Where(conditions...).
+		FindByPage((int(pageNum * pageSize)), int(pageSize))
+	if err != nil {
+		return nil, 0, err
+	}
+	return items, count, nil
+}
+
+func QueryActivityCommentIdAndVidByCommentId(commentId int64) ([]model.ActivityComment, error) {
+	ac := dal.Executor.ActivityComment
+	list := []model.ActivityComment{}
+	err := ac.WithContext(context.Background()).
+		Where(ac.ID.Eq(commentId)).
+		Or(ac.RootID.Eq(commentId)).
+		Select(ac.ID, ac.ActivityID).
+		Scan(&list)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
 func InsertVideoComment(items ...*model.VideoComment) error {
 	vc := dal.Executor.VideoComment
 	err := vc.WithContext(context.Background()).Create(items...)
@@ -181,6 +288,15 @@ func DeleteVideoCommentByVideoId(videoId int64) error {
 	return nil
 }
 
+func DeleteVideoCommentCascadeById(id int64) error {
+	vc := dal.Executor.VideoComment
+	_, err := vc.WithContext(context.Background()).Where(vc.ID.Eq(id)).Or(vc.RootID.Eq(id)).Delete()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func DeleteActivityCommentById(id int64) error {
 	ac := dal.Executor.ActivityComment
 	_, err := ac.WithContext(context.Background()).Where(ac.ID.Eq(id)).Delete()
@@ -193,6 +309,15 @@ func DeleteActivityCommentById(id int64) error {
 func DeleteActivityCommentByActivityId(activityId int64) error {
 	ac := dal.Executor.ActivityComment
 	_, err := ac.WithContext(context.Background()).Where(ac.ActivityID.Eq(activityId)).Delete()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func DeleteActivityCommentCascadeById(commentId int64) error {
+	ac := dal.Executor.ActivityComment
+	_, err := ac.WithContext(context.Background()).Where(ac.ID.Eq(commentId)).Or(ac.RootID.Eq(commentId)).Delete()
 	if err != nil {
 		return err
 	}
