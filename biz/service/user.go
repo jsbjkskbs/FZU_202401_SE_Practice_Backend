@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"time"
 
-	"sfw/biz/dal"
 	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/user"
@@ -233,8 +232,8 @@ func (service *UserService) NewMfaBindEvent(req *user.UserMfaBindReq) error {
 		return errno.MfaAuthFailed
 	}
 
-	u := dal.Executor.User
-	_, err = u.WithContext(service.ctx).Where(u.ID.Eq(id)).Updates(model.User{
+	err = exquery.UpdateUserWithId(&model.User{
+		ID:        id,
 		MfaEnable: true,
 		MfaSecret: req.Secret,
 	})

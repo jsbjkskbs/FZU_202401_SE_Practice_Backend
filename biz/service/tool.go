@@ -6,9 +6,7 @@ import (
 	"strconv"
 	"sync"
 
-	"sfw/biz/dal"
 	"sfw/biz/dal/exquery"
-	"sfw/biz/dal/model"
 	"sfw/biz/model/api/tool"
 	"sfw/biz/mw/gorse"
 	"sfw/biz/mw/jwt"
@@ -145,7 +143,6 @@ func (service *ToolService) newDeleteVideoCommentEvent(req *tool.ToolDeleteComme
 		return errno.ParamInvalid.WithInnerError(err)
 	}
 
-	vc := dal.Executor.VideoComment
 	exist, err := exquery.QueryVideoCommentExistByIdAndUserId(commentId, uid)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
@@ -154,20 +151,12 @@ func (service *ToolService) newDeleteVideoCommentEvent(req *tool.ToolDeleteComme
 		return errno.CustomError.WithMessage("不能删除别人的评论")
 	}
 
-	list := []model.VideoComment{}
-	err = vc.WithContext(context.Background()).
-		Where(vc.ID.Eq(commentId)).
-		Or(vc.RootID.Eq(commentId)).
-		Select(vc.ID, vc.VideoID).
-		Scan(&list)
+	list, err := exquery.QueryVideoCommentIdAndVidByCommentId(commentId)
 	if err != nil {
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	_, err = vc.WithContext(context.Background()).
-		Where(vc.ID.Eq(commentId)).
-		Or(vc.RootID.Eq(commentId)).
-		Delete()
+	err = exquery.DeleteVideoCommentCascadeById(commentId)
 	if err != nil {
 		return errno.InternalServerError.WithInnerError(err)
 	}
@@ -191,7 +180,6 @@ func (service *ToolService) newDeleteActivityCommentEvent(req *tool.ToolDeleteCo
 		return errno.ParamInvalid.WithInnerError(err)
 	}
 
-	ac := dal.Executor.ActivityComment
 	exist, err := exquery.QueryActivityCommentExistByIdAndUserId(commentId, uid)
 	if err != nil {
 		return errno.InternalServerError.WithInnerError(err)
@@ -200,20 +188,12 @@ func (service *ToolService) newDeleteActivityCommentEvent(req *tool.ToolDeleteCo
 		return errno.CustomError.WithMessage("不能删除别人的评论")
 	}
 
-	list := []model.ActivityComment{}
-	err = ac.WithContext(context.Background()).
-		Where(ac.ID.Eq(commentId)).
-		Or(ac.RootID.Eq(commentId)).
-		Select(ac.ID, ac.ActivityID).
-		Scan(&list)
+	list, err := exquery.QueryActivityCommentIdAndVidByCommentId(commentId)
 	if err != nil {
 		return errno.InternalServerError.WithInnerError(err)
 	}
 
-	_, err = ac.WithContext(context.Background()).
-		Where(ac.ID.Eq(commentId)).
-		Or(ac.RootID.Eq(commentId)).
-		Delete()
+	err = exquery.DeleteActivityCommentCascadeById(commentId)
 	if err != nil {
 		return errno.InternalServerError.WithInnerError(err)
 	}
@@ -331,7 +311,6 @@ func (service *ToolService) newAdminDeleteVideoCommentEvent(req *tool.AdminToolD
 		return errno.ParamInvalid.WithInnerError(err)
 	}
 
-	vc := dal.Executor.VideoComment
 	exist, err := exquery.QueryVideoCommentExistById(commentId)
 	if err != nil {
 		return errno.InternalServerError.WithInnerError(err)
@@ -340,20 +319,12 @@ func (service *ToolService) newAdminDeleteVideoCommentEvent(req *tool.AdminToolD
 		return errno.CustomError.WithMessage("评论不存在")
 	}
 
-	list := []model.VideoComment{}
-	err = vc.WithContext(context.Background()).
-		Where(vc.ID.Eq(commentId)).
-		Or(vc.RootID.Eq(commentId)).
-		Select(vc.ID, vc.VideoID).
-		Scan(&list)
+	list, err := exquery.QueryVideoCommentIdAndVidByCommentId(commentId)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	_, err = vc.WithContext(context.Background()).
-		Where(vc.ID.Eq(commentId)).
-		Or(vc.RootID.Eq(commentId)).
-		Delete()
+	err = exquery.DeleteVideoCommentCascadeById(commentId)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -373,7 +344,6 @@ func (service *ToolService) newAdminDeleteActivityCommentEvent(req *tool.AdminTo
 		return errno.ParamInvalid.WithInnerError(err)
 	}
 
-	ac := dal.Executor.ActivityComment
 	exist, err := exquery.QueryActivityCommentExistById(commentId)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
@@ -382,20 +352,12 @@ func (service *ToolService) newAdminDeleteActivityCommentEvent(req *tool.AdminTo
 		return errno.CustomError.WithMessage("评论不存在")
 	}
 
-	list := []model.ActivityComment{}
-	err = ac.WithContext(context.Background()).
-		Where(ac.ID.Eq(commentId)).
-		Or(ac.RootID.Eq(commentId)).
-		Select(ac.ID, ac.ActivityID).
-		Scan(&list)
+	list, err := exquery.QueryActivityCommentIdAndVidByCommentId(commentId)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	_, err = ac.WithContext(context.Background()).
-		Where(ac.ID.Eq(commentId)).
-		Or(ac.RootID.Eq(commentId)).
-		Delete()
+	err = exquery.DeleteActivityCommentCascadeById(commentId)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}

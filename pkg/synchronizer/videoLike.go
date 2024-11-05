@@ -7,7 +7,7 @@ import (
 	"sync"
 
 	"sfw/biz/dal"
-	"sfw/biz/dal/model"
+	"sfw/biz/dal/exquery"
 	"sfw/biz/mw/redis"
 )
 
@@ -43,12 +43,11 @@ func synchronizeNewInsertVideoLikeFromRedis2DB(vid string) error {
 		return err
 	}
 
-	v := dal.Executor.Video
-	exist, err := v.WithContext(context.Background()).Where(v.ID.Eq(videoId)).Count()
+	exist, err := exquery.QueryVideoExistById(videoId)
 	if err != nil {
 		return err
 	}
-	if exist == 0 {
+	if !exist {
 		return nil
 	}
 
@@ -57,22 +56,19 @@ func synchronizeNewInsertVideoLikeFromRedis2DB(vid string) error {
 		return err
 	}
 	uids := []int64{}
-	vlikes := []*model.VideoLike{}
 	for _, uid := range *list {
 		userId, err := strconv.ParseInt(uid, 10, 64)
 		if err != nil {
 			continue
 		}
 		uids = append(uids, userId)
-		vlikes = append(vlikes, &model.VideoLike{VideoID: videoId, UserID: userId})
 	}
 
-	vl := dal.Executor.VideoLike
-	if _, err = vl.WithContext(context.Background()).Where(vl.VideoID.Eq(videoId), vl.UserID.In(uids...)).Delete(); err != nil {
+	if err = exquery.DeleteVideoLikeByVideoIdAndUserIds(videoId, uids); err != nil {
 		return err
 	}
 
-	if err = vl.WithContext(context.Background()).Create(vlikes...); err != nil {
+	if err = exquery.InsertVideoLikeByUserIds(videoId, uids); err != nil {
 		return err
 	}
 
