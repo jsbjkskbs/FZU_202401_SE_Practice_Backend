@@ -1,6 +1,8 @@
 package service
 
 import (
+	"testing"
+
 	"github.com/bytedance/mockey"
 	"github.com/stretchr/testify/assert"
 	"sfw/biz/dal/exquery"
@@ -14,7 +16,6 @@ import (
 	"sfw/pkg/oss"
 	"sfw/pkg/utils/checker"
 	"sfw/pkg/utils/generator"
-	"testing"
 )
 
 var videoService = new(VideoService)
