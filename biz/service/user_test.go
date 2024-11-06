@@ -4,8 +4,6 @@ import (
 	"testing"
 	"time"
 
-	"gorm.io/gen"
-
 	"sfw/biz/mw/jwt"
 
 	"sfw/pkg/oss"
@@ -25,7 +23,7 @@ import (
 	"sfw/pkg/utils/mfa"
 )
 
-var service = new(UserService)
+var userService = new(UserService)
 
 func TestNewRegisterEvent(t *testing.T) {
 	type testCase struct {
@@ -188,14 +186,14 @@ func TestNewRegisterEvent(t *testing.T) {
 			mockey.Mock(exquery.InsertUser).Return(tc.mockInsertErrorReturn).Build()
 			mockey.Mock(redis.EmailCodeDel).Return(nil).Build()
 
-			err := service.NewRegisterEvent(tc.req)
+			err := userService.NewRegisterEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
 				assert.Contains(t, err.Error(), tc.expectedError)
 			} else {
 				assert.NoError(t, err)
-				time.Sleep(5 * time.Second)
+				time.Sleep(1 * time.Second)
 			}
 		})
 	}
@@ -261,7 +259,7 @@ func TestNewSecurityEmailCodeEvent(t *testing.T) {
 			mockey.Mock(redis.EmailCodeStore).Return(tc.mockCodeStoreErrorReturn).Build()
 			mockey.Mock(mockey.GetMethod(mail.Station, "Send")).Return().Build()
 
-			err := service.NewSecurityEmailCodeEvent(tc.req)
+			err := userService.NewSecurityEmailCodeEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -372,7 +370,7 @@ func TestNewLoginEvent(t *testing.T) {
 			mockey.Mock((*mfa.AuthController).VerifyTOTP).Return(tc.mockVerifyReturn).Build()
 			mockey.Mock(model_converter.UserWithTokenDal2Resp).Return(&base.UserWithToken{}).Build()
 
-			_, err := service.NewLoginEvent(tc.req)
+			_, err := userService.NewLoginEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -433,7 +431,7 @@ func TestNewInfoEvent(t *testing.T) {
 			mockey.Mock(exquery.QueryUserByID).Return(tc.mockUserReturn, tc.mockErrorReturn).Build()
 			mockey.Mock(model_converter.UserDal2Resp).Return(&base.User{}).Build()
 
-			_, err := service.NewInfoEvent(tc.req)
+			_, err := userService.NewInfoEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -487,7 +485,7 @@ func TestNewFollowerCountEvent(t *testing.T) {
 
 			mockey.Mock(exquery.QueryFollowerCountByUserID).Return(tc.mockCountReturn, tc.mockErrorReturn).Build()
 
-			result, err := service.NewFollowerCountEvent(tc.req)
+			result, err := userService.NewFollowerCountEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -542,7 +540,7 @@ func TestNewFollowingCountEvent(t *testing.T) {
 
 			mockey.Mock(exquery.QueryFollowingCountByUserID).Return(tc.mockCountReturn, tc.mockErrorReturn).Build()
 
-			result, err := service.NewFollowingCountEvent(tc.req)
+			result, err := userService.NewFollowingCountEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -571,7 +569,7 @@ func TestNewLikeCountEvent(t *testing.T) {
 			name:          "ParamInvalid",
 			req:           &user.UserLikeCountReq{UserID: ""},
 			errorIsExist:  true,
-			expectedError: "用户ID错误",
+			expectedError: errno.ParamInvalidErrorMsg,
 		},
 		{
 			name:            "QueryError",
@@ -597,7 +595,7 @@ func TestNewLikeCountEvent(t *testing.T) {
 
 			mockey.Mock(exquery.QueryUserLikeCount).Return(tc.mockCountReturn, tc.mockErrorReturn).Build()
 
-			result, err := service.NewLikeCountEvent(tc.req)
+			result, err := userService.NewLikeCountEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -661,7 +659,7 @@ func TestNewAvatarUploadEvent(t *testing.T) {
 			mockey.Mock((*jwt.JWTMiddleware).ConvertJWTPayloadToInt64).Return(111, tc.mockTokenErrorReturn).Build()
 			mockey.Mock(oss.UploadAvatar).Return(tc.mockUploadUptokenReturn, tc.mockUploadUploadKeyReturn, tc.mockUploadErrorReturn).Build()
 
-			result, err := service.NewAvatarUploadEvent(tc.req)
+			result, err := userService.NewAvatarUploadEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -728,7 +726,7 @@ func TestNewMfaQrcodeEvent(t *testing.T) {
 			mockey.Mock((*mfa.AuthController).GenerateTOTP).Return(tc.mockInfoReturn, tc.mockGenerateErrorReturn).Build()
 			mockey.Mock(encrypt.EncodeUrlToQrcodeAsPng).Return(tc.mockQRCodeReturn).Build()
 
-			result, err := service.NewMfaQrcodeEvent(tc.req)
+			result, err := userService.NewMfaQrcodeEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -770,30 +768,29 @@ func TestNewMfaBindEvent(t *testing.T) {
 			errorIsExist:  true,
 			expectedError: errno.MfaAuthFailedErrorMsg,
 		},
-		//{
-		//	name: "UpdateFailed",
-		//	req: &user.UserMfaBindReq{
-		//		AccessToken: "111",
-		//		Code:        "111",
-		//		Secret:      "111",
-		//	},
-		//	errorIsExist:          true,
-		//	expectedError:         errno.DatabaseCallErrorMsg,
-		//	mockVerifyReturn:      true,
-		//	mockUpdateErrorReturn: errno.DatabaseCallError,
-		//},
-		//{
-		//	name: "Success",
-		//	req: &user.UserMfaBindReq{
-		//		AccessToken: "111",
-		//		Code:        "111",
-		//		Secret:      "111",
-		//	},
-		//	errorIsExist:     false,
-		//	mockVerifyReturn: true,
-		//},
+		{
+			name: "UpdateFailed",
+			req: &user.UserMfaBindReq{
+				AccessToken: "111",
+				Code:        "111",
+				Secret:      "111",
+			},
+			errorIsExist:          true,
+			expectedError:         errno.DatabaseCallErrorMsg,
+			mockVerifyReturn:      true,
+			mockUpdateErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "Success",
+			req: &user.UserMfaBindReq{
+				AccessToken: "111",
+				Code:        "111",
+				Secret:      "111",
+			},
+			errorIsExist:     false,
+			mockVerifyReturn: true,
+		},
 	}
-	// dal.Executor = new(query.Query)
 
 	defer mockey.UnPatchAll()
 
@@ -803,10 +800,9 @@ func TestNewMfaBindEvent(t *testing.T) {
 
 			mockey.Mock((*jwt.JWTMiddleware).ConvertJWTPayloadToInt64).Return(111, tc.mockTokenErrorReturn).Build()
 			mockey.Mock((*mfa.AuthController).VerifyTOTP).Return(tc.mockVerifyReturn).Build()
-			mockey.Mock((*gen.DO).Update).Return(nil, tc.mockUpdateErrorReturn).Build()
-			// mockey.Mock(dal.Executor.User.WithContext).Return(nil).Build()
+			mockey.Mock(exquery.UpdateUserWithId).Return(tc.mockUpdateErrorReturn).Build()
 
-			err := service.NewMfaBindEvent(tc.req)
+			err := userService.NewMfaBindEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -865,7 +861,7 @@ func TestNewSearchEvent(t *testing.T) {
 
 			mockey.Mock(exquery.QueryUserFuzzyByUsernamePaged).Return(tc.mockQueryUsersReturn, tc.mockQueryCountReturn, tc.mockQueryErrorReturn).Build()
 
-			result, err := service.NewSearchEvent(tc.req)
+			result, err := userService.NewSearchEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -945,7 +941,7 @@ func TestNewSecurityPasswordRetrieveEmail(t *testing.T) {
 			mockey.Mock(redis.EmailCodeStore).Return(tc.mockCodeStoreErrorReturn).Build()
 			mockey.Mock(redis.TokenExpireTimeStore).Return(tc.mockTimeStoreErrorReturn).Build()
 
-			err := service.NewSecurityPasswordRetrieveEmail(tc.req)
+			err := userService.NewSecurityPasswordRetrieveEmail(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -1055,14 +1051,14 @@ func TestNewSecurityPasswordResetEmailEvent(t *testing.T) {
 			mockey.Mock(exquery.UpdateUserWithEmail).Return(tc.mockUpdateErrorReturn).Build()
 			mockey.Mock(redis.EmailCodeDel).Return(nil).Build()
 
-			err := service.NewSecurityPasswordResetEmailEvent(tc.req)
+			err := userService.NewSecurityPasswordResetEmailEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
 				assert.Contains(t, err.Error(), tc.expectedError)
 			} else {
 				assert.NoError(t, err)
-				time.Sleep(10 * time.Second)
+				time.Sleep(1 * time.Second)
 			}
 		})
 	}
