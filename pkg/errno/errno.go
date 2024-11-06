@@ -24,8 +24,10 @@ func (e *Errno) Unwrap() error {
 }
 
 func (e *Errno) WithMessage(message string) *Errno {
-	e.Message = message
-	return e
+	// e.Message = message
+	err := *e
+	err.Message = message
+	return &err
 }
 
 func (e *Errno) RecommendToPrintStack() bool {
@@ -39,15 +41,16 @@ func (e *Errno) RecommendToPrintStack() bool {
 }
 
 func (e *Errno) WithInnerError(err error) *Errno {
+	ne := *e
 	_, file, line, ok := runtime.Caller(1)
-	e.goid = goid.Get()
+	ne.goid = goid.Get()
 	if ok {
-		e.file = fmt.Sprintf("%s:%d", file, line)
+		ne.file = fmt.Sprintf("%s:%d", file, line)
 	} else {
-		e.file = "unknown"
+		ne.file = "unknown"
 	}
-	e.InnerErrno = ConvertErrno(err)
-	return e
+	ne.InnerErrno = ConvertErrno(err)
+	return &ne
 }
 
 func (e *Errno) PrintStack() string {

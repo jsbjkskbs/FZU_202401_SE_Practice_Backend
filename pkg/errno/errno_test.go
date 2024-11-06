@@ -52,3 +52,27 @@ func TestErrno6(t *testing.T) {
 	)
 	t.Log(err.(*errno.Errno).PrintStack())
 }
+
+func TestErrno7(t *testing.T) {
+	errno.CustomError.WithMessage("1")
+	if errno.CustomError.Message == "1" {
+		t.Error("CustomError message should not be '1'")
+	}
+	errno.CustomError.WithMessage("2")
+	if errno.CustomError.Message == "2" {
+		t.Error("CustomError message should not be '2'")
+	}
+}
+
+func TestErrno8(t *testing.T) {
+	inner1 := errno.CustomError.InnerErrno
+	inner2 := errno.CustomError.WithInnerError(errors.New("123")).InnerErrno
+	inner3 := errno.CustomError.InnerErrno
+	if !(inner1 == nil && inner1 == inner3) {
+		t.Errorf("errno.CustomError has modified, %#v\n", errno.CustomError)
+	}
+	if inner2 == inner1 || inner2 == inner3 {
+		t.Errorf("unexpected new Errno, %#v\n", inner2)
+	}
+	t.Logf("passed, %#v, %#v, %#v\n", inner1, inner2, inner3)
+}
