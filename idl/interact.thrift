@@ -41,6 +41,7 @@ struct InteractLikeVideoListReq {
     1: required string user_id;
     2: required i64 page_num;
     3: required i64 page_size;
+    4: optional string access_token (api.header="Access-Token");
 }
 
 struct InteractLikeVideoListRespData {
@@ -86,6 +87,7 @@ struct InteractCommentVideoListReq {
     1: required string video_id;
     2: required i64 page_num;
     3: required i64 page_size;
+    4: optional string access_token (api.header="Access-Token");
 }
 
 struct InteractCommentVideoListRespData {
@@ -105,6 +107,7 @@ struct InteractCommentActivityListReq {
     1: required string activity_id;
     2: required i64 page_num;
     3: required i64 page_size;
+    4: optional string access_token (api.header="Access-Token");
 }
 
 struct InteractCommentActivityListRespData {
@@ -125,6 +128,7 @@ struct InteractVideoChildCommentListReq {
     1: required string comment_id;
     2: required i64 page_num;
     3: required i64 page_size;
+    4: optional string access_token (api.header="Access-Token");
 }
 
 struct InteractVideoChildCommentListRespData {
@@ -144,6 +148,7 @@ struct InteractActivityChildCommentListReq {
     1: required string comment_id;
     2: required i64 page_num;
     3: required i64 page_size;
+    4: optional string access_token (api.header="Access-Token");
 }
 
 struct InteractActivityChildCommentListRespData {

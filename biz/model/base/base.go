@@ -896,6 +896,7 @@ type Video struct {
 	CreatedAt    int64    `thrift:"created_at,13" form:"created_at" json:"created_at" query:"created_at"`
 	UpdatedAt    int64    `thrift:"updated_at,14" form:"updated_at" json:"updated_at" query:"updated_at"`
 	DeletedAt    int64    `thrift:"deleted_at,15" form:"deleted_at" json:"deleted_at" query:"deleted_at"`
+	IsLiked      bool     `thrift:"is_liked,16" form:"is_liked" json:"is_liked" query:"is_liked"`
 }
 
 func NewVideo() *Video {
@@ -965,6 +966,10 @@ func (p *Video) GetDeletedAt() (v int64) {
 	return p.DeletedAt
 }
 
+func (p *Video) GetIsLiked() (v bool) {
+	return p.IsLiked
+}
+
 var fieldIDToName_Video = map[int16]string{
 	1:  "id",
 	2:  "user_id",
@@ -981,6 +986,7 @@ var fieldIDToName_Video = map[int16]string{
 	13: "created_at",
 	14: "updated_at",
 	15: "deleted_at",
+	16: "is_liked",
 }
 
 func (p *Video) Read(iprot thrift.TProtocol) (err error) {
@@ -1116,6 +1122,14 @@ func (p *Video) Read(iprot thrift.TProtocol) (err error) {
 		case 15:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField15(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 16:
+			if fieldTypeId == thrift.BOOL {
+				if err = p.ReadField16(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1327,6 +1341,17 @@ func (p *Video) ReadField15(iprot thrift.TProtocol) error {
 	p.DeletedAt = _field
 	return nil
 }
+func (p *Video) ReadField16(iprot thrift.TProtocol) error {
+
+	var _field bool
+	if v, err := iprot.ReadBool(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.IsLiked = _field
+	return nil
+}
 
 func (p *Video) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -1392,6 +1417,10 @@ func (p *Video) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField15(oprot); err != nil {
 			fieldId = 15
+			goto WriteFieldError
+		}
+		if err = p.writeField16(oprot); err != nil {
+			fieldId = 16
 			goto WriteFieldError
 		}
 	}
@@ -1675,6 +1704,23 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 15 end error: ", p), err)
 }
 
+func (p *Video) writeField16(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("is_liked", thrift.BOOL, 16); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteBool(p.IsLiked); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 16 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 16 end error: ", p), err)
+}
+
 func (p *Video) String() string {
 	if p == nil {
 		return "<nil>"
@@ -1695,6 +1741,7 @@ type Comment struct {
 	CreatedAt  int64  `thrift:"created_at,10" form:"created_at" json:"created_at" query:"created_at"`
 	UpdatedAt  int64  `thrift:"updated_at,11" form:"updated_at" json:"updated_at" query:"updated_at"`
 	DeletedAt  int64  `thrift:"deleted_at,12" form:"deleted_at" json:"deleted_at" query:"deleted_at"`
+	IsLiked    bool   `thrift:"is_liked,13" form:"is_liked" json:"is_liked" query:"is_liked"`
 }
 
 func NewComment() *Comment {
@@ -1752,6 +1799,10 @@ func (p *Comment) GetDeletedAt() (v int64) {
 	return p.DeletedAt
 }
 
+func (p *Comment) GetIsLiked() (v bool) {
+	return p.IsLiked
+}
+
 var fieldIDToName_Comment = map[int16]string{
 	1:  "id",
 	2:  "user_id",
@@ -1765,6 +1816,7 @@ var fieldIDToName_Comment = map[int16]string{
 	10: "created_at",
 	11: "updated_at",
 	12: "deleted_at",
+	13: "is_liked",
 }
 
 func (p *Comment) Read(iprot thrift.TProtocol) (err error) {
@@ -1876,6 +1928,14 @@ func (p *Comment) Read(iprot thrift.TProtocol) (err error) {
 		case 12:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField12(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 13:
+			if fieldTypeId == thrift.BOOL {
+				if err = p.ReadField13(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -2041,6 +2101,17 @@ func (p *Comment) ReadField12(iprot thrift.TProtocol) error {
 	p.DeletedAt = _field
 	return nil
 }
+func (p *Comment) ReadField13(iprot thrift.TProtocol) error {
+
+	var _field bool
+	if v, err := iprot.ReadBool(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.IsLiked = _field
+	return nil
+}
 
 func (p *Comment) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -2094,6 +2165,10 @@ func (p *Comment) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField12(oprot); err != nil {
 			fieldId = 12
+			goto WriteFieldError
+		}
+		if err = p.writeField13(oprot); err != nil {
+			fieldId = 13
 			goto WriteFieldError
 		}
 	}
@@ -2318,6 +2393,23 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 12 end error: ", p), err)
 }
 
+func (p *Comment) writeField13(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("is_liked", thrift.BOOL, 13); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteBool(p.IsLiked); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 13 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 13 end error: ", p), err)
+}
+
 func (p *Comment) String() string {
 	if p == nil {
 		return "<nil>"
@@ -2336,6 +2428,7 @@ type Activity struct {
 	CreatedAt   int64    `thrift:"created_at,8" form:"created_at" json:"created_at" query:"created_at"`
 	UpdatedAt   int64    `thrift:"updated_at,9" form:"updated_at" json:"updated_at" query:"updated_at"`
 	DeletedAt   int64    `thrift:"deleted_at,10" form:"deleted_at" json:"deleted_at" query:"deleted_at"`
+	IsLiked     bool     `thrift:"is_liked,11" form:"is_liked" json:"is_liked" query:"is_liked"`
 }
 
 func NewActivity() *Activity {
@@ -2385,6 +2478,10 @@ func (p *Activity) GetDeletedAt() (v int64) {
 	return p.DeletedAt
 }
 
+func (p *Activity) GetIsLiked() (v bool) {
+	return p.IsLiked
+}
+
 var fieldIDToName_Activity = map[int16]string{
 	1:  "id",
 	2:  "user_id",
@@ -2396,6 +2493,7 @@ var fieldIDToName_Activity = map[int16]string{
 	8:  "created_at",
 	9:  "updated_at",
 	10: "deleted_at",
+	11: "is_liked",
 }
 
 func (p *Activity) Read(iprot thrift.TProtocol) (err error) {
@@ -2491,6 +2589,14 @@ func (p *Activity) Read(iprot thrift.TProtocol) (err error) {
 		case 10:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField10(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 11:
+			if fieldTypeId == thrift.BOOL {
+				if err = p.ReadField11(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -2647,6 +2753,17 @@ func (p *Activity) ReadField10(iprot thrift.TProtocol) error {
 	p.DeletedAt = _field
 	return nil
 }
+func (p *Activity) ReadField11(iprot thrift.TProtocol) error {
+
+	var _field bool
+	if v, err := iprot.ReadBool(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.IsLiked = _field
+	return nil
+}
 
 func (p *Activity) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -2692,6 +2809,10 @@ func (p *Activity) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField10(oprot); err != nil {
 			fieldId = 10
+			goto WriteFieldError
+		}
+		if err = p.writeField11(oprot); err != nil {
+			fieldId = 11
 			goto WriteFieldError
 		}
 	}
@@ -2888,6 +3009,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 10 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 10 end error: ", p), err)
+}
+
+func (p *Activity) writeField11(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("is_liked", thrift.BOOL, 11); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteBool(p.IsLiked); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 11 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 11 end error: ", p), err)
 }
 
 func (p *Activity) String() string {

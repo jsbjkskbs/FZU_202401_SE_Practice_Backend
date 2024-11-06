@@ -10,7 +10,7 @@ import (
 	"sfw/biz/mw/redis"
 )
 
-func VideoCommentDal2Resp(list *[]*model.VideoComment) (*[]*base.Comment, error) {
+func VideoCommentDal2Resp(list *[]*model.VideoComment, fromUser *string) (*[]*base.Comment, error) {
 	vc := dal.Executor.VideoComment
 	resp := &[]*base.Comment{}
 	for _, v := range *list {
@@ -22,6 +22,15 @@ func VideoCommentDal2Resp(list *[]*model.VideoComment) (*[]*base.Comment, error)
 		if err != nil {
 			return nil, err
 		}
+
+		isLiked := false
+		if fromUser != nil {
+			isLiked, err = redis.IsVideoCommentLikedByUser(fmt.Sprint(v.VideoID), fmt.Sprint(v.ID), *fromUser)
+			if err != nil {
+				return nil, err
+			}
+		}
+
 		*resp = append(*resp, &base.Comment{
 			ID:         fmt.Sprint(v.ID),
 			UserID:     fmt.Sprint(v.UserID),
@@ -35,12 +44,13 @@ func VideoCommentDal2Resp(list *[]*model.VideoComment) (*[]*base.Comment, error)
 			CreatedAt:  v.CreatedAt,
 			UpdatedAt:  v.UpdatedAt,
 			DeletedAt:  v.DeletedAt,
+			IsLiked:    isLiked,
 		})
 	}
 	return resp, nil
 }
 
-func ActivityCommentDal2Resp(list *[]*model.ActivityComment) (*[]*base.Comment, error) {
+func ActivityCommentDal2Resp(list *[]*model.ActivityComment, fromUser *string) (*[]*base.Comment, error) {
 	ac := dal.Executor.ActivityComment
 	resp := &[]*base.Comment{}
 	for _, v := range *list {
@@ -52,6 +62,15 @@ func ActivityCommentDal2Resp(list *[]*model.ActivityComment) (*[]*base.Comment, 
 		if err != nil {
 			return nil, err
 		}
+
+		isLiked := false
+		if fromUser != nil {
+			isLiked, err = redis.IsActivityCommentLikedByUser(fmt.Sprint(v.ActivityID), fmt.Sprint(v.ID), *fromUser)
+			if err != nil {
+				return nil, err
+			}
+		}
+
 		*resp = append(*resp, &base.Comment{
 			ID:         fmt.Sprint(v.ID),
 			UserID:     fmt.Sprint(v.UserID),
@@ -65,6 +84,7 @@ func ActivityCommentDal2Resp(list *[]*model.ActivityComment) (*[]*base.Comment, 
 			CreatedAt:  v.CreatedAt,
 			UpdatedAt:  v.UpdatedAt,
 			DeletedAt:  v.DeletedAt,
+			IsLiked:    isLiked,
 		})
 	}
 	return resp, nil

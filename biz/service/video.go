@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"strings"
 
-	"sfw/biz/dal"
 	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/video"
@@ -24,7 +23,6 @@ import (
 	"sfw/pkg/utils/scheduler"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"gorm.io/gen"
 )
 
 type VideoService struct {
@@ -137,7 +135,7 @@ func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) ([]*base.Vide
 		}
 		videos = append(videos, video)
 	}
-	return model_converter.VideoListDal2Resp(&videos)
+	return model_converter.VideoListDal2Resp(&videos, nil)
 }
 
 func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) ([]*base.Video, error) {
@@ -168,7 +166,10 @@ func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) (
 		}
 		videos = append(videos, video)
 	}
-	return model_converter.VideoListDal2Resp(&videos)
+
+	fromUser := fmt.Sprint(userId)
+
+	return model_converter.VideoListDal2Resp(&videos, &fromUser)
 }
 
 func (service *VideoService) NewCategoriesEvent(req *video.VideoCategoriesReq) ([]string, error) {
@@ -214,7 +215,22 @@ func (service *VideoService) NewInfoEvent(req *video.VideoInfoReq) (*base.Video,
 			},
 		)
 	}()
-	return model_converter.VideoDal2Resp(video), nil
+
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	resp, err := model_converter.VideoDal2Resp(video, fromUser)
+	if err != nil {
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
+
+	return resp, nil
 }
 
 func (service *VideoService) NewListEvent(req *video.VideoListReq) (*video.VideoListRespData, error) {
@@ -228,7 +244,17 @@ func (service *VideoService) NewListEvent(req *video.VideoListReq) (*video.Video
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	items, err := model_converter.VideoListDal2Resp(&result)
+
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.VideoListDal2Resp(&result, fromUser)
 	if err != nil {
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}
@@ -253,7 +279,7 @@ func (service *VideoService) NewSubmitAllEvent(req *video.VideoSubmitAllReq) (*v
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.VideoListDal2Resp(&videos)
+	items, err := model_converter.VideoListDal2Resp(&videos, nil)
 	if err != nil {
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}
@@ -274,12 +300,13 @@ func (service *VideoService) NewSubmitReviewEvent(req *video.VideoSubmitReviewRe
 	}
 
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	videos, count, err := exquery.QueryVideoByUserIdAndStatusPaged(userId, int(req.PageNum), int(req.PageSize), common.VideoStatusReview)
+	videos, count, err := exquery.QueryVideoByUserIdAndStatusPaged(
+		userId, int(req.PageNum), int(req.PageSize), common.VideoStatusReview)
 	if err != nil {
 		return nil, err
 	}
 
-	items, err := model_converter.VideoListDal2Resp(&videos)
+	items, err := model_converter.VideoListDal2Resp(&videos, nil)
 	if err != nil {
 		return nil, errno.InternalServerError
 	}
@@ -300,12 +327,13 @@ func (service *VideoService) NewSubmitLockedEvent(req *video.VideoSubmitLockedRe
 	}
 
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	videos, count, err := exquery.QueryVideoByUserIdAndStatusPaged(userId, int(req.PageNum), int(req.PageSize), common.VideoStatusLocked)
+	videos, count, err := exquery.QueryVideoByUserIdAndStatusPaged(
+		userId, int(req.PageNum), int(req.PageSize), common.VideoStatusLocked)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.VideoListDal2Resp(&videos)
+	items, err := model_converter.VideoListDal2Resp(&videos, nil)
 	if err != nil {
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}
@@ -326,12 +354,13 @@ func (service *VideoService) NewSumitPassedEvent(req *video.VideoSubmitPassedReq
 	}
 
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	videos, count, err := exquery.QueryVideoByUserIdAndStatusPaged(userId, int(req.PageNum), int(req.PageSize), common.VideoStatusPassed)
+	videos, count, err := exquery.QueryVideoByUserIdAndStatusPaged(
+		userId, int(req.PageNum), int(req.PageSize), common.VideoStatusPassed)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.VideoListDal2Resp(&videos)
+	items, err := model_converter.VideoListDal2Resp(&videos, nil)
 	if err != nil {
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}
@@ -346,40 +375,22 @@ func (service *VideoService) NewSumitPassedEvent(req *video.VideoSubmitPassedReq
 }
 
 func (service *VideoService) NewSearchEvent(req *video.VideoSearchReq) (*video.VideoSearchRespData, error) {
-	v := dal.Executor.Video
-	vd := v.WithContext(context.Background())
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-	conditions := []gen.Condition{}
-
-	if req.FromDate != nil {
-		conditions = append(conditions, v.CreatedAt.Gte(*req.FromDate))
-	}
-	if req.ToDate != nil {
-		conditions = append(conditions, v.CreatedAt.Lte(*req.ToDate))
-	}
-	conditions = append(conditions, v.Status.Eq(common.VideoStatusPassed))
-	// 此处不必提取代码，因为过于特殊
-	result, count, err := vd.Where(conditions...).
-		Where(vd.Where(v.Title.Like("%"+req.Keyword+"%")).Or(v.Description.Like("%"+req.Keyword+"%"))).
-		FindByPage(int(req.PageNum), int(req.PageSize))
-		/*
-			SELECT *
-				FROM video
-				WHERE
-					(video.title LIKE '%keyword%' OR video.description LIKE '%keyword%')
-					AND
-					video.status = 'passed'
-					AND
-					video.created_at >= fromDate
-					AND
-					video.created_at <= toDate
-					LIMIT pageSize OFFSET pageNum
-		*/
+	result, count, err := exquery.QueryVideoFuzzyByKeywordPaged(req.Keyword, int(req.PageNum), int(req.PageSize), req.FromDate, req.ToDate)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.VideoListDal2Resp(&result)
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.VideoListDal2Resp(&result, fromUser)
 	if err != nil {
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}

@@ -1,10 +1,8 @@
 package synchronizer
 
 import (
-	"context"
 	"strconv"
 
-	"sfw/biz/dal"
 	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/mw/redis"
@@ -29,8 +27,7 @@ func SynchronizeVideoVisitInfoRedis2DB(vid string) error {
 }
 
 func SynchronizeVideoVisitInfoDB2Redis() error {
-	v := dal.Executor.Video
-	videos, err := v.WithContext(context.Background()).Select(v.ID, v.VisitCount).Find()
+	videos, err := exquery.QueryVideoVisitCountAll()
 	if err != nil {
 		return err
 	}

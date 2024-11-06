@@ -1419,9 +1419,10 @@ func (p *InteractLikeCommentActionResp) String() string {
 }
 
 type InteractLikeVideoListReq struct {
-	UserID   string `thrift:"user_id,1,required" form:"user_id,required" json:"user_id,required" query:"user_id,required"`
-	PageNum  int64  `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
-	PageSize int64  `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	UserID      string  `thrift:"user_id,1,required" form:"user_id,required" json:"user_id,required" query:"user_id,required"`
+	PageNum     int64   `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
+	PageSize    int64   `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	AccessToken *string `thrift:"access_token,4,optional" header:"Access-Token" json:"access_token,omitempty"`
 }
 
 func NewInteractLikeVideoListReq() *InteractLikeVideoListReq {
@@ -1443,10 +1444,24 @@ func (p *InteractLikeVideoListReq) GetPageSize() (v int64) {
 	return p.PageSize
 }
 
+var InteractLikeVideoListReq_AccessToken_DEFAULT string
+
+func (p *InteractLikeVideoListReq) GetAccessToken() (v string) {
+	if !p.IsSetAccessToken() {
+		return InteractLikeVideoListReq_AccessToken_DEFAULT
+	}
+	return *p.AccessToken
+}
+
 var fieldIDToName_InteractLikeVideoListReq = map[int16]string{
 	1: "user_id",
 	2: "page_num",
 	3: "page_size",
+	4: "access_token",
+}
+
+func (p *InteractLikeVideoListReq) IsSetAccessToken() bool {
+	return p.AccessToken != nil
 }
 
 func (p *InteractLikeVideoListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -1494,6 +1509,14 @@ func (p *InteractLikeVideoListReq) Read(iprot thrift.TProtocol) (err error) {
 					goto ReadFieldError
 				}
 				issetPageSize = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -1574,6 +1597,17 @@ func (p *InteractLikeVideoListReq) ReadField3(iprot thrift.TProtocol) error {
 	p.PageSize = _field
 	return nil
 }
+func (p *InteractLikeVideoListReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field *string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = &v
+	}
+	p.AccessToken = _field
+	return nil
+}
 
 func (p *InteractLikeVideoListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -1591,6 +1625,10 @@ func (p *InteractLikeVideoListReq) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
 			goto WriteFieldError
 		}
 	}
@@ -1660,6 +1698,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *InteractLikeVideoListReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetAccessToken() {
+		if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.AccessToken); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *InteractLikeVideoListReq) String() string {
@@ -3344,9 +3401,10 @@ func (p *InteractCommentActivityPublishResp) String() string {
 }
 
 type InteractCommentVideoListReq struct {
-	VideoID  string `thrift:"video_id,1,required" form:"video_id,required" json:"video_id,required" query:"video_id,required"`
-	PageNum  int64  `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
-	PageSize int64  `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	VideoID     string  `thrift:"video_id,1,required" form:"video_id,required" json:"video_id,required" query:"video_id,required"`
+	PageNum     int64   `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
+	PageSize    int64   `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	AccessToken *string `thrift:"access_token,4,optional" header:"Access-Token" json:"access_token,omitempty"`
 }
 
 func NewInteractCommentVideoListReq() *InteractCommentVideoListReq {
@@ -3368,10 +3426,24 @@ func (p *InteractCommentVideoListReq) GetPageSize() (v int64) {
 	return p.PageSize
 }
 
+var InteractCommentVideoListReq_AccessToken_DEFAULT string
+
+func (p *InteractCommentVideoListReq) GetAccessToken() (v string) {
+	if !p.IsSetAccessToken() {
+		return InteractCommentVideoListReq_AccessToken_DEFAULT
+	}
+	return *p.AccessToken
+}
+
 var fieldIDToName_InteractCommentVideoListReq = map[int16]string{
 	1: "video_id",
 	2: "page_num",
 	3: "page_size",
+	4: "access_token",
+}
+
+func (p *InteractCommentVideoListReq) IsSetAccessToken() bool {
+	return p.AccessToken != nil
 }
 
 func (p *InteractCommentVideoListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -3419,6 +3491,14 @@ func (p *InteractCommentVideoListReq) Read(iprot thrift.TProtocol) (err error) {
 					goto ReadFieldError
 				}
 				issetPageSize = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -3499,6 +3579,17 @@ func (p *InteractCommentVideoListReq) ReadField3(iprot thrift.TProtocol) error {
 	p.PageSize = _field
 	return nil
 }
+func (p *InteractCommentVideoListReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field *string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = &v
+	}
+	p.AccessToken = _field
+	return nil
+}
 
 func (p *InteractCommentVideoListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -3516,6 +3607,10 @@ func (p *InteractCommentVideoListReq) Write(oprot thrift.TProtocol) (err error) 
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
 			goto WriteFieldError
 		}
 	}
@@ -3585,6 +3680,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *InteractCommentVideoListReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetAccessToken() {
+		if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.AccessToken); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *InteractCommentVideoListReq) String() string {
@@ -4173,9 +4287,10 @@ func (p *InteractCommentVideoListResp) String() string {
 }
 
 type InteractCommentActivityListReq struct {
-	ActivityID string `thrift:"activity_id,1,required" form:"activity_id,required" json:"activity_id,required" query:"activity_id,required"`
-	PageNum    int64  `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
-	PageSize   int64  `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	ActivityID  string  `thrift:"activity_id,1,required" form:"activity_id,required" json:"activity_id,required" query:"activity_id,required"`
+	PageNum     int64   `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
+	PageSize    int64   `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	AccessToken *string `thrift:"access_token,4,optional" header:"Access-Token" json:"access_token,omitempty"`
 }
 
 func NewInteractCommentActivityListReq() *InteractCommentActivityListReq {
@@ -4197,10 +4312,24 @@ func (p *InteractCommentActivityListReq) GetPageSize() (v int64) {
 	return p.PageSize
 }
 
+var InteractCommentActivityListReq_AccessToken_DEFAULT string
+
+func (p *InteractCommentActivityListReq) GetAccessToken() (v string) {
+	if !p.IsSetAccessToken() {
+		return InteractCommentActivityListReq_AccessToken_DEFAULT
+	}
+	return *p.AccessToken
+}
+
 var fieldIDToName_InteractCommentActivityListReq = map[int16]string{
 	1: "activity_id",
 	2: "page_num",
 	3: "page_size",
+	4: "access_token",
+}
+
+func (p *InteractCommentActivityListReq) IsSetAccessToken() bool {
+	return p.AccessToken != nil
 }
 
 func (p *InteractCommentActivityListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -4248,6 +4377,14 @@ func (p *InteractCommentActivityListReq) Read(iprot thrift.TProtocol) (err error
 					goto ReadFieldError
 				}
 				issetPageSize = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -4328,6 +4465,17 @@ func (p *InteractCommentActivityListReq) ReadField3(iprot thrift.TProtocol) erro
 	p.PageSize = _field
 	return nil
 }
+func (p *InteractCommentActivityListReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field *string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = &v
+	}
+	p.AccessToken = _field
+	return nil
+}
 
 func (p *InteractCommentActivityListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -4345,6 +4493,10 @@ func (p *InteractCommentActivityListReq) Write(oprot thrift.TProtocol) (err erro
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
 			goto WriteFieldError
 		}
 	}
@@ -4414,6 +4566,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *InteractCommentActivityListReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetAccessToken() {
+		if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.AccessToken); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *InteractCommentActivityListReq) String() string {
@@ -5002,9 +5173,10 @@ func (p *InteractCommentActivityListResp) String() string {
 }
 
 type InteractVideoChildCommentListReq struct {
-	CommentID string `thrift:"comment_id,1,required" form:"comment_id,required" json:"comment_id,required" query:"comment_id,required"`
-	PageNum   int64  `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
-	PageSize  int64  `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	CommentID   string  `thrift:"comment_id,1,required" form:"comment_id,required" json:"comment_id,required" query:"comment_id,required"`
+	PageNum     int64   `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
+	PageSize    int64   `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	AccessToken *string `thrift:"access_token,4,optional" header:"Access-Token" json:"access_token,omitempty"`
 }
 
 func NewInteractVideoChildCommentListReq() *InteractVideoChildCommentListReq {
@@ -5026,10 +5198,24 @@ func (p *InteractVideoChildCommentListReq) GetPageSize() (v int64) {
 	return p.PageSize
 }
 
+var InteractVideoChildCommentListReq_AccessToken_DEFAULT string
+
+func (p *InteractVideoChildCommentListReq) GetAccessToken() (v string) {
+	if !p.IsSetAccessToken() {
+		return InteractVideoChildCommentListReq_AccessToken_DEFAULT
+	}
+	return *p.AccessToken
+}
+
 var fieldIDToName_InteractVideoChildCommentListReq = map[int16]string{
 	1: "comment_id",
 	2: "page_num",
 	3: "page_size",
+	4: "access_token",
+}
+
+func (p *InteractVideoChildCommentListReq) IsSetAccessToken() bool {
+	return p.AccessToken != nil
 }
 
 func (p *InteractVideoChildCommentListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -5077,6 +5263,14 @@ func (p *InteractVideoChildCommentListReq) Read(iprot thrift.TProtocol) (err err
 					goto ReadFieldError
 				}
 				issetPageSize = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -5157,6 +5351,17 @@ func (p *InteractVideoChildCommentListReq) ReadField3(iprot thrift.TProtocol) er
 	p.PageSize = _field
 	return nil
 }
+func (p *InteractVideoChildCommentListReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field *string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = &v
+	}
+	p.AccessToken = _field
+	return nil
+}
 
 func (p *InteractVideoChildCommentListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -5174,6 +5379,10 @@ func (p *InteractVideoChildCommentListReq) Write(oprot thrift.TProtocol) (err er
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
 			goto WriteFieldError
 		}
 	}
@@ -5243,6 +5452,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *InteractVideoChildCommentListReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetAccessToken() {
+		if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.AccessToken); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *InteractVideoChildCommentListReq) String() string {
@@ -5831,9 +6059,10 @@ func (p *InteractVideoChildCommentListResp) String() string {
 }
 
 type InteractActivityChildCommentListReq struct {
-	CommentID string `thrift:"comment_id,1,required" form:"comment_id,required" json:"comment_id,required" query:"comment_id,required"`
-	PageNum   int64  `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
-	PageSize  int64  `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	CommentID   string  `thrift:"comment_id,1,required" form:"comment_id,required" json:"comment_id,required" query:"comment_id,required"`
+	PageNum     int64   `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
+	PageSize    int64   `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	AccessToken *string `thrift:"access_token,4,optional" header:"Access-Token" json:"access_token,omitempty"`
 }
 
 func NewInteractActivityChildCommentListReq() *InteractActivityChildCommentListReq {
@@ -5855,10 +6084,24 @@ func (p *InteractActivityChildCommentListReq) GetPageSize() (v int64) {
 	return p.PageSize
 }
 
+var InteractActivityChildCommentListReq_AccessToken_DEFAULT string
+
+func (p *InteractActivityChildCommentListReq) GetAccessToken() (v string) {
+	if !p.IsSetAccessToken() {
+		return InteractActivityChildCommentListReq_AccessToken_DEFAULT
+	}
+	return *p.AccessToken
+}
+
 var fieldIDToName_InteractActivityChildCommentListReq = map[int16]string{
 	1: "comment_id",
 	2: "page_num",
 	3: "page_size",
+	4: "access_token",
+}
+
+func (p *InteractActivityChildCommentListReq) IsSetAccessToken() bool {
+	return p.AccessToken != nil
 }
 
 func (p *InteractActivityChildCommentListReq) Read(iprot thrift.TProtocol) (err error) {
@@ -5906,6 +6149,14 @@ func (p *InteractActivityChildCommentListReq) Read(iprot thrift.TProtocol) (err 
 					goto ReadFieldError
 				}
 				issetPageSize = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -5986,6 +6237,17 @@ func (p *InteractActivityChildCommentListReq) ReadField3(iprot thrift.TProtocol)
 	p.PageSize = _field
 	return nil
 }
+func (p *InteractActivityChildCommentListReq) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field *string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = &v
+	}
+	p.AccessToken = _field
+	return nil
+}
 
 func (p *InteractActivityChildCommentListReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -6003,6 +6265,10 @@ func (p *InteractActivityChildCommentListReq) Write(oprot thrift.TProtocol) (err
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
 			goto WriteFieldError
 		}
 	}
@@ -6072,6 +6338,25 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *InteractActivityChildCommentListReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if p.IsSetAccessToken() {
+		if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 4); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.AccessToken); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *InteractActivityChildCommentListReq) String() string {

@@ -2,10 +2,8 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 
-	"sfw/biz/dal"
 	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/report"
@@ -17,7 +15,6 @@ import (
 	"sfw/pkg/utils/generator"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"gorm.io/gen"
 )
 
 type ReportService struct {
@@ -207,28 +204,8 @@ func (service *ReportService) NewReportCommentEvent(req *report.ReportCommentReq
 func (service *ReportService) NewAdminVideoReportListEvent(req *report.AdminVideoReportListReq) (*report.AdminVideoReportListRespData, error) {
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 
-	vr := dal.Executor.VideoReport
-	conditions := []gen.Condition{}
-	if req.Status != nil {
-		conditions = append(conditions, vr.Status.Eq(*req.Status))
-	}
-	if req.Keyword != nil {
-		conditions = append(conditions, vr.Reason.Like(fmt.Sprint("%", *req.Keyword, "%")))
-	}
-	if req.UserID != nil {
-		userId, err := strconv.ParseInt(*req.UserID, 10, 64)
-		if err != nil {
-			return nil, errno.CustomError.WithMessage("用户ID错误")
-		}
-		conditions = append(conditions, vr.UserID.Eq(userId))
-	}
-	if req.Label != nil {
-		conditions = append(conditions, vr.Label.Eq(*req.Label))
-	}
-	// 此处代码不必提取至exquery
-	items, count, err := vr.WithContext(context.Background()).
-		Where(conditions...).
-		FindByPage((int(req.PageNum * req.PageSize)), int(req.PageSize))
+	items, count, err := exquery.QueryVideoReportByBasicInfoPaged(
+		req.Status, req.Keyword, req.UserID, req.Label, req.PageNum, req.PageSize)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -244,28 +221,8 @@ func (service *ReportService) NewAdminVideoReportListEvent(req *report.AdminVide
 func (service *ReportService) NewAdminActivityReportListEvent(req *report.AdminActivityReportListReq) (*report.AdminActivityReportListRespData, error) {
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 
-	ar := dal.Executor.ActivityReport
-	conditions := []gen.Condition{}
-	if req.Status != nil {
-		conditions = append(conditions, ar.Status.Eq(*req.Status))
-	}
-	if req.Keyword != nil {
-		conditions = append(conditions, ar.Reason.Like(fmt.Sprint("%", *req.Keyword, "%")))
-	}
-	if req.UserID != nil {
-		userId, err := strconv.ParseInt(*req.UserID, 10, 64)
-		if err != nil {
-			return nil, errno.CustomError.WithMessage("用户ID错误")
-		}
-		conditions = append(conditions, ar.UserID.Eq(userId))
-	}
-	if req.Label != nil {
-		conditions = append(conditions, ar.Label.Eq(*req.Label))
-	}
-	// 此处代码不必提取至exquery
-	items, count, err := ar.WithContext(context.Background()).
-		Where(conditions...).
-		FindByPage((int(req.PageNum * req.PageSize)), int(req.PageSize))
+	items, count, err := exquery.QueryActivityReportByBasicInfoPaged(
+		req.Status, req.Keyword, req.UserID, req.Label, req.PageNum, req.PageSize)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -280,29 +237,8 @@ func (service *ReportService) NewAdminActivityReportListEvent(req *report.AdminA
 
 func (service *ReportService) newAdminVideoCommentListEvent(req *report.AdminCommentReportListReq) (*report.AdminCommentReportListRespData, error) {
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-
-	cr := dal.Executor.VideoCommentReport
-	conditions := []gen.Condition{}
-	if req.Status != nil {
-		conditions = append(conditions, cr.Status.Eq(*req.Status))
-	}
-	if req.Keyword != nil {
-		conditions = append(conditions, cr.Reason.Like(fmt.Sprint("%", *req.Keyword, "%")))
-	}
-	if req.UserID != nil {
-		userId, err := strconv.ParseInt(*req.UserID, 10, 64)
-		if err != nil {
-			return nil, errno.CustomError.WithMessage("用户ID错误")
-		}
-		conditions = append(conditions, cr.UserID.Eq(userId))
-	}
-	if req.Label != nil {
-		conditions = append(conditions, cr.Label.Eq(*req.Label))
-	}
-	// 此处代码不必提取至exquery
-	items, count, err := cr.WithContext(context.Background()).
-		Where(conditions...).
-		FindByPage((int(req.PageNum * req.PageSize)), int(req.PageSize))
+	items, count, err := exquery.QueryVideoCommentReportByBasicInfoPaged(
+		req.Status, req.Keyword, req.UserID, req.Label, req.PageNum, req.PageSize)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -317,29 +253,8 @@ func (service *ReportService) newAdminVideoCommentListEvent(req *report.AdminCom
 
 func (service *ReportService) newAdminActivityCommentListEvent(req *report.AdminCommentReportListReq) (*report.AdminCommentReportListRespData, error) {
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-
-	cr := dal.Executor.ActivityCommentReport
-	conditions := []gen.Condition{}
-	if req.Status != nil {
-		conditions = append(conditions, cr.Status.Eq(*req.Status))
-	}
-	if req.Keyword != nil {
-		conditions = append(conditions, cr.Reason.Like(fmt.Sprint("%", *req.Keyword, "%")))
-	}
-	if req.UserID != nil {
-		userId, err := strconv.ParseInt(*req.UserID, 10, 64)
-		if err != nil {
-			return nil, errno.CustomError.WithMessage("用户ID错误")
-		}
-		conditions = append(conditions, cr.UserID.Eq(userId))
-	}
-	if req.Label != nil {
-		conditions = append(conditions, cr.Label.Eq(*req.Label))
-	}
-	// 此处代码不必提取至exquery
-	items, count, err := cr.WithContext(context.Background()).
-		Where(conditions...).
-		FindByPage((int(req.PageNum * req.PageSize)), int(req.PageSize))
+	items, count, err := exquery.QueryActivityCommentReportByBasicInfoPaged(
+		req.Status, req.Keyword, req.UserID, req.Label, req.PageNum, req.PageSize)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -524,25 +439,21 @@ func (service *ReportService) NewAdminCommentReportHandleEvent(req *report.Admin
 
 func (service *ReportService) NewAdminVideoListEvent(req *report.AdminVideoListReq) (*report.AdminVideoListRespData, error) {
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
-
-	v := dal.Executor.Video
-	conditions := []gen.Condition{v.Status.Eq(common.VideoStatusReview)}
-
+	var categoryId *int64
+	categoryId = nil
 	if req.Category != nil {
-		categoryId, ok := checker.CategoryMap[*req.Category]
+		cid, ok := checker.CategoryMap[*req.Category]
 		if !ok {
-			return nil, errno.ParamInvalid.WithMessage("视频分区不存在")
+			return nil, errno.ParamInvalid.WithMessage("分区不存在")
 		}
-		conditions = append(conditions, v.CategoryID.Eq(categoryId))
+		categoryId = &cid
 	}
 
-	// 此处代码不必提取至exquery
-	videos, count, err := v.WithContext(context.Background()).
-		Where(conditions...).FindByPage((int(req.PageNum * req.PageSize)), int(req.PageSize))
+	videos, count, err := exquery.QueryVideoByCategoryPaged(categoryId, int(req.PageNum), int(req.PageSize))
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	items, err := model_converter.VideoListDal2Resp(&videos)
+	items, err := model_converter.VideoListDal2Resp(&videos, nil)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}

@@ -1,13 +1,11 @@
 package synchronizer
 
 import (
-	"context"
 	"fmt"
 	"strconv"
 	"sync"
 
-	"sfw/biz/dal"
-	"sfw/biz/dal/model"
+	"sfw/biz/dal/exquery"
 	"sfw/biz/mw/redis"
 )
 
@@ -42,12 +40,11 @@ func synchronizeNewInsertActivityLikeFromRedis2DB(vid string) error {
 		return err
 	}
 
-	a := dal.Executor.Activity
-	exist, err := a.WithContext(context.Background()).Where(a.ID.Eq(activityId)).Count()
+	exist, err := exquery.QueryActivityExistById(activityId)
 	if err != nil {
 		return err
 	}
-	if exist == 0 {
+	if !exist {
 		return nil
 	}
 
@@ -55,23 +52,20 @@ func synchronizeNewInsertActivityLikeFromRedis2DB(vid string) error {
 	if err != nil {
 		return err
 	}
-	alikes := []*model.ActivityLike{}
 	uids := []int64{}
 	for _, uid := range *list {
 		userId, err := strconv.ParseInt(uid, 10, 64)
 		if err != nil {
 			continue
 		}
-		alikes = append(alikes, &model.ActivityLike{ActivityID: activityId, UserID: userId})
 		uids = append(uids, userId)
 	}
 
-	al := dal.Executor.ActivityLike
-	if _, err = al.WithContext(context.Background()).Where(al.ActivityID.Eq(activityId), al.UserID.In(uids...)).Delete(); err != nil {
+	if err = exquery.DeleteActivityLikeByUserIds(activityId, uids); err != nil {
 		return err
 	}
 
-	if err = al.WithContext(context.Background()).Create(alikes...); err != nil {
+	if err = exquery.InsertActivityLikeByUserIds(activityId, uids); err != nil {
 		return err
 	}
 
@@ -104,23 +98,20 @@ func synchronizeNewDeleteActivityLikeFromRedis2DB(vid string) error {
 		uids = append(uids, userId)
 	}
 
-	al := dal.Executor.ActivityLike
-	if _, err = al.WithContext(context.Background()).Where(al.ActivityID.Eq(activityId), al.UserID.In(uids...)).Delete(); err != nil {
+	if err = exquery.DeleteActivityLikeByUserIds(activityId, uids); err != nil {
 		return err
 	}
 	return nil
 }
 
 func SynchronizeActivityLikeFromDB2Redis() error {
-	a := dal.Executor.Activity
-	activities, err := a.WithContext(context.Background()).Select(a.ID).Find()
+	activities, err := exquery.QueryActivityLikeActivityIds()
 	if err != nil {
 		return err
 	}
 
-	al := dal.Executor.ActivityLike
 	for _, activity := range activities {
-		l, err := al.WithContext(context.Background()).Where(al.ActivityID.Eq(activity.ID)).Find()
+		l, err := exquery.QueryActivityLikeUserIdsByActivityId(activity.ActivityID)
 		if err != nil {
 			return err
 		}
@@ -128,7 +119,7 @@ func SynchronizeActivityLikeFromDB2Redis() error {
 		for _, item := range l {
 			likes = append(likes, fmt.Sprint(item.UserID))
 		}
-		if err = redis.PutActivityLikeInfo(fmt.Sprint(activity.ID), &likes); err != nil {
+		if err = redis.PutActivityLikeInfo(fmt.Sprint(activity.ActivityID), &likes); err != nil {
 			return err
 		}
 	}

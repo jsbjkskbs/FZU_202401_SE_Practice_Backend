@@ -44,7 +44,7 @@ func (service *InteractService) NewLikeVideoActionEvent(req *interact.InteractLi
 		return errno.CustomError.WithMessage("无效的操作类型")
 	}
 
-	scheduler.Schdeduler.Start("video_like/"+req.VideoID, 3*time.Minute, func() {
+	scheduler.Schdeduler.Start("video_like/"+req.VideoID, 10*time.Second, func() {
 		err := synchronizer.SynchronizeVideoLikeFromRedis2DB(req.VideoID)
 		if err != nil {
 			hlog.Info("synchronize video like from redis to db failed, video_id: ", req.VideoID)
@@ -66,7 +66,7 @@ func (service *InteractService) NewLikeActivityActionEvent(req *interact.Interac
 	default:
 		return errno.CustomError.WithMessage("无效的操作类型")
 	}
-	scheduler.Schdeduler.Start("activity_like/"+req.ActivityID, 3*time.Minute, func() {
+	scheduler.Schdeduler.Start("activity_like/"+req.ActivityID, 10*time.Second, func() {
 		err := synchronizer.SynchronizeActivityLikeFromRedis2DB(req.ActivityID)
 		if err != nil {
 			hlog.Info("synchronize activity like from redis to db failed, activity_id: ", req.ActivityID)
@@ -88,7 +88,7 @@ func (service *InteractService) newLikeVideoCommentEvent(req *interact.InteractL
 	default:
 		return errno.CustomError.WithMessage("无效的操作类型")
 	}
-	scheduler.Schdeduler.Start("video_comment_like/"+req.CommentID, 3*time.Minute, func() {
+	scheduler.Schdeduler.Start("video_comment_like/"+req.CommentID, 10*time.Second, func() {
 		err := synchronizer.SynchronizeVideoCommentLikeFromRedis2DB(req.FromMediaID, req.CommentID)
 		if err != nil {
 			hlog.Info("synchronize video comment like from redis to db failed, comment_id: ", req.CommentID)
@@ -110,7 +110,7 @@ func (service *InteractService) newLikeActivityCommentEvent(req *interact.Intera
 	default:
 		return errno.CustomError.WithMessage("无效的操作类型")
 	}
-	scheduler.Schdeduler.Start("activity_comment_like/"+req.CommentID, 3*time.Minute, func() {
+	scheduler.Schdeduler.Start("activity_comment_like/"+req.CommentID, 10*time.Second, func() {
 		err := synchronizer.SynchronizeActivityCommentLikeFromRedis2DB(req.FromMediaID, req.CommentID)
 		if err != nil {
 			hlog.Info("synchronize activity comment like from redis to db failed, comment_id: ", req.CommentID)
@@ -142,7 +142,16 @@ func (service *InteractService) NewLikeVideoListEvent(req *interact.InteractLike
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.VideoListDal2Resp(&videos)
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.VideoListDal2Resp(&videos, fromUser)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -319,7 +328,16 @@ func (service *InteractService) NewCommentVideoListEvent(req *interact.InteractC
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.VideoCommentDal2Resp(&comments)
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.VideoCommentDal2Resp(&comments, fromUser)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -353,7 +371,16 @@ func (service *InteractService) NewCommentActivityListEvent(req *interact.Intera
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.ActivityCommentDal2Resp(&comments)
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.ActivityCommentDal2Resp(&comments, fromUser)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -387,7 +414,16 @@ func (service *InteractService) NewChildCommentVideoListEvent(req *interact.Inte
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.VideoCommentDal2Resp(&comments)
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.VideoCommentDal2Resp(&comments, fromUser)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -421,7 +457,16 @@ func (service *InteractService) NewChildCommentActivityListEvent(req *interact.I
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.ActivityCommentDal2Resp(&comments)
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.ActivityCommentDal2Resp(&comments, fromUser)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}

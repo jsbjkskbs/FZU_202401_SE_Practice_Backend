@@ -194,6 +194,57 @@ func GetVideoPopularList(pageNum, pageSize int64) (*[]string, error) {
 	return &list, err
 }
 
+func isVideoLikedByUserInStaticSpace(vid, uid string) (bool, error) {
+	exist, err := videoInfoClient.Exists(`video/like/` + vid).Result()
+	if err != nil {
+		return false, err
+	}
+	if exist == 0 {
+		return false, nil
+	}
+
+	isLiked, err := videoInfoClient.SIsMember(`video/like/`+vid, uid).Result()
+	if err != nil {
+		return false, err
+	}
+
+	return isLiked, nil
+}
+
+func isVideoLikedByUserInDynamicSpace(vid, uid string) (bool, error) {
+	exist, err := videoInfoClient.Exists(`video/changed_like/` + vid).Result()
+	if err != nil {
+		return false, err
+	}
+	if exist == 0 {
+		return false, nil
+	}
+
+	score, err := videoInfoClient.ZScore(`video/changed_like/`+vid, uid).Result()
+	if err != nil {
+		return false, err
+	}
+
+	return score == 1, nil
+}
+
+func IsVideoLikedByUser(vid, uid string) (bool, error) {
+	inStaticSpace, err := isVideoLikedByUserInStaticSpace(vid, uid)
+	if err != nil {
+		return false, err
+	}
+	if inStaticSpace {
+		return true, nil
+	}
+
+	inDynamicSpace, err := isVideoLikedByUserInDynamicSpace(vid, uid)
+	if err != nil {
+		return false, err
+	}
+
+	return inDynamicSpace, nil
+}
+
 func IsVideoExist(vid string) bool {
 	_, err := videoInfoClient.ZScore(`visit`, vid).Result()
 	return err == nil

@@ -1,7 +1,7 @@
 package scheduler
 
 import (
-	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"sfw/pkg/utils/logger"
 )
 
 var Schdeduler *Scheduler
@@ -9,7 +9,7 @@ var Schdeduler *Scheduler
 func Init() {
 	Schdeduler = NewScheduler(SchedulerOption{
 		LogPrefix: "Scheduler: ",
-		LogFunc:   hlog.Info,
+		LogFunc:   logger.SynchronizeLogger.Info,
 		Debug:     true,
 		Silent:    false,
 		NShard:    64,

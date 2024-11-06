@@ -1,13 +1,11 @@
 package synchronizer
 
 import (
-	"context"
 	"fmt"
 	"strconv"
 	"sync"
 
-	"sfw/biz/dal"
-	"sfw/biz/dal/model"
+	"sfw/biz/dal/exquery"
 	"sfw/biz/mw/redis"
 )
 
@@ -42,12 +40,11 @@ func synchronizeNewInsertVideoCommentLikeFromDB2Redis(vid, cid string) error {
 		return err
 	}
 
-	vc := dal.Executor.VideoComment
-	exist, err := vc.WithContext(context.Background()).Where(vc.ID.Eq(commentId)).Count()
+	exist, err := exquery.QueryVideoCommentExistById(commentId)
 	if err != nil {
 		return err
 	}
-	if exist == 0 {
+	if !exist {
 		return nil
 	}
 
@@ -55,7 +52,6 @@ func synchronizeNewInsertVideoCommentLikeFromDB2Redis(vid, cid string) error {
 	if err != nil {
 		return err
 	}
-	clikes := []*model.VideoCommentLike{}
 	uids := []int64{}
 	for _, uid := range *list {
 		userId, err := strconv.ParseInt(uid, 10, 64)
@@ -63,14 +59,12 @@ func synchronizeNewInsertVideoCommentLikeFromDB2Redis(vid, cid string) error {
 			continue
 		}
 		uids = append(uids, userId)
-		clikes = append(clikes, &model.VideoCommentLike{CommentID: commentId, UserID: userId})
 	}
 
-	cl := dal.Executor.VideoCommentLike
-	if _, err = cl.WithContext(context.Background()).Where(cl.CommentID.Eq(commentId), cl.UserID.In(uids...)).Delete(); err != nil {
+	if err = exquery.DeleteVideoCommentLikeByCommentIdAndUserIds(commentId, uids); err != nil {
 		return err
 	}
-	if err = cl.WithContext(context.Background()).Create(clikes...); err != nil {
+	if err = exquery.InsertVideoCommentLikeByUserIds(commentId, uids); err != nil {
 		return err
 	}
 
@@ -100,23 +94,20 @@ func synchronizeNewDeleteVideoCommentLikeFromDB2Redis(vid, cid string) error {
 		uids = append(uids, userId)
 	}
 
-	cl := dal.Executor.VideoCommentLike
-	if _, err = cl.WithContext(context.Background()).Where(cl.CommentID.Eq(commentId), cl.UserID.In(uids...)).Delete(); err != nil {
+	if err = exquery.DeleteVideoCommentLikeByCommentIdAndUserIds(commentId, uids); err != nil {
 		return err
 	}
 	return nil
 }
 
 func SynchronizeVideoCommentLikeFromDB2Redis() error {
-	vc := dal.Executor.VideoComment
-	vcomments, err := vc.WithContext(context.Background()).Select(vc.ID, vc.VideoID).Find()
+	vcomments, err := exquery.QueryVideoCommentAllIdAndVideoId()
 	if err != nil {
 		return err
 	}
 
 	for _, v := range vcomments {
-		cl := dal.Executor.VideoCommentLike
-		clikes, err := cl.WithContext(context.Background()).Find()
+		clikes, err := exquery.QueryVideoCommentLikeAllUserIdByCommentId(v.ID)
 		if err != nil {
 			return err
 		}
@@ -163,12 +154,11 @@ func synchronizeNewInsertActivityCommentLikeFromDB2Redis(aid, cid string) error 
 		return err
 	}
 
-	ac := dal.Executor.ActivityComment
-	exist, err := ac.WithContext(context.Background()).Where(ac.ID.Eq(commentId)).Count()
+	exist, err := exquery.QueryActivityCommentExistById(commentId)
 	if err != nil {
 		return err
 	}
-	if exist == 0 {
+	if !exist {
 		return nil
 	}
 
@@ -176,7 +166,6 @@ func synchronizeNewInsertActivityCommentLikeFromDB2Redis(aid, cid string) error 
 	if err != nil {
 		return err
 	}
-	clikes := []*model.ActivityCommentLike{}
 	uids := []int64{}
 	for _, uid := range *list {
 		userId, err := strconv.ParseInt(uid, 10, 64)
@@ -184,14 +173,12 @@ func synchronizeNewInsertActivityCommentLikeFromDB2Redis(aid, cid string) error 
 			continue
 		}
 		uids = append(uids, userId)
-		clikes = append(clikes, &model.ActivityCommentLike{CommentID: commentId, UserID: userId})
 	}
 
-	cl := dal.Executor.ActivityCommentLike
-	if _, err = cl.WithContext(context.Background()).Where(cl.CommentID.Eq(commentId), cl.UserID.In(uids...)).Delete(); err != nil {
+	if err = exquery.DeleteActivityCommentLikeByCommentIdAndUserIds(commentId, uids); err != nil {
 		return err
 	}
-	if err = cl.WithContext(context.Background()).Create(clikes...); err != nil {
+	if err = exquery.InsertActivityCommentLikeByUserIds(commentId, uids); err != nil {
 		return err
 	}
 
@@ -221,23 +208,20 @@ func synchronizeNewDeleteActivityCommentLikeFromDB2Redis(aid, cid string) error 
 		uids = append(uids, userId)
 	}
 
-	cl := dal.Executor.ActivityCommentLike
-	if _, err = cl.WithContext(context.Background()).Where(cl.CommentID.Eq(commentId), cl.UserID.In(uids...)).Delete(); err != nil {
+	if err = exquery.DeleteActivityCommentLikeByCommentIdAndUserIds(commentId, uids); err != nil {
 		return err
 	}
 	return nil
 }
 
 func SynchronizeActivityCommentLikeFromDB2Redis() error {
-	ac := dal.Executor.ActivityComment
-	acomments, err := ac.WithContext(context.Background()).Select(ac.ID, ac.ActivityID).Find()
+	acomments, err := exquery.QueryActivityCommentAllIdAndActivityId()
 	if err != nil {
 		return err
 	}
 
 	for _, a := range acomments {
-		cl := dal.Executor.ActivityCommentLike
-		clikes, err := cl.WithContext(context.Background()).Find()
+		clikes, err := exquery.QueryActivityCommentLikeAllUserIdByCommentId(a.ID)
 		if err != nil {
 			return err
 		}
@@ -246,7 +230,7 @@ func SynchronizeActivityCommentLikeFromDB2Redis() error {
 		for _, acl := range clikes {
 			list = append(list, fmt.Sprint(acl.UserID))
 		}
-		if err = redis.PutActivityCommentLikeInfo(fmt.Sprint(ac.ActivityID), fmt.Sprint(a.ID), &list); err != nil {
+		if err = redis.PutActivityCommentLikeInfo(fmt.Sprint(a.ActivityID), fmt.Sprint(a.ID), &list); err != nil {
 			return err
 		}
 	}

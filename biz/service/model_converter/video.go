@@ -12,7 +12,7 @@ import (
 	"sfw/pkg/utils/checker"
 )
 
-func VideoDal2Resp(v *model.Video) *base.Video {
+func VideoDal2Resp(v *model.Video, fromUser *string) (*base.Video, error) {
 	category := "null"
 	for k, i := range checker.CategoryMap {
 		if i == v.CategoryID {
@@ -25,7 +25,7 @@ func VideoDal2Resp(v *model.Video) *base.Video {
 	l := dal.Executor.VideoLabel
 	err := l.WithContext(context.Background()).Where(l.VideoID.Eq(v.ID)).Scan(&labelItems)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 	labels := []string{}
 	for _, item := range labelItems {
@@ -34,13 +34,21 @@ func VideoDal2Resp(v *model.Video) *base.Video {
 
 	likeCount, err := redis.GetVideoLikeCount(fmt.Sprint(v.ID))
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	c := dal.Executor.VideoComment
 	commentCount, err := c.WithContext(context.Background()).Where(c.VideoID.Eq(v.ID)).Count()
 	if err != nil {
-		return nil
+		return nil, err
+	}
+
+	isLiked := false
+	if fromUser != nil {
+		isLiked, err = redis.IsVideoLikedByUser(fmt.Sprint(v.ID), *fromUser)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &base.Video{
@@ -59,10 +67,11 @@ func VideoDal2Resp(v *model.Video) *base.Video {
 		CreatedAt:    v.CreatedAt,
 		UpdatedAt:    v.UpdatedAt,
 		DeletedAt:    v.DeletedAt,
-	}
+		IsLiked:      isLiked,
+	}, nil
 }
 
-func VideoListDal2Resp(list *[]*model.Video) ([]*base.Video, error) {
+func VideoListDal2Resp(list *[]*model.Video, fromUser *string) ([]*base.Video, error) {
 	resp := []*base.Video{}
 	for _, v := range *list {
 		category := "null"
@@ -95,6 +104,14 @@ func VideoListDal2Resp(list *[]*model.Video) ([]*base.Video, error) {
 			return nil, err
 		}
 
+		isLiked := false
+		if fromUser != nil {
+			isLiked, err = redis.IsVideoLikedByUser(fmt.Sprint(v.ID), *fromUser)
+			if err != nil {
+				return nil, err
+			}
+		}
+
 		resp = append(resp, &base.Video{
 			ID:           fmt.Sprint(v.ID),
 			UserID:       fmt.Sprint(v.UserID),
@@ -111,6 +128,7 @@ func VideoListDal2Resp(list *[]*model.Video) ([]*base.Video, error) {
 			CreatedAt:    v.CreatedAt,
 			UpdatedAt:    v.UpdatedAt,
 			DeletedAt:    v.DeletedAt,
+			IsLiked:      isLiked,
 		})
 	}
 	return resp, nil

@@ -41,9 +41,14 @@ Redis:
 # QPS limit for each API
 # QPS = threshold / statintervalinms
 Sentinel:
-    default:
-        threshold: 100000.0
-        statintervalinms: 1000.0
+  default:
+      threshold: 100000.0
+      statintervalinms: 1000.0
+
+Zincsearch:
+  host: "localhost:4080"
+  username: "admin"
+  password: "123456"
 
 OSS:
   bucket: ""

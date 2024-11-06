@@ -9,6 +9,7 @@ import (
 	"sfw/biz/service"
 	"sfw/pkg/errno"
 	"sfw/pkg/utils"
+	"sfw/pkg/utils/logger"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -47,6 +48,7 @@ func ActivityFeedMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewActivityService(ctx, c).NewFeedEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, activity.ActivityFeedResp{
 			Code: resp.Code,
@@ -79,6 +81,7 @@ func ActivityPublishMethod(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewActivityService(ctx, c).NewPublishEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, activity.ActivityPublishResp{
 			Code: resp.Code,
@@ -110,6 +113,7 @@ func ActivityListMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewActivityService(ctx, c).NewListEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, activity.ActivityListResp{
 			Code: resp.Code,

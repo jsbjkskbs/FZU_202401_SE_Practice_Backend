@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"sfw/biz/dal/exquery"
@@ -39,7 +40,8 @@ func (service *ActivityService) NewFeedEvent(req *activity.ActivityFeedReq) (*ac
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
-	items, err := model_converter.ActivityListDal2Resp(&activities)
+	fromUser := fmt.Sprint(uid)
+	items, err := model_converter.ActivityListDal2Resp(&activities, &fromUser)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
@@ -132,7 +134,17 @@ func (service *ActivityService) NewListEvent(req *activity.ActivityListReq) (*ac
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
-	items, err := model_converter.ActivityListDal2Resp(&activities)
+
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.ActivityListDal2Resp(&activities, fromUser)
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}

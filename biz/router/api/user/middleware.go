@@ -75,17 +75,17 @@ func _avataruploadmethodMw() []app.HandlerFunc {
 
 func _mfaMw() []app.HandlerFunc {
 	// your code...
-	return auth.Auth()
+	return nil
 }
 
 func _mfabindmethodMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _mfaqrcodemethodMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return auth.Auth()
 }
 
 func _passwordMw() []app.HandlerFunc {

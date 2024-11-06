@@ -9,6 +9,7 @@ import (
 	"sfw/biz/service"
 	"sfw/pkg/errno"
 	"sfw/pkg/utils"
+	"sfw/pkg/utils/logger"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -31,6 +32,7 @@ func ToolUploadImage(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewToolService(ctx, c).NewUploadImageEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, tool.ToolUploadImageResp{
 			Code: resp.Code,
@@ -63,6 +65,7 @@ func ToolGetImage(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewToolService(ctx, c).NewGetImageEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, tool.ToolGetImageResp{
 			Code: resp.Code,
@@ -95,6 +98,7 @@ func ToolDeleteVideo(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewToolService(ctx, c).NewDeleteVideoEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, tool.ToolDeleteVideoResp{
 			Code: resp.Code,
@@ -126,6 +130,7 @@ func ToolDeleteActivity(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewToolService(ctx, c).NewDeleteActivityEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, tool.ToolDeleteActivityResp{
 			Code: resp.Code,
@@ -157,6 +162,7 @@ func ToolDeleteComment(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewToolService(ctx, c).NewDeleteCommentEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, tool.ToolDeleteCommentResp{
 			Code: resp.Code,
@@ -188,6 +194,7 @@ func AdminToolDeleteVideo(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewToolService(ctx, c).NewAdminDeleteVideoEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, tool.AdminToolDeleteVideoResp{
 			Code: resp.Code,
@@ -219,6 +226,7 @@ func AdminToolDeleteActivity(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewToolService(ctx, c).NewAdminDeleteActivityEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, tool.AdminToolDeleteActivityResp{
 			Code: resp.Code,
@@ -250,6 +258,7 @@ func AdminToolDeleteComment(ctx context.Context, c *app.RequestContext) {
 
 	err = service.NewToolService(ctx, c).NewAdminDeleteCommentEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, tool.AdminToolDeleteCommentResp{
 			Code: resp.Code,
@@ -281,6 +290,7 @@ func ToolTokenRefresh(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewToolService(ctx, c).NewTokenRefreshEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, tool.ToolTokenRefreshResp{
 			Code: resp.Code,

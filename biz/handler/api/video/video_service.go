@@ -9,6 +9,7 @@ import (
 	"sfw/biz/service"
 	"sfw/pkg/errno"
 	"sfw/pkg/utils"
+	"sfw/pkg/utils/logger"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -31,6 +32,7 @@ func VideoFeedMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewVideoService(ctx, c).NewFeedEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, video.VideoFeedResp{
 			Code: resp.Code,
@@ -65,6 +67,7 @@ func VideoInfoMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewVideoService(ctx, c).NewInfoEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, video.VideoInfoResp{
 			Code: resp.Code,
@@ -97,6 +100,7 @@ func VideoPublishMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewVideoService(ctx, c).NewPublishEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, video.VideoPublishResp{
 			Code: resp.Code,
@@ -129,6 +133,7 @@ func VideoCategoriesMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewVideoService(ctx, c).NewCategoriesEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, video.VideoCategoriesResp{
 			Code: resp.Code,
@@ -163,6 +168,7 @@ func VideoListMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewVideoService(ctx, c).NewListEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, video.VideoListResp{
 			Code: resp.Code,
@@ -195,6 +201,7 @@ func VideoSubmitAllMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewVideoService(ctx, c).NewSubmitAllEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, video.VideoSubmitAllResp{
 			Code: resp.Code,
@@ -227,6 +234,7 @@ func VideoSubmitReviewMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewVideoService(ctx, c).NewSubmitReviewEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, video.VideoSubmitReviewResp{
 			Code: resp.Code,
@@ -259,6 +267,7 @@ func VideoSubmitLockedMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewVideoService(ctx, c).NewSubmitLockedEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, video.VideoSubmitLockedResp{
 			Code: resp.Code,
@@ -291,6 +300,7 @@ func VideoSubmitPassedMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewVideoService(ctx, c).NewSumitPassedEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, video.VideoSubmitPassedResp{
 			Code: resp.Code,
@@ -323,6 +333,7 @@ func VideoSearchMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewVideoService(ctx, c).NewSearchEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, video.VideoSearchResp{
 			Code: resp.Code,
@@ -355,6 +366,7 @@ func VideoCoverUploadMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewVideoService(ctx, c).NewCoverUploadEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, video.VideoCoverUploadResp{
 			Code: resp.Code,
@@ -387,6 +399,7 @@ func VideoCustomFeedMethod(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewVideoService(ctx, c).NewCustomFeedEvent(&req)
 	if err != nil {
+		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
 		c.JSON(consts.StatusOK, video.VideoCustomFeedResp{
 			Code: resp.Code,
