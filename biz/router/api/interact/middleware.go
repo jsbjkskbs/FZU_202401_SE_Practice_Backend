@@ -167,3 +167,8 @@ func _interactvideochildcommentlistmethodMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _interactvideodislikemethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

@@ -175,6 +175,16 @@ struct InteractMessageSendResp {
     2: string msg;
 }
 
+struct InteractVideoDislikeReq {
+    1: required string access_token (api.header="Access-Token");
+    2: required string video_id;
+}
+
+struct InteractVideoDislikeResp {
+    1: i64 code;
+    2: string msg;
+}
+
 service InteractService {
     InteractLikeVideoActionResp InteractLikeVideoActionMethod(1: InteractLikeVideoActionReq req) (api.post="/api/v1/interact/like/video/action");
     InteractLikeActivityActionResp InteractLikeActivityActionMethod(1: InteractLikeActivityActionReq req) (api.post="/api/v1/interact/like/activity/action");
@@ -187,4 +197,5 @@ service InteractService {
     InteractVideoChildCommentListResp InteractVideoChildCommentListMethod(1: InteractVideoChildCommentListReq req) (api.get="/api/v1/interact/video/child_comment/list");
     InteractActivityChildCommentListResp InteractActivityChildCommentListMethod(1: InteractActivityChildCommentListReq req) (api.get="/api/v1/interact/activity/child_comment/list");
     InteractMessageSendResp InteractMessageSendMethod(1: InteractMessageSendReq req) (api.post="/api/v1/interact/message/send");
+    InteractVideoDislikeResp InteractVideoDislikeMethod(1: InteractVideoDislikeReq req) (api.post="/api/v1/interact/video/dislike");
 }

@@ -5,7 +5,6 @@ package report
 import (
 	"context"
 	"fmt"
-
 	"github.com/apache/thrift/lib/go/thrift"
 	"sfw/biz/model/base"
 )
@@ -48,6 +47,7 @@ var fieldIDToName_ReportVideoReq = map[int16]string{
 }
 
 func (p *ReportVideoReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -156,6 +156,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *ReportVideoReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -165,8 +166,8 @@ func (p *ReportVideoReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *ReportVideoReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -176,8 +177,8 @@ func (p *ReportVideoReq) ReadField2(iprot thrift.TProtocol) error {
 	p.VideoID = _field
 	return nil
 }
-
 func (p *ReportVideoReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -187,8 +188,8 @@ func (p *ReportVideoReq) ReadField3(iprot thrift.TProtocol) error {
 	p.Content = _field
 	return nil
 }
-
 func (p *ReportVideoReq) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -312,6 +313,7 @@ func (p *ReportVideoReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportVideoReq(%+v)", *p)
+
 }
 
 type ReportVideoResp struct {
@@ -340,6 +342,7 @@ var fieldIDToName_ReportVideoResp = map[int16]string{
 }
 
 func (p *ReportVideoResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -403,6 +406,7 @@ ReadStructEndError:
 }
 
 func (p *ReportVideoResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -412,8 +416,8 @@ func (p *ReportVideoResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-
 func (p *ReportVideoResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -495,6 +499,7 @@ func (p *ReportVideoResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportVideoResp(%+v)", *p)
+
 }
 
 type ReportActivityReq struct {
@@ -535,6 +540,7 @@ var fieldIDToName_ReportActivityReq = map[int16]string{
 }
 
 func (p *ReportActivityReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -643,6 +649,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *ReportActivityReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -652,8 +659,8 @@ func (p *ReportActivityReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *ReportActivityReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -663,8 +670,8 @@ func (p *ReportActivityReq) ReadField2(iprot thrift.TProtocol) error {
 	p.ActivityID = _field
 	return nil
 }
-
 func (p *ReportActivityReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -674,8 +681,8 @@ func (p *ReportActivityReq) ReadField3(iprot thrift.TProtocol) error {
 	p.Content = _field
 	return nil
 }
-
 func (p *ReportActivityReq) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -799,6 +806,7 @@ func (p *ReportActivityReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportActivityReq(%+v)", *p)
+
 }
 
 type ReportActivityResp struct {
@@ -827,6 +835,7 @@ var fieldIDToName_ReportActivityResp = map[int16]string{
 }
 
 func (p *ReportActivityResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -890,6 +899,7 @@ ReadStructEndError:
 }
 
 func (p *ReportActivityResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -899,8 +909,8 @@ func (p *ReportActivityResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-
 func (p *ReportActivityResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -982,6 +992,7 @@ func (p *ReportActivityResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportActivityResp(%+v)", *p)
+
 }
 
 type ReportCommentReq struct {
@@ -1034,6 +1045,7 @@ var fieldIDToName_ReportCommentReq = map[int16]string{
 }
 
 func (p *ReportCommentReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -1172,6 +1184,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *ReportCommentReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1181,8 +1194,8 @@ func (p *ReportCommentReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *ReportCommentReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1192,8 +1205,8 @@ func (p *ReportCommentReq) ReadField2(iprot thrift.TProtocol) error {
 	p.CommentType = _field
 	return nil
 }
-
 func (p *ReportCommentReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1203,8 +1216,8 @@ func (p *ReportCommentReq) ReadField3(iprot thrift.TProtocol) error {
 	p.FromMediaID = _field
 	return nil
 }
-
 func (p *ReportCommentReq) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1214,8 +1227,8 @@ func (p *ReportCommentReq) ReadField4(iprot thrift.TProtocol) error {
 	p.CommentID = _field
 	return nil
 }
-
 func (p *ReportCommentReq) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1225,8 +1238,8 @@ func (p *ReportCommentReq) ReadField5(iprot thrift.TProtocol) error {
 	p.Content = _field
 	return nil
 }
-
 func (p *ReportCommentReq) ReadField6(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1392,6 +1405,7 @@ func (p *ReportCommentReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportCommentReq(%+v)", *p)
+
 }
 
 type ReportCommentResp struct {
@@ -1420,6 +1434,7 @@ var fieldIDToName_ReportCommentResp = map[int16]string{
 }
 
 func (p *ReportCommentResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1483,6 +1498,7 @@ ReadStructEndError:
 }
 
 func (p *ReportCommentResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1492,8 +1508,8 @@ func (p *ReportCommentResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-
 func (p *ReportCommentResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1575,6 +1591,7 @@ func (p *ReportCommentResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportCommentResp(%+v)", *p)
+
 }
 
 type AdminVideoReportListReq struct {
@@ -1669,6 +1686,7 @@ func (p *AdminVideoReportListReq) IsSetLabel() bool {
 }
 
 func (p *AdminVideoReportListReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -1794,6 +1812,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *AdminVideoReportListReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1803,8 +1822,8 @@ func (p *AdminVideoReportListReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *AdminVideoReportListReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1814,8 +1833,8 @@ func (p *AdminVideoReportListReq) ReadField2(iprot thrift.TProtocol) error {
 	p.PageNum = _field
 	return nil
 }
-
 func (p *AdminVideoReportListReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1825,8 +1844,8 @@ func (p *AdminVideoReportListReq) ReadField3(iprot thrift.TProtocol) error {
 	p.PageSize = _field
 	return nil
 }
-
 func (p *AdminVideoReportListReq) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1836,8 +1855,8 @@ func (p *AdminVideoReportListReq) ReadField4(iprot thrift.TProtocol) error {
 	p.Status = _field
 	return nil
 }
-
 func (p *AdminVideoReportListReq) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1847,8 +1866,8 @@ func (p *AdminVideoReportListReq) ReadField5(iprot thrift.TProtocol) error {
 	p.Keyword = _field
 	return nil
 }
-
 func (p *AdminVideoReportListReq) ReadField6(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1858,8 +1877,8 @@ func (p *AdminVideoReportListReq) ReadField6(iprot thrift.TProtocol) error {
 	p.UserID = _field
 	return nil
 }
-
 func (p *AdminVideoReportListReq) ReadField7(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2054,6 +2073,7 @@ func (p *AdminVideoReportListReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminVideoReportListReq(%+v)", *p)
+
 }
 
 type AdminVideoReportListRespData struct {
@@ -2100,6 +2120,7 @@ var fieldIDToName_AdminVideoReportListRespData = map[int16]string{
 }
 
 func (p *AdminVideoReportListRespData) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2209,8 +2230,8 @@ func (p *AdminVideoReportListRespData) ReadField1(iprot thrift.TProtocol) error 
 	p.Items = _field
 	return nil
 }
-
 func (p *AdminVideoReportListRespData) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2220,8 +2241,8 @@ func (p *AdminVideoReportListRespData) ReadField2(iprot thrift.TProtocol) error 
 	p.Total = _field
 	return nil
 }
-
 func (p *AdminVideoReportListRespData) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2231,8 +2252,8 @@ func (p *AdminVideoReportListRespData) ReadField3(iprot thrift.TProtocol) error 
 	p.PageNum = _field
 	return nil
 }
-
 func (p *AdminVideoReportListRespData) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2242,8 +2263,8 @@ func (p *AdminVideoReportListRespData) ReadField4(iprot thrift.TProtocol) error 
 	p.PageSize = _field
 	return nil
 }
-
 func (p *AdminVideoReportListRespData) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field bool
 	if v, err := iprot.ReadBool(); err != nil {
 		return err
@@ -2396,6 +2417,7 @@ func (p *AdminVideoReportListRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminVideoReportListRespData(%+v)", *p)
+
 }
 
 type AdminVideoReportListResp struct {
@@ -2439,6 +2461,7 @@ func (p *AdminVideoReportListResp) IsSetData() bool {
 }
 
 func (p *AdminVideoReportListResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2510,6 +2533,7 @@ ReadStructEndError:
 }
 
 func (p *AdminVideoReportListResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2519,8 +2543,8 @@ func (p *AdminVideoReportListResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-
 func (p *AdminVideoReportListResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2530,7 +2554,6 @@ func (p *AdminVideoReportListResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
-
 func (p *AdminVideoReportListResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewAdminVideoReportListRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -2632,6 +2655,7 @@ func (p *AdminVideoReportListResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminVideoReportListResp(%+v)", *p)
+
 }
 
 type AdminActivityReportListReq struct {
@@ -2726,6 +2750,7 @@ func (p *AdminActivityReportListReq) IsSetLabel() bool {
 }
 
 func (p *AdminActivityReportListReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -2851,6 +2876,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *AdminActivityReportListReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2860,8 +2886,8 @@ func (p *AdminActivityReportListReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *AdminActivityReportListReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2871,8 +2897,8 @@ func (p *AdminActivityReportListReq) ReadField2(iprot thrift.TProtocol) error {
 	p.PageNum = _field
 	return nil
 }
-
 func (p *AdminActivityReportListReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2882,8 +2908,8 @@ func (p *AdminActivityReportListReq) ReadField3(iprot thrift.TProtocol) error {
 	p.PageSize = _field
 	return nil
 }
-
 func (p *AdminActivityReportListReq) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2893,8 +2919,8 @@ func (p *AdminActivityReportListReq) ReadField4(iprot thrift.TProtocol) error {
 	p.Status = _field
 	return nil
 }
-
 func (p *AdminActivityReportListReq) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2904,8 +2930,8 @@ func (p *AdminActivityReportListReq) ReadField5(iprot thrift.TProtocol) error {
 	p.Keyword = _field
 	return nil
 }
-
 func (p *AdminActivityReportListReq) ReadField6(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2915,8 +2941,8 @@ func (p *AdminActivityReportListReq) ReadField6(iprot thrift.TProtocol) error {
 	p.UserID = _field
 	return nil
 }
-
 func (p *AdminActivityReportListReq) ReadField7(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3111,6 +3137,7 @@ func (p *AdminActivityReportListReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminActivityReportListReq(%+v)", *p)
+
 }
 
 type AdminActivityReportListRespData struct {
@@ -3157,6 +3184,7 @@ var fieldIDToName_AdminActivityReportListRespData = map[int16]string{
 }
 
 func (p *AdminActivityReportListRespData) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3266,8 +3294,8 @@ func (p *AdminActivityReportListRespData) ReadField1(iprot thrift.TProtocol) err
 	p.Items = _field
 	return nil
 }
-
 func (p *AdminActivityReportListRespData) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3277,8 +3305,8 @@ func (p *AdminActivityReportListRespData) ReadField2(iprot thrift.TProtocol) err
 	p.Total = _field
 	return nil
 }
-
 func (p *AdminActivityReportListRespData) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3288,8 +3316,8 @@ func (p *AdminActivityReportListRespData) ReadField3(iprot thrift.TProtocol) err
 	p.PageNum = _field
 	return nil
 }
-
 func (p *AdminActivityReportListRespData) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3299,8 +3327,8 @@ func (p *AdminActivityReportListRespData) ReadField4(iprot thrift.TProtocol) err
 	p.PageSize = _field
 	return nil
 }
-
 func (p *AdminActivityReportListRespData) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field bool
 	if v, err := iprot.ReadBool(); err != nil {
 		return err
@@ -3453,6 +3481,7 @@ func (p *AdminActivityReportListRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminActivityReportListRespData(%+v)", *p)
+
 }
 
 type AdminActivityReportListResp struct {
@@ -3496,6 +3525,7 @@ func (p *AdminActivityReportListResp) IsSetData() bool {
 }
 
 func (p *AdminActivityReportListResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3567,6 +3597,7 @@ ReadStructEndError:
 }
 
 func (p *AdminActivityReportListResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3576,8 +3607,8 @@ func (p *AdminActivityReportListResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-
 func (p *AdminActivityReportListResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3587,7 +3618,6 @@ func (p *AdminActivityReportListResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
-
 func (p *AdminActivityReportListResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewAdminActivityReportListRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -3689,6 +3719,7 @@ func (p *AdminActivityReportListResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminActivityReportListResp(%+v)", *p)
+
 }
 
 type AdminCommentReportListReq struct {
@@ -3789,6 +3820,7 @@ func (p *AdminCommentReportListReq) IsSetLabel() bool {
 }
 
 func (p *AdminCommentReportListReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -3929,6 +3961,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *AdminCommentReportListReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3938,8 +3971,8 @@ func (p *AdminCommentReportListReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *AdminCommentReportListReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3949,8 +3982,8 @@ func (p *AdminCommentReportListReq) ReadField2(iprot thrift.TProtocol) error {
 	p.PageNum = _field
 	return nil
 }
-
 func (p *AdminCommentReportListReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3960,8 +3993,8 @@ func (p *AdminCommentReportListReq) ReadField3(iprot thrift.TProtocol) error {
 	p.PageSize = _field
 	return nil
 }
-
 func (p *AdminCommentReportListReq) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3971,8 +4004,8 @@ func (p *AdminCommentReportListReq) ReadField4(iprot thrift.TProtocol) error {
 	p.CommentType = _field
 	return nil
 }
-
 func (p *AdminCommentReportListReq) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3982,8 +4015,8 @@ func (p *AdminCommentReportListReq) ReadField5(iprot thrift.TProtocol) error {
 	p.Status = _field
 	return nil
 }
-
 func (p *AdminCommentReportListReq) ReadField6(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3993,8 +4026,8 @@ func (p *AdminCommentReportListReq) ReadField6(iprot thrift.TProtocol) error {
 	p.Keyword = _field
 	return nil
 }
-
 func (p *AdminCommentReportListReq) ReadField7(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4004,8 +4037,8 @@ func (p *AdminCommentReportListReq) ReadField7(iprot thrift.TProtocol) error {
 	p.UserID = _field
 	return nil
 }
-
 func (p *AdminCommentReportListReq) ReadField8(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4221,6 +4254,7 @@ func (p *AdminCommentReportListReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminCommentReportListReq(%+v)", *p)
+
 }
 
 type AdminCommentReportListRespData struct {
@@ -4267,6 +4301,7 @@ var fieldIDToName_AdminCommentReportListRespData = map[int16]string{
 }
 
 func (p *AdminCommentReportListRespData) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4376,8 +4411,8 @@ func (p *AdminCommentReportListRespData) ReadField1(iprot thrift.TProtocol) erro
 	p.Items = _field
 	return nil
 }
-
 func (p *AdminCommentReportListRespData) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4387,8 +4422,8 @@ func (p *AdminCommentReportListRespData) ReadField2(iprot thrift.TProtocol) erro
 	p.Total = _field
 	return nil
 }
-
 func (p *AdminCommentReportListRespData) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4398,8 +4433,8 @@ func (p *AdminCommentReportListRespData) ReadField3(iprot thrift.TProtocol) erro
 	p.PageNum = _field
 	return nil
 }
-
 func (p *AdminCommentReportListRespData) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4409,8 +4444,8 @@ func (p *AdminCommentReportListRespData) ReadField4(iprot thrift.TProtocol) erro
 	p.PageSize = _field
 	return nil
 }
-
 func (p *AdminCommentReportListRespData) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field bool
 	if v, err := iprot.ReadBool(); err != nil {
 		return err
@@ -4563,6 +4598,7 @@ func (p *AdminCommentReportListRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminCommentReportListRespData(%+v)", *p)
+
 }
 
 type AdminCommentReportListResp struct {
@@ -4606,6 +4642,7 @@ func (p *AdminCommentReportListResp) IsSetData() bool {
 }
 
 func (p *AdminCommentReportListResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4677,6 +4714,7 @@ ReadStructEndError:
 }
 
 func (p *AdminCommentReportListResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4686,8 +4724,8 @@ func (p *AdminCommentReportListResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-
 func (p *AdminCommentReportListResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4697,7 +4735,6 @@ func (p *AdminCommentReportListResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
-
 func (p *AdminCommentReportListResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewAdminCommentReportListRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -4799,6 +4836,7 @@ func (p *AdminCommentReportListResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminCommentReportListResp(%+v)", *p)
+
 }
 
 type AdminVideoReportHandleReq struct {
@@ -4833,6 +4871,7 @@ var fieldIDToName_AdminVideoReportHandleReq = map[int16]string{
 }
 
 func (p *AdminVideoReportHandleReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -4926,6 +4965,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *AdminVideoReportHandleReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4935,8 +4975,8 @@ func (p *AdminVideoReportHandleReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *AdminVideoReportHandleReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4946,8 +4986,8 @@ func (p *AdminVideoReportHandleReq) ReadField2(iprot thrift.TProtocol) error {
 	p.ReportID = _field
 	return nil
 }
-
 func (p *AdminVideoReportHandleReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5050,6 +5090,7 @@ func (p *AdminVideoReportHandleReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminVideoReportHandleReq(%+v)", *p)
+
 }
 
 type AdminVideoReportHandleResp struct {
@@ -5078,6 +5119,7 @@ var fieldIDToName_AdminVideoReportHandleResp = map[int16]string{
 }
 
 func (p *AdminVideoReportHandleResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -5141,6 +5183,7 @@ ReadStructEndError:
 }
 
 func (p *AdminVideoReportHandleResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5150,8 +5193,8 @@ func (p *AdminVideoReportHandleResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-
 func (p *AdminVideoReportHandleResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -5233,6 +5276,7 @@ func (p *AdminVideoReportHandleResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminVideoReportHandleResp(%+v)", *p)
+
 }
 
 type AdminActivityReportHandleReq struct {
@@ -5267,6 +5311,7 @@ var fieldIDToName_AdminActivityReportHandleReq = map[int16]string{
 }
 
 func (p *AdminActivityReportHandleReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -5360,6 +5405,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *AdminActivityReportHandleReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -5369,8 +5415,8 @@ func (p *AdminActivityReportHandleReq) ReadField1(iprot thrift.TProtocol) error 
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *AdminActivityReportHandleReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -5380,8 +5426,8 @@ func (p *AdminActivityReportHandleReq) ReadField2(iprot thrift.TProtocol) error 
 	p.ReportID = _field
 	return nil
 }
-
 func (p *AdminActivityReportHandleReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5484,6 +5530,7 @@ func (p *AdminActivityReportHandleReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminActivityReportHandleReq(%+v)", *p)
+
 }
 
 type AdminActivityReportHandleResp struct {
@@ -5512,6 +5559,7 @@ var fieldIDToName_AdminActivityReportHandleResp = map[int16]string{
 }
 
 func (p *AdminActivityReportHandleResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -5575,6 +5623,7 @@ ReadStructEndError:
 }
 
 func (p *AdminActivityReportHandleResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5584,8 +5633,8 @@ func (p *AdminActivityReportHandleResp) ReadField1(iprot thrift.TProtocol) error
 	p.Code = _field
 	return nil
 }
-
 func (p *AdminActivityReportHandleResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -5667,6 +5716,7 @@ func (p *AdminActivityReportHandleResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminActivityReportHandleResp(%+v)", *p)
+
 }
 
 type AdminCommentReportHandleReq struct {
@@ -5707,6 +5757,7 @@ var fieldIDToName_AdminCommentReportHandleReq = map[int16]string{
 }
 
 func (p *AdminCommentReportHandleReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -5815,6 +5866,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *AdminCommentReportHandleReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -5824,8 +5876,8 @@ func (p *AdminCommentReportHandleReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *AdminCommentReportHandleReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -5835,8 +5887,8 @@ func (p *AdminCommentReportHandleReq) ReadField2(iprot thrift.TProtocol) error {
 	p.CommentType = _field
 	return nil
 }
-
 func (p *AdminCommentReportHandleReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -5846,8 +5898,8 @@ func (p *AdminCommentReportHandleReq) ReadField3(iprot thrift.TProtocol) error {
 	p.ReportID = _field
 	return nil
 }
-
 func (p *AdminCommentReportHandleReq) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5971,6 +6023,7 @@ func (p *AdminCommentReportHandleReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminCommentReportHandleReq(%+v)", *p)
+
 }
 
 type AdminCommentReportHandleResp struct {
@@ -5999,6 +6052,7 @@ var fieldIDToName_AdminCommentReportHandleResp = map[int16]string{
 }
 
 func (p *AdminCommentReportHandleResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -6062,6 +6116,7 @@ ReadStructEndError:
 }
 
 func (p *AdminCommentReportHandleResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6071,8 +6126,8 @@ func (p *AdminCommentReportHandleResp) ReadField1(iprot thrift.TProtocol) error 
 	p.Code = _field
 	return nil
 }
-
 func (p *AdminCommentReportHandleResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -6154,6 +6209,7 @@ func (p *AdminCommentReportHandleResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminCommentReportHandleResp(%+v)", *p)
+
 }
 
 type AdminVideoListReq struct {
@@ -6203,6 +6259,7 @@ func (p *AdminVideoListReq) IsSetCategory() bool {
 }
 
 func (p *AdminVideoListReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -6304,6 +6361,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *AdminVideoListReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -6313,8 +6371,8 @@ func (p *AdminVideoListReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *AdminVideoListReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6324,8 +6382,8 @@ func (p *AdminVideoListReq) ReadField2(iprot thrift.TProtocol) error {
 	p.PageNum = _field
 	return nil
 }
-
 func (p *AdminVideoListReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6335,8 +6393,8 @@ func (p *AdminVideoListReq) ReadField3(iprot thrift.TProtocol) error {
 	p.PageSize = _field
 	return nil
 }
-
 func (p *AdminVideoListReq) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -6462,6 +6520,7 @@ func (p *AdminVideoListReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminVideoListReq(%+v)", *p)
+
 }
 
 type AdminVideoListRespData struct {
@@ -6508,6 +6567,7 @@ var fieldIDToName_AdminVideoListRespData = map[int16]string{
 }
 
 func (p *AdminVideoListRespData) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -6617,8 +6677,8 @@ func (p *AdminVideoListRespData) ReadField1(iprot thrift.TProtocol) error {
 	p.Items = _field
 	return nil
 }
-
 func (p *AdminVideoListRespData) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6628,8 +6688,8 @@ func (p *AdminVideoListRespData) ReadField2(iprot thrift.TProtocol) error {
 	p.Total = _field
 	return nil
 }
-
 func (p *AdminVideoListRespData) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6639,8 +6699,8 @@ func (p *AdminVideoListRespData) ReadField3(iprot thrift.TProtocol) error {
 	p.PageNum = _field
 	return nil
 }
-
 func (p *AdminVideoListRespData) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6650,8 +6710,8 @@ func (p *AdminVideoListRespData) ReadField4(iprot thrift.TProtocol) error {
 	p.PageSize = _field
 	return nil
 }
-
 func (p *AdminVideoListRespData) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field bool
 	if v, err := iprot.ReadBool(); err != nil {
 		return err
@@ -6804,6 +6864,7 @@ func (p *AdminVideoListRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminVideoListRespData(%+v)", *p)
+
 }
 
 type AdminVideoListResp struct {
@@ -6847,6 +6908,7 @@ func (p *AdminVideoListResp) IsSetData() bool {
 }
 
 func (p *AdminVideoListResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -6918,6 +6980,7 @@ ReadStructEndError:
 }
 
 func (p *AdminVideoListResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6927,8 +6990,8 @@ func (p *AdminVideoListResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-
 func (p *AdminVideoListResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -6938,7 +7001,6 @@ func (p *AdminVideoListResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
-
 func (p *AdminVideoListResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewAdminVideoListRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -7040,6 +7102,7 @@ func (p *AdminVideoListResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminVideoListResp(%+v)", *p)
+
 }
 
 type AdminVideoHandleReq struct {
@@ -7074,6 +7137,7 @@ var fieldIDToName_AdminVideoHandleReq = map[int16]string{
 }
 
 func (p *AdminVideoHandleReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -7167,6 +7231,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *AdminVideoHandleReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -7176,8 +7241,8 @@ func (p *AdminVideoHandleReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *AdminVideoHandleReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -7187,8 +7252,8 @@ func (p *AdminVideoHandleReq) ReadField2(iprot thrift.TProtocol) error {
 	p.VideoID = _field
 	return nil
 }
-
 func (p *AdminVideoHandleReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -7291,6 +7356,7 @@ func (p *AdminVideoHandleReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminVideoHandleReq(%+v)", *p)
+
 }
 
 type AdminVideoHandleResp struct {
@@ -7319,6 +7385,7 @@ var fieldIDToName_AdminVideoHandleResp = map[int16]string{
 }
 
 func (p *AdminVideoHandleResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -7382,6 +7449,7 @@ ReadStructEndError:
 }
 
 func (p *AdminVideoHandleResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -7391,8 +7459,8 @@ func (p *AdminVideoHandleResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-
 func (p *AdminVideoHandleResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -7474,6 +7542,7 @@ func (p *AdminVideoHandleResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("AdminVideoHandleResp(%+v)", *p)
+
 }
 
 type ReportService interface {
@@ -7535,7 +7604,6 @@ func (p *ReportServiceClient) ReportVideo(ctx context.Context, req *ReportVideoR
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *ReportServiceClient) ReportActivity(ctx context.Context, req *ReportActivityReq) (r *ReportActivityResp, err error) {
 	var _args ReportServiceReportActivityArgs
 	_args.Req = req
@@ -7545,7 +7613,6 @@ func (p *ReportServiceClient) ReportActivity(ctx context.Context, req *ReportAct
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *ReportServiceClient) ReportComment(ctx context.Context, req *ReportCommentReq) (r *ReportCommentResp, err error) {
 	var _args ReportServiceReportCommentArgs
 	_args.Req = req
@@ -7555,7 +7622,6 @@ func (p *ReportServiceClient) ReportComment(ctx context.Context, req *ReportComm
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *ReportServiceClient) AdminVideoReportList(ctx context.Context, req *AdminVideoReportListReq) (r *AdminVideoReportListResp, err error) {
 	var _args ReportServiceAdminVideoReportListArgs
 	_args.Req = req
@@ -7565,7 +7631,6 @@ func (p *ReportServiceClient) AdminVideoReportList(ctx context.Context, req *Adm
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *ReportServiceClient) AdminActivityReportList(ctx context.Context, req *AdminActivityReportListReq) (r *AdminActivityReportListResp, err error) {
 	var _args ReportServiceAdminActivityReportListArgs
 	_args.Req = req
@@ -7575,7 +7640,6 @@ func (p *ReportServiceClient) AdminActivityReportList(ctx context.Context, req *
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *ReportServiceClient) AdminCommentReportList(ctx context.Context, req *AdminCommentReportListReq) (r *AdminCommentReportListResp, err error) {
 	var _args ReportServiceAdminCommentReportListArgs
 	_args.Req = req
@@ -7585,7 +7649,6 @@ func (p *ReportServiceClient) AdminCommentReportList(ctx context.Context, req *A
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *ReportServiceClient) AdminVideoReportHandle(ctx context.Context, req *AdminVideoReportHandleReq) (r *AdminVideoReportHandleResp, err error) {
 	var _args ReportServiceAdminVideoReportHandleArgs
 	_args.Req = req
@@ -7595,7 +7658,6 @@ func (p *ReportServiceClient) AdminVideoReportHandle(ctx context.Context, req *A
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *ReportServiceClient) AdminActivityReportHandle(ctx context.Context, req *AdminActivityReportHandleReq) (r *AdminActivityReportHandleResp, err error) {
 	var _args ReportServiceAdminActivityReportHandleArgs
 	_args.Req = req
@@ -7605,7 +7667,6 @@ func (p *ReportServiceClient) AdminActivityReportHandle(ctx context.Context, req
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *ReportServiceClient) AdminCommentHandle(ctx context.Context, req *AdminCommentReportHandleReq) (r *AdminCommentReportHandleResp, err error) {
 	var _args ReportServiceAdminCommentHandleArgs
 	_args.Req = req
@@ -7615,7 +7676,6 @@ func (p *ReportServiceClient) AdminCommentHandle(ctx context.Context, req *Admin
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *ReportServiceClient) AdminVideoList(ctx context.Context, req *AdminVideoListReq) (r *AdminVideoListResp, err error) {
 	var _args ReportServiceAdminVideoListArgs
 	_args.Req = req
@@ -7625,7 +7685,6 @@ func (p *ReportServiceClient) AdminVideoList(ctx context.Context, req *AdminVide
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *ReportServiceClient) AdminVideoHandle(ctx context.Context, req *AdminVideoHandleReq) (r *AdminVideoHandleResp, err error) {
 	var _args ReportServiceAdminVideoHandleArgs
 	_args.Req = req
@@ -7669,7 +7728,6 @@ func NewReportServiceProcessor(handler ReportService) *ReportServiceProcessor {
 	self.AddToProcessorMap("AdminVideoHandle", &reportServiceProcessorAdminVideoHandle{handler: handler})
 	return self
 }
-
 func (p *ReportServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
 	name, _, seqId, err := iprot.ReadMessageBegin()
 	if err != nil {
@@ -8245,6 +8303,7 @@ func (p *ReportServiceReportVideoArgs) IsSetReq() bool {
 }
 
 func (p *ReportServiceReportVideoArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8358,6 +8417,7 @@ func (p *ReportServiceReportVideoArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceReportVideoArgs(%+v)", *p)
+
 }
 
 type ReportServiceReportVideoResult struct {
@@ -8389,6 +8449,7 @@ func (p *ReportServiceReportVideoResult) IsSetSuccess() bool {
 }
 
 func (p *ReportServiceReportVideoResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8504,6 +8565,7 @@ func (p *ReportServiceReportVideoResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceReportVideoResult(%+v)", *p)
+
 }
 
 type ReportServiceReportActivityArgs struct {
@@ -8535,6 +8597,7 @@ func (p *ReportServiceReportActivityArgs) IsSetReq() bool {
 }
 
 func (p *ReportServiceReportActivityArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8648,6 +8711,7 @@ func (p *ReportServiceReportActivityArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceReportActivityArgs(%+v)", *p)
+
 }
 
 type ReportServiceReportActivityResult struct {
@@ -8679,6 +8743,7 @@ func (p *ReportServiceReportActivityResult) IsSetSuccess() bool {
 }
 
 func (p *ReportServiceReportActivityResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8794,6 +8859,7 @@ func (p *ReportServiceReportActivityResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceReportActivityResult(%+v)", *p)
+
 }
 
 type ReportServiceReportCommentArgs struct {
@@ -8825,6 +8891,7 @@ func (p *ReportServiceReportCommentArgs) IsSetReq() bool {
 }
 
 func (p *ReportServiceReportCommentArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8938,6 +9005,7 @@ func (p *ReportServiceReportCommentArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceReportCommentArgs(%+v)", *p)
+
 }
 
 type ReportServiceReportCommentResult struct {
@@ -8969,6 +9037,7 @@ func (p *ReportServiceReportCommentResult) IsSetSuccess() bool {
 }
 
 func (p *ReportServiceReportCommentResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9084,6 +9153,7 @@ func (p *ReportServiceReportCommentResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceReportCommentResult(%+v)", *p)
+
 }
 
 type ReportServiceAdminVideoReportListArgs struct {
@@ -9115,6 +9185,7 @@ func (p *ReportServiceAdminVideoReportListArgs) IsSetReq() bool {
 }
 
 func (p *ReportServiceAdminVideoReportListArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9228,6 +9299,7 @@ func (p *ReportServiceAdminVideoReportListArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminVideoReportListArgs(%+v)", *p)
+
 }
 
 type ReportServiceAdminVideoReportListResult struct {
@@ -9259,6 +9331,7 @@ func (p *ReportServiceAdminVideoReportListResult) IsSetSuccess() bool {
 }
 
 func (p *ReportServiceAdminVideoReportListResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9374,6 +9447,7 @@ func (p *ReportServiceAdminVideoReportListResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminVideoReportListResult(%+v)", *p)
+
 }
 
 type ReportServiceAdminActivityReportListArgs struct {
@@ -9405,6 +9479,7 @@ func (p *ReportServiceAdminActivityReportListArgs) IsSetReq() bool {
 }
 
 func (p *ReportServiceAdminActivityReportListArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9518,6 +9593,7 @@ func (p *ReportServiceAdminActivityReportListArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminActivityReportListArgs(%+v)", *p)
+
 }
 
 type ReportServiceAdminActivityReportListResult struct {
@@ -9549,6 +9625,7 @@ func (p *ReportServiceAdminActivityReportListResult) IsSetSuccess() bool {
 }
 
 func (p *ReportServiceAdminActivityReportListResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9664,6 +9741,7 @@ func (p *ReportServiceAdminActivityReportListResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminActivityReportListResult(%+v)", *p)
+
 }
 
 type ReportServiceAdminCommentReportListArgs struct {
@@ -9695,6 +9773,7 @@ func (p *ReportServiceAdminCommentReportListArgs) IsSetReq() bool {
 }
 
 func (p *ReportServiceAdminCommentReportListArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9808,6 +9887,7 @@ func (p *ReportServiceAdminCommentReportListArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminCommentReportListArgs(%+v)", *p)
+
 }
 
 type ReportServiceAdminCommentReportListResult struct {
@@ -9839,6 +9919,7 @@ func (p *ReportServiceAdminCommentReportListResult) IsSetSuccess() bool {
 }
 
 func (p *ReportServiceAdminCommentReportListResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9954,6 +10035,7 @@ func (p *ReportServiceAdminCommentReportListResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminCommentReportListResult(%+v)", *p)
+
 }
 
 type ReportServiceAdminVideoReportHandleArgs struct {
@@ -9985,6 +10067,7 @@ func (p *ReportServiceAdminVideoReportHandleArgs) IsSetReq() bool {
 }
 
 func (p *ReportServiceAdminVideoReportHandleArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10098,6 +10181,7 @@ func (p *ReportServiceAdminVideoReportHandleArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminVideoReportHandleArgs(%+v)", *p)
+
 }
 
 type ReportServiceAdminVideoReportHandleResult struct {
@@ -10129,6 +10213,7 @@ func (p *ReportServiceAdminVideoReportHandleResult) IsSetSuccess() bool {
 }
 
 func (p *ReportServiceAdminVideoReportHandleResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10244,6 +10329,7 @@ func (p *ReportServiceAdminVideoReportHandleResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminVideoReportHandleResult(%+v)", *p)
+
 }
 
 type ReportServiceAdminActivityReportHandleArgs struct {
@@ -10275,6 +10361,7 @@ func (p *ReportServiceAdminActivityReportHandleArgs) IsSetReq() bool {
 }
 
 func (p *ReportServiceAdminActivityReportHandleArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10388,6 +10475,7 @@ func (p *ReportServiceAdminActivityReportHandleArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminActivityReportHandleArgs(%+v)", *p)
+
 }
 
 type ReportServiceAdminActivityReportHandleResult struct {
@@ -10419,6 +10507,7 @@ func (p *ReportServiceAdminActivityReportHandleResult) IsSetSuccess() bool {
 }
 
 func (p *ReportServiceAdminActivityReportHandleResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10534,6 +10623,7 @@ func (p *ReportServiceAdminActivityReportHandleResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminActivityReportHandleResult(%+v)", *p)
+
 }
 
 type ReportServiceAdminCommentHandleArgs struct {
@@ -10565,6 +10655,7 @@ func (p *ReportServiceAdminCommentHandleArgs) IsSetReq() bool {
 }
 
 func (p *ReportServiceAdminCommentHandleArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10678,6 +10769,7 @@ func (p *ReportServiceAdminCommentHandleArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminCommentHandleArgs(%+v)", *p)
+
 }
 
 type ReportServiceAdminCommentHandleResult struct {
@@ -10709,6 +10801,7 @@ func (p *ReportServiceAdminCommentHandleResult) IsSetSuccess() bool {
 }
 
 func (p *ReportServiceAdminCommentHandleResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10824,6 +10917,7 @@ func (p *ReportServiceAdminCommentHandleResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminCommentHandleResult(%+v)", *p)
+
 }
 
 type ReportServiceAdminVideoListArgs struct {
@@ -10855,6 +10949,7 @@ func (p *ReportServiceAdminVideoListArgs) IsSetReq() bool {
 }
 
 func (p *ReportServiceAdminVideoListArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10968,6 +11063,7 @@ func (p *ReportServiceAdminVideoListArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminVideoListArgs(%+v)", *p)
+
 }
 
 type ReportServiceAdminVideoListResult struct {
@@ -10999,6 +11095,7 @@ func (p *ReportServiceAdminVideoListResult) IsSetSuccess() bool {
 }
 
 func (p *ReportServiceAdminVideoListResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -11114,6 +11211,7 @@ func (p *ReportServiceAdminVideoListResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminVideoListResult(%+v)", *p)
+
 }
 
 type ReportServiceAdminVideoHandleArgs struct {
@@ -11145,6 +11243,7 @@ func (p *ReportServiceAdminVideoHandleArgs) IsSetReq() bool {
 }
 
 func (p *ReportServiceAdminVideoHandleArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -11258,6 +11357,7 @@ func (p *ReportServiceAdminVideoHandleArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminVideoHandleArgs(%+v)", *p)
+
 }
 
 type ReportServiceAdminVideoHandleResult struct {
@@ -11289,6 +11389,7 @@ func (p *ReportServiceAdminVideoHandleResult) IsSetSuccess() bool {
 }
 
 func (p *ReportServiceAdminVideoHandleResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -11404,4 +11505,5 @@ func (p *ReportServiceAdminVideoHandleResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("ReportServiceAdminVideoHandleResult(%+v)", *p)
+
 }

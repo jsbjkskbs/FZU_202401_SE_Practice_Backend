@@ -9,7 +9,7 @@ import (
 
 func QueryVideoLikeVideoIds() ([]*model.VideoLike, error) {
 	vl := dal.Executor.VideoLike
-	likes, err := vl.WithContext(context.Background()).Select(vl.VideoID).Find()
+	likes, err := vl.WithContext(context.Background()).Select(vl.VideoID.Distinct()).Find()
 	if err != nil {
 		return nil, err
 	}

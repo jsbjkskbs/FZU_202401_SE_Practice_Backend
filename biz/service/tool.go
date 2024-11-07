@@ -38,7 +38,7 @@ func (service *ToolService) NewDeleteVideoEvent(req *tool.ToolDeleteVideoReq) er
 	}
 	videoId, err := strconv.ParseInt(req.VideoID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithInnerError(err)
+		return errno.ParamInvalid.WithMessage("视频ID错误")
 	}
 
 	exist, err := exquery.QueryVideoExistByIdAndUserId(videoId, uid)
@@ -92,7 +92,7 @@ func (service *ToolService) NewDeleteActivityEvent(req *tool.ToolDeleteActivityR
 	}
 	activityId, err := strconv.ParseInt(req.ActivityID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithInnerError(err)
+		return errno.ParamInvalid.WithMessage("动态ID错误")
 	}
 
 	exist, err := exquery.QueryActivityExistByIdAndUserId(activityId, uid)
@@ -140,7 +140,7 @@ func (service *ToolService) newDeleteVideoCommentEvent(req *tool.ToolDeleteComme
 	}
 	commentId, err := strconv.ParseInt(req.CommentID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithInnerError(err)
+		return errno.ParamInvalid.WithMessage("评论ID错误")
 	}
 
 	exist, err := exquery.QueryVideoCommentExistByIdAndUserId(commentId, uid)
@@ -177,7 +177,7 @@ func (service *ToolService) newDeleteActivityCommentEvent(req *tool.ToolDeleteCo
 	}
 	commentId, err := strconv.ParseInt(req.CommentID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithInnerError(err)
+		return errno.ParamInvalid.WithMessage("评论ID错误")
 	}
 
 	exist, err := exquery.QueryActivityCommentExistByIdAndUserId(commentId, uid)
@@ -220,7 +220,7 @@ func (tool *ToolService) NewDeleteCommentEvent(req *tool.ToolDeleteCommentReq) e
 func (service *ToolService) NewAdminDeleteVideoEvent(req *tool.AdminToolDeleteVideoReq) error {
 	videoId, err := strconv.ParseInt(req.VideoID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithInnerError(err)
+		return errno.ParamInvalid.WithMessage("视频ID错误")
 	}
 
 	exist, err := exquery.QueryVideoExistById(videoId)
@@ -264,7 +264,7 @@ func (service *ToolService) NewAdminDeleteVideoEvent(req *tool.AdminToolDeleteVi
 func (service *ToolService) NewAdminDeleteActivityEvent(req *tool.AdminToolDeleteActivityReq) error {
 	activityId, err := strconv.ParseInt(req.ActivityID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithInnerError(err)
+		return errno.ParamInvalid.WithMessage("动态ID错误")
 	}
 
 	exist, err := exquery.QueryActivityExistById(activityId)
@@ -308,7 +308,7 @@ func (service *ToolService) NewAdminDeleteActivityEvent(req *tool.AdminToolDelet
 func (service *ToolService) newAdminDeleteVideoCommentEvent(req *tool.AdminToolDeleteCommentReq) error {
 	commentId, err := strconv.ParseInt(req.CommentID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithInnerError(err)
+		return errno.ParamInvalid.WithMessage("评论ID错误")
 	}
 
 	exist, err := exquery.QueryVideoCommentExistById(commentId)
@@ -341,7 +341,7 @@ func (service *ToolService) newAdminDeleteVideoCommentEvent(req *tool.AdminToolD
 func (service *ToolService) newAdminDeleteActivityCommentEvent(req *tool.AdminToolDeleteCommentReq) error {
 	commentId, err := strconv.ParseInt(req.CommentID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithInnerError(err)
+		return errno.ParamInvalid.WithMessage("评论ID错误")
 	}
 
 	exist, err := exquery.QueryActivityCommentExistById(commentId)
@@ -402,7 +402,7 @@ func (service *ToolService) NewUploadImageEvent(req *tool.ToolUploadImageReq) (*
 func (service *ToolService) NewGetImageEvent(req *tool.ToolGetImageReq) (*tool.ToolGetImageRespData, error) {
 	imageId, err := strconv.ParseInt(req.ImageID, 10, 64)
 	if err != nil {
-		return nil, errno.ParamInvalid.WithInnerError(err)
+		return nil, errno.ParamInvalid.WithMessage("图片ID错误")
 	}
 	image, err := exquery.QueryImageById(imageId)
 	if err != nil {

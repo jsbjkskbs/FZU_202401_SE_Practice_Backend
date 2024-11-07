@@ -23,4 +23,10 @@ const (
 	VideoVisitInterval = 20 * time.Minute
 
 	SyncInterval = 3 * time.Minute
+
+	GorseFeedbackRead    = "read"
+	GorseFeedbackDislike = "dislike"
+	GorseFeedbackLike    = "like"
+	GorseFeedbackStar    = "star"
+	GorseFeedbackVisit   = "visit"
 )

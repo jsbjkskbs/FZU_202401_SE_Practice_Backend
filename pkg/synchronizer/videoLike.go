@@ -1,14 +1,17 @@
 package synchronizer
 
 import (
-	"context"
 	"fmt"
 	"strconv"
 	"sync"
+	"time"
 
-	"sfw/biz/dal"
 	"sfw/biz/dal/exquery"
+	"sfw/biz/mw/gorse"
 	"sfw/biz/mw/redis"
+	"sfw/biz/service/common"
+
+	gorseCli "github.com/zhenghaoz/gorse/client"
 )
 
 func SynchronizeVideoLikeFromRedis2DB(vid string) error {
@@ -75,6 +78,19 @@ func synchronizeNewInsertVideoLikeFromRedis2DB(vid string) error {
 	if err = redis.AppendVideoLikeListToStaticSpace(vid, *list); err != nil {
 		return err
 	}
+	go func() {
+		fTime := fmt.Sprint(time.Unix(time.Now().Unix(), 0).UTC().Format(time.RFC3339))
+		feedbacks := []gorseCli.Feedback{}
+		for _, uid := range *list {
+			feedbacks = append(feedbacks, gorseCli.Feedback{
+				FeedbackType: common.GorseFeedbackLike,
+				UserId:       fmt.Sprint(uid),
+				ItemId:       vid,
+				Timestamp:    fTime,
+			})
+		}
+		gorse.PutFeedbacks(feedbacks)
+	}()
 	return nil
 }
 
@@ -97,23 +113,20 @@ func synchronizeNewDeleteVideoLikeFromRedis2DB(vid string) error {
 		uids = append(uids, userId)
 	}
 
-	vl := dal.Executor.VideoLike
-	if _, err = vl.WithContext(context.Background()).Where(vl.VideoID.Eq(videoId), vl.UserID.In(uids...)).Delete(); err != nil {
+	if err = exquery.DeleteVideoLikeByVideoIdAndUserIds(videoId, uids); err != nil {
 		return err
 	}
 	return nil
 }
 
 func SynchronizeVideoLikeFromDB2Redis() error {
-	v := dal.Executor.Video
-	videos, err := v.WithContext(context.Background()).Select(v.ID).Find()
+	videos, err := exquery.QueryVideoLikeVideoIds()
 	if err != nil {
 		return err
 	}
 
 	for _, video := range videos {
-		vl := dal.Executor.VideoLike
-		vlikes, err := vl.WithContext(context.Background()).Where(vl.VideoID.Eq(video.ID)).Find()
+		vlikes, err := exquery.QueryVideoLikeUserIdsByVideoId(video.VideoID)
 		if err != nil {
 			return err
 		}
@@ -123,7 +136,7 @@ func SynchronizeVideoLikeFromDB2Redis() error {
 			list = append(list, fmt.Sprint(vlike.UserID))
 		}
 
-		if err = redis.PutVideoLikeInfo(fmt.Sprint(video.ID), &list); err != nil {
+		if err = redis.PutVideoLikeInfo(fmt.Sprint(video.VideoID), &list); err != nil {
 			return err
 		}
 	}

@@ -5,7 +5,6 @@ package interact
 import (
 	"context"
 	"fmt"
-
 	"github.com/apache/thrift/lib/go/thrift"
 	"sfw/biz/model/base"
 )
@@ -42,6 +41,7 @@ var fieldIDToName_InteractLikeVideoActionReq = map[int16]string{
 }
 
 func (p *InteractLikeVideoActionReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -135,6 +135,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *InteractLikeVideoActionReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -144,8 +145,8 @@ func (p *InteractLikeVideoActionReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *InteractLikeVideoActionReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -155,8 +156,8 @@ func (p *InteractLikeVideoActionReq) ReadField2(iprot thrift.TProtocol) error {
 	p.VideoID = _field
 	return nil
 }
-
 func (p *InteractLikeVideoActionReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -259,6 +260,7 @@ func (p *InteractLikeVideoActionReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractLikeVideoActionReq(%+v)", *p)
+
 }
 
 type InteractLikeVideoActionResp struct {
@@ -287,6 +289,7 @@ var fieldIDToName_InteractLikeVideoActionResp = map[int16]string{
 }
 
 func (p *InteractLikeVideoActionResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -350,6 +353,7 @@ ReadStructEndError:
 }
 
 func (p *InteractLikeVideoActionResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -359,8 +363,8 @@ func (p *InteractLikeVideoActionResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-
 func (p *InteractLikeVideoActionResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -442,6 +446,7 @@ func (p *InteractLikeVideoActionResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractLikeVideoActionResp(%+v)", *p)
+
 }
 
 type InteractLikeActivityActionReq struct {
@@ -476,6 +481,7 @@ var fieldIDToName_InteractLikeActivityActionReq = map[int16]string{
 }
 
 func (p *InteractLikeActivityActionReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -569,6 +575,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *InteractLikeActivityActionReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -578,8 +585,8 @@ func (p *InteractLikeActivityActionReq) ReadField1(iprot thrift.TProtocol) error
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *InteractLikeActivityActionReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -589,8 +596,8 @@ func (p *InteractLikeActivityActionReq) ReadField2(iprot thrift.TProtocol) error
 	p.ActivityID = _field
 	return nil
 }
-
 func (p *InteractLikeActivityActionReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -693,6 +700,7 @@ func (p *InteractLikeActivityActionReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractLikeActivityActionReq(%+v)", *p)
+
 }
 
 type InteractLikeActivityActionResp struct {
@@ -721,6 +729,7 @@ var fieldIDToName_InteractLikeActivityActionResp = map[int16]string{
 }
 
 func (p *InteractLikeActivityActionResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -784,6 +793,7 @@ ReadStructEndError:
 }
 
 func (p *InteractLikeActivityActionResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -793,8 +803,8 @@ func (p *InteractLikeActivityActionResp) ReadField1(iprot thrift.TProtocol) erro
 	p.Code = _field
 	return nil
 }
-
 func (p *InteractLikeActivityActionResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -876,6 +886,7 @@ func (p *InteractLikeActivityActionResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractLikeActivityActionResp(%+v)", *p)
+
 }
 
 type InteractLikeCommentActionReq struct {
@@ -922,6 +933,7 @@ var fieldIDToName_InteractLikeCommentActionReq = map[int16]string{
 }
 
 func (p *InteractLikeCommentActionReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -1045,6 +1057,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *InteractLikeCommentActionReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1054,8 +1067,8 @@ func (p *InteractLikeCommentActionReq) ReadField1(iprot thrift.TProtocol) error 
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *InteractLikeCommentActionReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1065,8 +1078,8 @@ func (p *InteractLikeCommentActionReq) ReadField2(iprot thrift.TProtocol) error 
 	p.CommentType = _field
 	return nil
 }
-
 func (p *InteractLikeCommentActionReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1076,8 +1089,8 @@ func (p *InteractLikeCommentActionReq) ReadField3(iprot thrift.TProtocol) error 
 	p.FromMediaID = _field
 	return nil
 }
-
 func (p *InteractLikeCommentActionReq) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1087,8 +1100,8 @@ func (p *InteractLikeCommentActionReq) ReadField4(iprot thrift.TProtocol) error 
 	p.CommentID = _field
 	return nil
 }
-
 func (p *InteractLikeCommentActionReq) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1233,6 +1246,7 @@ func (p *InteractLikeCommentActionReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractLikeCommentActionReq(%+v)", *p)
+
 }
 
 type InteractLikeCommentActionResp struct {
@@ -1261,6 +1275,7 @@ var fieldIDToName_InteractLikeCommentActionResp = map[int16]string{
 }
 
 func (p *InteractLikeCommentActionResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1324,6 +1339,7 @@ ReadStructEndError:
 }
 
 func (p *InteractLikeCommentActionResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1333,8 +1349,8 @@ func (p *InteractLikeCommentActionResp) ReadField1(iprot thrift.TProtocol) error
 	p.Code = _field
 	return nil
 }
-
 func (p *InteractLikeCommentActionResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1416,6 +1432,7 @@ func (p *InteractLikeCommentActionResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractLikeCommentActionResp(%+v)", *p)
+
 }
 
 type InteractLikeVideoListReq struct {
@@ -1465,6 +1482,7 @@ func (p *InteractLikeVideoListReq) IsSetAccessToken() bool {
 }
 
 func (p *InteractLikeVideoListReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetUserID bool = false
@@ -1566,6 +1584,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *InteractLikeVideoListReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -1575,8 +1594,8 @@ func (p *InteractLikeVideoListReq) ReadField1(iprot thrift.TProtocol) error {
 	p.UserID = _field
 	return nil
 }
-
 func (p *InteractLikeVideoListReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1586,8 +1605,8 @@ func (p *InteractLikeVideoListReq) ReadField2(iprot thrift.TProtocol) error {
 	p.PageNum = _field
 	return nil
 }
-
 func (p *InteractLikeVideoListReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1724,6 +1743,7 @@ func (p *InteractLikeVideoListReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractLikeVideoListReq(%+v)", *p)
+
 }
 
 type InteractLikeVideoListRespData struct {
@@ -1770,6 +1790,7 @@ var fieldIDToName_InteractLikeVideoListRespData = map[int16]string{
 }
 
 func (p *InteractLikeVideoListRespData) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -1879,8 +1900,8 @@ func (p *InteractLikeVideoListRespData) ReadField1(iprot thrift.TProtocol) error
 	p.Items = _field
 	return nil
 }
-
 func (p *InteractLikeVideoListRespData) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field bool
 	if v, err := iprot.ReadBool(); err != nil {
 		return err
@@ -1890,8 +1911,8 @@ func (p *InteractLikeVideoListRespData) ReadField2(iprot thrift.TProtocol) error
 	p.IsEnd = _field
 	return nil
 }
-
 func (p *InteractLikeVideoListRespData) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1901,8 +1922,8 @@ func (p *InteractLikeVideoListRespData) ReadField3(iprot thrift.TProtocol) error
 	p.PageNum = _field
 	return nil
 }
-
 func (p *InteractLikeVideoListRespData) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -1912,8 +1933,8 @@ func (p *InteractLikeVideoListRespData) ReadField4(iprot thrift.TProtocol) error
 	p.PageSize = _field
 	return nil
 }
-
 func (p *InteractLikeVideoListRespData) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2066,6 +2087,7 @@ func (p *InteractLikeVideoListRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractLikeVideoListRespData(%+v)", *p)
+
 }
 
 type InteractLikeVideoListResp struct {
@@ -2109,6 +2131,7 @@ func (p *InteractLikeVideoListResp) IsSetData() bool {
 }
 
 func (p *InteractLikeVideoListResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2180,6 +2203,7 @@ ReadStructEndError:
 }
 
 func (p *InteractLikeVideoListResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2189,8 +2213,8 @@ func (p *InteractLikeVideoListResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-
 func (p *InteractLikeVideoListResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2200,7 +2224,6 @@ func (p *InteractLikeVideoListResp) ReadField2(iprot thrift.TProtocol) error {
 	p.Msg = _field
 	return nil
 }
-
 func (p *InteractLikeVideoListResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewInteractLikeVideoListRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -2302,6 +2325,7 @@ func (p *InteractLikeVideoListResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractLikeVideoListResp(%+v)", *p)
+
 }
 
 type InteractCommentVideoPublishReq struct {
@@ -2366,6 +2390,7 @@ func (p *InteractCommentVideoPublishReq) IsSetParentID() bool {
 }
 
 func (p *InteractCommentVideoPublishReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -2475,6 +2500,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *InteractCommentVideoPublishReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2484,8 +2510,8 @@ func (p *InteractCommentVideoPublishReq) ReadField1(iprot thrift.TProtocol) erro
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *InteractCommentVideoPublishReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2495,8 +2521,8 @@ func (p *InteractCommentVideoPublishReq) ReadField2(iprot thrift.TProtocol) erro
 	p.VideoID = _field
 	return nil
 }
-
 func (p *InteractCommentVideoPublishReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2506,8 +2532,8 @@ func (p *InteractCommentVideoPublishReq) ReadField3(iprot thrift.TProtocol) erro
 	p.Content = _field
 	return nil
 }
-
 func (p *InteractCommentVideoPublishReq) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2517,8 +2543,8 @@ func (p *InteractCommentVideoPublishReq) ReadField4(iprot thrift.TProtocol) erro
 	p.RootID = _field
 	return nil
 }
-
 func (p *InteractCommentVideoPublishReq) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2667,6 +2693,7 @@ func (p *InteractCommentVideoPublishReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractCommentVideoPublishReq(%+v)", *p)
+
 }
 
 type InteractCommentVideoPublishResp struct {
@@ -2695,6 +2722,7 @@ var fieldIDToName_InteractCommentVideoPublishResp = map[int16]string{
 }
 
 func (p *InteractCommentVideoPublishResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -2758,6 +2786,7 @@ ReadStructEndError:
 }
 
 func (p *InteractCommentVideoPublishResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -2767,8 +2796,8 @@ func (p *InteractCommentVideoPublishResp) ReadField1(iprot thrift.TProtocol) err
 	p.Code = _field
 	return nil
 }
-
 func (p *InteractCommentVideoPublishResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -2850,6 +2879,7 @@ func (p *InteractCommentVideoPublishResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractCommentVideoPublishResp(%+v)", *p)
+
 }
 
 type InteractCommentActivityPublishReq struct {
@@ -2914,6 +2944,7 @@ func (p *InteractCommentActivityPublishReq) IsSetParentID() bool {
 }
 
 func (p *InteractCommentActivityPublishReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -3023,6 +3054,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *InteractCommentActivityPublishReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3032,8 +3064,8 @@ func (p *InteractCommentActivityPublishReq) ReadField1(iprot thrift.TProtocol) e
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *InteractCommentActivityPublishReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3043,8 +3075,8 @@ func (p *InteractCommentActivityPublishReq) ReadField2(iprot thrift.TProtocol) e
 	p.ActivityID = _field
 	return nil
 }
-
 func (p *InteractCommentActivityPublishReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3054,8 +3086,8 @@ func (p *InteractCommentActivityPublishReq) ReadField3(iprot thrift.TProtocol) e
 	p.Content = _field
 	return nil
 }
-
 func (p *InteractCommentActivityPublishReq) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3065,8 +3097,8 @@ func (p *InteractCommentActivityPublishReq) ReadField4(iprot thrift.TProtocol) e
 	p.RootID = _field
 	return nil
 }
-
 func (p *InteractCommentActivityPublishReq) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field *string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3215,6 +3247,7 @@ func (p *InteractCommentActivityPublishReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractCommentActivityPublishReq(%+v)", *p)
+
 }
 
 type InteractCommentActivityPublishResp struct {
@@ -3243,6 +3276,7 @@ var fieldIDToName_InteractCommentActivityPublishResp = map[int16]string{
 }
 
 func (p *InteractCommentActivityPublishResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3306,6 +3340,7 @@ ReadStructEndError:
 }
 
 func (p *InteractCommentActivityPublishResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3315,8 +3350,8 @@ func (p *InteractCommentActivityPublishResp) ReadField1(iprot thrift.TProtocol) 
 	p.Code = _field
 	return nil
 }
-
 func (p *InteractCommentActivityPublishResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3398,6 +3433,7 @@ func (p *InteractCommentActivityPublishResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractCommentActivityPublishResp(%+v)", *p)
+
 }
 
 type InteractCommentVideoListReq struct {
@@ -3447,6 +3483,7 @@ func (p *InteractCommentVideoListReq) IsSetAccessToken() bool {
 }
 
 func (p *InteractCommentVideoListReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetVideoID bool = false
@@ -3548,6 +3585,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *InteractCommentVideoListReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -3557,8 +3595,8 @@ func (p *InteractCommentVideoListReq) ReadField1(iprot thrift.TProtocol) error {
 	p.VideoID = _field
 	return nil
 }
-
 func (p *InteractCommentVideoListReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3568,8 +3606,8 @@ func (p *InteractCommentVideoListReq) ReadField2(iprot thrift.TProtocol) error {
 	p.PageNum = _field
 	return nil
 }
-
 func (p *InteractCommentVideoListReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3706,6 +3744,7 @@ func (p *InteractCommentVideoListReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractCommentVideoListReq(%+v)", *p)
+
 }
 
 type InteractCommentVideoListRespData struct {
@@ -3752,6 +3791,7 @@ var fieldIDToName_InteractCommentVideoListRespData = map[int16]string{
 }
 
 func (p *InteractCommentVideoListRespData) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -3861,8 +3901,8 @@ func (p *InteractCommentVideoListRespData) ReadField1(iprot thrift.TProtocol) er
 	p.Items = _field
 	return nil
 }
-
 func (p *InteractCommentVideoListRespData) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field bool
 	if v, err := iprot.ReadBool(); err != nil {
 		return err
@@ -3872,8 +3912,8 @@ func (p *InteractCommentVideoListRespData) ReadField2(iprot thrift.TProtocol) er
 	p.IsEnd = _field
 	return nil
 }
-
 func (p *InteractCommentVideoListRespData) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3883,8 +3923,8 @@ func (p *InteractCommentVideoListRespData) ReadField3(iprot thrift.TProtocol) er
 	p.PageNum = _field
 	return nil
 }
-
 func (p *InteractCommentVideoListRespData) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -3894,8 +3934,8 @@ func (p *InteractCommentVideoListRespData) ReadField4(iprot thrift.TProtocol) er
 	p.PageSize = _field
 	return nil
 }
-
 func (p *InteractCommentVideoListRespData) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4048,6 +4088,7 @@ func (p *InteractCommentVideoListRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractCommentVideoListRespData(%+v)", *p)
+
 }
 
 type InteractCommentVideoListResp struct {
@@ -4091,6 +4132,7 @@ func (p *InteractCommentVideoListResp) IsSetData() bool {
 }
 
 func (p *InteractCommentVideoListResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4162,6 +4204,7 @@ ReadStructEndError:
 }
 
 func (p *InteractCommentVideoListResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4171,8 +4214,8 @@ func (p *InteractCommentVideoListResp) ReadField1(iprot thrift.TProtocol) error 
 	p.Code = _field
 	return nil
 }
-
 func (p *InteractCommentVideoListResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4182,7 +4225,6 @@ func (p *InteractCommentVideoListResp) ReadField2(iprot thrift.TProtocol) error 
 	p.Msg = _field
 	return nil
 }
-
 func (p *InteractCommentVideoListResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewInteractCommentVideoListRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -4284,6 +4326,7 @@ func (p *InteractCommentVideoListResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractCommentVideoListResp(%+v)", *p)
+
 }
 
 type InteractCommentActivityListReq struct {
@@ -4333,6 +4376,7 @@ func (p *InteractCommentActivityListReq) IsSetAccessToken() bool {
 }
 
 func (p *InteractCommentActivityListReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetActivityID bool = false
@@ -4434,6 +4478,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *InteractCommentActivityListReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -4443,8 +4488,8 @@ func (p *InteractCommentActivityListReq) ReadField1(iprot thrift.TProtocol) erro
 	p.ActivityID = _field
 	return nil
 }
-
 func (p *InteractCommentActivityListReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4454,8 +4499,8 @@ func (p *InteractCommentActivityListReq) ReadField2(iprot thrift.TProtocol) erro
 	p.PageNum = _field
 	return nil
 }
-
 func (p *InteractCommentActivityListReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4592,6 +4637,7 @@ func (p *InteractCommentActivityListReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractCommentActivityListReq(%+v)", *p)
+
 }
 
 type InteractCommentActivityListRespData struct {
@@ -4638,6 +4684,7 @@ var fieldIDToName_InteractCommentActivityListRespData = map[int16]string{
 }
 
 func (p *InteractCommentActivityListRespData) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -4747,8 +4794,8 @@ func (p *InteractCommentActivityListRespData) ReadField1(iprot thrift.TProtocol)
 	p.Items = _field
 	return nil
 }
-
 func (p *InteractCommentActivityListRespData) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field bool
 	if v, err := iprot.ReadBool(); err != nil {
 		return err
@@ -4758,8 +4805,8 @@ func (p *InteractCommentActivityListRespData) ReadField2(iprot thrift.TProtocol)
 	p.IsEnd = _field
 	return nil
 }
-
 func (p *InteractCommentActivityListRespData) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4769,8 +4816,8 @@ func (p *InteractCommentActivityListRespData) ReadField3(iprot thrift.TProtocol)
 	p.PageNum = _field
 	return nil
 }
-
 func (p *InteractCommentActivityListRespData) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4780,8 +4827,8 @@ func (p *InteractCommentActivityListRespData) ReadField4(iprot thrift.TProtocol)
 	p.PageSize = _field
 	return nil
 }
-
 func (p *InteractCommentActivityListRespData) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -4934,6 +4981,7 @@ func (p *InteractCommentActivityListRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractCommentActivityListRespData(%+v)", *p)
+
 }
 
 type InteractCommentActivityListResp struct {
@@ -4977,6 +5025,7 @@ func (p *InteractCommentActivityListResp) IsSetData() bool {
 }
 
 func (p *InteractCommentActivityListResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -5048,6 +5097,7 @@ ReadStructEndError:
 }
 
 func (p *InteractCommentActivityListResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5057,8 +5107,8 @@ func (p *InteractCommentActivityListResp) ReadField1(iprot thrift.TProtocol) err
 	p.Code = _field
 	return nil
 }
-
 func (p *InteractCommentActivityListResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -5068,7 +5118,6 @@ func (p *InteractCommentActivityListResp) ReadField2(iprot thrift.TProtocol) err
 	p.Msg = _field
 	return nil
 }
-
 func (p *InteractCommentActivityListResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewInteractCommentActivityListRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -5170,6 +5219,7 @@ func (p *InteractCommentActivityListResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractCommentActivityListResp(%+v)", *p)
+
 }
 
 type InteractVideoChildCommentListReq struct {
@@ -5219,6 +5269,7 @@ func (p *InteractVideoChildCommentListReq) IsSetAccessToken() bool {
 }
 
 func (p *InteractVideoChildCommentListReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetCommentID bool = false
@@ -5320,6 +5371,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *InteractVideoChildCommentListReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -5329,8 +5381,8 @@ func (p *InteractVideoChildCommentListReq) ReadField1(iprot thrift.TProtocol) er
 	p.CommentID = _field
 	return nil
 }
-
 func (p *InteractVideoChildCommentListReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5340,8 +5392,8 @@ func (p *InteractVideoChildCommentListReq) ReadField2(iprot thrift.TProtocol) er
 	p.PageNum = _field
 	return nil
 }
-
 func (p *InteractVideoChildCommentListReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5478,6 +5530,7 @@ func (p *InteractVideoChildCommentListReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractVideoChildCommentListReq(%+v)", *p)
+
 }
 
 type InteractVideoChildCommentListRespData struct {
@@ -5524,6 +5577,7 @@ var fieldIDToName_InteractVideoChildCommentListRespData = map[int16]string{
 }
 
 func (p *InteractVideoChildCommentListRespData) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -5633,8 +5687,8 @@ func (p *InteractVideoChildCommentListRespData) ReadField1(iprot thrift.TProtoco
 	p.Items = _field
 	return nil
 }
-
 func (p *InteractVideoChildCommentListRespData) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field bool
 	if v, err := iprot.ReadBool(); err != nil {
 		return err
@@ -5644,8 +5698,8 @@ func (p *InteractVideoChildCommentListRespData) ReadField2(iprot thrift.TProtoco
 	p.IsEnd = _field
 	return nil
 }
-
 func (p *InteractVideoChildCommentListRespData) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5655,8 +5709,8 @@ func (p *InteractVideoChildCommentListRespData) ReadField3(iprot thrift.TProtoco
 	p.PageNum = _field
 	return nil
 }
-
 func (p *InteractVideoChildCommentListRespData) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5666,8 +5720,8 @@ func (p *InteractVideoChildCommentListRespData) ReadField4(iprot thrift.TProtoco
 	p.PageSize = _field
 	return nil
 }
-
 func (p *InteractVideoChildCommentListRespData) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5820,6 +5874,7 @@ func (p *InteractVideoChildCommentListRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractVideoChildCommentListRespData(%+v)", *p)
+
 }
 
 type InteractVideoChildCommentListResp struct {
@@ -5863,6 +5918,7 @@ func (p *InteractVideoChildCommentListResp) IsSetData() bool {
 }
 
 func (p *InteractVideoChildCommentListResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -5934,6 +5990,7 @@ ReadStructEndError:
 }
 
 func (p *InteractVideoChildCommentListResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -5943,8 +6000,8 @@ func (p *InteractVideoChildCommentListResp) ReadField1(iprot thrift.TProtocol) e
 	p.Code = _field
 	return nil
 }
-
 func (p *InteractVideoChildCommentListResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -5954,7 +6011,6 @@ func (p *InteractVideoChildCommentListResp) ReadField2(iprot thrift.TProtocol) e
 	p.Msg = _field
 	return nil
 }
-
 func (p *InteractVideoChildCommentListResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewInteractVideoChildCommentListRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -6056,6 +6112,7 @@ func (p *InteractVideoChildCommentListResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractVideoChildCommentListResp(%+v)", *p)
+
 }
 
 type InteractActivityChildCommentListReq struct {
@@ -6105,6 +6162,7 @@ func (p *InteractActivityChildCommentListReq) IsSetAccessToken() bool {
 }
 
 func (p *InteractActivityChildCommentListReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetCommentID bool = false
@@ -6206,6 +6264,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *InteractActivityChildCommentListReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -6215,8 +6274,8 @@ func (p *InteractActivityChildCommentListReq) ReadField1(iprot thrift.TProtocol)
 	p.CommentID = _field
 	return nil
 }
-
 func (p *InteractActivityChildCommentListReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6226,8 +6285,8 @@ func (p *InteractActivityChildCommentListReq) ReadField2(iprot thrift.TProtocol)
 	p.PageNum = _field
 	return nil
 }
-
 func (p *InteractActivityChildCommentListReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6364,6 +6423,7 @@ func (p *InteractActivityChildCommentListReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractActivityChildCommentListReq(%+v)", *p)
+
 }
 
 type InteractActivityChildCommentListRespData struct {
@@ -6410,6 +6470,7 @@ var fieldIDToName_InteractActivityChildCommentListRespData = map[int16]string{
 }
 
 func (p *InteractActivityChildCommentListRespData) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -6519,8 +6580,8 @@ func (p *InteractActivityChildCommentListRespData) ReadField1(iprot thrift.TProt
 	p.Items = _field
 	return nil
 }
-
 func (p *InteractActivityChildCommentListRespData) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field bool
 	if v, err := iprot.ReadBool(); err != nil {
 		return err
@@ -6530,8 +6591,8 @@ func (p *InteractActivityChildCommentListRespData) ReadField2(iprot thrift.TProt
 	p.IsEnd = _field
 	return nil
 }
-
 func (p *InteractActivityChildCommentListRespData) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6541,8 +6602,8 @@ func (p *InteractActivityChildCommentListRespData) ReadField3(iprot thrift.TProt
 	p.PageNum = _field
 	return nil
 }
-
 func (p *InteractActivityChildCommentListRespData) ReadField4(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6552,8 +6613,8 @@ func (p *InteractActivityChildCommentListRespData) ReadField4(iprot thrift.TProt
 	p.PageSize = _field
 	return nil
 }
-
 func (p *InteractActivityChildCommentListRespData) ReadField5(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6706,6 +6767,7 @@ func (p *InteractActivityChildCommentListRespData) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractActivityChildCommentListRespData(%+v)", *p)
+
 }
 
 type InteractActivityChildCommentListResp struct {
@@ -6749,6 +6811,7 @@ func (p *InteractActivityChildCommentListResp) IsSetData() bool {
 }
 
 func (p *InteractActivityChildCommentListResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -6820,6 +6883,7 @@ ReadStructEndError:
 }
 
 func (p *InteractActivityChildCommentListResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -6829,8 +6893,8 @@ func (p *InteractActivityChildCommentListResp) ReadField1(iprot thrift.TProtocol
 	p.Code = _field
 	return nil
 }
-
 func (p *InteractActivityChildCommentListResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -6840,7 +6904,6 @@ func (p *InteractActivityChildCommentListResp) ReadField2(iprot thrift.TProtocol
 	p.Msg = _field
 	return nil
 }
-
 func (p *InteractActivityChildCommentListResp) ReadField3(iprot thrift.TProtocol) error {
 	_field := NewInteractActivityChildCommentListRespData()
 	if err := _field.Read(iprot); err != nil {
@@ -6942,6 +7005,7 @@ func (p *InteractActivityChildCommentListResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractActivityChildCommentListResp(%+v)", *p)
+
 }
 
 type InteractMessageSendReq struct {
@@ -6976,6 +7040,7 @@ var fieldIDToName_InteractMessageSendReq = map[int16]string{
 }
 
 func (p *InteractMessageSendReq) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
@@ -7069,6 +7134,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *InteractMessageSendReq) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -7078,8 +7144,8 @@ func (p *InteractMessageSendReq) ReadField1(iprot thrift.TProtocol) error {
 	p.AccessToken = _field
 	return nil
 }
-
 func (p *InteractMessageSendReq) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -7089,8 +7155,8 @@ func (p *InteractMessageSendReq) ReadField2(iprot thrift.TProtocol) error {
 	p.ToUserID = _field
 	return nil
 }
-
 func (p *InteractMessageSendReq) ReadField3(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -7193,6 +7259,7 @@ func (p *InteractMessageSendReq) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractMessageSendReq(%+v)", *p)
+
 }
 
 type InteractMessageSendResp struct {
@@ -7221,6 +7288,7 @@ var fieldIDToName_InteractMessageSendResp = map[int16]string{
 }
 
 func (p *InteractMessageSendResp) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -7284,6 +7352,7 @@ ReadStructEndError:
 }
 
 func (p *InteractMessageSendResp) ReadField1(iprot thrift.TProtocol) error {
+
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
@@ -7293,8 +7362,8 @@ func (p *InteractMessageSendResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-
 func (p *InteractMessageSendResp) ReadField2(iprot thrift.TProtocol) error {
+
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
 		return err
@@ -7376,6 +7445,394 @@ func (p *InteractMessageSendResp) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractMessageSendResp(%+v)", *p)
+
+}
+
+type InteractVideoDislikeReq struct {
+	AccessToken string `thrift:"access_token,1,required" header:"Access-Token,required" json:"access_token,required"`
+	VideoID     string `thrift:"video_id,2,required" form:"video_id,required" json:"video_id,required" query:"video_id,required"`
+}
+
+func NewInteractVideoDislikeReq() *InteractVideoDislikeReq {
+	return &InteractVideoDislikeReq{}
+}
+
+func (p *InteractVideoDislikeReq) InitDefault() {
+}
+
+func (p *InteractVideoDislikeReq) GetAccessToken() (v string) {
+	return p.AccessToken
+}
+
+func (p *InteractVideoDislikeReq) GetVideoID() (v string) {
+	return p.VideoID
+}
+
+var fieldIDToName_InteractVideoDislikeReq = map[int16]string{
+	1: "access_token",
+	2: "video_id",
+}
+
+func (p *InteractVideoDislikeReq) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+	var issetAccessToken bool = false
+	var issetVideoID bool = false
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetAccessToken = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetVideoID = true
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	if !issetAccessToken {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetVideoID {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_InteractVideoDislikeReq[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_InteractVideoDislikeReq[fieldId]))
+}
+
+func (p *InteractVideoDislikeReq) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.AccessToken = _field
+	return nil
+}
+func (p *InteractVideoDislikeReq) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.VideoID = _field
+	return nil
+}
+
+func (p *InteractVideoDislikeReq) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("InteractVideoDislikeReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *InteractVideoDislikeReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("access_token", thrift.STRING, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.AccessToken); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *InteractVideoDislikeReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("video_id", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.VideoID); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *InteractVideoDislikeReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("InteractVideoDislikeReq(%+v)", *p)
+
+}
+
+type InteractVideoDislikeResp struct {
+	Code int64  `thrift:"code,1" form:"code" json:"code" query:"code"`
+	Msg  string `thrift:"msg,2" form:"msg" json:"msg" query:"msg"`
+}
+
+func NewInteractVideoDislikeResp() *InteractVideoDislikeResp {
+	return &InteractVideoDislikeResp{}
+}
+
+func (p *InteractVideoDislikeResp) InitDefault() {
+}
+
+func (p *InteractVideoDislikeResp) GetCode() (v int64) {
+	return p.Code
+}
+
+func (p *InteractVideoDislikeResp) GetMsg() (v string) {
+	return p.Msg
+}
+
+var fieldIDToName_InteractVideoDislikeResp = map[int16]string{
+	1: "code",
+	2: "msg",
+}
+
+func (p *InteractVideoDislikeResp) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_InteractVideoDislikeResp[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *InteractVideoDislikeResp) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field int64
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Code = _field
+	return nil
+}
+func (p *InteractVideoDislikeResp) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Msg = _field
+	return nil
+}
+
+func (p *InteractVideoDislikeResp) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("InteractVideoDislikeResp"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *InteractVideoDislikeResp) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("code", thrift.I64, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.Code); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *InteractVideoDislikeResp) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Msg); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *InteractVideoDislikeResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("InteractVideoDislikeResp(%+v)", *p)
+
 }
 
 type InteractService interface {
@@ -7400,6 +7857,8 @@ type InteractService interface {
 	InteractActivityChildCommentListMethod(ctx context.Context, req *InteractActivityChildCommentListReq) (r *InteractActivityChildCommentListResp, err error)
 
 	InteractMessageSendMethod(ctx context.Context, req *InteractMessageSendReq) (r *InteractMessageSendResp, err error)
+
+	InteractVideoDislikeMethod(ctx context.Context, req *InteractVideoDislikeReq) (r *InteractVideoDislikeResp, err error)
 }
 
 type InteractServiceClient struct {
@@ -7437,7 +7896,6 @@ func (p *InteractServiceClient) InteractLikeVideoActionMethod(ctx context.Contex
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *InteractServiceClient) InteractLikeActivityActionMethod(ctx context.Context, req *InteractLikeActivityActionReq) (r *InteractLikeActivityActionResp, err error) {
 	var _args InteractServiceInteractLikeActivityActionMethodArgs
 	_args.Req = req
@@ -7447,7 +7905,6 @@ func (p *InteractServiceClient) InteractLikeActivityActionMethod(ctx context.Con
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *InteractServiceClient) InteractLikeCommentActionMethod(ctx context.Context, req *InteractLikeCommentActionReq) (r *InteractLikeCommentActionResp, err error) {
 	var _args InteractServiceInteractLikeCommentActionMethodArgs
 	_args.Req = req
@@ -7457,7 +7914,6 @@ func (p *InteractServiceClient) InteractLikeCommentActionMethod(ctx context.Cont
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *InteractServiceClient) InteractLikeVideoListMethod(ctx context.Context, req *InteractLikeVideoListReq) (r *InteractLikeVideoListResp, err error) {
 	var _args InteractServiceInteractLikeVideoListMethodArgs
 	_args.Req = req
@@ -7467,7 +7923,6 @@ func (p *InteractServiceClient) InteractLikeVideoListMethod(ctx context.Context,
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *InteractServiceClient) InteractCommentVideoPublishMethod(ctx context.Context, req *InteractCommentVideoPublishReq) (r *InteractCommentVideoPublishResp, err error) {
 	var _args InteractServiceInteractCommentVideoPublishMethodArgs
 	_args.Req = req
@@ -7477,7 +7932,6 @@ func (p *InteractServiceClient) InteractCommentVideoPublishMethod(ctx context.Co
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *InteractServiceClient) InteractCommentActivityPublishMethod(ctx context.Context, req *InteractCommentActivityPublishReq) (r *InteractCommentActivityPublishResp, err error) {
 	var _args InteractServiceInteractCommentActivityPublishMethodArgs
 	_args.Req = req
@@ -7487,7 +7941,6 @@ func (p *InteractServiceClient) InteractCommentActivityPublishMethod(ctx context
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *InteractServiceClient) InteractCommentVideoListMethod(ctx context.Context, req *InteractCommentVideoListReq) (r *InteractCommentVideoListResp, err error) {
 	var _args InteractServiceInteractCommentVideoListMethodArgs
 	_args.Req = req
@@ -7497,7 +7950,6 @@ func (p *InteractServiceClient) InteractCommentVideoListMethod(ctx context.Conte
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *InteractServiceClient) InteractCommentActivityListMethod(ctx context.Context, req *InteractCommentActivityListReq) (r *InteractCommentActivityListResp, err error) {
 	var _args InteractServiceInteractCommentActivityListMethodArgs
 	_args.Req = req
@@ -7507,7 +7959,6 @@ func (p *InteractServiceClient) InteractCommentActivityListMethod(ctx context.Co
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *InteractServiceClient) InteractVideoChildCommentListMethod(ctx context.Context, req *InteractVideoChildCommentListReq) (r *InteractVideoChildCommentListResp, err error) {
 	var _args InteractServiceInteractVideoChildCommentListMethodArgs
 	_args.Req = req
@@ -7517,7 +7968,6 @@ func (p *InteractServiceClient) InteractVideoChildCommentListMethod(ctx context.
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *InteractServiceClient) InteractActivityChildCommentListMethod(ctx context.Context, req *InteractActivityChildCommentListReq) (r *InteractActivityChildCommentListResp, err error) {
 	var _args InteractServiceInteractActivityChildCommentListMethodArgs
 	_args.Req = req
@@ -7527,12 +7977,20 @@ func (p *InteractServiceClient) InteractActivityChildCommentListMethod(ctx conte
 	}
 	return _result.GetSuccess(), nil
 }
-
 func (p *InteractServiceClient) InteractMessageSendMethod(ctx context.Context, req *InteractMessageSendReq) (r *InteractMessageSendResp, err error) {
 	var _args InteractServiceInteractMessageSendMethodArgs
 	_args.Req = req
 	var _result InteractServiceInteractMessageSendMethodResult
 	if err = p.Client_().Call(ctx, "InteractMessageSendMethod", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+func (p *InteractServiceClient) InteractVideoDislikeMethod(ctx context.Context, req *InteractVideoDislikeReq) (r *InteractVideoDislikeResp, err error) {
+	var _args InteractServiceInteractVideoDislikeMethodArgs
+	_args.Req = req
+	var _result InteractServiceInteractVideoDislikeMethodResult
+	if err = p.Client_().Call(ctx, "InteractVideoDislikeMethod", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -7569,9 +8027,9 @@ func NewInteractServiceProcessor(handler InteractService) *InteractServiceProces
 	self.AddToProcessorMap("InteractVideoChildCommentListMethod", &interactServiceProcessorInteractVideoChildCommentListMethod{handler: handler})
 	self.AddToProcessorMap("InteractActivityChildCommentListMethod", &interactServiceProcessorInteractActivityChildCommentListMethod{handler: handler})
 	self.AddToProcessorMap("InteractMessageSendMethod", &interactServiceProcessorInteractMessageSendMethod{handler: handler})
+	self.AddToProcessorMap("InteractVideoDislikeMethod", &interactServiceProcessorInteractVideoDislikeMethod{handler: handler})
 	return self
 }
-
 func (p *InteractServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
 	name, _, seqId, err := iprot.ReadMessageBegin()
 	if err != nil {
@@ -8118,6 +8576,54 @@ func (p *interactServiceProcessorInteractMessageSendMethod) Process(ctx context.
 	return true, err
 }
 
+type interactServiceProcessorInteractVideoDislikeMethod struct {
+	handler InteractService
+}
+
+func (p *interactServiceProcessorInteractVideoDislikeMethod) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := InteractServiceInteractVideoDislikeMethodArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("InteractVideoDislikeMethod", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := InteractServiceInteractVideoDislikeMethodResult{}
+	var retval *InteractVideoDislikeResp
+	if retval, err2 = p.handler.InteractVideoDislikeMethod(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing InteractVideoDislikeMethod: "+err2.Error())
+		oprot.WriteMessageBegin("InteractVideoDislikeMethod", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("InteractVideoDislikeMethod", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
 type InteractServiceInteractLikeVideoActionMethodArgs struct {
 	Req *InteractLikeVideoActionReq `thrift:"req,1"`
 }
@@ -8147,6 +8653,7 @@ func (p *InteractServiceInteractLikeVideoActionMethodArgs) IsSetReq() bool {
 }
 
 func (p *InteractServiceInteractLikeVideoActionMethodArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8260,6 +8767,7 @@ func (p *InteractServiceInteractLikeVideoActionMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractLikeVideoActionMethodArgs(%+v)", *p)
+
 }
 
 type InteractServiceInteractLikeVideoActionMethodResult struct {
@@ -8291,6 +8799,7 @@ func (p *InteractServiceInteractLikeVideoActionMethodResult) IsSetSuccess() bool
 }
 
 func (p *InteractServiceInteractLikeVideoActionMethodResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8406,6 +8915,7 @@ func (p *InteractServiceInteractLikeVideoActionMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractLikeVideoActionMethodResult(%+v)", *p)
+
 }
 
 type InteractServiceInteractLikeActivityActionMethodArgs struct {
@@ -8437,6 +8947,7 @@ func (p *InteractServiceInteractLikeActivityActionMethodArgs) IsSetReq() bool {
 }
 
 func (p *InteractServiceInteractLikeActivityActionMethodArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8550,6 +9061,7 @@ func (p *InteractServiceInteractLikeActivityActionMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractLikeActivityActionMethodArgs(%+v)", *p)
+
 }
 
 type InteractServiceInteractLikeActivityActionMethodResult struct {
@@ -8581,6 +9093,7 @@ func (p *InteractServiceInteractLikeActivityActionMethodResult) IsSetSuccess() b
 }
 
 func (p *InteractServiceInteractLikeActivityActionMethodResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8696,6 +9209,7 @@ func (p *InteractServiceInteractLikeActivityActionMethodResult) String() string 
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractLikeActivityActionMethodResult(%+v)", *p)
+
 }
 
 type InteractServiceInteractLikeCommentActionMethodArgs struct {
@@ -8727,6 +9241,7 @@ func (p *InteractServiceInteractLikeCommentActionMethodArgs) IsSetReq() bool {
 }
 
 func (p *InteractServiceInteractLikeCommentActionMethodArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8840,6 +9355,7 @@ func (p *InteractServiceInteractLikeCommentActionMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractLikeCommentActionMethodArgs(%+v)", *p)
+
 }
 
 type InteractServiceInteractLikeCommentActionMethodResult struct {
@@ -8871,6 +9387,7 @@ func (p *InteractServiceInteractLikeCommentActionMethodResult) IsSetSuccess() bo
 }
 
 func (p *InteractServiceInteractLikeCommentActionMethodResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -8986,6 +9503,7 @@ func (p *InteractServiceInteractLikeCommentActionMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractLikeCommentActionMethodResult(%+v)", *p)
+
 }
 
 type InteractServiceInteractLikeVideoListMethodArgs struct {
@@ -9017,6 +9535,7 @@ func (p *InteractServiceInteractLikeVideoListMethodArgs) IsSetReq() bool {
 }
 
 func (p *InteractServiceInteractLikeVideoListMethodArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9130,6 +9649,7 @@ func (p *InteractServiceInteractLikeVideoListMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractLikeVideoListMethodArgs(%+v)", *p)
+
 }
 
 type InteractServiceInteractLikeVideoListMethodResult struct {
@@ -9161,6 +9681,7 @@ func (p *InteractServiceInteractLikeVideoListMethodResult) IsSetSuccess() bool {
 }
 
 func (p *InteractServiceInteractLikeVideoListMethodResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9276,6 +9797,7 @@ func (p *InteractServiceInteractLikeVideoListMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractLikeVideoListMethodResult(%+v)", *p)
+
 }
 
 type InteractServiceInteractCommentVideoPublishMethodArgs struct {
@@ -9307,6 +9829,7 @@ func (p *InteractServiceInteractCommentVideoPublishMethodArgs) IsSetReq() bool {
 }
 
 func (p *InteractServiceInteractCommentVideoPublishMethodArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9420,6 +9943,7 @@ func (p *InteractServiceInteractCommentVideoPublishMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractCommentVideoPublishMethodArgs(%+v)", *p)
+
 }
 
 type InteractServiceInteractCommentVideoPublishMethodResult struct {
@@ -9451,6 +9975,7 @@ func (p *InteractServiceInteractCommentVideoPublishMethodResult) IsSetSuccess() 
 }
 
 func (p *InteractServiceInteractCommentVideoPublishMethodResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9566,6 +10091,7 @@ func (p *InteractServiceInteractCommentVideoPublishMethodResult) String() string
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractCommentVideoPublishMethodResult(%+v)", *p)
+
 }
 
 type InteractServiceInteractCommentActivityPublishMethodArgs struct {
@@ -9597,6 +10123,7 @@ func (p *InteractServiceInteractCommentActivityPublishMethodArgs) IsSetReq() boo
 }
 
 func (p *InteractServiceInteractCommentActivityPublishMethodArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9710,6 +10237,7 @@ func (p *InteractServiceInteractCommentActivityPublishMethodArgs) String() strin
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractCommentActivityPublishMethodArgs(%+v)", *p)
+
 }
 
 type InteractServiceInteractCommentActivityPublishMethodResult struct {
@@ -9741,6 +10269,7 @@ func (p *InteractServiceInteractCommentActivityPublishMethodResult) IsSetSuccess
 }
 
 func (p *InteractServiceInteractCommentActivityPublishMethodResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -9856,6 +10385,7 @@ func (p *InteractServiceInteractCommentActivityPublishMethodResult) String() str
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractCommentActivityPublishMethodResult(%+v)", *p)
+
 }
 
 type InteractServiceInteractCommentVideoListMethodArgs struct {
@@ -9887,6 +10417,7 @@ func (p *InteractServiceInteractCommentVideoListMethodArgs) IsSetReq() bool {
 }
 
 func (p *InteractServiceInteractCommentVideoListMethodArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10000,6 +10531,7 @@ func (p *InteractServiceInteractCommentVideoListMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractCommentVideoListMethodArgs(%+v)", *p)
+
 }
 
 type InteractServiceInteractCommentVideoListMethodResult struct {
@@ -10031,6 +10563,7 @@ func (p *InteractServiceInteractCommentVideoListMethodResult) IsSetSuccess() boo
 }
 
 func (p *InteractServiceInteractCommentVideoListMethodResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10146,6 +10679,7 @@ func (p *InteractServiceInteractCommentVideoListMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractCommentVideoListMethodResult(%+v)", *p)
+
 }
 
 type InteractServiceInteractCommentActivityListMethodArgs struct {
@@ -10177,6 +10711,7 @@ func (p *InteractServiceInteractCommentActivityListMethodArgs) IsSetReq() bool {
 }
 
 func (p *InteractServiceInteractCommentActivityListMethodArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10290,6 +10825,7 @@ func (p *InteractServiceInteractCommentActivityListMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractCommentActivityListMethodArgs(%+v)", *p)
+
 }
 
 type InteractServiceInteractCommentActivityListMethodResult struct {
@@ -10321,6 +10857,7 @@ func (p *InteractServiceInteractCommentActivityListMethodResult) IsSetSuccess() 
 }
 
 func (p *InteractServiceInteractCommentActivityListMethodResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10436,6 +10973,7 @@ func (p *InteractServiceInteractCommentActivityListMethodResult) String() string
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractCommentActivityListMethodResult(%+v)", *p)
+
 }
 
 type InteractServiceInteractVideoChildCommentListMethodArgs struct {
@@ -10467,6 +11005,7 @@ func (p *InteractServiceInteractVideoChildCommentListMethodArgs) IsSetReq() bool
 }
 
 func (p *InteractServiceInteractVideoChildCommentListMethodArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10580,6 +11119,7 @@ func (p *InteractServiceInteractVideoChildCommentListMethodArgs) String() string
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractVideoChildCommentListMethodArgs(%+v)", *p)
+
 }
 
 type InteractServiceInteractVideoChildCommentListMethodResult struct {
@@ -10611,6 +11151,7 @@ func (p *InteractServiceInteractVideoChildCommentListMethodResult) IsSetSuccess(
 }
 
 func (p *InteractServiceInteractVideoChildCommentListMethodResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10726,6 +11267,7 @@ func (p *InteractServiceInteractVideoChildCommentListMethodResult) String() stri
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractVideoChildCommentListMethodResult(%+v)", *p)
+
 }
 
 type InteractServiceInteractActivityChildCommentListMethodArgs struct {
@@ -10757,6 +11299,7 @@ func (p *InteractServiceInteractActivityChildCommentListMethodArgs) IsSetReq() b
 }
 
 func (p *InteractServiceInteractActivityChildCommentListMethodArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -10870,6 +11413,7 @@ func (p *InteractServiceInteractActivityChildCommentListMethodArgs) String() str
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractActivityChildCommentListMethodArgs(%+v)", *p)
+
 }
 
 type InteractServiceInteractActivityChildCommentListMethodResult struct {
@@ -10901,6 +11445,7 @@ func (p *InteractServiceInteractActivityChildCommentListMethodResult) IsSetSucce
 }
 
 func (p *InteractServiceInteractActivityChildCommentListMethodResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -11016,6 +11561,7 @@ func (p *InteractServiceInteractActivityChildCommentListMethodResult) String() s
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractActivityChildCommentListMethodResult(%+v)", *p)
+
 }
 
 type InteractServiceInteractMessageSendMethodArgs struct {
@@ -11047,6 +11593,7 @@ func (p *InteractServiceInteractMessageSendMethodArgs) IsSetReq() bool {
 }
 
 func (p *InteractServiceInteractMessageSendMethodArgs) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -11160,6 +11707,7 @@ func (p *InteractServiceInteractMessageSendMethodArgs) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractMessageSendMethodArgs(%+v)", *p)
+
 }
 
 type InteractServiceInteractMessageSendMethodResult struct {
@@ -11191,6 +11739,7 @@ func (p *InteractServiceInteractMessageSendMethodResult) IsSetSuccess() bool {
 }
 
 func (p *InteractServiceInteractMessageSendMethodResult) Read(iprot thrift.TProtocol) (err error) {
+
 	var fieldTypeId thrift.TType
 	var fieldId int16
 
@@ -11306,4 +11855,299 @@ func (p *InteractServiceInteractMessageSendMethodResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("InteractServiceInteractMessageSendMethodResult(%+v)", *p)
+
+}
+
+type InteractServiceInteractVideoDislikeMethodArgs struct {
+	Req *InteractVideoDislikeReq `thrift:"req,1"`
+}
+
+func NewInteractServiceInteractVideoDislikeMethodArgs() *InteractServiceInteractVideoDislikeMethodArgs {
+	return &InteractServiceInteractVideoDislikeMethodArgs{}
+}
+
+func (p *InteractServiceInteractVideoDislikeMethodArgs) InitDefault() {
+}
+
+var InteractServiceInteractVideoDislikeMethodArgs_Req_DEFAULT *InteractVideoDislikeReq
+
+func (p *InteractServiceInteractVideoDislikeMethodArgs) GetReq() (v *InteractVideoDislikeReq) {
+	if !p.IsSetReq() {
+		return InteractServiceInteractVideoDislikeMethodArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+var fieldIDToName_InteractServiceInteractVideoDislikeMethodArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *InteractServiceInteractVideoDislikeMethodArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *InteractServiceInteractVideoDislikeMethodArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_InteractServiceInteractVideoDislikeMethodArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *InteractServiceInteractVideoDislikeMethodArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewInteractVideoDislikeReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Req = _field
+	return nil
+}
+
+func (p *InteractServiceInteractVideoDislikeMethodArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("InteractVideoDislikeMethod_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *InteractServiceInteractVideoDislikeMethodArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *InteractServiceInteractVideoDislikeMethodArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("InteractServiceInteractVideoDislikeMethodArgs(%+v)", *p)
+
+}
+
+type InteractServiceInteractVideoDislikeMethodResult struct {
+	Success *InteractVideoDislikeResp `thrift:"success,0,optional"`
+}
+
+func NewInteractServiceInteractVideoDislikeMethodResult() *InteractServiceInteractVideoDislikeMethodResult {
+	return &InteractServiceInteractVideoDislikeMethodResult{}
+}
+
+func (p *InteractServiceInteractVideoDislikeMethodResult) InitDefault() {
+}
+
+var InteractServiceInteractVideoDislikeMethodResult_Success_DEFAULT *InteractVideoDislikeResp
+
+func (p *InteractServiceInteractVideoDislikeMethodResult) GetSuccess() (v *InteractVideoDislikeResp) {
+	if !p.IsSetSuccess() {
+		return InteractServiceInteractVideoDislikeMethodResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_InteractServiceInteractVideoDislikeMethodResult = map[int16]string{
+	0: "success",
+}
+
+func (p *InteractServiceInteractVideoDislikeMethodResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *InteractServiceInteractVideoDislikeMethodResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_InteractServiceInteractVideoDislikeMethodResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *InteractServiceInteractVideoDislikeMethodResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := NewInteractVideoDislikeResp()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *InteractServiceInteractVideoDislikeMethodResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("InteractVideoDislikeMethod_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *InteractServiceInteractVideoDislikeMethodResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *InteractServiceInteractVideoDislikeMethodResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("InteractServiceInteractVideoDislikeMethodResult(%+v)", *p)
+
 }

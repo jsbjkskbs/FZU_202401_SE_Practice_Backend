@@ -69,6 +69,11 @@ func PutFeedback(userId, videoId, feedback string) error {
 	return err
 }
 
+func PutFeedbacks(feedbacks []client.Feedback) error {
+	_, err := cli.InsertFeedback(context.Background(), feedbacks)
+	return err
+}
+
 func GetRecommend(userId string, n int) ([]string, error) {
 	resp, err := cli.GetRecommend(context.Background(), userId, "*", n)
 	if err != nil {

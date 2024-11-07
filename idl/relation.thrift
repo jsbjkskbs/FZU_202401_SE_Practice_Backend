@@ -17,6 +17,7 @@ struct RelationFollowListReq {
     1: required string user_id;
     2: required i64 page_num;
     3: required i64 page_size;
+    4: optional string access_token (api.header="Access-Token");
 }
 
 struct RelationFollowListRespData {
@@ -36,6 +37,7 @@ struct RelationFollowerListReq {
     1: required string user_id;
     2: required i64 page_num;
     3: required i64 page_size;
+    4: optional string access_token (api.header="Access-Token");
 }
 
 struct RelationFollowerListRespData {

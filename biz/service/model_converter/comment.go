@@ -12,6 +12,16 @@ import (
 func VideoCommentDal2Resp(list *[]*model.VideoComment, fromUser *string) (*[]*base.Comment, error) {
 	resp := &[]*base.Comment{}
 	for _, v := range *list {
+		owner, err := exquery.QueryUserByID(v.UserID)
+		if err != nil {
+			return nil, err
+		}
+
+		user, err := UserDal2Resp(owner, fromUser)
+		if err != nil {
+			return nil, err
+		}
+
 		likeCount, err := redis.GetVideoCommentLikeCount(fmt.Sprint(v.VideoID), fmt.Sprint(v.ID))
 		if err != nil {
 			return nil, err
@@ -31,7 +41,7 @@ func VideoCommentDal2Resp(list *[]*model.VideoComment, fromUser *string) (*[]*ba
 
 		*resp = append(*resp, &base.Comment{
 			ID:         fmt.Sprint(v.ID),
-			UserID:     fmt.Sprint(v.UserID),
+			User:       user,
 			Otype:      "video",
 			Oid:        fmt.Sprint(v.VideoID),
 			Content:    v.Content,
@@ -51,6 +61,16 @@ func VideoCommentDal2Resp(list *[]*model.VideoComment, fromUser *string) (*[]*ba
 func ActivityCommentDal2Resp(list *[]*model.ActivityComment, fromUser *string) (*[]*base.Comment, error) {
 	resp := &[]*base.Comment{}
 	for _, v := range *list {
+		owner, err := exquery.QueryUserByID(v.UserID)
+		if err != nil {
+			return nil, err
+		}
+
+		user, err := UserDal2Resp(owner, fromUser)
+		if err != nil {
+			return nil, err
+		}
+
 		likeCount, err := redis.GetActivityCommentLikeCount(fmt.Sprint(v.ActivityID), fmt.Sprint(v.ID))
 		if err != nil {
 			return nil, err
@@ -70,7 +90,7 @@ func ActivityCommentDal2Resp(list *[]*model.ActivityComment, fromUser *string) (
 
 		*resp = append(*resp, &base.Comment{
 			ID:         fmt.Sprint(v.ID),
-			UserID:     fmt.Sprint(v.UserID),
+			User:       user,
 			Otype:      "activity",
 			Oid:        fmt.Sprint(v.ActivityID),
 			Content:    v.Content,

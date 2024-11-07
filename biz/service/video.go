@@ -45,7 +45,7 @@ func (service *VideoService) NewPublishEvent(req *video.VideoPublishReq) (*video
 
 	err = checker.CheckVideoPublish(req.Title, req.Description, req.Category, req.Labels)
 	if err != nil {
-		return nil, err
+		return nil, errno.ParamInvalid.WithMessage("视频信息不合法")
 	}
 
 	videoId := generator.VideoIDGenerator.Generate()
@@ -82,7 +82,7 @@ func (service *VideoService) NewCoverUploadEvent(req *video.VideoCoverUploadReq)
 
 	videoId, err := strconv.ParseInt(req.VideoID, 10, 64)
 	if err != nil {
-		return nil, errno.ParamInvalid
+		return nil, errno.ParamInvalid.WithMessage("视频ID错误")
 	}
 
 	exist, err := exquery.QueryVideoExistByIdAndUserId(videoId, userId)
@@ -90,7 +90,7 @@ func (service *VideoService) NewCoverUploadEvent(req *video.VideoCoverUploadReq)
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 	if !exist {
-		return nil, errno.ResourceNotFound
+		return nil, errno.ResourceNotFound.WithMessage("视频不存在")
 	}
 
 	uptoken, key, err := oss.UploadVideoCover(req.VideoID, videoId)
@@ -124,14 +124,14 @@ func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) ([]*base.Vide
 	for _, vid := range vids {
 		videoId, err := strconv.ParseInt(vid, 10, 64)
 		if err != nil {
-			return nil, errno.ParamInvalid
+			return nil, errno.ParamInvalid.WithMessage("视频ID错误")
 		}
 		video, err := exquery.QueryVideoById(videoId)
 		if err != nil {
 			return nil, errno.DatabaseCallError.WithInnerError(err)
 		}
 		if video == nil {
-			return nil, errno.ResourceNotFound
+			return nil, errno.ResourceNotFound.WithMessage("视频不存在")
 		}
 		videos = append(videos, video)
 	}
@@ -155,14 +155,14 @@ func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) (
 	for _, vid := range vids {
 		videoId, err := strconv.ParseInt(vid, 10, 64)
 		if err != nil {
-			return nil, errno.InternalServerError
+			return nil, errno.InternalServerError.WithInnerError(err)
 		}
 		video, err := exquery.QueryVideoById(videoId)
 		if err != nil {
 			return nil, errno.DatabaseCallError
 		}
 		if video == nil {
-			return nil, errno.ResourceNotFound
+			return nil, errno.ResourceNotFound.WithMessage("视频不存在")
 		}
 		videos = append(videos, video)
 	}
@@ -179,7 +179,7 @@ func (service *VideoService) NewCategoriesEvent(req *video.VideoCategoriesReq) (
 func (service *VideoService) NewInfoEvent(req *video.VideoInfoReq) (*base.Video, error) {
 	videoId, err := strconv.ParseInt(req.VideoID, 10, 64)
 	if err != nil {
-		return nil, errno.ParamInvalid
+		return nil, errno.ParamInvalid.WithMessage("视频ID错误")
 	}
 
 	video, err := exquery.QueryVideoById(videoId)
@@ -223,6 +223,7 @@ func (service *VideoService) NewInfoEvent(req *video.VideoInfoReq) (*base.Video,
 			return nil, errno.AccessTokenInvalid
 		}
 		fromUser = &uid
+		go gorse.PutFeedback(uid, fmt.Sprint(videoId), common.GorseFeedbackVisit)
 	}
 
 	resp, err := model_converter.VideoDal2Resp(video, fromUser)
@@ -238,7 +239,7 @@ func (service *VideoService) NewListEvent(req *video.VideoListReq) (*video.Video
 
 	userId, err := strconv.ParseInt(req.UserID, 10, 64)
 	if err != nil {
-		return nil, errno.ParamInvalid
+		return nil, errno.ParamInvalid.WithMessage("用户ID错误")
 	}
 	result, count, err := exquery.QueryVideoByUserIdAndStatusPaged(userId, int(req.PageNum), int(req.PageSize), common.VideoStatusPassed)
 	if err != nil {
@@ -308,7 +309,7 @@ func (service *VideoService) NewSubmitReviewEvent(req *video.VideoSubmitReviewRe
 
 	items, err := model_converter.VideoListDal2Resp(&videos, nil)
 	if err != nil {
-		return nil, errno.InternalServerError
+		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 
 	return &video.VideoSubmitReviewRespData{
