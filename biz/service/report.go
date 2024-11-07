@@ -37,7 +37,7 @@ func (service *ReportService) NewReportVideoEvent(req *report.ReportVideoReq) er
 
 	vid, err := strconv.ParseInt(req.VideoID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithMessage("视频ID错误")
+		return errno.ParamInvalid.WithMessage("视频ID不合法")
 	}
 
 	exist, err := exquery.QueryVideoExistById(vid)
@@ -45,7 +45,7 @@ func (service *ReportService) NewReportVideoEvent(req *report.ReportVideoReq) er
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	if !exist {
-		return errno.CustomError.WithMessage("视频不存在")
+		return errno.ResourceNotFound.WithMessage("视频不存在")
 	}
 
 	count, err := exquery.QueryVideoReportCountByUserIdAndVideoId(uid, vid)
@@ -75,7 +75,7 @@ func (service *ReportService) NewReportActivityEvent(req *report.ReportActivityR
 
 	aid, err := strconv.ParseInt(req.ActivityID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithMessage("动态ID错误")
+		return errno.ParamInvalid.WithMessage("动态ID不合法")
 	}
 
 	exist, err := exquery.QueryActivityExistById(aid)
@@ -83,7 +83,7 @@ func (service *ReportService) NewReportActivityEvent(req *report.ReportActivityR
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	if !exist {
-		return errno.CustomError.WithMessage("动态不存在")
+		return errno.ResourceNotFound.WithMessage("动态不存在")
 	}
 
 	count, err := exquery.QueryActivityReportCountByUserIdAndActivityId(uid, aid)
@@ -113,12 +113,12 @@ func (service *ReportService) newReportVideoCommentEvent(req *report.ReportComme
 
 	vid, err := strconv.ParseInt(req.FromMediaID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithMessage("视频ID错误")
+		return errno.ParamInvalid.WithMessage("视频ID不合法")
 	}
 
 	cid, err := strconv.ParseInt(req.CommentID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithMessage("评论ID错误")
+		return errno.ResourceNotFound.WithMessage("评论ID不合法")
 	}
 
 	exist, err := exquery.QueryVideoCommentExistByIdAndVideoId(cid, vid)
@@ -156,12 +156,12 @@ func (service *ReportService) newReportActivityCommentEvent(req *report.ReportCo
 
 	aid, err := strconv.ParseInt(req.FromMediaID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithMessage("动态ID错误")
+		return errno.ParamInvalid.WithMessage("动态ID不合法")
 	}
 
 	cid, err := strconv.ParseInt(req.CommentID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithMessage("评论ID错误")
+		return errno.ParamInvalid.WithMessage("评论ID不合法")
 	}
 
 	exist, err := exquery.QueryActivityCommentExistByIdAndActivityId(cid, aid)
@@ -169,7 +169,7 @@ func (service *ReportService) newReportActivityCommentEvent(req *report.ReportCo
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	if !exist {
-		return errno.CustomError.WithMessage("评论不存在或动态与评论索引不匹配")
+		return errno.ResourceNotFound.WithMessage("评论不存在或动态与评论索引不匹配")
 	}
 
 	count, err := exquery.QueryActivityCommentReportCountByUserIdAndCommentId(uid, cid)
@@ -284,14 +284,14 @@ func (service *ReportService) NewAdminVideoReportHandleEvent(req *report.AdminVi
 	}
 	reportId, err := strconv.ParseInt(req.ReportID, 10, 64)
 	if err != nil {
-		return errno.CustomError.WithMessage("举报ID错误")
+		return errno.ParamInvalid.WithMessage("举报ID不合法")
 	}
 	exist, err := exquery.QueryVideoReportExistByIdAndStatus(reportId, common.ReportUnresolved)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	if !exist {
-		return errno.CustomError.WithMessage("举报不存在或已处理")
+		return errno.ResourceNotFound.WithMessage("举报不存在或已经处理")
 	}
 
 	status := ""
@@ -301,7 +301,7 @@ func (service *ReportService) NewAdminVideoReportHandleEvent(req *report.AdminVi
 	case common.ActionTypeOn:
 		status = common.ReportResolved
 	default:
-		return errno.ParamInvalid.WithMessage("操作类型错误")
+		return errno.ParamInvalid.WithMessage("操作类型不合法")
 	}
 
 	err = exquery.UpdateVideoReportById(&model.VideoReport{
@@ -321,14 +321,14 @@ func (service *ReportService) NewAdminActivityReportHandleEvent(req *report.Admi
 	}
 	reportId, err := strconv.ParseInt(req.ReportID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithMessage("举报ID错误")
+		return errno.ParamInvalid.WithMessage("举报ID不合法")
 	}
 	exist, err := exquery.QueryActivityReportExistByIdAndStatus(reportId, common.ReportUnresolved)
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	if !exist {
-		return errno.CustomError.WithMessage("举报不存在或已处理")
+		return errno.ResourceNotFound.WithMessage("举报不存在或已经处理")
 	}
 
 	status := ""
@@ -338,7 +338,7 @@ func (service *ReportService) NewAdminActivityReportHandleEvent(req *report.Admi
 	case common.ActionTypeOn:
 		status = common.ReportResolved
 	default:
-		return errno.ParamInvalid.WithMessage("操作类型错误")
+		return errno.ParamInvalid.WithMessage("操作类型不合法")
 	}
 
 	err = exquery.UpdateActivityReportById(&model.ActivityReport{
@@ -358,7 +358,7 @@ func (service *ReportService) newAdminVideoCommentReportHandleEvent(req *report.
 	}
 	reportId, err := strconv.ParseInt(req.ReportID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithMessage("举报ID错误")
+		return errno.ParamInvalid.WithMessage("举报ID不合法")
 	}
 
 	exist, err := exquery.QueryVideoCommentReportExistByIdAndStatus(reportId, common.ReportUnresolved)
@@ -366,7 +366,7 @@ func (service *ReportService) newAdminVideoCommentReportHandleEvent(req *report.
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	if !exist {
-		return errno.CustomError.WithMessage("举报不存在或已处理")
+		return errno.ResourceNotFound.WithMessage("举报不存在或已经处理")
 	}
 
 	status := ""
@@ -376,7 +376,7 @@ func (service *ReportService) newAdminVideoCommentReportHandleEvent(req *report.
 	case common.ActionTypeOn:
 		status = common.ReportResolved
 	default:
-		return errno.ParamInvalid.WithMessage("操作类型错误")
+		return errno.ParamInvalid.WithMessage("操作类型不合法")
 	}
 
 	err = exquery.UpdateVideoCommentReportById(&model.VideoCommentReport{
@@ -396,7 +396,7 @@ func (service *ReportService) newAdminActivityCommentReportHandleEvent(req *repo
 	}
 	reportId, err := strconv.ParseInt(req.ReportID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithMessage("举报ID错误")
+		return errno.ParamInvalid.WithMessage("举报ID不合法")
 	}
 
 	exist, err := exquery.QueryActivityCommentReportExistByIdAndStatus(reportId, common.ReportUnresolved)
@@ -404,7 +404,7 @@ func (service *ReportService) newAdminActivityCommentReportHandleEvent(req *repo
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	if !exist {
-		return errno.CustomError.WithMessage("举报不存在或已处理")
+		return errno.ResourceNotFound.WithMessage("举报不存在或已经处理")
 	}
 
 	status := ""
@@ -414,7 +414,7 @@ func (service *ReportService) newAdminActivityCommentReportHandleEvent(req *repo
 	case common.ActionTypeOn:
 		status = common.ReportResolved
 	default:
-		return errno.ParamInvalid.WithMessage("操作类型错误")
+		return errno.ParamInvalid.WithMessage("操作类型不合法")
 	}
 
 	err = exquery.UpdateActivityCommentReportById(&model.ActivityCommentReport{
@@ -444,7 +444,7 @@ func (service *ReportService) NewAdminVideoListEvent(req *report.AdminVideoListR
 	if req.Category != nil {
 		cid, ok := checker.CategoryMap[*req.Category]
 		if !ok {
-			return nil, errno.ParamInvalid.WithMessage("分区不存在")
+			return nil, errno.ResourceNotFound.WithMessage("分类不存在")
 		}
 		categoryId = &cid
 	}
@@ -469,7 +469,7 @@ func (service *ReportService) NewAdminVideoListEvent(req *report.AdminVideoListR
 func (service *ReportService) NewAdminVideoHandleEvent(req *report.AdminVideoHandleReq) error {
 	videoId, err := strconv.ParseInt(req.VideoID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithMessage("视频ID错误")
+		return errno.ParamInvalid.WithMessage("视频ID不合法")
 	}
 
 	exist, err := exquery.QueryVideoExistByIdAndStatus(videoId, common.VideoStatusReview)
@@ -477,7 +477,7 @@ func (service *ReportService) NewAdminVideoHandleEvent(req *report.AdminVideoHan
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	if !exist {
-		return errno.CustomError.WithMessage("视频不存在或已处理")
+		return errno.ResourceNotFound.WithMessage("视频不存在或已经处理")
 	}
 
 	status := ""
@@ -487,7 +487,7 @@ func (service *ReportService) NewAdminVideoHandleEvent(req *report.AdminVideoHan
 	case common.ActionTypeOn:
 		status = common.VideoStatusPassed
 	default:
-		return errno.ParamInvalid.WithMessage("操作类型错误")
+		return errno.ParamInvalid.WithMessage("操作类型不合法")
 	}
 
 	err = exquery.UpdateVideoWithId(&model.Video{

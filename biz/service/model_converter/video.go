@@ -1,10 +1,9 @@
 package model_converter
 
 import (
-	"context"
 	"fmt"
 
-	"sfw/biz/dal"
+	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/base"
 	"sfw/biz/mw/redis"
@@ -13,6 +12,13 @@ import (
 )
 
 func VideoDal2Resp(v *model.Video, fromUser *string) (*base.Video, error) {
+	owner, err := exquery.QueryUserByID(v.UserID)
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := UserDal2Resp(owner, fromUser)
+
 	category := "null"
 	for k, i := range checker.CategoryMap {
 		if i == v.CategoryID {
@@ -21,24 +27,14 @@ func VideoDal2Resp(v *model.Video, fromUser *string) (*base.Video, error) {
 		}
 	}
 
-	labelItems := []model.VideoLabel{}
-	l := dal.Executor.VideoLabel
-	err := l.WithContext(context.Background()).Where(l.VideoID.Eq(v.ID)).Scan(&labelItems)
-	if err != nil {
-		return nil, err
-	}
-	labels := []string{}
-	for _, item := range labelItems {
-		labels = append(labels, item.LabelName)
-	}
+	labels, err := exquery.QueryVideoLabels(v.ID)
 
 	likeCount, err := redis.GetVideoLikeCount(fmt.Sprint(v.ID))
 	if err != nil {
 		return nil, err
 	}
 
-	c := dal.Executor.VideoComment
-	commentCount, err := c.WithContext(context.Background()).Where(c.VideoID.Eq(v.ID)).Count()
+	commentCount, err := exquery.QueryVideoCommentCountById(v.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +49,7 @@ func VideoDal2Resp(v *model.Video, fromUser *string) (*base.Video, error) {
 
 	return &base.Video{
 		ID:           fmt.Sprint(v.ID),
-		UserID:       fmt.Sprint(v.UserID),
+		User:         user,
 		VideoURL:     oss.Key2Url(v.VideoURL),
 		CoverURL:     oss.Key2Url(v.CoverURL),
 		Title:        v.Title,
@@ -74,6 +70,16 @@ func VideoDal2Resp(v *model.Video, fromUser *string) (*base.Video, error) {
 func VideoListDal2Resp(list *[]*model.Video, fromUser *string) ([]*base.Video, error) {
 	resp := []*base.Video{}
 	for _, v := range *list {
+		owner, err := exquery.QueryUserByID(v.UserID)
+		if err != nil {
+			return nil, err
+		}
+
+		user, err := UserDal2Resp(owner, fromUser)
+		if err != nil {
+			return nil, err
+		}
+
 		category := "null"
 		for k, i := range checker.CategoryMap {
 			if i == v.CategoryID {
@@ -82,24 +88,14 @@ func VideoListDal2Resp(list *[]*model.Video, fromUser *string) ([]*base.Video, e
 			}
 		}
 
-		labelItems := []model.VideoLabel{}
-		l := dal.Executor.VideoLabel
-		err := l.WithContext(context.Background()).Where(l.VideoID.Eq(v.ID)).Scan(&labelItems)
-		if err != nil {
-			return nil, err
-		}
-		labels := []string{}
-		for _, item := range labelItems {
-			labels = append(labels, item.LabelName)
-		}
+		labels, err := exquery.QueryVideoLabels(v.ID)
 
 		likeCount, err := redis.GetVideoLikeCount(fmt.Sprint(v.ID))
 		if err != nil {
 			return nil, err
 		}
 
-		c := dal.Executor.VideoComment
-		commentCount, err := c.WithContext(context.Background()).Where(c.VideoID.Eq(v.ID)).Count()
+		commentCount, err := exquery.QueryVideoCommentCountById(v.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -114,7 +110,7 @@ func VideoListDal2Resp(list *[]*model.Video, fromUser *string) ([]*base.Video, e
 
 		resp = append(resp, &base.Video{
 			ID:           fmt.Sprint(v.ID),
-			UserID:       fmt.Sprint(v.UserID),
+			User:         user,
 			VideoURL:     oss.Key2Url(v.VideoURL),
 			CoverURL:     oss.Key2Url(v.CoverURL),
 			Title:        v.Title,

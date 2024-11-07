@@ -8,6 +8,7 @@ import (
 	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/interact"
+	"sfw/biz/mw/gorse"
 	"sfw/biz/mw/jwt"
 	"sfw/biz/mw/redis"
 	"sfw/biz/service/common"
@@ -15,10 +16,10 @@ import (
 	"sfw/pkg/errno"
 	"sfw/pkg/synchronizer"
 	"sfw/pkg/utils/generator"
+	"sfw/pkg/utils/logger"
 	"sfw/pkg/utils/scheduler"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 )
 
 type InteractService struct {
@@ -41,13 +42,13 @@ func (service *InteractService) NewLikeVideoActionEvent(req *interact.InteractLi
 	case common.ActionTypeOff:
 		go redis.RemoveVideoLikeInfo(req.VideoID, uid)
 	default:
-		return errno.CustomError.WithMessage("无效的操作类型")
+		return errno.ParamInvalid
 	}
 
 	scheduler.Schdeduler.Start("video_like/"+req.VideoID, 10*time.Second, func() {
 		err := synchronizer.SynchronizeVideoLikeFromRedis2DB(req.VideoID)
 		if err != nil {
-			hlog.Info("synchronize video like from redis to db failed, video_id: ", req.VideoID)
+			logger.RuntimeLogger.Error("synchronize video like from redis to db failed, video_id: ", req.VideoID)
 		}
 	})
 	return nil
@@ -64,12 +65,12 @@ func (service *InteractService) NewLikeActivityActionEvent(req *interact.Interac
 	case common.ActionTypeOff:
 		go redis.RemoveActivityLikeInfo(req.ActivityID, uid)
 	default:
-		return errno.CustomError.WithMessage("无效的操作类型")
+		return errno.ParamInvalid
 	}
 	scheduler.Schdeduler.Start("activity_like/"+req.ActivityID, 10*time.Second, func() {
 		err := synchronizer.SynchronizeActivityLikeFromRedis2DB(req.ActivityID)
 		if err != nil {
-			hlog.Info("synchronize activity like from redis to db failed, activity_id: ", req.ActivityID)
+			logger.RuntimeLogger.Error("synchronize activity like from redis to db failed, activity_id: ", req.ActivityID)
 		}
 	})
 	return nil
@@ -86,12 +87,12 @@ func (service *InteractService) newLikeVideoCommentEvent(req *interact.InteractL
 	case common.ActionTypeOff:
 		go redis.RemoveVideoCommentLikeInfo(req.FromMediaID, req.CommentID, uid)
 	default:
-		return errno.CustomError.WithMessage("无效的操作类型")
+		return errno.ParamInvalid
 	}
 	scheduler.Schdeduler.Start("video_comment_like/"+req.CommentID, 10*time.Second, func() {
 		err := synchronizer.SynchronizeVideoCommentLikeFromRedis2DB(req.FromMediaID, req.CommentID)
 		if err != nil {
-			hlog.Info("synchronize video comment like from redis to db failed, comment_id: ", req.CommentID)
+			logger.RuntimeLogger.Error("synchronize video comment like from redis to db failed, comment_id: ", req.CommentID)
 		}
 	})
 	return nil
@@ -108,12 +109,12 @@ func (service *InteractService) newLikeActivityCommentEvent(req *interact.Intera
 	case common.ActionTypeOff:
 		go redis.RemoveActivityCommentLikeInfo(req.FromMediaID, req.CommentID, uid)
 	default:
-		return errno.CustomError.WithMessage("无效的操作类型")
+		return errno.ParamInvalid
 	}
 	scheduler.Schdeduler.Start("activity_comment_like/"+req.CommentID, 10*time.Second, func() {
 		err := synchronizer.SynchronizeActivityCommentLikeFromRedis2DB(req.FromMediaID, req.CommentID)
 		if err != nil {
-			hlog.Info("synchronize activity comment like from redis to db failed, comment_id: ", req.CommentID)
+			logger.RuntimeLogger.Error("synchronize activity comment like from redis to db failed, comment_id: ", req.CommentID)
 		}
 	})
 	return nil
@@ -126,7 +127,7 @@ func (service *InteractService) NewLikeCommentEvent(req *interact.InteractLikeCo
 	case common.CommentTypeActivity:
 		return service.newLikeActivityCommentEvent(req)
 	default:
-		return errno.CustomError.WithMessage("无效的评论类型")
+		return errno.ParamInvalid
 	}
 }
 
@@ -176,10 +177,10 @@ func (service *InteractService) NewCommentVideoPublishEvent(req *interact.Intera
 	if req.RootID != nil {
 		rid, err = strconv.ParseInt(*req.RootID, 10, 64)
 		if err != nil {
-			return errno.ParamInvalid.WithMessage("无效的根评论ID")
+			return errno.ParamInvalid
 		}
 		if rid == 0 {
-			return errno.ParamInvalid.WithMessage("无效的根评论ID")
+			return errno.ParamInvalid
 		}
 		exist, err := exquery.QueryVideoCommentExistByIdParentIdAndRootId(rid, 0, 0)
 		if err != nil {
@@ -205,7 +206,7 @@ func (service *InteractService) NewCommentVideoPublishEvent(req *interact.Intera
 			return errno.DatabaseCallError.WithInnerError(err)
 		}
 		if !exist {
-			return errno.CustomError.WithMessage("父评论不存在")
+			return errno.ResourceNotFound.WithMessage("父评论不存在")
 		}
 	}
 	if pid == 0 {
@@ -478,4 +479,27 @@ func (service *InteractService) NewChildCommentActivityListEvent(req *interact.I
 		IsEnd:    count <= (req.PageNum+1)*req.PageSize,
 		Total:    count,
 	}, nil
+}
+
+func (service *InteractService) NewVideoDislikeEvent(req *interact.InteractVideoDislikeReq) error {
+	uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(req.AccessToken)
+	if err != nil {
+		return errno.AccessTokenInvalid
+	}
+
+	vid, err := strconv.ParseInt(req.VideoID, 10, 64)
+	if err != nil {
+		return errno.ParamInvalid.WithMessage("无效的视频ID")
+	}
+
+	exist, err := exquery.QueryVideoExistById(vid)
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
+	}
+	if !exist {
+		return errno.ResourceNotFound.WithMessage("视频不存在")
+	}
+
+	go gorse.PutFeedback(uid, req.VideoID, common.GorseFeedbackDislike)
+	return nil
 }

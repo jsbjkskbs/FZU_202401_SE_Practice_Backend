@@ -37,6 +37,7 @@ struct UserLoginResp {
 
 struct UserInfoReq {
     1: required string user_id;
+    2: optional string access_token (api.header="Access-Token");
 }
 
 struct UserInfoResp {
@@ -131,6 +132,7 @@ struct UserSearchReq {
     1: required string keyword;
     2: required i64 page_num;
     3: required i64 page_size;
+    4: optional string access_token (api.header="Access-Token");
 }
 
 struct UserSearchRespData {

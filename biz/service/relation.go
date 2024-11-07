@@ -39,7 +39,7 @@ func (service *RelationService) NewFollowActionEvent(req *relation.RelationFollo
 
 	toUserId, err := strconv.ParseInt(req.ToUserID, 10, 64)
 	if err != nil {
-		return errno.ParamInvalid.WithMessage("无效的用户ID").WithInnerError(err)
+		return errno.ParamInvalid.WithMessage("用户ID不合法")
 	}
 
 	exist, err := exquery.QueryUserExistByID(toUserId)
@@ -47,7 +47,7 @@ func (service *RelationService) NewFollowActionEvent(req *relation.RelationFollo
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	if !exist {
-		return errno.CustomError.WithMessage("用户不存在")
+		return errno.ResourceNotFound.WithMessage("用户不存在")
 	}
 
 	switch req.ActionType {
@@ -66,7 +66,7 @@ func (service *RelationService) NewFollowActionEvent(req *relation.RelationFollo
 			FollowerID: uid,
 		})
 	default:
-		return errno.CustomError.WithMessage("无效的操作类型")
+		return errno.ParamInvalid.WithMessage("操作类型不合法")
 	}
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
@@ -77,7 +77,7 @@ func (service *RelationService) NewFollowActionEvent(req *relation.RelationFollo
 func (service *RelationService) NewFollowListEvent(req *relation.RelationFollowListReq) (*relation.RelationFollowListRespData, error) {
 	uid, err := strconv.ParseInt(req.UserID, 10, 64)
 	if err != nil {
-		return nil, errno.ParamInvalid.WithMessage("无效的用户ID")
+		return nil, errno.ParamInvalid.WithMessage("用户ID错误")
 	}
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 	follows, count, err := exquery.QueryFollowingByUserIdPaged(uid, req.PageNum, req.PageSize)
@@ -94,8 +94,22 @@ func (service *RelationService) NewFollowListEvent(req *relation.RelationFollowL
 		users = append(users, user)
 	}
 
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.UserListDal2Resp(&users, fromUser)
+	if err != nil {
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
+
 	return &relation.RelationFollowListRespData{
-		Items:    *model_converter.UserListDal2Resp(&users),
+		Items:    *items,
 		IsEnd:    count <= (req.PageNum+1)*req.PageSize,
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
@@ -106,7 +120,7 @@ func (service *RelationService) NewFollowListEvent(req *relation.RelationFollowL
 func (service *RelationService) NewFollowerListEvent(req *relation.RelationFollowerListReq) (*relation.RelationFollowerListRespData, error) {
 	uid, err := strconv.ParseInt(req.UserID, 10, 64)
 	if err != nil {
-		return nil, errno.CustomError.WithMessage("无效的用户ID").WithInnerError(err)
+		return nil, errno.ParamInvalid.WithMessage("用户ID错误")
 	}
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 	followers, count, err := exquery.QueryFollowerByUserIdPaged(uid, req.PageNum, req.PageSize)
@@ -123,8 +137,22 @@ func (service *RelationService) NewFollowerListEvent(req *relation.RelationFollo
 		users = append(users, user)
 	}
 
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.UserListDal2Resp(&users, fromUser)
+	if err != nil {
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
+
 	return &relation.RelationFollowerListRespData{
-		Items:    *model_converter.UserListDal2Resp(&users),
+		Items:    *items,
 		IsEnd:    count <= (req.PageNum+1)*req.PageSize,
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
@@ -149,8 +177,17 @@ func (service *RelationService) NewFriendListEvent(req *relation.RelationFriendL
 		users = append(users, user)
 	}
 
+	var fromUser *string
+	userId := fmt.Sprint(uid)
+	fromUser = &userId
+
+	items, err := model_converter.UserListDal2Resp(&users, fromUser)
+	if err != nil {
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
+
 	return &relation.RelationFriendListRespData{
-		Items:    *model_converter.UserListDal2Resp(&users),
+		Items:    *items,
 		IsEnd:    count <= (req.PageNum+1)*req.PageSize,
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,

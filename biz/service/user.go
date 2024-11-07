@@ -10,6 +10,7 @@ import (
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/user"
 	"sfw/biz/model/base"
+	"sfw/biz/mw/gorse"
 	"sfw/biz/mw/jwt"
 	"sfw/biz/mw/redis"
 	"sfw/biz/service/common"
@@ -66,9 +67,11 @@ func (service *UserService) NewRegisterEvent(req *user.UserRegisterReq) error {
 		return errno.CustomError.WithMessage("用户名或邮箱已存在")
 	}
 
+	userId := generator.UserIDGenerator.Generate()
+
 	// create user
 	err = exquery.InsertUser(&model.User{
-		ID:       generator.UserIDGenerator.Generate(),
+		ID:       userId,
 		Username: req.Username,
 		Password: encrypt.EncryptBySHA256WithSalt(req.Password, encrypt.GetSalt()),
 		Email:    req.Email,
@@ -78,6 +81,7 @@ func (service *UserService) NewRegisterEvent(req *user.UserRegisterReq) error {
 	}
 
 	// not need to check error, because it's not a critical operation
+	go gorse.InsertUser(fmt.Sprint(userId))
 	go redis.EmailCodeDel(req.Email)
 	return nil
 }
@@ -88,7 +92,7 @@ func (service *UserService) NewSecurityEmailCodeEvent(req *user.UserSecurityEmai
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	if exist {
-		return errno.CustomError.WithMessage("邮箱已存在")
+		return errno.ResourceConflict.WithMessage("邮箱已存在")
 	}
 
 	code := generator.GenerateAlnumString(
@@ -116,10 +120,10 @@ func (service *UserService) NewLoginEvent(req *user.UserLoginReq) (*base.UserWit
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 	if user == nil {
-		return nil, errno.CustomError.WithMessage("用户不存在")
+		return nil, errno.ResourceNotFound.WithMessage("用户不存在")
 	}
 	if user.Password != encrypt.EncryptBySHA256WithSalt(req.Password, encrypt.GetSalt()) {
-		return nil, errno.CustomError.WithMessage("密码错误")
+		return nil, errno.ResourceNotFound.WithMessage("密码错误")
 	}
 	if user.MfaEnable {
 		if req.MfaCode == nil {
@@ -143,9 +147,23 @@ func (service *UserService) NewInfoEvent(req *user.UserInfoReq) (*base.User, err
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 	if user == nil {
-		return nil, errno.CustomError.WithMessage("用户不存在")
+		return nil, errno.ResourceNotFound.WithMessage("用户不存在")
 	}
-	return model_converter.UserDal2Resp(user), nil
+
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	resp, err := model_converter.UserDal2Resp(user, fromUser)
+	if err != nil {
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
+	return resp, nil
 }
 
 func (service *UserService) NewFollowerCountEvent(req *user.UserFollowerCountReq) (int64, error) {
@@ -250,8 +268,23 @@ func (service *UserService) NewSearchEvent(req *user.UserSearchReq) (*user.UserS
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
+
+	var fromUser *string
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		fromUser = &uid
+	}
+
+	items, err := model_converter.UserListDal2Resp(&users, fromUser)
+	if err != nil {
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
+
 	return &user.UserSearchRespData{
-		Items:    *model_converter.UserListDal2Resp(&users),
+		Items:    *items,
 		IsEnd:    count < req.PageSize*(req.PageNum+1),
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
@@ -275,7 +308,7 @@ func (service *UserService) NewSecurityPasswordRetrieveEmail(req *user.UserPassw
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	if user == nil {
-		return errno.CustomError.WithMessage("用户不存在")
+		return errno.ResourceNotFound.WithMessage("用户不存在")
 	}
 	mail.Station.Send(&mail.Email{
 		To:      []string{req.Email},

@@ -11,6 +11,15 @@ import (
 	"gorm.io/gen"
 )
 
+func QueryVideoCommentCountById(id int64) (int64, error) {
+	vc := dal.Executor.VideoComment
+	count, err := vc.WithContext(context.Background()).Where(vc.ID.Eq(id)).Count()
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
 func QueryVideoCommentChildCommentCountById(id int64) (int64, error) {
 	vc := dal.Executor.VideoComment
 	count, err := vc.WithContext(context.Background()).Where(vc.RootID.Eq(id)).Count()
@@ -139,6 +148,15 @@ func QueryVideoCommentIdAndVidByCommentId(commentId int64) ([]model.VideoComment
 		return nil, err
 	}
 	return list, nil
+}
+
+func QueryActivityCommentCountById(id int64) (int64, error) {
+	ac := dal.Executor.ActivityComment
+	count, err := ac.WithContext(context.Background()).Where(ac.ID.Eq(id)).Count()
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
 }
 
 func QueryActivityCommentChildCommentCountById(id int64) (int64, error) {

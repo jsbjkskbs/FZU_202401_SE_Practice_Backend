@@ -7,6 +7,7 @@ struct User {
     4: i64 created_at;
     5: i64 updated_at;
     6: i64 deleted_at;
+    7: bool is_followed;
 }
 
 struct UserWithToken {
@@ -23,7 +24,7 @@ struct UserWithToken {
 
 struct Video {
     1: string id;
-    2: string user_id;
+    2: User user;
     3: string video_url;
     4: string cover_url;
     5: string title;
@@ -42,7 +43,7 @@ struct Video {
 
 struct Comment {
     1: string id;
-    2: string user_id;
+    2: User user;
     3: string otype;
     4: string oid;
     5: string root_id;
@@ -58,16 +59,17 @@ struct Comment {
 
 struct Activity {
     1: string id;
-    2: string user_id;
+    2: User user;
     3: string content;
     4: list<string> image;
     5: string ref_video;
     6: string ref_activity;
     7: i64 like_count;
-    8: i64 created_at;
-    9: i64 updated_at;
-    10: i64 deleted_at;
-    11: bool is_liked;
+    8: i64 comment_count;
+    9: i64 created_at;
+    10: i64 updated_at;
+    11: i64 deleted_at;
+    12: bool is_liked;
 }
 
 struct VideoReport {

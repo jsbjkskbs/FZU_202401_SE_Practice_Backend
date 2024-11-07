@@ -15,6 +15,7 @@ import (
 
 // Register register routes based on the IDL 'api.${HTTP Method}' annotation.
 func Register(r *server.Hertz) {
+
 	root := r.Group("/", rootMw()...)
 	{
 		_api := root.Group("/api", _apiMw()...)
@@ -64,6 +65,7 @@ func Register(r *server.Hertz) {
 				}
 				{
 					_video1 := _interact.Group("/video", _video1Mw()...)
+					_video1.POST("/dislike", append(_interactvideodislikemethodMw(), interact.InteractVideoDislikeMethod)...)
 					{
 						_child_comment0 := _video1.Group("/child_comment", _child_comment0Mw()...)
 						_child_comment0.GET("/list", append(_interactvideochildcommentlistmethodMw(), interact.InteractVideoChildCommentListMethod)...)

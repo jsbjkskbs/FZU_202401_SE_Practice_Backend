@@ -10,6 +10,15 @@ import (
 	"gorm.io/gen"
 )
 
+func QueryVideoIdAll() ([]*model.Video, error) {
+	v := dal.Executor.Video
+	videos, err := v.WithContext(context.Background()).Select(v.ID).Find()
+	if err != nil {
+		return nil, err
+	}
+	return videos, nil
+}
+
 func QueryVideoVisitCountAll() ([]*model.Video, error) {
 	v := dal.Executor.Video
 	videos, err := v.WithContext(context.Background()).Select(v.ID, v.VisitCount).Find()

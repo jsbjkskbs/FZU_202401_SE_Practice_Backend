@@ -355,3 +355,35 @@ func InteractActivityChildCommentListMethod(ctx context.Context, c *app.RequestC
 		Data: resp,
 	})
 }
+
+// InteractVideoDislikeMethod .
+// @router /api/v1/interact/video/dislike [POST]
+func InteractVideoDislikeMethod(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req interact.InteractVideoDislikeReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, interact.InteractVideoDislikeResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	err = service.NewInteractService(ctx, c).NewVideoDislikeEvent(&req)
+	if err != nil {
+		logger.LogRuntimeError(err)
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, interact.InteractVideoDislikeResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, interact.InteractVideoDislikeResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
