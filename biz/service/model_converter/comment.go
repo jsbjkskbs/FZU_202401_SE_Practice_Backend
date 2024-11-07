@@ -1,24 +1,22 @@
 package model_converter
 
 import (
-	"context"
 	"fmt"
 
-	"sfw/biz/dal"
+	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/base"
 	"sfw/biz/mw/redis"
 )
 
 func VideoCommentDal2Resp(list *[]*model.VideoComment, fromUser *string) (*[]*base.Comment, error) {
-	vc := dal.Executor.VideoComment
 	resp := &[]*base.Comment{}
 	for _, v := range *list {
 		likeCount, err := redis.GetVideoCommentLikeCount(fmt.Sprint(v.VideoID), fmt.Sprint(v.ID))
 		if err != nil {
 			return nil, err
 		}
-		childCount, err := vc.WithContext(context.Background()).Where(vc.RootID.Eq(v.ID)).Count()
+		childCount, err := exquery.QueryVideoCommentChildCommentCountById(v.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -51,14 +49,13 @@ func VideoCommentDal2Resp(list *[]*model.VideoComment, fromUser *string) (*[]*ba
 }
 
 func ActivityCommentDal2Resp(list *[]*model.ActivityComment, fromUser *string) (*[]*base.Comment, error) {
-	ac := dal.Executor.ActivityComment
 	resp := &[]*base.Comment{}
 	for _, v := range *list {
 		likeCount, err := redis.GetActivityCommentLikeCount(fmt.Sprint(v.ActivityID), fmt.Sprint(v.ID))
 		if err != nil {
 			return nil, err
 		}
-		childCount, err := ac.WithContext(context.Background()).Where(ac.RootID.Eq(v.ID)).Count()
+		childCount, err := exquery.QueryActivityCommentChildCommentCountById(v.ID)
 		if err != nil {
 			return nil, err
 		}

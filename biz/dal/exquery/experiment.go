@@ -62,3 +62,16 @@ func QueryVideoLikedByUserIdPaged(userId int64, pageNum, pageSize int) ([]*model
 
 	return videos, count, nil
 }
+
+func QueryImageUrlsByActivityId(activityId int64) ([]string, error) {
+	images := []string{}
+	result := dal.DB.Raw(
+		`SELECT i.image_url  	
+		FROM Image i  
+		JOIN ActivityImages ai ON i.id = ai.image_id  
+		WHERE ai.activity_id = ?;`, activityId).Scan(&images)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return images, nil
+}

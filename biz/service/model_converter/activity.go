@@ -3,7 +3,7 @@ package model_converter
 import (
 	"fmt"
 
-	"sfw/biz/dal"
+	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/base"
 	"sfw/biz/mw/redis"
@@ -13,12 +13,7 @@ import (
 func ActivityListDal2Resp(list *[]*model.Activity, fromUser *string) (*[]*base.Activity, error) {
 	resp := &[]*base.Activity{}
 	for _, v := range *list {
-		images := []string{}
-		dal.DB.Raw(
-			`SELECT i.image_url  	
-			FROM Image i  
-			JOIN ActivityImages ai ON i.id = ai.image_id  
-			WHERE ai.activity_id = ?;`, v.ID).Scan(&images)
+		images, err := exquery.QueryImageUrlsByActivityId(v.ID)
 		for i, image := range images {
 			images[i] = oss.Key2Url(image)
 		}

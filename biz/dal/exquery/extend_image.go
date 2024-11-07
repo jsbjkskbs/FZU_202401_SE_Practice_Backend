@@ -28,6 +28,18 @@ func QueryImageById(imageId int64) (*model.Image, error) {
 	return images[0], nil
 }
 
+func QueryImageUrlById(id int64) (string, error) {
+	img := dal.Executor.Image
+	images, _, err := img.WithContext(context.Background()).Where(img.ID.Eq(id)).Select(img.ImageURL).FindByPage(0, 1)
+	if err != nil {
+		return "", err
+	}
+	if len(images) == 0 {
+		return "", nil
+	}
+	return images[0].ImageURL, nil
+}
+
 func InsertImage(images ...*model.Image) error {
 	img := dal.Executor.Image
 	err := img.WithContext(context.Background()).Create(images...)
