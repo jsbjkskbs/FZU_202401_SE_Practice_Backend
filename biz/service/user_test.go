@@ -4,6 +4,8 @@ import (
 	"testing"
 	"time"
 
+	"sfw/biz/mw/gorse"
+
 	"sfw/biz/mw/jwt"
 
 	"sfw/pkg/oss"
@@ -185,6 +187,7 @@ func TestNewRegisterEvent(t *testing.T) {
 			mockey.Mock((*generator.Snowflake).Generate).Return(111).Build()
 			mockey.Mock(exquery.InsertUser).Return(tc.mockInsertErrorReturn).Build()
 			mockey.Mock(redis.EmailCodeDel).Return(nil).Build()
+			mockey.Mock(gorse.InsertUser).Return(nil).Build()
 
 			err := userService.NewRegisterEvent(tc.req)
 
@@ -382,14 +385,19 @@ func TestNewLoginEvent(t *testing.T) {
 	}
 }
 
-func TestNewInfoEvent(t *testing.T) {
+func TestNewUserInfoEvent(t *testing.T) {
 	type testCase struct {
-		name            string
-		req             *user.UserInfoReq
-		errorIsExist    bool
-		expectedError   string
-		mockUserReturn  *model.User
-		mockErrorReturn error
+		name                       string
+		req                        *user.UserInfoReq
+		errorIsExist               bool
+		expectedError              string
+		mockQueryUserReturn        *model.User
+		mockQueryErrorReturn       error
+		mockAccessTokenUidReturn   string
+		mockAccessTokenErrorReturn error
+		mockRespReturn             *base.User
+		mockRespErrorReturn        error
+		expectedResult             *base.User
 	}
 
 	testCases := []testCase{
@@ -406,19 +414,45 @@ func TestNewInfoEvent(t *testing.T) {
 			expectedError: "用户不存在",
 		},
 		{
-			name:            "QueryError",
-			req:             &user.UserInfoReq{UserID: "111"},
-			errorIsExist:    true,
-			expectedError:   errno.DatabaseCallErrorMsg,
-			mockErrorReturn: errno.DatabaseCallError,
+			name:                 "QueryError",
+			req:                  &user.UserInfoReq{UserID: "111"},
+			errorIsExist:         true,
+			expectedError:        errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "AccessTokenError",
+			req: &user.UserInfoReq{
+				AccessToken: new(string),
+				UserID:      "111",
+			},
+			errorIsExist:               true,
+			expectedError:              errno.AccessTokenInvalidErrorMsg,
+			mockAccessTokenErrorReturn: errno.AccessTokenInvalid,
+			mockAccessTokenUidReturn:   "111",
+			mockQueryUserReturn: &model.User{
+				ID: 111,
+			},
+		},
+		{
+			name:                 "ConvertError",
+			req:                  &user.UserInfoReq{UserID: "111"},
+			errorIsExist:         true,
+			expectedError:        errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn: errno.DatabaseCallError,
+			mockQueryUserReturn: &model.User{
+				ID: 111,
+			},
 		},
 		{
 			name:         "Success",
 			req:          &user.UserInfoReq{UserID: "111"},
 			errorIsExist: false,
-			mockUserReturn: &model.User{
+			mockQueryUserReturn: &model.User{
 				ID: 111,
 			},
+			mockRespReturn: &base.User{},
+			expectedResult: &base.User{},
 		},
 	}
 
@@ -428,16 +462,18 @@ func TestNewInfoEvent(t *testing.T) {
 		mockey.PatchConvey(tc.name, t, func() {
 			t.Logf("%s  :  %s", t.Name(), tc.name)
 
-			mockey.Mock(exquery.QueryUserByID).Return(tc.mockUserReturn, tc.mockErrorReturn).Build()
-			mockey.Mock(model_converter.UserDal2Resp).Return(&base.User{}).Build()
+			mockey.Mock(exquery.QueryUserByID).Return(tc.mockQueryUserReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock((*jwt.JWTMiddleware).ExtractPayloadFromToken).Return(tc.mockAccessTokenUidReturn, tc.mockAccessTokenErrorReturn).Build()
+			mockey.Mock(model_converter.UserDal2Resp).Return(tc.mockRespReturn, tc.mockRespErrorReturn).Build()
 
-			_, err := userService.NewInfoEvent(tc.req)
+			result, err := userService.NewInfoEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
 				assert.Contains(t, err.Error(), tc.expectedError)
 			} else {
 				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
 			}
 		})
 	}
