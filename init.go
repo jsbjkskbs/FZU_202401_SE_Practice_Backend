@@ -238,7 +238,7 @@ func ConfigureRegister(...any) {
 					"activity_info":     &redis.ActivityInfoClient,
 					"comment_info":      &redis.CommentInfoClient,
 				}
-				for k, _ := range ConfigKV {
+				for k := range ConfigKV {
 					c, ok := cmap[k].(map[string]interface{})
 					if !ok {
 						return errno.InternalServerError

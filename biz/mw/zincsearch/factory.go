@@ -43,7 +43,8 @@ func (l *ZincClient) NewLogger(title string) *Logger {
 func (l *ZincClient) NewLoggerWithOtherOutput(
 	title string,
 	output func(v ...any),
-	outputf func(format string, v ...any)) *Logger {
+	outputf func(format string, v ...any),
+) *Logger {
 	return &Logger{
 		Info:    l.GetDecoInfoFunc(title, output),
 		Infof:   l.GetDecoInfofFunc(title, outputf),

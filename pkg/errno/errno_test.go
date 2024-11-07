@@ -2,8 +2,9 @@ package errno_test
 
 import (
 	"errors"
-	"sfw/pkg/errno"
 	"testing"
+
+	"sfw/pkg/errno"
 )
 
 // TestErrno1 test errno
