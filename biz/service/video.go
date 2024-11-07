@@ -124,7 +124,7 @@ func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) ([]*base.Vide
 	for _, vid := range vids {
 		videoId, err := strconv.ParseInt(vid, 10, 64)
 		if err != nil {
-			return nil, errno.ParamInvalid.WithMessage("视频ID错误")
+			return nil, errno.InternalServerError.WithInnerError(err)
 		}
 		video, err := exquery.QueryVideoById(videoId)
 		if err != nil {
@@ -149,6 +149,10 @@ func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) (
 		vids, err = gorse.GetRecommendWithCategory(fmt.Sprint(userId), *req.Category, 10)
 	} else {
 		vids, err = gorse.GetRecommend(fmt.Sprint(userId), 10)
+	}
+
+	if err != nil {
+		return nil, errno.InternalServerError.WithInnerError(err)
 	}
 
 	videos := make([]*model.Video, 0)
