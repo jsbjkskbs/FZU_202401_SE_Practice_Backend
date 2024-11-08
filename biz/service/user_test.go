@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/cloudwego/hertz/pkg/app"
 	"testing"
 	"time"
 
@@ -25,7 +26,7 @@ import (
 	"sfw/pkg/utils/mfa"
 )
 
-var userService = new(UserService)
+var userService = NewUserService(nil, new(app.RequestContext))
 
 func TestNewRegisterEvent(t *testing.T) {
 	type testCase struct {
