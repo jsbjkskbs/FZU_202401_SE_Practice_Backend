@@ -4,6 +4,8 @@ import (
 	"testing"
 	"time"
 
+	"sfw/biz/mw/gorse"
+
 	"sfw/biz/mw/jwt"
 
 	"sfw/pkg/oss"
@@ -23,7 +25,7 @@ import (
 	"sfw/pkg/utils/mfa"
 )
 
-var service = new(UserService)
+var userService = new(UserService)
 
 func TestNewRegisterEvent(t *testing.T) {
 	type testCase struct {
@@ -35,6 +37,7 @@ func TestNewRegisterEvent(t *testing.T) {
 		mockExistErrorReturn   error
 		mockInsertErrorReturn  error
 		mockCodeGetErrorReturn error
+		mockCodeGetCodeReturn  string
 	}
 
 	testCases := []testCase{
@@ -83,6 +86,17 @@ func TestNewRegisterEvent(t *testing.T) {
 			expectedError: "密码不符合规范",
 		},
 		{
+			name: "PasswordIsTooWeak",
+			req: &user.UserRegisterReq{
+				Username: "jkskj",
+				Password: "123",
+				Email:    "test@example.com",
+				Code:     "123456",
+			},
+			errorIsExist:  true,
+			expectedError: "密码不符合规范",
+		},
+		{
 			name: "CodeError",
 			req: &user.UserRegisterReq{
 				Username: "jkskj",
@@ -90,8 +104,9 @@ func TestNewRegisterEvent(t *testing.T) {
 				Email:    "test@example.com",
 				Code:     "12345678",
 			},
-			errorIsExist:  true,
-			expectedError: "验证码错误、不存在或已过期",
+			errorIsExist:          true,
+			expectedError:         "验证码错误、不存在或已过期",
+			mockCodeGetCodeReturn: "123456",
 		},
 		{
 			name: "CodeGetError",
@@ -113,9 +128,10 @@ func TestNewRegisterEvent(t *testing.T) {
 				Email:    "test@example.com",
 				Code:     "123456",
 			},
-			errorIsExist:    true,
-			expectedError:   "用户名或邮箱已存在",
-			mockExistReturn: true,
+			errorIsExist:          true,
+			expectedError:         "用户名或邮箱已存在",
+			mockCodeGetCodeReturn: "123456",
+			mockExistReturn:       true,
 		},
 		{
 			name: "QueryError",
@@ -125,9 +141,10 @@ func TestNewRegisterEvent(t *testing.T) {
 				Email:    "test@example.com",
 				Code:     "123456",
 			},
-			errorIsExist:         true,
-			expectedError:        errno.DatabaseCallErrorMsg,
-			mockExistErrorReturn: errno.DatabaseCallError,
+			errorIsExist:          true,
+			expectedError:         errno.DatabaseCallErrorMsg,
+			mockCodeGetCodeReturn: "123456",
+			mockExistErrorReturn:  errno.DatabaseCallError,
 		},
 		{
 			name: "InsertError",
@@ -139,6 +156,7 @@ func TestNewRegisterEvent(t *testing.T) {
 			},
 			errorIsExist:          true,
 			expectedError:         errno.DatabaseCallErrorMsg,
+			mockCodeGetCodeReturn: "123456",
 			mockInsertErrorReturn: errno.DatabaseCallError,
 		},
 		{
@@ -149,8 +167,9 @@ func TestNewRegisterEvent(t *testing.T) {
 				Email:    "test@example.com",
 				Code:     "123456",
 			},
-			errorIsExist:    false,
-			mockExistReturn: false,
+			errorIsExist:          false,
+			mockExistReturn:       false,
+			mockCodeGetCodeReturn: "123456",
 		},
 	}
 
@@ -162,21 +181,22 @@ func TestNewRegisterEvent(t *testing.T) {
 		mockey.PatchConvey(tc.name, t, func() {
 			t.Logf("%s  :  %s", t.Name(), tc.name)
 
-			mockey.Mock(redis.EmailCodeGet).Return("123456", tc.mockCodeGetErrorReturn).Build()
+			mockey.Mock(redis.EmailCodeGet).Return(tc.mockCodeGetCodeReturn, tc.mockCodeGetErrorReturn).Build()
 			mockey.Mock(exquery.QueryUserExistByUsernameOrEmail).Return(tc.mockExistReturn, tc.mockExistErrorReturn).Build()
 
-			mockey.Mock(generator.UserIDGenerator.Generate).Return(111).Build()
+			mockey.Mock((*generator.Snowflake).Generate).Return(111).Build()
 			mockey.Mock(exquery.InsertUser).Return(tc.mockInsertErrorReturn).Build()
 			mockey.Mock(redis.EmailCodeDel).Return(nil).Build()
+			mockey.Mock(gorse.InsertUser).Return(nil).Build()
 
-			err := service.NewRegisterEvent(tc.req)
+			err := userService.NewRegisterEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
 				assert.Contains(t, err.Error(), tc.expectedError)
 			} else {
 				assert.NoError(t, err)
-				time.Sleep(5 * time.Second)
+				time.Sleep(1 * time.Second)
 			}
 		})
 	}
@@ -242,7 +262,7 @@ func TestNewSecurityEmailCodeEvent(t *testing.T) {
 			mockey.Mock(redis.EmailCodeStore).Return(tc.mockCodeStoreErrorReturn).Build()
 			mockey.Mock(mockey.GetMethod(mail.Station, "Send")).Return().Build()
 
-			err := service.NewSecurityEmailCodeEvent(tc.req)
+			err := userService.NewSecurityEmailCodeEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -353,7 +373,7 @@ func TestNewLoginEvent(t *testing.T) {
 			mockey.Mock((*mfa.AuthController).VerifyTOTP).Return(tc.mockVerifyReturn).Build()
 			mockey.Mock(model_converter.UserWithTokenDal2Resp).Return(&base.UserWithToken{}).Build()
 
-			_, err := service.NewLoginEvent(tc.req)
+			_, err := userService.NewLoginEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -365,14 +385,19 @@ func TestNewLoginEvent(t *testing.T) {
 	}
 }
 
-func TestNewInfoEvent(t *testing.T) {
+func TestNewUserInfoEvent(t *testing.T) {
 	type testCase struct {
-		name            string
-		req             *user.UserInfoReq
-		errorIsExist    bool
-		expectedError   string
-		mockUserReturn  *model.User
-		mockErrorReturn error
+		name                       string
+		req                        *user.UserInfoReq
+		errorIsExist               bool
+		expectedError              string
+		mockQueryUserReturn        *model.User
+		mockQueryErrorReturn       error
+		mockAccessTokenUidReturn   string
+		mockAccessTokenErrorReturn error
+		mockRespReturn             *base.User
+		mockRespErrorReturn        error
+		expectedResult             *base.User
 	}
 
 	testCases := []testCase{
@@ -380,7 +405,7 @@ func TestNewInfoEvent(t *testing.T) {
 			name:          "ParamInvalid",
 			req:           &user.UserInfoReq{UserID: ""},
 			errorIsExist:  true,
-			expectedError: errno.ParamInvalidErrorMsg,
+			expectedError: "用户ID错误",
 		},
 		{
 			name:          "IsNotExist",
@@ -389,19 +414,45 @@ func TestNewInfoEvent(t *testing.T) {
 			expectedError: "用户不存在",
 		},
 		{
-			name:            "QueryError",
-			req:             &user.UserInfoReq{UserID: "111"},
-			errorIsExist:    true,
-			expectedError:   errno.DatabaseCallErrorMsg,
-			mockErrorReturn: errno.DatabaseCallError,
+			name:                 "QueryError",
+			req:                  &user.UserInfoReq{UserID: "111"},
+			errorIsExist:         true,
+			expectedError:        errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "AccessTokenError",
+			req: &user.UserInfoReq{
+				AccessToken: new(string),
+				UserID:      "111",
+			},
+			errorIsExist:               true,
+			expectedError:              errno.AccessTokenInvalidErrorMsg,
+			mockAccessTokenErrorReturn: errno.AccessTokenInvalid,
+			mockAccessTokenUidReturn:   "111",
+			mockQueryUserReturn: &model.User{
+				ID: 111,
+			},
+		},
+		{
+			name:                 "ConvertError",
+			req:                  &user.UserInfoReq{UserID: "111"},
+			errorIsExist:         true,
+			expectedError:        errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn: errno.DatabaseCallError,
+			mockQueryUserReturn: &model.User{
+				ID: 111,
+			},
 		},
 		{
 			name:         "Success",
 			req:          &user.UserInfoReq{UserID: "111"},
 			errorIsExist: false,
-			mockUserReturn: &model.User{
+			mockQueryUserReturn: &model.User{
 				ID: 111,
 			},
+			mockRespReturn: &base.User{},
+			expectedResult: &base.User{},
 		},
 	}
 
@@ -411,16 +462,18 @@ func TestNewInfoEvent(t *testing.T) {
 		mockey.PatchConvey(tc.name, t, func() {
 			t.Logf("%s  :  %s", t.Name(), tc.name)
 
-			mockey.Mock(exquery.QueryUserByID).Return(tc.mockUserReturn, tc.mockErrorReturn).Build()
-			mockey.Mock(model_converter.UserDal2Resp).Return(&base.User{}).Build()
+			mockey.Mock(exquery.QueryUserByID).Return(tc.mockQueryUserReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock((*jwt.JWTMiddleware).ExtractPayloadFromToken).Return(tc.mockAccessTokenUidReturn, tc.mockAccessTokenErrorReturn).Build()
+			mockey.Mock(model_converter.UserDal2Resp).Return(tc.mockRespReturn, tc.mockRespErrorReturn).Build()
 
-			_, err := service.NewInfoEvent(tc.req)
+			result, err := userService.NewInfoEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
 				assert.Contains(t, err.Error(), tc.expectedError)
 			} else {
 				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
 			}
 		})
 	}
@@ -442,7 +495,7 @@ func TestNewFollowerCountEvent(t *testing.T) {
 			name:          "ParamInvalid",
 			req:           &user.UserFollowerCountReq{UserID: ""},
 			errorIsExist:  true,
-			expectedError: errno.ParamInvalidErrorMsg,
+			expectedError: "用户ID错误",
 		},
 		{
 			name:            "QueryError",
@@ -468,7 +521,7 @@ func TestNewFollowerCountEvent(t *testing.T) {
 
 			mockey.Mock(exquery.QueryFollowerCountByUserID).Return(tc.mockCountReturn, tc.mockErrorReturn).Build()
 
-			result, err := service.NewFollowerCountEvent(tc.req)
+			result, err := userService.NewFollowerCountEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -497,7 +550,7 @@ func TestNewFollowingCountEvent(t *testing.T) {
 			name:          "ParamInvalid",
 			req:           &user.UserFollowingCountReq{UserID: ""},
 			errorIsExist:  true,
-			expectedError: errno.ParamInvalidErrorMsg,
+			expectedError: "用户ID错误",
 		},
 		{
 			name:            "QueryError",
@@ -523,7 +576,7 @@ func TestNewFollowingCountEvent(t *testing.T) {
 
 			mockey.Mock(exquery.QueryFollowingCountByUserID).Return(tc.mockCountReturn, tc.mockErrorReturn).Build()
 
-			result, err := service.NewFollowingCountEvent(tc.req)
+			result, err := userService.NewFollowingCountEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -578,7 +631,7 @@ func TestNewLikeCountEvent(t *testing.T) {
 
 			mockey.Mock(exquery.QueryUserLikeCount).Return(tc.mockCountReturn, tc.mockErrorReturn).Build()
 
-			result, err := service.NewLikeCountEvent(tc.req)
+			result, err := userService.NewLikeCountEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -642,7 +695,7 @@ func TestNewAvatarUploadEvent(t *testing.T) {
 			mockey.Mock((*jwt.JWTMiddleware).ConvertJWTPayloadToInt64).Return(111, tc.mockTokenErrorReturn).Build()
 			mockey.Mock(oss.UploadAvatar).Return(tc.mockUploadUptokenReturn, tc.mockUploadUploadKeyReturn, tc.mockUploadErrorReturn).Build()
 
-			result, err := service.NewAvatarUploadEvent(tc.req)
+			result, err := userService.NewAvatarUploadEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -709,7 +762,7 @@ func TestNewMfaQrcodeEvent(t *testing.T) {
 			mockey.Mock((*mfa.AuthController).GenerateTOTP).Return(tc.mockInfoReturn, tc.mockGenerateErrorReturn).Build()
 			mockey.Mock(encrypt.EncodeUrlToQrcodeAsPng).Return(tc.mockQRCodeReturn).Build()
 
-			result, err := service.NewMfaQrcodeEvent(tc.req)
+			result, err := userService.NewMfaQrcodeEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -717,6 +770,331 @@ func TestNewMfaQrcodeEvent(t *testing.T) {
 			} else {
 				assert.NoError(t, err)
 				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
+
+func TestNewMfaBindEvent(t *testing.T) {
+	type testCase struct {
+		name                  string
+		req                   *user.UserMfaBindReq
+		errorIsExist          bool
+		expectedError         string
+		mockVerifyReturn      bool
+		mockTokenErrorReturn  error
+		mockUpdateErrorReturn error
+	}
+
+	testCases := []testCase{
+		{
+			name:                 "AccessTokenInvalid",
+			req:                  &user.UserMfaBindReq{AccessToken: ""},
+			errorIsExist:         true,
+			expectedError:        errno.AccessTokenInvalidErrorMsg,
+			mockTokenErrorReturn: errno.AccessTokenInvalid,
+		},
+		{
+			name: "MfaAuthFailed",
+			req: &user.UserMfaBindReq{
+				AccessToken: "111",
+				Code:        "111",
+				Secret:      "111",
+			},
+			errorIsExist:  true,
+			expectedError: errno.MfaAuthFailedErrorMsg,
+		},
+		{
+			name: "UpdateFailed",
+			req: &user.UserMfaBindReq{
+				AccessToken: "111",
+				Code:        "111",
+				Secret:      "111",
+			},
+			errorIsExist:          true,
+			expectedError:         errno.DatabaseCallErrorMsg,
+			mockVerifyReturn:      true,
+			mockUpdateErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "Success",
+			req: &user.UserMfaBindReq{
+				AccessToken: "111",
+				Code:        "111",
+				Secret:      "111",
+			},
+			errorIsExist:     false,
+			mockVerifyReturn: true,
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock((*jwt.JWTMiddleware).ConvertJWTPayloadToInt64).Return(111, tc.mockTokenErrorReturn).Build()
+			mockey.Mock((*mfa.AuthController).VerifyTOTP).Return(tc.mockVerifyReturn).Build()
+			mockey.Mock(exquery.UpdateUserWithId).Return(tc.mockUpdateErrorReturn).Build()
+
+			err := userService.NewMfaBindEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestNewUserSearchEvent(t *testing.T) {
+	type testCase struct {
+		name                 string
+		req                  *user.UserSearchReq
+		errorIsExist         bool
+		expectedError        string
+		mockQueryErrorReturn error
+		mockQueryUsersReturn []*model.User
+		mockQueryCountReturn int64
+		expectedResult       *user.UserSearchRespData
+	}
+
+	testCases := []testCase{
+		{
+			name:                 "QueryFailed",
+			req:                  &user.UserSearchReq{},
+			errorIsExist:         true,
+			expectedError:        errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "Success",
+			req: &user.UserSearchReq{
+				PageNum:  1,
+				PageSize: 5,
+			},
+			errorIsExist:         false,
+			mockQueryUsersReturn: make([]*model.User, 0),
+			mockQueryCountReturn: 0,
+			expectedResult: &user.UserSearchRespData{
+				Items:    []*base.User{},
+				IsEnd:    true,
+				PageNum:  1,
+				PageSize: 5,
+				Total:    0,
+			},
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(exquery.QueryUserFuzzyByUsernamePaged).Return(tc.mockQueryUsersReturn, tc.mockQueryCountReturn, tc.mockQueryErrorReturn).Build()
+
+			result, err := userService.NewSearchEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
+
+func TestNewSecurityPasswordRetrieveEmail(t *testing.T) {
+	type testCase struct {
+		name                     string
+		req                      *user.UserPasswordRetrieveEmailReq
+		errorIsExist             bool
+		expectedError            string
+		mockQueryErrorReturn     error
+		mockQueryUserReturn      *model.User
+		mockCodeStoreErrorReturn error
+		mockTimeStoreErrorReturn error
+	}
+
+	testCases := []testCase{
+		{
+			name:                 "QueryFailed",
+			req:                  &user.UserPasswordRetrieveEmailReq{},
+			errorIsExist:         true,
+			expectedError:        errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name:          "UserIsNotExist",
+			req:           &user.UserPasswordRetrieveEmailReq{},
+			errorIsExist:  true,
+			expectedError: "用户不存在",
+		},
+		{
+			name:          "CodeStoreFailed",
+			req:           &user.UserPasswordRetrieveEmailReq{},
+			errorIsExist:  true,
+			expectedError: errno.DatabaseCallErrorMsg,
+			mockQueryUserReturn: &model.User{
+				ID: 111,
+			},
+			mockCodeStoreErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name:          "TimeStoreFailed",
+			req:           &user.UserPasswordRetrieveEmailReq{},
+			errorIsExist:  true,
+			expectedError: errno.DatabaseCallErrorMsg,
+			mockQueryUserReturn: &model.User{
+				ID: 111,
+			},
+			mockTimeStoreErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "Success",
+			req:  &user.UserPasswordRetrieveEmailReq{},
+			mockQueryUserReturn: &model.User{
+				ID: 111,
+			},
+			errorIsExist: false,
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(exquery.QueryUserByEmail).Return(tc.mockQueryUserReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock(mockey.GetMethod(mail.Station, "Send")).Return().Build()
+			mockey.Mock(redis.EmailCodeStore).Return(tc.mockCodeStoreErrorReturn).Build()
+			mockey.Mock(redis.TokenExpireTimeStore).Return(tc.mockTimeStoreErrorReturn).Build()
+
+			err := userService.NewSecurityPasswordRetrieveEmail(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestNewSecurityPasswordResetEmailEvent(t *testing.T) {
+	type testCase struct {
+		name                  string
+		req                   *user.UserPasswordResetEmailReq
+		errorIsExist          bool
+		expectedError         string
+		mockCodeReturn        string
+		mockCodeErrorReturn   error
+		mockUpdateErrorReturn error
+	}
+
+	testCases := []testCase{
+		{
+			name: "PasswordIsEmpty",
+			req: &user.UserPasswordResetEmailReq{
+				Password: "",
+				Email:    "test@example.com",
+				Code:     "123456",
+			},
+			errorIsExist:  true,
+			expectedError: "密码不符合规范",
+		},
+		{
+			name: "PasswordContainsWhiteSpace",
+			req: &user.UserPasswordResetEmailReq{
+				Password: "12 3",
+				Email:    "test@example.com",
+				Code:     "123456",
+			},
+			errorIsExist:  true,
+			expectedError: "密码不符合规范",
+		},
+		{
+			name: "PasswordIsTooWeak",
+			req: &user.UserPasswordResetEmailReq{
+				Password: "123",
+				Email:    "test@example.com",
+				Code:     "123456",
+			},
+			errorIsExist:  true,
+			expectedError: "密码不符合规范",
+		},
+		{
+			name: "CodeGetFailed",
+			req: &user.UserPasswordResetEmailReq{
+				Password: "jkskj12345678",
+				Email:    "test@example.com",
+				Code:     "123456",
+			},
+			errorIsExist:        true,
+			expectedError:       errno.DatabaseCallErrorMsg,
+			mockCodeErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "CodeError",
+			req: &user.UserPasswordResetEmailReq{
+				Password: "jkskj12345678",
+				Email:    "test@example.com",
+				Code:     "123456",
+			},
+			errorIsExist:   true,
+			expectedError:  "验证码错误、不存在或已过期",
+			mockCodeReturn: "12345678",
+		},
+		{
+			name: "UpdateFailed",
+			req: &user.UserPasswordResetEmailReq{
+				Password: "jkskj12345678",
+				Email:    "test@example.com",
+				Code:     "123456",
+			},
+			errorIsExist:          true,
+			expectedError:         errno.DatabaseCallErrorMsg,
+			mockCodeReturn:        "123456",
+			mockUpdateErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "Success",
+			req: &user.UserPasswordResetEmailReq{
+				Password: "jkskj12345678",
+				Email:    "test@example.com",
+				Code:     "123456",
+			},
+			errorIsExist:   false,
+			mockCodeReturn: "123456",
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(redis.EmailCodeGet).Return(tc.mockCodeReturn, tc.mockCodeErrorReturn).Build()
+			mockey.Mock(exquery.UpdateUserWithEmail).Return(tc.mockUpdateErrorReturn).Build()
+			mockey.Mock(redis.EmailCodeDel).Return(nil).Build()
+
+			err := userService.NewSecurityPasswordResetEmailEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				time.Sleep(1 * time.Second)
 			}
 		})
 	}
