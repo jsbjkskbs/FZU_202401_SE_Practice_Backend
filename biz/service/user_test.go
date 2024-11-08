@@ -850,7 +850,7 @@ func TestNewMfaBindEvent(t *testing.T) {
 	}
 }
 
-func TestNewSearchEvent(t *testing.T) {
+func TestNewUserSearchEvent(t *testing.T) {
 	type testCase struct {
 		name                 string
 		req                  *user.UserSearchReq

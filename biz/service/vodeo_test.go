@@ -596,3 +596,518 @@ func TestNewVideoInfoEvent(t *testing.T) {
 		})
 	}
 }
+
+func TestNewListEvent(t *testing.T) {
+	type testCase struct {
+		name                       string
+		req                        *video.VideoListReq
+		errorIsExist               bool
+		expectedError              string
+		expectedResult             *video.VideoListRespData
+		mockQueryErrorReturn       error
+		mockQueryResultReturn      []*model.Video
+		mockQueryCountReturn       int64
+		mockAccessTokenErrorReturn error
+		mockConvertErrorReturn     error
+		mockConvertItemsReturn     []*base.Video
+		mockConvertResultReturn    []*base.Video
+	}
+
+	testCases := []testCase{
+		{
+			name: "ParamInvalid",
+			req: &video.VideoListReq{
+				UserID: "aaa",
+			},
+			errorIsExist:  true,
+			expectedError: "用户ID错误",
+		},
+		{
+			name: "QueryFail",
+			req: &video.VideoListReq{
+				UserID: "111",
+			},
+			errorIsExist:         true,
+			expectedError:        errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "AccessTokenFail",
+			req: &video.VideoListReq{
+				UserID:      "111",
+				AccessToken: new(string),
+			},
+			errorIsExist:               true,
+			expectedError:              errno.AccessTokenInvalidErrorMsg,
+			mockAccessTokenErrorReturn: errno.AccessTokenInvalid,
+		},
+		{
+			name: "ConvertFail",
+			req: &video.VideoListReq{
+				UserID:      "111",
+				AccessToken: new(string),
+			},
+			errorIsExist:           true,
+			expectedError:          errno.InternalServerErrorMsg,
+			mockConvertErrorReturn: errno.InternalServerError,
+		},
+		{
+			name: "Success",
+			req: &video.VideoListReq{
+				UserID:      "111",
+				AccessToken: new(string),
+			},
+			errorIsExist: false,
+			expectedResult: &video.VideoListRespData{
+				Items:    make([]*base.Video, 0),
+				IsEnd:    true,
+				PageSize: 1,
+				PageNum:  0,
+				Total:    0,
+			},
+			mockConvertResultReturn: make([]*base.Video, 0),
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(exquery.QueryVideoByUserIdAndStatusPaged).Return(tc.mockQueryResultReturn, tc.mockQueryCountReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock((*jwt.JWTMiddleware).ExtractPayloadFromToken).Return("111", tc.mockAccessTokenErrorReturn).Build()
+			mockey.Mock(model_converter.VideoListDal2Resp).Return(tc.mockConvertResultReturn, tc.mockConvertErrorReturn).Build()
+
+			result, err := videoService.NewListEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
+
+func TestNewSubmitAllEvent(t *testing.T) {
+	type testCase struct {
+		name                       string
+		req                        *video.VideoSubmitAllReq
+		errorIsExist               bool
+		expectedError              string
+		expectedResult             *video.VideoSubmitAllRespData
+		mockQueryErrorReturn       error
+		mockQueryVideoReturn       []*model.Video
+		mockQueryCountReturn       int64
+		mockAccessTokenErrorReturn error
+		mockConvertErrorReturn     error
+		mockConvertItemsReturn     []*base.Video
+		mockConvertResultReturn    []*base.Video
+	}
+
+	testCases := []testCase{
+		{
+			name: "AccessTokenFail",
+			req: &video.VideoSubmitAllReq{
+				AccessToken: "111",
+			},
+			errorIsExist:               true,
+			expectedError:              errno.AccessTokenInvalidErrorMsg,
+			mockAccessTokenErrorReturn: errno.AccessTokenInvalid,
+		},
+		{
+			name: "QueryFail",
+			req: &video.VideoSubmitAllReq{
+				AccessToken: "111",
+			},
+			errorIsExist:         true,
+			expectedError:        errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "ConvertFail",
+			req: &video.VideoSubmitAllReq{
+				AccessToken: "111",
+			},
+			errorIsExist:           true,
+			expectedError:          errno.InternalServerErrorMsg,
+			mockConvertErrorReturn: errno.InternalServerError,
+		},
+		{
+			name: "Success",
+			req: &video.VideoSubmitAllReq{
+				AccessToken: "111",
+			},
+			errorIsExist: false,
+			expectedResult: &video.VideoSubmitAllRespData{
+				Items:    make([]*base.Video, 0),
+				IsEnd:    true,
+				PageSize: 1,
+				PageNum:  0,
+				Total:    0,
+			},
+			mockConvertResultReturn: make([]*base.Video, 0),
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(exquery.QueryVideoByUserIdPaged).Return(tc.mockQueryVideoReturn, tc.mockQueryCountReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock((*jwt.JWTMiddleware).ConvertJWTPayloadToInt64).Return(111, tc.mockAccessTokenErrorReturn).Build()
+			mockey.Mock(model_converter.VideoListDal2Resp).Return(tc.mockConvertResultReturn, tc.mockConvertErrorReturn).Build()
+
+			result, err := videoService.NewSubmitAllEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
+
+func TestNewSubmitReviewEvent(t *testing.T) {
+	type testCase struct {
+		name                       string
+		req                        *video.VideoSubmitReviewReq
+		errorIsExist               bool
+		expectedError              string
+		expectedResult             *video.VideoSubmitReviewRespData
+		mockQueryErrorReturn       error
+		mockQueryVideoReturn       []*model.Video
+		mockQueryCountReturn       int64
+		mockAccessTokenErrorReturn error
+		mockConvertErrorReturn     error
+		mockConvertItemsReturn     []*base.Video
+		mockConvertResultReturn    []*base.Video
+	}
+
+	testCases := []testCase{
+		{
+			name: "AccessTokenFail",
+			req: &video.VideoSubmitReviewReq{
+				AccessToken: "111",
+			},
+			errorIsExist:               true,
+			expectedError:              errno.AccessTokenInvalidErrorMsg,
+			mockAccessTokenErrorReturn: errno.AccessTokenInvalid,
+		},
+		{
+			name: "QueryFail",
+			req: &video.VideoSubmitReviewReq{
+				AccessToken: "111",
+			},
+			errorIsExist:         true,
+			expectedError:        errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "ConvertFail",
+			req: &video.VideoSubmitReviewReq{
+				AccessToken: "111",
+			},
+			errorIsExist:           true,
+			expectedError:          errno.DatabaseCallErrorMsg,
+			mockConvertErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "Success",
+			req: &video.VideoSubmitReviewReq{
+				AccessToken: "111",
+			},
+			errorIsExist: false,
+			expectedResult: &video.VideoSubmitReviewRespData{
+				Items:    make([]*base.Video, 0),
+				IsEnd:    true,
+				PageSize: 1,
+				PageNum:  0,
+				Total:    0,
+			},
+			mockConvertResultReturn: make([]*base.Video, 0),
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(exquery.QueryVideoByUserIdAndStatusPaged).Return(tc.mockQueryVideoReturn, tc.mockQueryCountReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock((*jwt.JWTMiddleware).ConvertJWTPayloadToInt64).Return(111, tc.mockAccessTokenErrorReturn).Build()
+			mockey.Mock(model_converter.VideoListDal2Resp).Return(tc.mockConvertResultReturn, tc.mockConvertErrorReturn).Build()
+
+			result, err := videoService.NewSubmitReviewEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
+
+func TestNewSubmitLockedEvent(t *testing.T) {
+	type testCase struct {
+		name                       string
+		req                        *video.VideoSubmitLockedReq
+		errorIsExist               bool
+		expectedError              string
+		expectedResult             *video.VideoSubmitLockedRespData
+		mockQueryErrorReturn       error
+		mockQueryVideoReturn       []*model.Video
+		mockQueryCountReturn       int64
+		mockAccessTokenErrorReturn error
+		mockConvertErrorReturn     error
+		mockConvertItemsReturn     []*base.Video
+		mockConvertResultReturn    []*base.Video
+	}
+
+	testCases := []testCase{
+		{
+			name: "AccessTokenFail",
+			req: &video.VideoSubmitLockedReq{
+				AccessToken: "111",
+			},
+			errorIsExist:               true,
+			expectedError:              errno.AccessTokenInvalidErrorMsg,
+			mockAccessTokenErrorReturn: errno.AccessTokenInvalid,
+		},
+		{
+			name: "QueryFail",
+			req: &video.VideoSubmitLockedReq{
+				AccessToken: "111",
+			},
+			errorIsExist:         true,
+			expectedError:        errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "ConvertFail",
+			req: &video.VideoSubmitLockedReq{
+				AccessToken: "111",
+			},
+			errorIsExist:           true,
+			expectedError:          errno.InternalServerErrorMsg,
+			mockConvertErrorReturn: errno.InternalServerError,
+		},
+		{
+			name: "Success",
+			req: &video.VideoSubmitLockedReq{
+				AccessToken: "111",
+			},
+			errorIsExist: false,
+			expectedResult: &video.VideoSubmitLockedRespData{
+				Items:    make([]*base.Video, 0),
+				IsEnd:    true,
+				PageSize: 1,
+				PageNum:  0,
+				Total:    0,
+			},
+			mockConvertResultReturn: make([]*base.Video, 0),
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(exquery.QueryVideoByUserIdAndStatusPaged).Return(tc.mockQueryVideoReturn, tc.mockQueryCountReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock((*jwt.JWTMiddleware).ConvertJWTPayloadToInt64).Return(111, tc.mockAccessTokenErrorReturn).Build()
+			mockey.Mock(model_converter.VideoListDal2Resp).Return(tc.mockConvertResultReturn, tc.mockConvertErrorReturn).Build()
+
+			result, err := videoService.NewSubmitLockedEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
+
+func TestNewSumitPassedEvent(t *testing.T) {
+	type testCase struct {
+		name                       string
+		req                        *video.VideoSubmitPassedReq
+		errorIsExist               bool
+		expectedError              string
+		expectedResult             *video.VideoSubmitPassedRespData
+		mockQueryErrorReturn       error
+		mockQueryVideoReturn       []*model.Video
+		mockQueryCountReturn       int64
+		mockAccessTokenErrorReturn error
+		mockConvertErrorReturn     error
+		mockConvertItemsReturn     []*base.Video
+		mockConvertResultReturn    []*base.Video
+	}
+
+	testCases := []testCase{
+		{
+			name: "AccessTokenFail",
+			req: &video.VideoSubmitPassedReq{
+				AccessToken: "111",
+			},
+			errorIsExist:               true,
+			expectedError:              errno.AccessTokenInvalidErrorMsg,
+			mockAccessTokenErrorReturn: errno.AccessTokenInvalid,
+		},
+		{
+			name: "QueryFail",
+			req: &video.VideoSubmitPassedReq{
+				AccessToken: "111",
+			},
+			errorIsExist:         true,
+			expectedError:        errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "ConvertFail",
+			req: &video.VideoSubmitPassedReq{
+				AccessToken: "111",
+			},
+			errorIsExist:           true,
+			expectedError:          errno.InternalServerErrorMsg,
+			mockConvertErrorReturn: errno.InternalServerError,
+		},
+		{
+			name: "Success",
+			req: &video.VideoSubmitPassedReq{
+				AccessToken: "111",
+			},
+			errorIsExist: false,
+			expectedResult: &video.VideoSubmitPassedRespData{
+				Items:    make([]*base.Video, 0),
+				IsEnd:    true,
+				PageSize: 1,
+				PageNum:  0,
+				Total:    0,
+			},
+			mockConvertResultReturn: make([]*base.Video, 0),
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(exquery.QueryVideoByUserIdAndStatusPaged).Return(tc.mockQueryVideoReturn, tc.mockQueryCountReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock((*jwt.JWTMiddleware).ConvertJWTPayloadToInt64).Return(111, tc.mockAccessTokenErrorReturn).Build()
+			mockey.Mock(model_converter.VideoListDal2Resp).Return(tc.mockConvertResultReturn, tc.mockConvertErrorReturn).Build()
+
+			result, err := videoService.NewSumitPassedEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
+
+func TestNewVideoSearchEvent(t *testing.T) {
+	type testCase struct {
+		name                       string
+		req                        *video.VideoSearchReq
+		errorIsExist               bool
+		expectedError              string
+		expectedResult             *video.VideoSearchRespData
+		mockQueryErrorReturn       error
+		mockQueryVideoReturn       []*model.Video
+		mockQueryCountReturn       int64
+		mockAccessTokenErrorReturn error
+		mockConvertErrorReturn     error
+		mockConvertItemsReturn     []*base.Video
+		mockConvertResultReturn    []*base.Video
+	}
+
+	testCases := []testCase{
+		{
+			name: "AccessTokenFail",
+			req: &video.VideoSearchReq{
+				AccessToken: new(string),
+			},
+			errorIsExist:               true,
+			expectedError:              errno.AccessTokenInvalidErrorMsg,
+			mockAccessTokenErrorReturn: errno.AccessTokenInvalid,
+		},
+		{
+			name: "QueryFail",
+			req: &video.VideoSearchReq{
+				AccessToken: new(string),
+			},
+			errorIsExist:         true,
+			expectedError:        errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "ConvertFail",
+			req: &video.VideoSearchReq{
+				AccessToken: new(string),
+			},
+			errorIsExist:           true,
+			expectedError:          errno.InternalServerErrorMsg,
+			mockConvertErrorReturn: errno.InternalServerError,
+		},
+		{
+			name: "Success",
+			req: &video.VideoSearchReq{
+				AccessToken: new(string),
+			},
+			errorIsExist: false,
+			expectedResult: &video.VideoSearchRespData{
+				Items:    make([]*base.Video, 0),
+				IsEnd:    true,
+				PageSize: 1,
+				PageNum:  0,
+				Total:    0,
+			},
+			mockConvertResultReturn: make([]*base.Video, 0),
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(exquery.QueryVideoFuzzyByKeywordPaged).Return(tc.mockQueryVideoReturn, tc.mockQueryCountReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock((*jwt.JWTMiddleware).ExtractPayloadFromToken).Return("111", tc.mockAccessTokenErrorReturn).Build()
+			mockey.Mock(model_converter.VideoListDal2Resp).Return(tc.mockConvertResultReturn, tc.mockConvertErrorReturn).Build()
+
+			result, err := videoService.NewSearchEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
