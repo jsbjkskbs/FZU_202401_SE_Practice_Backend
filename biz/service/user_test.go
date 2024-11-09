@@ -1,9 +1,10 @@
 package service
 
 import (
-	"github.com/cloudwego/hertz/pkg/app"
 	"testing"
 	"time"
+
+	"github.com/cloudwego/hertz/pkg/app"
 
 	"sfw/biz/mw/gorse"
 

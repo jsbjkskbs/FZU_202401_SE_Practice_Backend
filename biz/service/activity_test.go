@@ -1,6 +1,8 @@
 package service
 
 import (
+	"testing"
+
 	"github.com/bytedance/mockey"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/stretchr/testify/assert"
@@ -12,7 +14,6 @@ import (
 	"sfw/biz/service/model_converter"
 	"sfw/pkg/errno"
 	"sfw/pkg/utils/generator"
-	"testing"
 )
 
 var activityService = NewActivityService(nil, new(app.RequestContext))
