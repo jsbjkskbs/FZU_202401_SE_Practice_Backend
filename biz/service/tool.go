@@ -449,7 +449,7 @@ func (service *ToolService) NewRefreshTokenRefreshEvent(req *tool.ToolRefreshTok
 	}
 	token := jwt.RefreshTokenJwtMiddleware.GenerateToken(fmt.Sprint(payload))
 	return &tool.ToolRefreshTokenRefreshRespData{
-		ID:          fmt.Sprint(payload),
+		ID:           fmt.Sprint(payload),
 		RefreshToken: token,
 	}, nil
 }

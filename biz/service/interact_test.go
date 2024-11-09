@@ -573,3 +573,120 @@ func TestNewCommentVideoPublishEvent(t *testing.T) {
 		})
 	}
 }
+
+func TestNewCommentVideoListEvent(t *testing.T) {
+	type testCase struct {
+		name                       string
+		req                        *interact.InteractCommentVideoListReq
+		errorIsExist               bool
+		expectedError              string
+		mockQueryErrorReturn       error
+		mockQueryCommentReturn     []*model.VideoComment
+		mockQueryCountReturn       int64
+		mockAccessTokenErrorReturn error
+		mockQueryVideoErrorReturn  error
+		mockQueryVideoExistReturn  bool
+		mockConvertErrorReturn     error
+		mockConvertResultReturn    *[]*base.Comment
+		expectedResult             *interact.InteractCommentVideoListRespData
+	}
+
+	testCases := []testCase{
+		{
+			name: "ParamInvalid",
+			req: &interact.InteractCommentVideoListReq{
+				VideoID: "aaa",
+			},
+			errorIsExist:  true,
+			expectedError: "无效的视频ID",
+		},
+		{
+			name: "QueryVideoFail",
+			req: &interact.InteractCommentVideoListReq{
+				VideoID: "111",
+			},
+			errorIsExist:              true,
+			expectedError:             errno.DatabaseCallErrorMsg,
+			mockQueryVideoErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "VideoIsNotExist",
+			req: &interact.InteractCommentVideoListReq{
+				VideoID: "111",
+			},
+			errorIsExist:  true,
+			expectedError: "视频不存在",
+		},
+		{
+			name: "QueryCommentFail",
+			req: &interact.InteractCommentVideoListReq{
+				VideoID: "111",
+			},
+			errorIsExist:              true,
+			expectedError:             errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn:      errno.DatabaseCallError,
+			mockQueryVideoExistReturn: true,
+		},
+		{
+			name: "AccessTokenFail",
+			req: &interact.InteractCommentVideoListReq{
+				VideoID:     "111",
+				AccessToken: new(string),
+			},
+			errorIsExist:               true,
+			expectedError:              errno.AccessTokenInvalidErrorMsg,
+			mockAccessTokenErrorReturn: errno.AccessTokenInvalid,
+			mockQueryVideoExistReturn:  true,
+		},
+		{
+			name: "ConvertFail",
+			req: &interact.InteractCommentVideoListReq{
+				VideoID:     "111",
+				AccessToken: new(string),
+			},
+			errorIsExist:              true,
+			expectedError:             errno.DatabaseCallErrorMsg,
+			mockConvertErrorReturn:    errno.DatabaseCallError,
+			mockQueryVideoExistReturn: true,
+		},
+		{
+			name: "Success",
+			req: &interact.InteractCommentVideoListReq{
+				VideoID: "111",
+			},
+			errorIsExist: false,
+			expectedResult: &interact.InteractCommentVideoListRespData{
+				Items:    nil,
+				IsEnd:    true,
+				PageSize: 1,
+				PageNum:  0,
+				Total:    0,
+			},
+			mockConvertResultReturn:   new([]*base.Comment),
+			mockQueryVideoExistReturn: true,
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(exquery.QueryVideoExistById).Return(tc.mockQueryVideoExistReturn, tc.mockQueryVideoErrorReturn).Build()
+			mockey.Mock(exquery.QueryVideoRootCommentByVideoIdPaged).Return(tc.mockQueryCommentReturn, tc.mockQueryCountReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock((*jwt.JWTMiddleware).ExtractPayloadFromToken).Return("111", tc.mockAccessTokenErrorReturn).Build()
+			mockey.Mock(model_converter.VideoCommentDal2Resp).Return(tc.mockConvertResultReturn, tc.mockConvertErrorReturn).Build()
+
+			result, err := interactService.NewCommentVideoListEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
