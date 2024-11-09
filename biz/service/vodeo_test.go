@@ -597,7 +597,7 @@ func TestNewVideoInfoEvent(t *testing.T) {
 	}
 }
 
-func TestNewListEvent(t *testing.T) {
+func TestNewUserListEvent(t *testing.T) {
 	type testCase struct {
 		name                       string
 		req                        *video.VideoListReq

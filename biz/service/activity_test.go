@@ -234,3 +234,96 @@ func TestNewActivityPublishEvent(t *testing.T) {
 		})
 	}
 }
+
+func TestNewActivityListEvent(t *testing.T) {
+	type testCase struct {
+		name                       string
+		req                        *activity.ActivityListReq
+		errorIsExist               bool
+		expectedError              string
+		mockQueryErrorReturn       error
+		mockQueryActivityReturn    []*model.Activity
+		mockQueryCountReturn       int64
+		mockAccessTokenErrorReturn error
+		mockConvertErrorReturn     error
+		mockConvertResultReturn    *[]*base.Activity
+		expectedResult             *activity.ActivityListRespData
+	}
+
+	testCases := []testCase{
+		{
+			name: "ParamInvalid",
+			req: &activity.ActivityListReq{
+				UserID: "aaa",
+			},
+			errorIsExist:  true,
+			expectedError: "无效的用户ID",
+		},
+		{
+			name: "QueryFail",
+			req: &activity.ActivityListReq{
+				UserID: "111",
+			},
+			errorIsExist:         true,
+			expectedError:        errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "AccessTokenFail",
+			req: &activity.ActivityListReq{
+				UserID:      "111",
+				AccessToken: new(string),
+			},
+			errorIsExist:               true,
+			expectedError:              errno.AccessTokenInvalidErrorMsg,
+			mockAccessTokenErrorReturn: errno.AccessTokenInvalid,
+		},
+		{
+			name: "ConvertFail",
+			req: &activity.ActivityListReq{
+				UserID:      "111",
+				AccessToken: new(string),
+			},
+			errorIsExist:           true,
+			expectedError:          errno.DatabaseCallErrorMsg,
+			mockConvertErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "Success",
+			req: &activity.ActivityListReq{
+				UserID: "111",
+			},
+			errorIsExist: false,
+			expectedResult: &activity.ActivityListRespData{
+				Items:    nil,
+				IsEnd:    true,
+				PageSize: 1,
+				PageNum:  0,
+				Total:    0,
+			},
+			mockConvertResultReturn: new([]*base.Activity),
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(exquery.QueryActivityByUserIdPaged).Return(tc.mockQueryActivityReturn, tc.mockQueryCountReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock((*jwt.JWTMiddleware).ExtractPayloadFromToken).Return("111", tc.mockAccessTokenErrorReturn).Build()
+			mockey.Mock(model_converter.ActivityListDal2Resp).Return(tc.mockConvertResultReturn, tc.mockConvertErrorReturn).Build()
+
+			result, err := activityService.NewListEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
