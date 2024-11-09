@@ -310,6 +310,15 @@ func (service *UserService) NewSecurityPasswordRetrieveEmailEvent(req *user.User
 	if user == nil {
 		return errno.ResourceNotFound.WithMessage("用户不存在")
 	}
+
+	ttl, err := redis.EmailCodeTTL(req.Email)
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
+	}
+	if ttl > (10 - 7) * time.Minute {
+		return errno.CustomError.WithMessage("验证码已发送，请稍后再试")
+	}
+
 	mail.Station.Send(&mail.Email{
 		To:      []string{req.Email},
 		Subject: "noreply",

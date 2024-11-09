@@ -11,6 +11,20 @@ func EmailCodeStore(email string, code string) error {
 	return nil
 }
 
+func EmailCodeTTL(email string) (time.Duration, error) {
+	if exist, err := emailRedisClient.Exists(email).Result(); err != nil {
+		return 0, err
+	} else if exist == 0 {
+		return 0, nil
+	}
+
+	ttl, err := emailRedisClient.TTL(email).Result()
+	if err != nil {
+		return 0, err
+	}
+	return ttl, nil
+}
+
 func EmailCodeGet(email string) (string, error) {
 	exist, err := emailRedisClient.Exists(email).Result()
 	if err != nil {
