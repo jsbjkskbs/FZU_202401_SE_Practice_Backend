@@ -16,31 +16,40 @@ import (
 func QueryUserByID(id int64) (*model.User, error) {
 	u := dal.Executor.User
 	uc := u.WithContext(context.Background())
-	user, err := uc.Where(uc.Where(u.ID.Eq(id))).First()
+	user, err := uc.Where(uc.Where(u.ID.Eq(id))).Find()
 	if err != nil {
 		return nil, err
 	}
-	return user, nil
+	if len(user) == 0 {
+		return nil, nil
+	}
+	return user[0], nil
 }
 
 func QueryUserByUsername(username string) (*model.User, error) {
 	u := dal.Executor.User
 	uc := u.WithContext(context.Background())
-	user, err := uc.Where(uc.Where(u.Username.Eq(username))).First()
+	user, err := uc.Where(uc.Where(u.Username.Eq(username))).Find()
 	if err != nil {
 		return nil, err
 	}
-	return user, nil
+	if len(user) == 0 {
+		return nil, nil
+	}
+	return user[0], nil
 }
 
 func QueryUserByEmail(email string) (*model.User, error) {
 	u := dal.Executor.User
 	uc := u.WithContext(context.Background())
-	user, err := uc.Where(uc.Where(u.Email.Eq(email))).First()
+	user, err := uc.Where(uc.Where(u.Email.Eq(email))).Find()
 	if err != nil {
 		return nil, err
 	}
-	return user, nil
+	if len(user) == 0 {
+		return nil, nil
+	}
+	return user[0], nil
 }
 
 func QueryUserExistByID(id int64) (bool, error) {

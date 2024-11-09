@@ -127,3 +127,13 @@ func _tooltokenrefreshMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _refresh_tokenMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _toolrefreshtokenrefreshMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

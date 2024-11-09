@@ -396,9 +396,9 @@ func SearchMethod(ctx context.Context, c *app.RequestContext) {
 	})
 }
 
-// PasswordRetrieveMethod .
+// PasswordRetrieveEmailMethod .
 // @router /api/v1/user/security/password/retrieve/email [POST]
-func PasswordRetrieveMethod(ctx context.Context, c *app.RequestContext) {
+func PasswordRetrieveEmailMethod(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req user.UserPasswordRetrieveEmailReq
 	err = c.BindAndValidate(&req)
@@ -411,7 +411,7 @@ func PasswordRetrieveMethod(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	err = service.NewUserService(ctx, c).NewSecurityPasswordRetrieveEmail(&req)
+	err = service.NewUserService(ctx, c).NewSecurityPasswordRetrieveEmailEvent(&req)
 	if err != nil {
 		logger.LogRuntimeError(err)
 		resp := utils.CreateBaseHttpResponse(err)
@@ -428,9 +428,9 @@ func PasswordRetrieveMethod(ctx context.Context, c *app.RequestContext) {
 	})
 }
 
-// PasswordResetMethod .
+// PasswordResetEmailMethod .
 // @router /api/v1/user/security/password/reset/email [POST]
-func PasswordResetMethod(ctx context.Context, c *app.RequestContext) {
+func PasswordResetEmailMethod(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req user.UserPasswordResetEmailReq
 	err = c.BindAndValidate(&req)
@@ -455,6 +455,70 @@ func PasswordResetMethod(ctx context.Context, c *app.RequestContext) {
 	}
 
 	c.JSON(consts.StatusOK, user.UserPasswordResetEmailResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
+
+// PasswordRetrieveUsernameMethod .
+// @router /api/v1/user/security/password/retrieve/username [POST]
+func PasswordRetrieveUsernameMethod(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req user.UserPasswordRetrieveUsernameReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserPasswordRetrieveUsernameResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	err = service.NewUserService(ctx, c).NewSecurityPasswordRetrieveUsernameEvent(&req)
+	if err != nil {
+		logger.LogRuntimeError(err)
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserPasswordRetrieveUsernameResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, user.UserPasswordRetrieveUsernameResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+	})
+}
+
+// PasswordResetUsernameMethod .
+// @router /api/v1/user/security/password/reset/username [POST]
+func PasswordResetUsernameMethod(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req user.UserPasswordResetUsernameReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserPasswordResetUsernameResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	err = service.NewUserService(ctx, c).NewSecurityPasswordResetUsernameEvent(&req)
+	if err != nil {
+		logger.LogRuntimeError(err)
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, user.UserPasswordResetUsernameResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, user.UserPasswordResetUsernameResp{
 		Code: errno.NoError.Code,
 		Msg:  errno.NoError.Message,
 	})
