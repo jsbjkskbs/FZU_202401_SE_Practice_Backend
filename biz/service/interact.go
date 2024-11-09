@@ -134,7 +134,7 @@ func (service *InteractService) NewLikeCommentEvent(req *interact.InteractLikeCo
 func (service *InteractService) NewLikeVideoListEvent(req *interact.InteractLikeVideoListReq) (*interact.InteractLikeVideoListRespData, error) {
 	uid, err := strconv.ParseInt(req.UserID, 10, 64)
 	if err != nil {
-		return nil, errno.AccessTokenInvalid
+		return nil, errno.ParamInvalid.WithMessage("无效的用户ID")
 	}
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 
@@ -177,10 +177,10 @@ func (service *InteractService) NewCommentVideoPublishEvent(req *interact.Intera
 	if req.RootID != nil {
 		rid, err = strconv.ParseInt(*req.RootID, 10, 64)
 		if err != nil {
-			return errno.ParamInvalid
+			return errno.ParamInvalid.WithMessage("无效的根评论ID")
 		}
 		if rid == 0 {
-			return errno.ParamInvalid
+			return errno.ParamInvalid.WithMessage("无效的根评论ID")
 		}
 		exist, err := exquery.QueryVideoCommentExistByIdParentIdAndRootId(rid, 0, 0)
 		if err != nil {

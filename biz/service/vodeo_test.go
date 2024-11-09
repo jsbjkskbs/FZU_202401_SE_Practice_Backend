@@ -25,7 +25,7 @@ import (
 
 var videoService = NewVideoService(nil, new(app.RequestContext))
 
-func TestNewPublishEvent(t *testing.T) {
+func TestNewVideoPublishEvent(t *testing.T) {
 	type testCase struct {
 		name                      string
 		req                       *video.VideoPublishReq
@@ -240,7 +240,7 @@ func TestNewCoverUploadEvent(t *testing.T) {
 	}
 }
 
-func TestNewFeedEvent(t *testing.T) {
+func TestNewVideoFeedEvent(t *testing.T) {
 	type testCase struct {
 		name                     string
 		req                      *video.VideoFeedReq
@@ -597,7 +597,7 @@ func TestNewVideoInfoEvent(t *testing.T) {
 	}
 }
 
-func TestNewListEvent(t *testing.T) {
+func TestNewUserListEvent(t *testing.T) {
 	type testCase struct {
 		name                       string
 		req                        *video.VideoListReq
@@ -609,7 +609,6 @@ func TestNewListEvent(t *testing.T) {
 		mockQueryCountReturn       int64
 		mockAccessTokenErrorReturn error
 		mockConvertErrorReturn     error
-		mockConvertItemsReturn     []*base.Video
 		mockConvertResultReturn    []*base.Video
 	}
 
@@ -704,7 +703,6 @@ func TestNewSubmitAllEvent(t *testing.T) {
 		mockQueryCountReturn       int64
 		mockAccessTokenErrorReturn error
 		mockConvertErrorReturn     error
-		mockConvertItemsReturn     []*base.Video
 		mockConvertResultReturn    []*base.Video
 	}
 
@@ -788,7 +786,6 @@ func TestNewSubmitReviewEvent(t *testing.T) {
 		mockQueryCountReturn       int64
 		mockAccessTokenErrorReturn error
 		mockConvertErrorReturn     error
-		mockConvertItemsReturn     []*base.Video
 		mockConvertResultReturn    []*base.Video
 	}
 
@@ -872,7 +869,6 @@ func TestNewSubmitLockedEvent(t *testing.T) {
 		mockQueryCountReturn       int64
 		mockAccessTokenErrorReturn error
 		mockConvertErrorReturn     error
-		mockConvertItemsReturn     []*base.Video
 		mockConvertResultReturn    []*base.Video
 	}
 
@@ -956,7 +952,6 @@ func TestNewSumitPassedEvent(t *testing.T) {
 		mockQueryCountReturn       int64
 		mockAccessTokenErrorReturn error
 		mockConvertErrorReturn     error
-		mockConvertItemsReturn     []*base.Video
 		mockConvertResultReturn    []*base.Video
 	}
 
@@ -1040,7 +1035,6 @@ func TestNewVideoSearchEvent(t *testing.T) {
 		mockQueryCountReturn       int64
 		mockAccessTokenErrorReturn error
 		mockConvertErrorReturn     error
-		mockConvertItemsReturn     []*base.Video
 		mockConvertResultReturn    []*base.Video
 	}
 
