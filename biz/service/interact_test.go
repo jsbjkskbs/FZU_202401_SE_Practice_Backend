@@ -4,6 +4,8 @@ import (
 	"testing"
 	"time"
 
+	"sfw/biz/mw/gorse"
+
 	"github.com/bytedance/mockey"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/stretchr/testify/assert"
@@ -686,6 +688,441 @@ func TestNewCommentVideoListEvent(t *testing.T) {
 			} else {
 				assert.NoError(t, err)
 				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
+
+func TestNewCommentActivityListEvent(t *testing.T) {
+	type testCase struct {
+		name                         string
+		req                          *interact.InteractCommentActivityListReq
+		errorIsExist                 bool
+		expectedError                string
+		mockQueryErrorReturn         error
+		mockQueryCommentReturn       []*model.ActivityComment
+		mockQueryCountReturn         int64
+		mockAccessTokenErrorReturn   error
+		mockQueryActivityErrorReturn error
+		mockQueryActivityExistReturn bool
+		mockConvertErrorReturn       error
+		mockConvertResultReturn      *[]*base.Comment
+		expectedResult               *interact.InteractCommentActivityListRespData
+	}
+
+	testCases := []testCase{
+		{
+			name: "ParamInvalid",
+			req: &interact.InteractCommentActivityListReq{
+				ActivityID: "aaa",
+			},
+			errorIsExist:  true,
+			expectedError: "无效的动态ID",
+		},
+		{
+			name: "QueryActivityFail",
+			req: &interact.InteractCommentActivityListReq{
+				ActivityID: "111",
+			},
+			errorIsExist:                 true,
+			expectedError:                errno.DatabaseCallErrorMsg,
+			mockQueryActivityErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "ActivityIsNotExist",
+			req: &interact.InteractCommentActivityListReq{
+				ActivityID: "111",
+			},
+			errorIsExist:  true,
+			expectedError: "动态不存在",
+		},
+		{
+			name: "QueryCommentFail",
+			req: &interact.InteractCommentActivityListReq{
+				ActivityID: "111",
+			},
+			errorIsExist:                 true,
+			expectedError:                errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn:         errno.DatabaseCallError,
+			mockQueryActivityExistReturn: true,
+		},
+		{
+			name: "AccessTokenFail",
+			req: &interact.InteractCommentActivityListReq{
+				ActivityID:  "111",
+				AccessToken: new(string),
+			},
+			errorIsExist:                 true,
+			expectedError:                errno.AccessTokenInvalidErrorMsg,
+			mockAccessTokenErrorReturn:   errno.AccessTokenInvalid,
+			mockQueryActivityExistReturn: true,
+		},
+		{
+			name: "ConvertFail",
+			req: &interact.InteractCommentActivityListReq{
+				ActivityID:  "111",
+				AccessToken: new(string),
+			},
+			errorIsExist:                 true,
+			expectedError:                errno.DatabaseCallErrorMsg,
+			mockConvertErrorReturn:       errno.DatabaseCallError,
+			mockQueryActivityExistReturn: true,
+		},
+		{
+			name: "Success",
+			req: &interact.InteractCommentActivityListReq{
+				ActivityID: "111",
+			},
+			errorIsExist: false,
+			expectedResult: &interact.InteractCommentActivityListRespData{
+				Items:    nil,
+				IsEnd:    true,
+				PageSize: 1,
+				PageNum:  0,
+				Total:    0,
+			},
+			mockConvertResultReturn:      new([]*base.Comment),
+			mockQueryActivityExistReturn: true,
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(exquery.QueryActivityExistById).Return(tc.mockQueryActivityExistReturn, tc.mockQueryActivityErrorReturn).Build()
+			mockey.Mock(exquery.QueryActivityRootCommentByActivityIdPaged).Return(tc.mockQueryCommentReturn, tc.mockQueryCountReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock((*jwt.JWTMiddleware).ExtractPayloadFromToken).Return("111", tc.mockAccessTokenErrorReturn).Build()
+			mockey.Mock(model_converter.ActivityCommentDal2Resp).Return(tc.mockConvertResultReturn, tc.mockConvertErrorReturn).Build()
+
+			result, err := interactService.NewCommentActivityListEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
+
+func TestNewChildCommentVideoListEvent(t *testing.T) {
+	type testCase struct {
+		name                             string
+		req                              *interact.InteractVideoChildCommentListReq
+		errorIsExist                     bool
+		expectedError                    string
+		mockQueryErrorReturn             error
+		mockQueryCommentReturn           []*model.VideoComment
+		mockQueryCountReturn             int64
+		mockAccessTokenErrorReturn       error
+		mockQueryVideoCommentErrorReturn error
+		mockQueryVideoCommentExistReturn bool
+		mockConvertErrorReturn           error
+		mockConvertResultReturn          *[]*base.Comment
+		expectedResult                   *interact.InteractVideoChildCommentListRespData
+	}
+
+	testCases := []testCase{
+		{
+			name: "ParamInvalid",
+			req: &interact.InteractVideoChildCommentListReq{
+				CommentID: "aaa",
+			},
+			errorIsExist:  true,
+			expectedError: "无效的评论ID",
+		},
+		{
+			name: "QueryVideoCommentFail",
+			req: &interact.InteractVideoChildCommentListReq{
+				CommentID: "111",
+			},
+			errorIsExist:                     true,
+			expectedError:                    errno.DatabaseCallErrorMsg,
+			mockQueryVideoCommentErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "VideoCommentIsNotExist",
+			req: &interact.InteractVideoChildCommentListReq{
+				CommentID: "111",
+			},
+			errorIsExist:  true,
+			expectedError: "评论不存在",
+		},
+		{
+			name: "QueryCommentFail",
+			req: &interact.InteractVideoChildCommentListReq{
+				CommentID: "111",
+			},
+			errorIsExist:                     true,
+			expectedError:                    errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn:             errno.DatabaseCallError,
+			mockQueryVideoCommentExistReturn: true,
+		},
+		{
+			name: "AccessTokenFail",
+			req: &interact.InteractVideoChildCommentListReq{
+				CommentID:   "111",
+				AccessToken: new(string),
+			},
+			errorIsExist:                     true,
+			expectedError:                    errno.AccessTokenInvalidErrorMsg,
+			mockAccessTokenErrorReturn:       errno.AccessTokenInvalid,
+			mockQueryVideoCommentExistReturn: true,
+		},
+		{
+			name: "ConvertFail",
+			req: &interact.InteractVideoChildCommentListReq{
+				CommentID:   "111",
+				AccessToken: new(string),
+			},
+			errorIsExist:                     true,
+			expectedError:                    errno.DatabaseCallErrorMsg,
+			mockConvertErrorReturn:           errno.DatabaseCallError,
+			mockQueryVideoCommentExistReturn: true,
+		},
+		{
+			name: "Success",
+			req: &interact.InteractVideoChildCommentListReq{
+				CommentID: "111",
+			},
+			errorIsExist: false,
+			expectedResult: &interact.InteractVideoChildCommentListRespData{
+				Items:    nil,
+				IsEnd:    true,
+				PageSize: 1,
+				PageNum:  0,
+				Total:    0,
+			},
+			mockConvertResultReturn:          new([]*base.Comment),
+			mockQueryVideoCommentExistReturn: true,
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(exquery.QueryVideoCommentExistById).Return(tc.mockQueryVideoCommentExistReturn, tc.mockQueryVideoCommentErrorReturn).Build()
+			mockey.Mock(exquery.QueryVideoChildCommentByRootIdPaged).Return(tc.mockQueryCommentReturn, tc.mockQueryCountReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock((*jwt.JWTMiddleware).ExtractPayloadFromToken).Return("111", tc.mockAccessTokenErrorReturn).Build()
+			mockey.Mock(model_converter.VideoCommentDal2Resp).Return(tc.mockConvertResultReturn, tc.mockConvertErrorReturn).Build()
+
+			result, err := interactService.NewChildCommentVideoListEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
+
+func TestNewChildCommentActivityListEvent(t *testing.T) {
+	type testCase struct {
+		name                                string
+		req                                 *interact.InteractActivityChildCommentListReq
+		errorIsExist                        bool
+		expectedError                       string
+		mockQueryErrorReturn                error
+		mockQueryCommentReturn              []*model.ActivityComment
+		mockQueryCountReturn                int64
+		mockAccessTokenErrorReturn          error
+		mockQueryActivityCommentErrorReturn error
+		mockQueryActivityCommentExistReturn bool
+		mockConvertErrorReturn              error
+		mockConvertResultReturn             *[]*base.Comment
+		expectedResult                      *interact.InteractActivityChildCommentListRespData
+	}
+
+	testCases := []testCase{
+		{
+			name: "ParamInvalid",
+			req: &interact.InteractActivityChildCommentListReq{
+				CommentID: "aaa",
+			},
+			errorIsExist:  true,
+			expectedError: "无效的评论ID",
+		},
+		{
+			name: "QueryActivityCommentFail",
+			req: &interact.InteractActivityChildCommentListReq{
+				CommentID: "111",
+			},
+			errorIsExist:                        true,
+			expectedError:                       errno.DatabaseCallErrorMsg,
+			mockQueryActivityCommentErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "ActivityCommentIsNotExist",
+			req: &interact.InteractActivityChildCommentListReq{
+				CommentID: "111",
+			},
+			errorIsExist:  true,
+			expectedError: "评论不存在",
+		},
+		{
+			name: "QueryCommentFail",
+			req: &interact.InteractActivityChildCommentListReq{
+				CommentID: "111",
+			},
+			errorIsExist:                        true,
+			expectedError:                       errno.DatabaseCallErrorMsg,
+			mockQueryErrorReturn:                errno.DatabaseCallError,
+			mockQueryActivityCommentExistReturn: true,
+		},
+		{
+			name: "AccessTokenFail",
+			req: &interact.InteractActivityChildCommentListReq{
+				CommentID:   "111",
+				AccessToken: new(string),
+			},
+			errorIsExist:                        true,
+			expectedError:                       errno.AccessTokenInvalidErrorMsg,
+			mockAccessTokenErrorReturn:          errno.AccessTokenInvalid,
+			mockQueryActivityCommentExistReturn: true,
+		},
+		{
+			name: "ConvertFail",
+			req: &interact.InteractActivityChildCommentListReq{
+				CommentID:   "111",
+				AccessToken: new(string),
+			},
+			errorIsExist:                        true,
+			expectedError:                       errno.DatabaseCallErrorMsg,
+			mockConvertErrorReturn:              errno.DatabaseCallError,
+			mockQueryActivityCommentExistReturn: true,
+		},
+		{
+			name: "Success",
+			req: &interact.InteractActivityChildCommentListReq{
+				CommentID: "111",
+			},
+			errorIsExist: false,
+			expectedResult: &interact.InteractActivityChildCommentListRespData{
+				Items:    nil,
+				IsEnd:    true,
+				PageSize: 1,
+				PageNum:  0,
+				Total:    0,
+			},
+			mockConvertResultReturn:             new([]*base.Comment),
+			mockQueryActivityCommentExistReturn: true,
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(exquery.QueryActivityCommentExistById).Return(tc.mockQueryActivityCommentExistReturn, tc.mockQueryActivityCommentErrorReturn).Build()
+			mockey.Mock(exquery.QueryActivityChildCommentByRootIdPaged).Return(tc.mockQueryCommentReturn, tc.mockQueryCountReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock((*jwt.JWTMiddleware).ExtractPayloadFromToken).Return("111", tc.mockAccessTokenErrorReturn).Build()
+			mockey.Mock(model_converter.ActivityCommentDal2Resp).Return(tc.mockConvertResultReturn, tc.mockConvertErrorReturn).Build()
+
+			result, err := interactService.NewChildCommentActivityListEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
+
+func TestNewVideoDislikeEvent(t *testing.T) {
+	type testCase struct {
+		name                       string
+		req                        *interact.InteractVideoDislikeReq
+		errorIsExist               bool
+		expectedError              string
+		mockAccessTokenErrorReturn error
+		mockQueryVideoErrorReturn  error
+		mockQueryVideoExistReturn  bool
+	}
+
+	testCases := []testCase{
+		{
+			name: "ParamInvalid",
+			req: &interact.InteractVideoDislikeReq{
+				VideoID:     "aaa",
+				AccessToken: "111",
+			},
+			errorIsExist:  true,
+			expectedError: "无效的视频ID",
+		},
+		{
+			name: "QueryVideoFail",
+			req: &interact.InteractVideoDislikeReq{
+				VideoID:     "111",
+				AccessToken: "111",
+			},
+			errorIsExist:              true,
+			expectedError:             errno.DatabaseCallErrorMsg,
+			mockQueryVideoErrorReturn: errno.DatabaseCallError,
+		},
+		{
+			name: "VideoIsNotExist",
+			req: &interact.InteractVideoDislikeReq{
+				VideoID:     "111",
+				AccessToken: "111",
+			},
+			errorIsExist:  true,
+			expectedError: "视频不存在",
+		},
+		{
+			name: "AccessTokenFail",
+			req: &interact.InteractVideoDislikeReq{
+				VideoID:     "111",
+				AccessToken: "111",
+			},
+			errorIsExist:               true,
+			expectedError:              errno.AccessTokenInvalidErrorMsg,
+			mockAccessTokenErrorReturn: errno.AccessTokenInvalid,
+		},
+		{
+			name: "Success",
+			req: &interact.InteractVideoDislikeReq{
+				VideoID:     "111",
+				AccessToken: "111",
+			},
+			errorIsExist:              false,
+			mockQueryVideoExistReturn: true,
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock(exquery.QueryVideoExistById).Return(tc.mockQueryVideoExistReturn, tc.mockQueryVideoErrorReturn).Build()
+			mockey.Mock((*jwt.JWTMiddleware).ExtractPayloadFromToken).Return("111", tc.mockAccessTokenErrorReturn).Build()
+			mockey.Mock(gorse.PutFeedback).Return(nil).Build()
+
+			err := interactService.NewVideoDislikeEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				time.Sleep(1 * time.Second)
 			}
 		})
 	}
