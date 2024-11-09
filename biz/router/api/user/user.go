@@ -49,11 +49,13 @@ func Register(r *server.Hertz) {
 						_password := _security.Group("/password", _passwordMw()...)
 						{
 							_reset := _password.Group("/reset", _resetMw()...)
-							_reset.POST("/email", append(_passwordresetmethodMw(), user.PasswordResetMethod)...)
+							_reset.POST("/email", append(_passwordresetemailmethodMw(), user.PasswordResetEmailMethod)...)
+							_reset.POST("/username", append(_passwordresetusernamemethodMw(), user.PasswordResetUsernameMethod)...)
 						}
 						{
 							_retrieve := _password.Group("/retrieve", _retrieveMw()...)
-							_retrieve.POST("/email", append(_passwordretrievemethodMw(), user.PasswordRetrieveMethod)...)
+							_retrieve.POST("/email", append(_passwordretrieveemailmethodMw(), user.PasswordRetrieveEmailMethod)...)
+							_retrieve.POST("/username", append(_passwordretrieveusernamemethodMw(), user.PasswordRetrieveUsernameMethod)...)
 						}
 					}
 				}

@@ -305,3 +305,36 @@ func ToolTokenRefresh(ctx context.Context, c *app.RequestContext) {
 		Data: resp,
 	})
 }
+
+// ToolRefreshTokenRefresh .
+// @router /api/v1/tool/refresh_token/refresh [GET]
+func ToolRefreshTokenRefresh(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req tool.ToolRefreshTokenRefreshReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.ToolRefreshTokenRefreshResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	resp, err := service.NewToolService(ctx, c).NewRefreshTokenRefreshEvent(&req)
+	if err != nil {
+		logger.LogRuntimeError(err)
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, tool.ToolRefreshTokenRefreshResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, tool.ToolRefreshTokenRefreshResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
+	})
+}

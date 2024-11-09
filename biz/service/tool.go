@@ -434,3 +434,22 @@ func (service *ToolService) NewTokenRefreshEvent(req *tool.ToolTokenRefreshReq) 
 		AccessToken: token,
 	}, nil
 }
+
+func (service *ToolService) NewRefreshTokenRefreshEvent(req *tool.ToolRefreshTokenRefreshReq) (*tool.ToolRefreshTokenRefreshRespData, error) {
+	payload, expire, err := jwt.RefreshTokenJwtMiddleware.GetBasicDataFromToken(req.RefreshToken)
+	if err != nil {
+		return nil, errno.RefreshTokenInvalid
+	}
+	expiredAt, err := redis.TokenExpireTimeGet(fmt.Sprint(payload))
+	if err != nil {
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
+	if expiredAt >= expire.Unix() {
+		return nil, errno.RefreshTokenForbidden
+	}
+	token := jwt.RefreshTokenJwtMiddleware.GenerateToken(fmt.Sprint(payload))
+	return &tool.ToolRefreshTokenRefreshRespData{
+		ID:          fmt.Sprint(payload),
+		RefreshToken: token,
+	}, nil
+}

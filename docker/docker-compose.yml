@@ -75,17 +75,16 @@ services:
       custom_network:
         ipv4_address: 20.20.20.5
 
-  # ignore this when testing
-  #app:
-  #  image: app:latest
-  #  restart: unless-stopped
-  #  ports:
-  #    - 18005:18005
-  #  depends_on:
-  #    - gorse
-  #  networks:
-  #    custom_network:
-  #      ipv4_address: 20.20.20.6
+  app:
+    image: app:latest
+    restart: unless-stopped
+    ports:
+      - 8888:8888
+    depends_on:
+      - gorse
+    networks:
+      custom_network:
+        ipv4_address: 20.20.20.6
         
 
 networks:

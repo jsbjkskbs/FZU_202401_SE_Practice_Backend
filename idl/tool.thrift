@@ -114,6 +114,20 @@ struct ToolTokenRefreshResp {
     3: ToolTokenRefreshRespData data;
 }
 
+struct ToolRefreshTokenRefreshReq {
+    1: required string refresh_token (api.header="Refresh-Token");
+}
+
+struct ToolRefreshTokenRefreshRespData {
+    1: string id
+    2: string refresh_token;
+}
+struct ToolRefreshTokenRefreshResp {
+    1: i64 code;
+    2: string msg;
+    3: ToolRefreshTokenRefreshRespData data;
+}
+
 service ToolService {
     ToolDeleteVideoResp ToolDeleteVideo(1: ToolDeleteVideoReq req) (api.delete="/api/v1/tool/delete/video");
     ToolDeleteActivityResp ToolDeleteActivity(1: ToolDeleteActivityReq req) (api.delete="/api/v1/tool/delete/activity");
@@ -124,4 +138,5 @@ service ToolService {
     ToolUploadImageResp ToolUploadImage(1: ToolUploadImageReq req) (api.get="/api/v1/tool/upload/image");
     ToolGetImageResp ToolGetImage(1: ToolGetImageReq req) (api.get="/api/v1/tool/get/image");
     ToolTokenRefreshResp ToolTokenRefresh(1: ToolTokenRefreshReq req) (api.get="/api/v1/tool/token/refresh");
+    ToolRefreshTokenRefreshResp ToolRefreshTokenRefresh(1: ToolRefreshTokenRefreshReq req) (api.get="/api/v1/tool/refresh_token/refresh");
 }

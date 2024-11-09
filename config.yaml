@@ -1,8 +1,8 @@
 MySQL:
-  dsn: "root:123456@tcp(localhost:13306)/fulifuli?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn: "root:123456@tcp(mysql:3306)/fulifuli?charset=utf8mb4&parseTime=True&loc=Local"
 
 Gorse:
-  url: "http://localhost:8088"
+  url: "http://gorse:8088"
   apikey: ""
 
 Email:
@@ -14,27 +14,27 @@ Email:
 
 Redis:
   email:
-    addr: "localhost:16379"
+    addr: "redis:6379"
     password: ""
     db: 1
   token_expire_time:
-    addr: "localhost:16379"
+    addr: "redis:6379"
     password: ""
     db: 2
   video:
-    addr: "localhost:16379"
+    addr: "redis:6379"
     password: ""
     db: 3
   video_info:
-    addr: "localhost:16379"
+    addr: "redis:6379"
     password: ""
     db: 4
   activity_info:
-    addr: "localhost:16379"
+    addr: "redis:6379"
     password: ""
     db: 5
   comment_info:
-    addr: "localhost:16379"
+    addr: "redis:6379"
     password: ""
     db: 6
 
@@ -46,7 +46,7 @@ Sentinel:
       statintervalinms: 1000.0
 
 Zincsearch:
-  host: "localhost:4080"
+  host: "zincsearch:4080"
   username: "admin"
   password: "123456"
 

@@ -977,7 +977,7 @@ func TestNewSecurityPasswordRetrieveEmail(t *testing.T) {
 			mockey.Mock(redis.EmailCodeStore).Return(tc.mockCodeStoreErrorReturn).Build()
 			mockey.Mock(redis.TokenExpireTimeStore).Return(tc.mockTimeStoreErrorReturn).Build()
 
-			err := userService.NewSecurityPasswordRetrieveEmail(tc.req)
+			err := userService.NewSecurityPasswordRetrieveEmailEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)

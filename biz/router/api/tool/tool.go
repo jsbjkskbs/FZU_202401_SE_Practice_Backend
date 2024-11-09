@@ -46,6 +46,10 @@ func Register(r *server.Hertz) {
 					_get.GET("/image", append(_toolgetimageMw(), tool.ToolGetImage)...)
 				}
 				{
+					_refresh_token := _tool0.Group("/refresh_token", _refresh_tokenMw()...)
+					_refresh_token.GET("/refresh", append(_toolrefreshtokenrefreshMw(), tool.ToolRefreshTokenRefresh)...)
+				}
+				{
 					_token := _tool0.Group("/token", _tokenMw()...)
 					_token.GET("/refresh", append(_tooltokenrefreshMw(), tool.ToolTokenRefresh)...)
 				}

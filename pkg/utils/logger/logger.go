@@ -18,6 +18,10 @@ func InitLogger() {
 }
 
 func LogRuntimeError(e error) {
+	go logRuntimeError(e)
+}
+
+func logRuntimeError(e error) {
 	if e == nil {
 		return
 	}

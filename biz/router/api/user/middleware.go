@@ -132,3 +132,23 @@ func _retrieveMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _passwordresetemailmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _passwordresetusernamemethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _passwordretrieveemailmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _passwordretrieveusernamemethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

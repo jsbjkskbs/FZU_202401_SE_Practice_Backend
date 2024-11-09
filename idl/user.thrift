@@ -168,6 +168,26 @@ struct UserPasswordResetEmailResp {
     2: string msg;
 }
 
+struct UserPasswordRetrieveUsernameReq {
+    1: required string username;
+}
+
+struct UserPasswordRetrieveUsernameResp {
+    1: i64 code;
+    2: string msg;
+}
+
+struct UserPasswordResetUsernameReq {
+    1: required string username;
+    2: required string password;
+    3: required string code;
+}
+
+struct UserPasswordResetUsernameResp {
+    1: i64 code;
+    2: string msg;
+}
+
 service UserService {
     UserRegisterResp RegisterMethod(1: UserRegisterReq req) (api.post="/api/v1/user/register");
     UserSecurityEmailCodeResp SecurityEmailCodeMethod(1: UserSecurityEmailCodeReq req) (api.post="/api/v1/user/security/email/code");
@@ -180,6 +200,8 @@ service UserService {
     UserMfaQrcodeResp MfaQrcodeMethod(1: UserMfaQrcodeReq req) (api.get="/api/v1/user/mfa/qrcode");
     UserMfaBindResp MfaBindMethod(1: UserMfaBindReq req) (api.post="/api/v1/user/mfa/bind");
     UserSearchResp SearchMethod(1: UserSearchReq req) (api.get="/api/v1/user/search");
-    UserPasswordRetrieveEmailResp PasswordRetrieveMethod(1: UserPasswordRetrieveEmailReq req) (api.post="/api/v1/user/security/password/retrieve/email");
-    UserPasswordResetEmailResp PasswordResetMethod(1: UserPasswordResetEmailReq req) (api.post="/api/v1/user/security/password/reset/email");
+    UserPasswordRetrieveEmailResp PasswordRetrieveEmailMethod(1: UserPasswordRetrieveEmailReq req) (api.post="/api/v1/user/security/password/retrieve/email");
+    UserPasswordResetEmailResp PasswordResetEmailMethod(1: UserPasswordResetEmailReq req) (api.post="/api/v1/user/security/password/reset/email");
+    UserPasswordRetrieveUsernameResp PasswordRetrieveUsernameMethod(1: UserPasswordRetrieveUsernameReq req) (api.post="/api/v1/user/security/password/retrieve/username");
+    UserPasswordResetUsernameResp PasswordResetUsernameMethod(1: UserPasswordResetUsernameReq req) (api.post="/api/v1/user/security/password/reset/username");
 }

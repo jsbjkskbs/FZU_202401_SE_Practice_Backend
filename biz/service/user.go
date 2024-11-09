@@ -292,7 +292,7 @@ func (service *UserService) NewSearchEvent(req *user.UserSearchReq) (*user.UserS
 	}, nil
 }
 
-func (service *UserService) NewSecurityPasswordRetrieveEmail(req *user.UserPasswordRetrieveEmailReq) error {
+func (service *UserService) NewSecurityPasswordRetrieveEmailEvent(req *user.UserPasswordRetrieveEmailReq) error {
 	var (
 		user *model.User
 		err  error
@@ -318,11 +318,6 @@ func (service *UserService) NewSecurityPasswordRetrieveEmail(req *user.UserPassw
 	if err := redis.EmailCodeStore(req.Email, code); err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	err = redis.TokenExpireTimeStore(fmt.Sprint(user.ID), time.Now().Unix(), jwt.RefreshTokenExpireTime-1*time.Minute)
-	if err != nil {
-		return errno.DatabaseCallError.WithInnerError(err)
-	}
-
 	return nil
 }
 
@@ -345,6 +340,43 @@ func (servcie *UserService) NewSecurityPasswordResetEmailEvent(req *user.UserPas
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
+
+	user, err := exquery.QueryUserByEmail(req.Email)
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
+	}
+	err = redis.TokenExpireTimeStore(fmt.Sprint(user.ID), time.Now().Unix(), jwt.RefreshTokenExpireTime-1*time.Minute)
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
+	}
 	go redis.EmailCodeDel(req.Email)
 	return nil
+}
+
+func (service *UserService) NewSecurityPasswordRetrieveUsernameEvent(req *user.UserPasswordRetrieveUsernameReq) error {
+	u, err := exquery.QueryUserByUsername(req.Username)
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
+	}
+	if u == nil {
+		return errno.ResourceNotFound.WithMessage("用户不存在")
+	}
+	return service.NewSecurityPasswordRetrieveEmailEvent(&user.UserPasswordRetrieveEmailReq{
+		Email: u.Email,
+	})
+}
+
+func (service *UserService) NewSecurityPasswordResetUsernameEvent(req *user.UserPasswordResetUsernameReq) error {
+	u, err := exquery.QueryUserByUsername(req.Username)
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
+	}
+	if u == nil {
+		return errno.ResourceNotFound.WithMessage("用户不存在")
+	}
+	return service.NewSecurityPasswordResetEmailEvent(&user.UserPasswordResetEmailReq{
+		Email:    u.Email,
+		Password: req.Password,
+		Code:     req.Code,
+	})
 }
