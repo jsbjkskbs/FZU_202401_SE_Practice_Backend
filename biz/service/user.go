@@ -315,7 +315,7 @@ func (service *UserService) NewSecurityPasswordRetrieveEmailEvent(req *user.User
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	if ttl > (10 - 7) * time.Minute {
+	if ttl > (10-7)*time.Minute {
 		return errno.CustomError.WithMessage("验证码已发送，请稍后再试")
 	}
 
