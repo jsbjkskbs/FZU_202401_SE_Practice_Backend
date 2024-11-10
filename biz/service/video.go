@@ -190,6 +190,9 @@ func (service *VideoService) NewInfoEvent(req *video.VideoInfoReq) (*base.Video,
 	if err != nil {
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
+	if video == nil {
+		return nil, errno.ResourceNotFound.WithMessage("视频不存在")
+	}
 	go func() {
 		visited, err := redis.IsIPVisited(req.VideoID, service.c.ClientIP())
 		if err != nil {
