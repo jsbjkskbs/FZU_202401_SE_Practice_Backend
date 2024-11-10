@@ -18,16 +18,14 @@ func InitLogger() {
 }
 
 func LogRuntimeError(e error) {
-	go logRuntimeError(e)
-}
+	go func () {
+		if e == nil {
+			return
+		}
 
-func logRuntimeError(e error) {
-	if e == nil {
-		return
-	}
-
-	err := errno.ConvertErrno(e)
-	if err.RecommendToPrintStack() {
-		RuntimeLogger.Error(err.PrintStack())
-	}
+		err := errno.ConvertErrno(e)
+		if err.RecommendToPrintStack() {
+			RuntimeLogger.Error(err.PrintStack())
+		}
+	}()
 }

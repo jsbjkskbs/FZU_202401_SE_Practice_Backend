@@ -31,13 +31,10 @@ func (e *Errno) WithMessage(message string) *Errno {
 }
 
 func (e *Errno) RecommendToPrintStack() bool {
-	if e.InnerErrno == nil {
+	if e.InnerErrno != nil && e.InnerErrno.Code == 0 {
 		return true
 	}
-	if e.InnerErrno.Code == 0 {
-		return false
-	}
-	return true
+	return false
 }
 
 func (e *Errno) WithInnerError(err error) *Errno {
