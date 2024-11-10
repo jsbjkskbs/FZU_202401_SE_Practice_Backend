@@ -54,7 +54,7 @@ func (service *RelationService) NewFollowActionEvent(req *relation.RelationFollo
 	case common.ActionTypeOff:
 		err = exquery.DeleteFollowRecord(uid, toUserId)
 	case common.ActionTypeOn:
-		exist, err := exquery.QueryFollowExistByFollowerIDAndFollowedID(uid, toUserId)
+		exist, err = exquery.QueryFollowExistByFollowerIDAndFollowedID(uid, toUserId)
 		if err != nil {
 			return errno.DatabaseCallError.WithInnerError(err)
 		}
@@ -167,6 +167,9 @@ func (service *RelationService) NewFriendListEvent(req *relation.RelationFriendL
 	}
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 	friends, count, err := exquery.QueryFriendByUserIDPaged(uid, req.PageNum, req.PageSize)
+	if err != nil {
+		return nil, errno.DatabaseCallError.WithInnerError(err)
+	}
 
 	users := []*model.User{}
 	for _, item := range friends {

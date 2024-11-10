@@ -2,6 +2,9 @@ package service
 
 import (
 	"encoding/json"
+	"testing"
+	"time"
+
 	"github.com/bytedance/mockey"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol"
@@ -13,8 +16,6 @@ import (
 	"sfw/pkg/errno"
 	"sfw/pkg/utils/checker"
 	"sfw/pkg/utils/generator"
-	"testing"
-	"time"
 )
 
 var ossService = NewOssService(nil, new(app.RequestContext))
