@@ -49,6 +49,9 @@ func (service *ReportService) NewReportVideoEvent(req *report.ReportVideoReq) er
 	}
 
 	count, err := exquery.QueryVideoReportCountByUserIdAndVideoId(uid, vid)
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
+	}
 	if count >= common.ReportLimit {
 		return errno.CustomError.WithMessage("您已经举报过该视频多次，请耐心等待处理结果")
 	}
@@ -87,6 +90,9 @@ func (service *ReportService) NewReportActivityEvent(req *report.ReportActivityR
 	}
 
 	count, err := exquery.QueryActivityReportCountByUserIdAndActivityId(uid, aid)
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
+	}
 	if count >= common.ReportLimit {
 		return errno.CustomError.WithMessage("您已经举报过该动态多次，请耐心等待处理结果")
 	}
@@ -130,6 +136,9 @@ func (service *ReportService) newReportVideoCommentEvent(req *report.ReportComme
 	}
 
 	count, err := exquery.QueryVideoCommentReportCountByUserIdAndCommentId(uid, cid)
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
+	}
 	if count >= common.ReportLimit {
 		return errno.CustomError.WithMessage("您已经举报过该评论多次，请耐心等待处理结果")
 	}
@@ -173,6 +182,9 @@ func (service *ReportService) newReportActivityCommentEvent(req *report.ReportCo
 	}
 
 	count, err := exquery.QueryActivityCommentReportCountByUserIdAndCommentId(uid, cid)
+	if err != nil {
+		return errno.DatabaseCallError.WithInnerError(err)
+	}
 	if count >= common.ReportLimit {
 		return errno.CustomError.WithMessage("您已经举报过该评论多次，请耐心等待处理结果")
 	}
