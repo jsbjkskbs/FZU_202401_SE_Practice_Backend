@@ -14,7 +14,7 @@ CREATE TABLE `Message` (
 DROP TABLE IF EXISTS `User`;
 CREATE TABLE `User` (
     `uid` BIGINT NOT NULL AUTO_INCREMENT COMMENT '用户ID',
-    `user_name` VARCHAR(255) NOT NULL COMMENT '用户名称',
+    `username` VARCHAR(255) NOT NULL COMMENT '用户名称',
     `password` VARCHAR(255) NOT NULL COMMENT '用户密码',
     `email` VARCHAR(255) NOT NULL COMMENT '用户邮箱',
     `role` VARCHAR(255) NOT NULL COMMENT '权限',
@@ -25,7 +25,7 @@ CREATE TABLE `User` (
     `mfa_secret` VARCHAR(255) COMMENT 'mfa秘钥',
     `mfa_enable` BOOLEAN NOT NULL COMMENT '是否使用mfa',
     PRIMARY KEY (`uid`),
-    KEY `idx_username` (`user_name`) USING BTREE COMMENT '用户名索引'
+    KEY `idx_username` (`username`) USING BTREE COMMENT '用户名索引'
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
 DROP TABLE IF EXISTS `Video`;
