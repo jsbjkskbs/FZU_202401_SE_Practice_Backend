@@ -525,6 +525,14 @@ func TestNewVideoInfoEvent(t *testing.T) {
 			mockQueryErrorReturn: errno.DatabaseCallError,
 		},
 		{
+			name: "VideoIsNotExist",
+			req: &video.VideoInfoReq{
+				VideoID: "1",
+			},
+			errorIsExist:  true,
+			expectedError: "视频不存在",
+		},
+		{
 			name: "IsIPVisitedFail",
 			req: &video.VideoInfoReq{
 				VideoID: "1",
@@ -534,6 +542,7 @@ func TestNewVideoInfoEvent(t *testing.T) {
 			mockVisited:             true,
 			mockConvertResultReturn: &base.Video{},
 			mockVisitedErrorReturn:  errno.DatabaseCallError,
+			mockQueryVideoReturn:    new(model.Video),
 		},
 		{
 			name: "VisitCountFail",
@@ -545,6 +554,7 @@ func TestNewVideoInfoEvent(t *testing.T) {
 			mockVisited:               true,
 			mockConvertResultReturn:   &base.Video{},
 			mockVisitCountErrorReturn: errno.DatabaseCallError,
+			mockQueryVideoReturn:      new(model.Video),
 		},
 		{
 			name: "PutIPVisitInfoFail",
@@ -556,6 +566,7 @@ func TestNewVideoInfoEvent(t *testing.T) {
 			mockVisited:                   true,
 			mockConvertResultReturn:       &base.Video{},
 			mockPutIPVisitInfoErrorReturn: errno.DatabaseCallError,
+			mockQueryVideoReturn:          new(model.Video),
 		},
 		{
 			name: "Success",
@@ -565,6 +576,7 @@ func TestNewVideoInfoEvent(t *testing.T) {
 			errorIsExist:            false,
 			expectedResult:          &base.Video{},
 			mockConvertResultReturn: &base.Video{},
+			mockQueryVideoReturn:    new(model.Video),
 		},
 	}
 
