@@ -7,6 +7,7 @@ import (
 	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/report"
+	"sfw/biz/mw/gorse"
 	"sfw/biz/mw/jwt"
 	"sfw/biz/service/common"
 	"sfw/biz/service/model_converter"
@@ -509,5 +510,6 @@ func (service *ReportService) NewAdminVideoHandleEvent(req *report.AdminVideoHan
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
+	go gorse.PutVideoHiddenState(req.VideoID, false)
 	return nil
 }
