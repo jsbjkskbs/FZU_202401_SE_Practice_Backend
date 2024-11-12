@@ -510,6 +510,8 @@ func (service *ReportService) NewAdminVideoHandleEvent(req *report.AdminVideoHan
 	if err != nil {
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
-	go gorse.PutVideoHiddenState(req.VideoID, false)
+	if status == common.VideoStatusPassed {
+		go gorse.PutVideoHiddenState(req.VideoID, false)
+	}
 	return nil
 }
