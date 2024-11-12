@@ -11,7 +11,7 @@ import (
 func InsertVideo(videoId string, category string, labels []string) error {
 	_, err := cli.InsertItem(context.Background(), client.Item{
 		ItemId:     videoId,
-		IsHidden:   false,
+		IsHidden:   true,
 		Categories: []string{category, "*"},
 		Labels:     labels,
 		Timestamp:  fmt.Sprint(time.Unix(time.Now().Unix(), 0).UTC().Format(time.RFC3339)),
