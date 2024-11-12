@@ -952,7 +952,7 @@ func TestNewSubmitLockedEvent(t *testing.T) {
 	}
 }
 
-func TestNewSumitPassedEvent(t *testing.T) {
+func TestNewSubmitPassedEvent(t *testing.T) {
 	type testCase struct {
 		name                       string
 		req                        *video.VideoSubmitPassedReq
