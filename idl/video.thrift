@@ -4,10 +4,15 @@ include "base.thrift"
 
 struct VideoFeedReq {
     1: optional string category;
+    2: required i64 page_num;
+    3: required i64 page_size;
 }
 
 struct VideoFeedRespData {
     1: list<base.Video> items;
+    2: i64 page_num;
+    3: i64 page_size;
+    4: bool is_end;
 }
 struct VideoFeedResp {
     1: i64 code;
@@ -18,15 +23,37 @@ struct VideoFeedResp {
 struct VideoCustomFeedReq {
     1: optional string category;
     2: required string access_token (api.header="Access-Token");
+    3: required i64 page_num;
+    4: required i64 page_size;
 }
 
 struct VideoCustomFeedRespData {
     1: list<base.Video> items;
+    2: i64 page_num;
+    3: i64 page_size;
 }
 struct VideoCustomFeedResp {
     1: i64 code;
     2: string msg;
     3: VideoCustomFeedRespData data;
+}
+
+struct VideoNeighbourFeedReq {
+    1: required string video_id;
+    2: required i64 page_num;
+    3: required i64 page_size;
+    4: optional string access_token (api.header="Access-Token");
+}
+
+struct VideoNeighbourFeedRespData {
+    1: list<base.Video> items;
+    2: i64 page_num;
+    3: i64 page_size;
+}
+struct VideoNeighbourFeedResp {
+    1: i64 code;
+    2: string msg;
+    3: VideoNeighbourFeedRespData data;
 }
 
 struct VideoInfoReq {
@@ -208,6 +235,7 @@ struct VideoSearchResp {
 service VideoService {
     VideoFeedResp VideoFeedMethod(1: VideoFeedReq req) (api.get="/api/v1/video/feed");
     VideoCustomFeedResp VideoCustomFeedMethod(1: VideoCustomFeedReq req) (api.get="/api/v1/video/custom/feed");
+    VideoNeighbourFeedResp VideoNeighbourFeedMethod(1: VideoNeighbourFeedReq req) (api.get="/api/v1/video/neighbour/feed");
     VideoInfoResp VideoInfoMethod(1: VideoInfoReq req) (api.get="/api/v1/video/info");
     VideoPublishResp VideoPublishMethod(1: VideoPublishReq req) (api.post="/api/v1/video/publish");
     VideoCoverUploadResp VideoCoverUploadMethod(1: VideoCoverUploadReq req) (api.post="/api/v1/video/cover/upload");

@@ -44,9 +44,7 @@ func VideoFeedMethod(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, video.VideoFeedResp{
 		Code: errno.NoError.Code,
 		Msg:  errno.NoError.Message,
-		Data: &video.VideoFeedRespData{
-			Items: resp,
-		},
+		Data: resp,
 	})
 }
 
@@ -411,8 +409,39 @@ func VideoCustomFeedMethod(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, video.VideoCustomFeedResp{
 		Code: errno.NoError.Code,
 		Msg:  errno.NoError.Message,
-		Data: &video.VideoCustomFeedRespData{
-			Items: resp,
-		},
+		Data: resp,
+	})
+}
+
+// VideoNeighbourFeedMethod .
+// @router /api/v1/video/neighbour/feed [GET]
+func VideoNeighbourFeedMethod(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req video.VideoNeighbourFeedReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusBadRequest, video.VideoNeighbourFeedResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	resp, err := service.NewVideoService(ctx, c).NewNeighbourFeedEvent(&req)
+	if err != nil {
+		logger.LogRuntimeError(err)
+		resp := utils.CreateBaseHttpResponse(err)
+		c.JSON(consts.StatusOK, video.VideoNeighbourFeedResp{
+			Code: resp.Code,
+			Msg:  resp.Msg,
+		})
+		return
+	}
+
+	c.JSON(consts.StatusOK, video.VideoNeighbourFeedResp{
+		Code: errno.NoError.Code,
+		Msg:  errno.NoError.Message,
+		Data: resp,
 	})
 }

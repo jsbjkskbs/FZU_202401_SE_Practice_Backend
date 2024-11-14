@@ -104,16 +104,18 @@ func (service *VideoService) NewCoverUploadEvent(req *video.VideoCoverUploadReq)
 	}, nil
 }
 
-func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) ([]*base.Video, error) {
+func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) (*video.VideoFeedRespData, error) {
 	var (
 		vids = []string{}
 		err  error
 	)
 
+	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
+
 	if req.Category != nil {
-		vids, err = gorse.GetRecommendWithCategory("", *req.Category, 10)
+		vids, err = gorse.GetRecommendWithCategory("", *req.Category, int(req.PageSize), int(req.PageNum))
 	} else {
-		vids, err = gorse.GetRecommend("", 10)
+		vids, err = gorse.GetRecommendWithCategory("", "*", int(req.PageSize), int(req.PageNum))
 	}
 
 	if err != nil {
@@ -135,20 +137,31 @@ func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) ([]*base.Vide
 		}
 		videos = append(videos, video)
 	}
-	return model_converter.VideoListDal2Resp(&videos, nil)
+	data, err := model_converter.VideoListDal2Resp(&videos, nil)
+	if err != nil {
+		return nil, errno.InternalServerError.WithInnerError(err)
+	}
+	return &video.VideoFeedRespData{
+		Items:    data,
+		PageNum:  req.PageNum,
+		PageSize: req.PageSize,
+		IsEnd:    len(data) == 0,
+	}, nil
 }
 
-func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) ([]*base.Video, error) {
+func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) (*video.VideoCustomFeedRespData, error) {
 	userId, err := jwt.AccessTokenJwtMiddleware.ConvertJWTPayloadToInt64(req.AccessToken)
 	if err != nil {
 		return nil, errno.AccessTokenInvalid
 	}
 
+	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
+
 	vids := []string{}
 	if req.Category != nil {
-		vids, err = gorse.GetRecommendWithCategory(fmt.Sprint(userId), *req.Category, 10)
+		vids, err = gorse.GetRecommendWithCategory(fmt.Sprint(userId), *req.Category, int(req.PageSize), int(req.PageNum))
 	} else {
-		vids, err = gorse.GetRecommend(fmt.Sprint(userId), 10)
+		vids, err = gorse.GetRecommendWithCategory(fmt.Sprint(userId), "*", int(req.PageSize), int(req.PageNum))
 	}
 
 	if err != nil {
@@ -173,7 +186,59 @@ func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) (
 
 	fromUser := fmt.Sprint(userId)
 
-	return model_converter.VideoListDal2Resp(&videos, &fromUser)
+	data, err := model_converter.VideoListDal2Resp(&videos, &fromUser)
+	if err != nil {
+		return nil, errno.InternalServerError.WithInnerError(err)
+	}
+	return &video.VideoCustomFeedRespData{
+		Items:    data,
+		PageNum:  req.PageNum,
+		PageSize: req.PageSize,
+	}, nil
+}
+
+func (service *VideoService) NewNeighbourFeedEvent(req *video.VideoNeighbourFeedReq) (*video.VideoNeighbourFeedRespData, error) {
+	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
+
+	userId := ""
+	if req.AccessToken != nil {
+		uid, err := jwt.AccessTokenJwtMiddleware.ExtractPayloadFromToken(*req.AccessToken)
+		if err != nil {
+			return nil, errno.AccessTokenInvalid
+		}
+		userId = uid
+	}
+
+	vids, err := gorse.GetItemNeighbors(userId, req.VideoID, int(req.PageSize), int(req.PageNum))
+	if err != nil {
+		return nil, errno.InternalServerError.WithInnerError(err)
+	}
+
+	videos := make([]*model.Video, 0)
+	for _, vid := range vids {
+		videoId, err := strconv.ParseInt(vid, 10, 64)
+		if err != nil {
+			return nil, errno.InternalServerError.WithInnerError(err)
+		}
+		video, err := exquery.QueryVideoById(videoId)
+		if err != nil {
+			return nil, errno.DatabaseCallError.WithInnerError(err)
+		}
+		if video == nil {
+			return nil, errno.ResourceNotFound.WithMessage("视频不存在")
+		}
+		videos = append(videos, video)
+	}
+
+	data, err := model_converter.VideoListDal2Resp(&videos, nil)
+	if err != nil {
+		return nil, errno.InternalServerError.WithInnerError(err)
+	}
+	return &video.VideoNeighbourFeedRespData{
+		Items:    data,
+		PageNum:  req.PageNum,
+		PageSize: req.PageSize,
+	}, nil
 }
 
 func (service *VideoService) NewCategoriesEvent(req *video.VideoCategoriesReq) ([]string, error) {
@@ -191,6 +256,9 @@ func (service *VideoService) NewInfoEvent(req *video.VideoInfoReq) (*base.Video,
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 	if video == nil {
+		return nil, errno.ResourceNotFound.WithMessage("视频不存在")
+	}
+	if video.Status != common.VideoStatusPassed {
 		return nil, errno.ResourceNotFound.WithMessage("视频不存在")
 	}
 	go func() {

@@ -38,6 +38,10 @@ func Register(r *server.Hertz) {
 					_custom.GET("/feed", append(_videocustomfeedmethodMw(), video.VideoCustomFeedMethod)...)
 				}
 				{
+					_neighbour := _video.Group("/neighbour", _neighbourMw()...)
+					_neighbour.GET("/feed", append(_videoneighbourfeedmethodMw(), video.VideoNeighbourFeedMethod)...)
+				}
+				{
 					_submit := _video.Group("/submit", _submitMw()...)
 					_submit.GET("/all", append(_videosubmitallmethodMw(), video.VideoSubmitAllMethod)...)
 					_submit.GET("/locked", append(_videosubmitlockedmethodMw(), video.VideoSubmitLockedMethod)...)
