@@ -113,9 +113,9 @@ func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) (*video.Video
 	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
 
 	if req.Category != nil {
-		vids, err = gorse.GetRecommendWithCategory("", *req.Category, int(req.PageSize), int(req.PageNum*req.PageSize))
+		vids, err = gorse.GetRecommendWithCategory("", *req.Category, int(req.PageSize), int(req.PageNum))
 	} else {
-		vids, err = gorse.GetRecommendWithCategory("", "*", int(req.PageSize), int(req.PageNum*req.PageSize))
+		vids, err = gorse.GetRecommendWithCategory("", "*", int(req.PageSize), int(req.PageNum))
 	}
 
 	if err != nil {
@@ -159,9 +159,9 @@ func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) (
 
 	vids := []string{}
 	if req.Category != nil {
-		vids, err = gorse.GetRecommendWithCategory(fmt.Sprint(userId), *req.Category, int(req.PageSize), int(req.PageNum*req.PageSize))
+		vids, err = gorse.GetRecommendWithCategory(fmt.Sprint(userId), *req.Category, int(req.PageSize), int(req.PageNum))
 	} else {
-		vids, err = gorse.GetRecommendWithCategory(fmt.Sprint(userId), "*", int(req.PageSize), int(req.PageNum*req.PageSize))
+		vids, err = gorse.GetRecommendWithCategory(fmt.Sprint(userId), "*", int(req.PageSize), int(req.PageNum))
 	}
 
 	if err != nil {
@@ -209,7 +209,7 @@ func (service *VideoService) NewNeighbourFeedEvent(req *video.VideoNeighbourFeed
 		userId = uid
 	}
 
-	vids, err := gorse.GetItemNeighbors(userId, req.VideoID, int(req.PageSize), int(req.PageNum*req.PageSize))
+	vids, err := gorse.GetItemNeighbors(userId, req.VideoID, int(req.PageSize), int(req.PageNum))
 	if err != nil {
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}
@@ -256,6 +256,9 @@ func (service *VideoService) NewInfoEvent(req *video.VideoInfoReq) (*base.Video,
 		return nil, errno.DatabaseCallError.WithInnerError(err)
 	}
 	if video == nil {
+		return nil, errno.ResourceNotFound.WithMessage("视频不存在")
+	}
+	if video.Status != common.VideoStatusPassed {
 		return nil, errno.ResourceNotFound.WithMessage("视频不存在")
 	}
 	go func() {
