@@ -4,15 +4,14 @@ include "base.thrift"
 
 struct VideoFeedReq {
     1: optional string category;
-    2: required i64 page_num;
-    3: required i64 page_size;
+    2: required i64 offset;
+    3: required i64 n;
 }
 
 struct VideoFeedRespData {
     1: list<base.Video> items;
-    2: i64 page_num;
-    3: i64 page_size;
-    4: bool is_end;
+    2: i64 offset;
+    3: i64 n;
 }
 struct VideoFeedResp {
     1: i64 code;
@@ -23,14 +22,14 @@ struct VideoFeedResp {
 struct VideoCustomFeedReq {
     1: optional string category;
     2: required string access_token (api.header="Access-Token");
-    3: required i64 page_num;
-    4: required i64 page_size;
+    3: required i64 offset;
+    4: required i64 n;
 }
 
 struct VideoCustomFeedRespData {
     1: list<base.Video> items;
-    2: i64 page_num;
-    3: i64 page_size;
+    2: i64 offset;
+    3: i64 n;
 }
 struct VideoCustomFeedResp {
     1: i64 code;
@@ -40,15 +39,15 @@ struct VideoCustomFeedResp {
 
 struct VideoNeighbourFeedReq {
     1: required string video_id;
-    2: required i64 page_num;
-    3: required i64 page_size;
+    2: required i64 offset;
+    3: required i64 n;
     4: optional string access_token (api.header="Access-Token");
 }
 
 struct VideoNeighbourFeedRespData {
     1: list<base.Video> items;
-    2: i64 page_num;
-    3: i64 page_size;
+    2: i64 offset;
+    3: i64 n;
 }
 struct VideoNeighbourFeedResp {
     1: i64 code;

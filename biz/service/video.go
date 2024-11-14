@@ -110,12 +110,12 @@ func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) (*video.Video
 		err  error
 	)
 
-	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
+	req.Offset, req.N = common.CorrectPageNumAndPageSize(req.Offset, req.N)
 
 	if req.Category != nil {
-		vids, err = gorse.GetRecommendWithCategory("", *req.Category, int(req.PageSize), int(req.PageNum))
+		vids, err = gorse.GetRecommendWithCategory("", *req.Category, int(req.N), int(req.Offset))
 	} else {
-		vids, err = gorse.GetRecommendWithCategory("", "*", int(req.PageSize), int(req.PageNum))
+		vids, err = gorse.GetRecommendWithCategory("", "*", int(req.N), int(req.Offset))
 	}
 
 	if err != nil {
@@ -143,9 +143,8 @@ func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) (*video.Video
 	}
 	return &video.VideoFeedRespData{
 		Items:    data,
-		PageNum:  req.PageNum,
-		PageSize: req.PageSize,
-		IsEnd:    len(data) == 0,
+		Offset:  req.Offset,
+		N: req.N,
 	}, nil
 }
 
@@ -155,13 +154,13 @@ func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) (
 		return nil, errno.AccessTokenInvalid
 	}
 
-	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
+	req.Offset, req.N = common.CorrectPageNumAndPageSize(req.Offset, req.N)
 
 	vids := []string{}
 	if req.Category != nil {
-		vids, err = gorse.GetRecommendWithCategory(fmt.Sprint(userId), *req.Category, int(req.PageSize), int(req.PageNum))
+		vids, err = gorse.GetRecommendWithCategory(fmt.Sprint(userId), *req.Category, int(req.N), int(req.Offset))
 	} else {
-		vids, err = gorse.GetRecommendWithCategory(fmt.Sprint(userId), "*", int(req.PageSize), int(req.PageNum))
+		vids, err = gorse.GetRecommendWithCategory(fmt.Sprint(userId), "*", int(req.N), int(req.Offset))
 	}
 
 	if err != nil {
@@ -192,13 +191,13 @@ func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) (
 	}
 	return &video.VideoCustomFeedRespData{
 		Items:    data,
-		PageNum:  req.PageNum,
-		PageSize: req.PageSize,
+		Offset:  req.Offset,
+		N: req.N,
 	}, nil
 }
 
 func (service *VideoService) NewNeighbourFeedEvent(req *video.VideoNeighbourFeedReq) (*video.VideoNeighbourFeedRespData, error) {
-	req.PageNum, req.PageSize = common.CorrectPageNumAndPageSize(req.PageNum, req.PageSize)
+	req.Offset, req.N = common.CorrectPageNumAndPageSize(req.Offset, req.N)
 
 	userId := ""
 	if req.AccessToken != nil {
@@ -209,7 +208,7 @@ func (service *VideoService) NewNeighbourFeedEvent(req *video.VideoNeighbourFeed
 		userId = uid
 	}
 
-	vids, err := gorse.GetItemNeighbors(userId, req.VideoID, int(req.PageSize), int(req.PageNum))
+	vids, err := gorse.GetItemNeighbors(userId, req.VideoID, int(req.N), int(req.Offset))
 	if err != nil {
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}
@@ -236,8 +235,8 @@ func (service *VideoService) NewNeighbourFeedEvent(req *video.VideoNeighbourFeed
 	}
 	return &video.VideoNeighbourFeedRespData{
 		Items:    data,
-		PageNum:  req.PageNum,
-		PageSize: req.PageSize,
+		Offset:  req.Offset,
+		N: req.N,
 	}, nil
 }
 

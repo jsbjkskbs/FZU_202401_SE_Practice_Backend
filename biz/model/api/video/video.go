@@ -11,8 +11,8 @@ import (
 
 type VideoFeedReq struct {
 	Category *string `thrift:"category,1,optional" form:"category" json:"category,omitempty" query:"category"`
-	PageNum  int64   `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
-	PageSize int64   `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	Offset   int64   `thrift:"offset,2,required" form:"offset,required" json:"offset,required" query:"offset,required"`
+	N        int64   `thrift:"n,3,required" form:"n,required" json:"n,required" query:"n,required"`
 }
 
 func NewVideoFeedReq() *VideoFeedReq {
@@ -31,18 +31,18 @@ func (p *VideoFeedReq) GetCategory() (v string) {
 	return *p.Category
 }
 
-func (p *VideoFeedReq) GetPageNum() (v int64) {
-	return p.PageNum
+func (p *VideoFeedReq) GetOffset() (v int64) {
+	return p.Offset
 }
 
-func (p *VideoFeedReq) GetPageSize() (v int64) {
-	return p.PageSize
+func (p *VideoFeedReq) GetN() (v int64) {
+	return p.N
 }
 
 var fieldIDToName_VideoFeedReq = map[int16]string{
 	1: "category",
-	2: "page_num",
-	3: "page_size",
+	2: "offset",
+	3: "n",
 }
 
 func (p *VideoFeedReq) IsSetCategory() bool {
@@ -53,8 +53,8 @@ func (p *VideoFeedReq) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetPageNum bool = false
-	var issetPageSize bool = false
+	var issetOffset bool = false
+	var issetN bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -83,7 +83,7 @@ func (p *VideoFeedReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetPageNum = true
+				issetOffset = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -92,7 +92,7 @@ func (p *VideoFeedReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetPageSize = true
+				issetN = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -109,12 +109,12 @@ func (p *VideoFeedReq) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetPageNum {
+	if !issetOffset {
 		fieldId = 2
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetPageSize {
+	if !issetN {
 		fieldId = 3
 		goto RequiredFieldNotSetError
 	}
@@ -155,7 +155,7 @@ func (p *VideoFeedReq) ReadField2(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PageNum = _field
+	p.Offset = _field
 	return nil
 }
 func (p *VideoFeedReq) ReadField3(iprot thrift.TProtocol) error {
@@ -166,7 +166,7 @@ func (p *VideoFeedReq) ReadField3(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PageSize = _field
+	p.N = _field
 	return nil
 }
 
@@ -226,10 +226,10 @@ WriteFieldEndError:
 }
 
 func (p *VideoFeedReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page_num", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("offset", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PageNum); err != nil {
+	if err := oprot.WriteI64(p.Offset); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -243,10 +243,10 @@ WriteFieldEndError:
 }
 
 func (p *VideoFeedReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page_size", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("n", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PageSize); err != nil {
+	if err := oprot.WriteI64(p.N); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -268,10 +268,9 @@ func (p *VideoFeedReq) String() string {
 }
 
 type VideoFeedRespData struct {
-	Items    []*base.Video `thrift:"items,1" form:"items" json:"items" query:"items"`
-	PageNum  int64         `thrift:"page_num,2" form:"page_num" json:"page_num" query:"page_num"`
-	PageSize int64         `thrift:"page_size,3" form:"page_size" json:"page_size" query:"page_size"`
-	IsEnd    bool          `thrift:"is_end,4" form:"is_end" json:"is_end" query:"is_end"`
+	Items  []*base.Video `thrift:"items,1" form:"items" json:"items" query:"items"`
+	Offset int64         `thrift:"offset,2" form:"offset" json:"offset" query:"offset"`
+	N      int64         `thrift:"n,3" form:"n" json:"n" query:"n"`
 }
 
 func NewVideoFeedRespData() *VideoFeedRespData {
@@ -285,23 +284,18 @@ func (p *VideoFeedRespData) GetItems() (v []*base.Video) {
 	return p.Items
 }
 
-func (p *VideoFeedRespData) GetPageNum() (v int64) {
-	return p.PageNum
+func (p *VideoFeedRespData) GetOffset() (v int64) {
+	return p.Offset
 }
 
-func (p *VideoFeedRespData) GetPageSize() (v int64) {
-	return p.PageSize
-}
-
-func (p *VideoFeedRespData) GetIsEnd() (v bool) {
-	return p.IsEnd
+func (p *VideoFeedRespData) GetN() (v int64) {
+	return p.N
 }
 
 var fieldIDToName_VideoFeedRespData = map[int16]string{
 	1: "items",
-	2: "page_num",
-	3: "page_size",
-	4: "is_end",
+	2: "offset",
+	3: "n",
 }
 
 func (p *VideoFeedRespData) Read(iprot thrift.TProtocol) (err error) {
@@ -342,14 +336,6 @@ func (p *VideoFeedRespData) Read(iprot thrift.TProtocol) (err error) {
 		case 3:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField3(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 4:
-			if fieldTypeId == thrift.BOOL {
-				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -415,7 +401,7 @@ func (p *VideoFeedRespData) ReadField2(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PageNum = _field
+	p.Offset = _field
 	return nil
 }
 func (p *VideoFeedRespData) ReadField3(iprot thrift.TProtocol) error {
@@ -426,18 +412,7 @@ func (p *VideoFeedRespData) ReadField3(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PageSize = _field
-	return nil
-}
-func (p *VideoFeedRespData) ReadField4(iprot thrift.TProtocol) error {
-
-	var _field bool
-	if v, err := iprot.ReadBool(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.IsEnd = _field
+	p.N = _field
 	return nil
 }
 
@@ -457,10 +432,6 @@ func (p *VideoFeedRespData) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
-			goto WriteFieldError
-		}
-		if err = p.writeField4(oprot); err != nil {
-			fieldId = 4
 			goto WriteFieldError
 		}
 	}
@@ -507,10 +478,10 @@ WriteFieldEndError:
 }
 
 func (p *VideoFeedRespData) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page_num", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("offset", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PageNum); err != nil {
+	if err := oprot.WriteI64(p.Offset); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -524,10 +495,10 @@ WriteFieldEndError:
 }
 
 func (p *VideoFeedRespData) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page_size", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("n", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PageSize); err != nil {
+	if err := oprot.WriteI64(p.N); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -538,23 +509,6 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
-}
-
-func (p *VideoFeedRespData) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("is_end", thrift.BOOL, 4); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteBool(p.IsEnd); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
 func (p *VideoFeedRespData) String() string {
@@ -806,8 +760,8 @@ func (p *VideoFeedResp) String() string {
 type VideoCustomFeedReq struct {
 	Category    *string `thrift:"category,1,optional" form:"category" json:"category,omitempty" query:"category"`
 	AccessToken string  `thrift:"access_token,2,required" header:"Access-Token,required" json:"access_token,required"`
-	PageNum     int64   `thrift:"page_num,3,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
-	PageSize    int64   `thrift:"page_size,4,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	Offset      int64   `thrift:"offset,3,required" form:"offset,required" json:"offset,required" query:"offset,required"`
+	N           int64   `thrift:"n,4,required" form:"n,required" json:"n,required" query:"n,required"`
 }
 
 func NewVideoCustomFeedReq() *VideoCustomFeedReq {
@@ -830,19 +784,19 @@ func (p *VideoCustomFeedReq) GetAccessToken() (v string) {
 	return p.AccessToken
 }
 
-func (p *VideoCustomFeedReq) GetPageNum() (v int64) {
-	return p.PageNum
+func (p *VideoCustomFeedReq) GetOffset() (v int64) {
+	return p.Offset
 }
 
-func (p *VideoCustomFeedReq) GetPageSize() (v int64) {
-	return p.PageSize
+func (p *VideoCustomFeedReq) GetN() (v int64) {
+	return p.N
 }
 
 var fieldIDToName_VideoCustomFeedReq = map[int16]string{
 	1: "category",
 	2: "access_token",
-	3: "page_num",
-	4: "page_size",
+	3: "offset",
+	4: "n",
 }
 
 func (p *VideoCustomFeedReq) IsSetCategory() bool {
@@ -854,8 +808,8 @@ func (p *VideoCustomFeedReq) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAccessToken bool = false
-	var issetPageNum bool = false
-	var issetPageSize bool = false
+	var issetOffset bool = false
+	var issetN bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -893,7 +847,7 @@ func (p *VideoCustomFeedReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetPageNum = true
+				issetOffset = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -902,7 +856,7 @@ func (p *VideoCustomFeedReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetPageSize = true
+				issetN = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -924,12 +878,12 @@ func (p *VideoCustomFeedReq) Read(iprot thrift.TProtocol) (err error) {
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetPageNum {
+	if !issetOffset {
 		fieldId = 3
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetPageSize {
+	if !issetN {
 		fieldId = 4
 		goto RequiredFieldNotSetError
 	}
@@ -981,7 +935,7 @@ func (p *VideoCustomFeedReq) ReadField3(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PageNum = _field
+	p.Offset = _field
 	return nil
 }
 func (p *VideoCustomFeedReq) ReadField4(iprot thrift.TProtocol) error {
@@ -992,7 +946,7 @@ func (p *VideoCustomFeedReq) ReadField4(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PageSize = _field
+	p.N = _field
 	return nil
 }
 
@@ -1073,10 +1027,10 @@ WriteFieldEndError:
 }
 
 func (p *VideoCustomFeedReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page_num", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("offset", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PageNum); err != nil {
+	if err := oprot.WriteI64(p.Offset); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1090,10 +1044,10 @@ WriteFieldEndError:
 }
 
 func (p *VideoCustomFeedReq) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page_size", thrift.I64, 4); err != nil {
+	if err = oprot.WriteFieldBegin("n", thrift.I64, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PageSize); err != nil {
+	if err := oprot.WriteI64(p.N); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1115,9 +1069,9 @@ func (p *VideoCustomFeedReq) String() string {
 }
 
 type VideoCustomFeedRespData struct {
-	Items    []*base.Video `thrift:"items,1" form:"items" json:"items" query:"items"`
-	PageNum  int64         `thrift:"page_num,2" form:"page_num" json:"page_num" query:"page_num"`
-	PageSize int64         `thrift:"page_size,3" form:"page_size" json:"page_size" query:"page_size"`
+	Items  []*base.Video `thrift:"items,1" form:"items" json:"items" query:"items"`
+	Offset int64         `thrift:"offset,2" form:"offset" json:"offset" query:"offset"`
+	N      int64         `thrift:"n,3" form:"n" json:"n" query:"n"`
 }
 
 func NewVideoCustomFeedRespData() *VideoCustomFeedRespData {
@@ -1131,18 +1085,18 @@ func (p *VideoCustomFeedRespData) GetItems() (v []*base.Video) {
 	return p.Items
 }
 
-func (p *VideoCustomFeedRespData) GetPageNum() (v int64) {
-	return p.PageNum
+func (p *VideoCustomFeedRespData) GetOffset() (v int64) {
+	return p.Offset
 }
 
-func (p *VideoCustomFeedRespData) GetPageSize() (v int64) {
-	return p.PageSize
+func (p *VideoCustomFeedRespData) GetN() (v int64) {
+	return p.N
 }
 
 var fieldIDToName_VideoCustomFeedRespData = map[int16]string{
 	1: "items",
-	2: "page_num",
-	3: "page_size",
+	2: "offset",
+	3: "n",
 }
 
 func (p *VideoCustomFeedRespData) Read(iprot thrift.TProtocol) (err error) {
@@ -1248,7 +1202,7 @@ func (p *VideoCustomFeedRespData) ReadField2(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PageNum = _field
+	p.Offset = _field
 	return nil
 }
 func (p *VideoCustomFeedRespData) ReadField3(iprot thrift.TProtocol) error {
@@ -1259,7 +1213,7 @@ func (p *VideoCustomFeedRespData) ReadField3(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PageSize = _field
+	p.N = _field
 	return nil
 }
 
@@ -1325,10 +1279,10 @@ WriteFieldEndError:
 }
 
 func (p *VideoCustomFeedRespData) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page_num", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("offset", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PageNum); err != nil {
+	if err := oprot.WriteI64(p.Offset); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1342,10 +1296,10 @@ WriteFieldEndError:
 }
 
 func (p *VideoCustomFeedRespData) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page_size", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("n", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PageSize); err != nil {
+	if err := oprot.WriteI64(p.N); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1606,8 +1560,8 @@ func (p *VideoCustomFeedResp) String() string {
 
 type VideoNeighbourFeedReq struct {
 	VideoID     string  `thrift:"video_id,1,required" form:"video_id,required" json:"video_id,required" query:"video_id,required"`
-	PageNum     int64   `thrift:"page_num,2,required" form:"page_num,required" json:"page_num,required" query:"page_num,required"`
-	PageSize    int64   `thrift:"page_size,3,required" form:"page_size,required" json:"page_size,required" query:"page_size,required"`
+	Offset      int64   `thrift:"offset,2,required" form:"offset,required" json:"offset,required" query:"offset,required"`
+	N           int64   `thrift:"n,3,required" form:"n,required" json:"n,required" query:"n,required"`
 	AccessToken *string `thrift:"access_token,4,optional" header:"Access-Token" json:"access_token,omitempty"`
 }
 
@@ -1622,12 +1576,12 @@ func (p *VideoNeighbourFeedReq) GetVideoID() (v string) {
 	return p.VideoID
 }
 
-func (p *VideoNeighbourFeedReq) GetPageNum() (v int64) {
-	return p.PageNum
+func (p *VideoNeighbourFeedReq) GetOffset() (v int64) {
+	return p.Offset
 }
 
-func (p *VideoNeighbourFeedReq) GetPageSize() (v int64) {
-	return p.PageSize
+func (p *VideoNeighbourFeedReq) GetN() (v int64) {
+	return p.N
 }
 
 var VideoNeighbourFeedReq_AccessToken_DEFAULT string
@@ -1641,8 +1595,8 @@ func (p *VideoNeighbourFeedReq) GetAccessToken() (v string) {
 
 var fieldIDToName_VideoNeighbourFeedReq = map[int16]string{
 	1: "video_id",
-	2: "page_num",
-	3: "page_size",
+	2: "offset",
+	3: "n",
 	4: "access_token",
 }
 
@@ -1655,8 +1609,8 @@ func (p *VideoNeighbourFeedReq) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetVideoID bool = false
-	var issetPageNum bool = false
-	var issetPageSize bool = false
+	var issetOffset bool = false
+	var issetN bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -1686,7 +1640,7 @@ func (p *VideoNeighbourFeedReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetPageNum = true
+				issetOffset = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -1695,7 +1649,7 @@ func (p *VideoNeighbourFeedReq) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetPageSize = true
+				issetN = true
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
@@ -1725,12 +1679,12 @@ func (p *VideoNeighbourFeedReq) Read(iprot thrift.TProtocol) (err error) {
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetPageNum {
+	if !issetOffset {
 		fieldId = 2
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetPageSize {
+	if !issetN {
 		fieldId = 3
 		goto RequiredFieldNotSetError
 	}
@@ -1771,7 +1725,7 @@ func (p *VideoNeighbourFeedReq) ReadField2(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PageNum = _field
+	p.Offset = _field
 	return nil
 }
 func (p *VideoNeighbourFeedReq) ReadField3(iprot thrift.TProtocol) error {
@@ -1782,7 +1736,7 @@ func (p *VideoNeighbourFeedReq) ReadField3(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PageSize = _field
+	p.N = _field
 	return nil
 }
 func (p *VideoNeighbourFeedReq) ReadField4(iprot thrift.TProtocol) error {
@@ -1855,10 +1809,10 @@ WriteFieldEndError:
 }
 
 func (p *VideoNeighbourFeedReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page_num", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("offset", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PageNum); err != nil {
+	if err := oprot.WriteI64(p.Offset); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1872,10 +1826,10 @@ WriteFieldEndError:
 }
 
 func (p *VideoNeighbourFeedReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page_size", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("n", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PageSize); err != nil {
+	if err := oprot.WriteI64(p.N); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1916,9 +1870,9 @@ func (p *VideoNeighbourFeedReq) String() string {
 }
 
 type VideoNeighbourFeedRespData struct {
-	Items    []*base.Video `thrift:"items,1" form:"items" json:"items" query:"items"`
-	PageNum  int64         `thrift:"page_num,2" form:"page_num" json:"page_num" query:"page_num"`
-	PageSize int64         `thrift:"page_size,3" form:"page_size" json:"page_size" query:"page_size"`
+	Items  []*base.Video `thrift:"items,1" form:"items" json:"items" query:"items"`
+	Offset int64         `thrift:"offset,2" form:"offset" json:"offset" query:"offset"`
+	N      int64         `thrift:"n,3" form:"n" json:"n" query:"n"`
 }
 
 func NewVideoNeighbourFeedRespData() *VideoNeighbourFeedRespData {
@@ -1932,18 +1886,18 @@ func (p *VideoNeighbourFeedRespData) GetItems() (v []*base.Video) {
 	return p.Items
 }
 
-func (p *VideoNeighbourFeedRespData) GetPageNum() (v int64) {
-	return p.PageNum
+func (p *VideoNeighbourFeedRespData) GetOffset() (v int64) {
+	return p.Offset
 }
 
-func (p *VideoNeighbourFeedRespData) GetPageSize() (v int64) {
-	return p.PageSize
+func (p *VideoNeighbourFeedRespData) GetN() (v int64) {
+	return p.N
 }
 
 var fieldIDToName_VideoNeighbourFeedRespData = map[int16]string{
 	1: "items",
-	2: "page_num",
-	3: "page_size",
+	2: "offset",
+	3: "n",
 }
 
 func (p *VideoNeighbourFeedRespData) Read(iprot thrift.TProtocol) (err error) {
@@ -2049,7 +2003,7 @@ func (p *VideoNeighbourFeedRespData) ReadField2(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PageNum = _field
+	p.Offset = _field
 	return nil
 }
 func (p *VideoNeighbourFeedRespData) ReadField3(iprot thrift.TProtocol) error {
@@ -2060,7 +2014,7 @@ func (p *VideoNeighbourFeedRespData) ReadField3(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.PageSize = _field
+	p.N = _field
 	return nil
 }
 
@@ -2126,10 +2080,10 @@ WriteFieldEndError:
 }
 
 func (p *VideoNeighbourFeedRespData) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page_num", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("offset", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PageNum); err != nil {
+	if err := oprot.WriteI64(p.Offset); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2143,10 +2097,10 @@ WriteFieldEndError:
 }
 
 func (p *VideoNeighbourFeedRespData) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("page_size", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("n", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.PageSize); err != nil {
+	if err := oprot.WriteI64(p.N); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
