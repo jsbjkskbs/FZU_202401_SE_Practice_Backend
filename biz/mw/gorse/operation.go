@@ -82,8 +82,20 @@ func GetRecommend(userId string, n int) ([]string, error) {
 	return resp, nil
 }
 
-func GetRecommendWithCategory(userId, category string, n int) ([]string, error) {
-	list, err := cli.GetItemLatestWithCategory(context.Background(), userId, category, n, 0)
+func GetRecommendWithCategory(userId, category string, n, offset int) ([]string, error) {
+	list, err := cli.GetItemLatestWithCategory(context.Background(), userId, category, n, offset)
+	if err != nil {
+		return nil, err
+	}
+	resp := []string{}
+	for _, item := range list {
+		resp = append(resp, item.Id)
+	}
+	return resp, nil
+}
+
+func GetItemNeighbors(userId, itemId string, n, offset int) ([]string, error) {
+	list, err := cli.GetItemNeighbors(context.Background(), itemId, userId, n, offset)
 	if err != nil {
 		return nil, err
 	}

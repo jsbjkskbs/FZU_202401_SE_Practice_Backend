@@ -107,3 +107,13 @@ func _videocustomfeedmethodMw() []app.HandlerFunc {
 	// your code...
 	return auth.Auth()
 }
+
+func _neighbourMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _videoneighbourfeedmethodMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
