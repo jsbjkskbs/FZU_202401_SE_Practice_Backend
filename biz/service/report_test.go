@@ -2,6 +2,9 @@ package service
 
 import (
 	"testing"
+	"time"
+
+	"sfw/biz/mw/gorse"
 
 	"sfw/biz/dal/model"
 	"sfw/biz/model/base"
@@ -1294,6 +1297,7 @@ func TestNewAdminVideoHandleEvent(t *testing.T) {
 
 			mockey.Mock(exquery.QueryVideoExistByIdAndStatus).Return(tc.mockQueryResultReturn, tc.mockQueryErrorReturn).Build()
 			mockey.Mock(exquery.UpdateVideoWithId).Return(tc.mockUpdateErrorReturn).Build()
+			mockey.Mock(gorse.PutVideoHiddenState).Return(nil).Build()
 
 			err := reportService.NewAdminVideoHandleEvent(tc.req)
 
@@ -1302,6 +1306,7 @@ func TestNewAdminVideoHandleEvent(t *testing.T) {
 				assert.Contains(t, err.Error(), tc.expectedError)
 			} else {
 				assert.NoError(t, err)
+				time.Sleep(1 * time.Second)
 			}
 		})
 	}
