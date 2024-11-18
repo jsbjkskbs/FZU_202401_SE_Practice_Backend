@@ -142,9 +142,9 @@ func (service *VideoService) NewFeedEvent(req *video.VideoFeedReq) (*video.Video
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}
 	return &video.VideoFeedRespData{
-		Items:    data,
-		Offset:  req.Offset,
-		N: req.N,
+		Items:  data,
+		Offset: req.Offset,
+		N:      req.N,
 	}, nil
 }
 
@@ -190,9 +190,9 @@ func (service *VideoService) NewCustomFeedEvent(req *video.VideoCustomFeedReq) (
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}
 	return &video.VideoCustomFeedRespData{
-		Items:    data,
-		Offset:  req.Offset,
-		N: req.N,
+		Items:  data,
+		Offset: req.Offset,
+		N:      req.N,
 	}, nil
 }
 
@@ -234,9 +234,9 @@ func (service *VideoService) NewNeighbourFeedEvent(req *video.VideoNeighbourFeed
 		return nil, errno.InternalServerError.WithInnerError(err)
 	}
 	return &video.VideoNeighbourFeedRespData{
-		Items:    data,
-		Offset:  req.Offset,
-		N: req.N,
+		Items:  data,
+		Offset: req.Offset,
+		N:      req.N,
 	}, nil
 }
 

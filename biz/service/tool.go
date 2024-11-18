@@ -123,11 +123,12 @@ func (service *ToolService) NewDeleteActivityEvent(req *tool.ToolDeleteActivityR
 		if err != nil {
 			errs <- err
 		}
+		wg.Done()
 	}()
 	wg.Wait()
 	select {
 	case err := <-errs:
-		return errno.InternalServerError.WithInnerError(err)
+		return errno.DatabaseCallError.WithInnerError(err)
 	default:
 		return nil
 	}
@@ -251,6 +252,7 @@ func (service *ToolService) NewAdminDeleteVideoEvent(req *tool.AdminToolDeleteVi
 		if err != nil {
 			errs <- err
 		}
+		wg.Done()
 	}()
 	wg.Wait()
 	select {
@@ -295,6 +297,7 @@ func (service *ToolService) NewAdminDeleteActivityEvent(req *tool.AdminToolDelet
 		if err != nil {
 			errs <- err
 		}
+		wg.Done()
 	}()
 	wg.Wait()
 	select {

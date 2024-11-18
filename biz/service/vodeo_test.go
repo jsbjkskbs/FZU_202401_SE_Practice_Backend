@@ -4,6 +4,8 @@ import (
 	"testing"
 	"time"
 
+	"sfw/biz/service/common"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"sfw/biz/service/model_converter"
 	"sfw/pkg/utils/scheduler"
@@ -250,7 +252,9 @@ func TestNewVideoFeedEvent(t *testing.T) {
 		mockRecommendErrorReturn error
 		mockQueryErrorReturn     error
 		mockQueryVideoReturn     *model.Video
-		expectedResult           []*base.Video
+		mockConvertResultReturn  []*base.Video
+		mockConvertErrorReturn   error
+		expectedResult           *video.VideoFeedRespData
 	}
 
 	category := "运动"
@@ -281,7 +285,7 @@ func TestNewVideoFeedEvent(t *testing.T) {
 			mockRecommendVidReturn: make([]string, 1),
 		},
 		{
-			name:                   "ResourceNotFound",
+			name:                   "QueryFail",
 			req:                    &video.VideoFeedReq{},
 			errorIsExist:           true,
 			expectedError:          errno.DatabaseCallErrorMsg,
@@ -289,19 +293,31 @@ func TestNewVideoFeedEvent(t *testing.T) {
 			mockQueryErrorReturn:   errno.DatabaseCallError,
 		},
 		{
-			name:                   "UploadFail",
+			name:                   "VideoIsNotExist",
 			req:                    &video.VideoFeedReq{},
 			errorIsExist:           true,
 			expectedError:          "视频不存在",
 			mockRecommendVidReturn: vid,
 		},
 		{
+			name:                   "ConvertFail",
+			req:                    &video.VideoFeedReq{},
+			errorIsExist:           true,
+			expectedError:          errno.InternalServerErrorMsg,
+			mockRecommendVidReturn: vid,
+			mockQueryVideoReturn:   new(model.Video),
+			mockConvertErrorReturn: errno.InternalServerError,
+		},
+		{
 			name:                   "Success",
 			req:                    &video.VideoFeedReq{},
 			errorIsExist:           false,
 			mockRecommendVidReturn: make([]string, 0),
-			mockQueryVideoReturn:   &model.Video{},
-			expectedResult:         []*base.Video{},
+			expectedResult: &video.VideoFeedRespData{
+				Items:  nil,
+				Offset: 0,
+				N:      1,
+			},
 		},
 	}
 
@@ -311,12 +327,9 @@ func TestNewVideoFeedEvent(t *testing.T) {
 		mockey.PatchConvey(tc.name, t, func() {
 			t.Logf("%s  :  %s", t.Name(), tc.name)
 
-			if tc.req.Category != nil {
-				mockey.Mock(gorse.GetRecommendWithCategory).Return(tc.mockRecommendVidReturn, tc.mockRecommendErrorReturn).Build()
-			} else {
-				mockey.Mock(gorse.GetRecommend).Return(tc.mockRecommendVidReturn, tc.mockRecommendErrorReturn).Build()
-			}
+			mockey.Mock(gorse.GetRecommendWithCategory).Return(tc.mockRecommendVidReturn, tc.mockRecommendErrorReturn).Build()
 			mockey.Mock(exquery.QueryVideoById).Return(tc.mockQueryVideoReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock(model_converter.VideoListDal2Resp).Return(tc.mockConvertResultReturn, tc.mockConvertErrorReturn).Build()
 
 			result, err := videoService.NewFeedEvent(tc.req)
 
@@ -342,7 +355,9 @@ func TestNewCustomFeedEvent(t *testing.T) {
 		mockRecommendErrorReturn error
 		mockQueryErrorReturn     error
 		mockQueryVideoReturn     *model.Video
-		expectedResult           []*base.Video
+		mockConvertResultReturn  []*base.Video
+		mockConvertErrorReturn   error
+		expectedResult           *video.VideoCustomFeedRespData
 	}
 
 	category := "运动"
@@ -387,7 +402,7 @@ func TestNewCustomFeedEvent(t *testing.T) {
 			mockRecommendVidReturn: make([]string, 1),
 		},
 		{
-			name: "ResourceNotFound",
+			name: "QueryFail",
 			req: &video.VideoCustomFeedReq{
 				AccessToken: "111",
 			},
@@ -397,7 +412,7 @@ func TestNewCustomFeedEvent(t *testing.T) {
 			mockQueryErrorReturn:   errno.DatabaseCallError,
 		},
 		{
-			name: "UploadFail",
+			name: "VideoIsNotExist",
 			req: &video.VideoCustomFeedReq{
 				AccessToken: "111",
 			},
@@ -406,14 +421,28 @@ func TestNewCustomFeedEvent(t *testing.T) {
 			mockRecommendVidReturn: vid,
 		},
 		{
+			name: "ConvertFail",
+			req: &video.VideoCustomFeedReq{
+				AccessToken: "111",
+			},
+			errorIsExist:           true,
+			expectedError:          errno.InternalServerErrorMsg,
+			mockRecommendVidReturn: vid,
+			mockQueryVideoReturn:   new(model.Video),
+			mockConvertErrorReturn: errno.InternalServerError,
+		},
+		{
 			name: "Success",
 			req: &video.VideoCustomFeedReq{
 				AccessToken: "111",
 			},
 			errorIsExist:           false,
 			mockRecommendVidReturn: make([]string, 0),
-			mockQueryVideoReturn:   &model.Video{},
-			expectedResult:         []*base.Video{},
+			expectedResult: &video.VideoCustomFeedRespData{
+				Items:  nil,
+				Offset: 0,
+				N:      1,
+			},
 		},
 	}
 
@@ -424,14 +453,116 @@ func TestNewCustomFeedEvent(t *testing.T) {
 			t.Logf("%s  :  %s", t.Name(), tc.name)
 
 			mockey.Mock((*jwt.JWTMiddleware).ConvertJWTPayloadToInt64).Return(111, tc.mockTokenErrorReturn).Build()
-			if tc.req.Category != nil {
-				mockey.Mock(gorse.GetRecommendWithCategory).Return(tc.mockRecommendVidReturn, tc.mockRecommendErrorReturn).Build()
-			} else {
-				mockey.Mock(gorse.GetRecommend).Return(tc.mockRecommendVidReturn, tc.mockRecommendErrorReturn).Build()
-			}
+			mockey.Mock(gorse.GetRecommendWithCategory).Return(tc.mockRecommendVidReturn, tc.mockRecommendErrorReturn).Build()
 			mockey.Mock(exquery.QueryVideoById).Return(tc.mockQueryVideoReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock(model_converter.VideoListDal2Resp).Return(tc.mockConvertResultReturn, tc.mockConvertErrorReturn).Build()
 
 			result, err := videoService.NewCustomFeedEvent(tc.req)
+
+			if tc.errorIsExist {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectedError)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResult, result)
+			}
+		})
+	}
+}
+
+func TestNewNeighbourFeedEvent(t *testing.T) {
+	type testCase struct {
+		name                     string
+		req                      *video.VideoNeighbourFeedReq
+		errorIsExist             bool
+		expectedError            string
+		mockTokenErrorReturn     error
+		mockRecommendVidReturn   []string
+		mockRecommendErrorReturn error
+		mockQueryErrorReturn     error
+		mockQueryVideoReturn     *model.Video
+		mockConvertResultReturn  []*base.Video
+		mockConvertErrorReturn   error
+		expectedResult           *video.VideoNeighbourFeedRespData
+	}
+
+	vid := make([]string, 0)
+	vid = append(vid, "1")
+	testCases := []testCase{
+		{
+			name: "AccessTokenFail",
+			req: &video.VideoNeighbourFeedReq{
+				AccessToken: new(string),
+			},
+			errorIsExist:         true,
+			expectedError:        errno.AccessTokenInvalidErrorMsg,
+			mockTokenErrorReturn: errno.AccessTokenInvalid,
+		},
+		{
+			name: "GetRecommendFail",
+			req: &video.VideoNeighbourFeedReq{
+				AccessToken: new(string),
+			},
+			errorIsExist:             true,
+			expectedError:            errno.InternalServerErrorMsg,
+			mockRecommendErrorReturn: errno.InternalServerError,
+		},
+		{
+			name:                   "ParseIntFail",
+			req:                    &video.VideoNeighbourFeedReq{},
+			errorIsExist:           true,
+			expectedError:          errno.InternalServerErrorMsg,
+			mockRecommendVidReturn: make([]string, 1),
+		},
+		{
+			name:                   "QueryFail",
+			req:                    &video.VideoNeighbourFeedReq{},
+			errorIsExist:           true,
+			expectedError:          errno.DatabaseCallErrorMsg,
+			mockRecommendVidReturn: vid,
+			mockQueryErrorReturn:   errno.DatabaseCallError,
+		},
+		{
+			name:                   "VideoIsNotExist",
+			req:                    &video.VideoNeighbourFeedReq{},
+			errorIsExist:           true,
+			expectedError:          "视频不存在",
+			mockRecommendVidReturn: vid,
+		},
+		{
+			name:                   "ConvertFail",
+			req:                    &video.VideoNeighbourFeedReq{},
+			errorIsExist:           true,
+			expectedError:          errno.InternalServerErrorMsg,
+			mockRecommendVidReturn: vid,
+			mockQueryVideoReturn:   new(model.Video),
+			mockConvertErrorReturn: errno.InternalServerError,
+		},
+		{
+			name:                   "Success",
+			req:                    &video.VideoNeighbourFeedReq{},
+			errorIsExist:           false,
+			mockRecommendVidReturn: make([]string, 0),
+			expectedResult: &video.VideoNeighbourFeedRespData{
+				Items:  nil,
+				Offset: 0,
+				N:      1,
+			},
+		},
+	}
+
+	defer mockey.UnPatchAll()
+
+	for _, tc := range testCases {
+		mockey.PatchConvey(tc.name, t, func() {
+			t.Logf("%s  :  %s", t.Name(), tc.name)
+
+			mockey.Mock((*jwt.JWTMiddleware).ExtractPayloadFromToken).Return(111, tc.mockTokenErrorReturn).Build()
+			mockey.Mock(gorse.GetItemNeighbors).Return(tc.mockRecommendVidReturn, tc.mockRecommendErrorReturn).Build()
+			mockey.Mock(exquery.QueryVideoById).Return(tc.mockQueryVideoReturn, tc.mockQueryErrorReturn).Build()
+			mockey.Mock(model_converter.VideoListDal2Resp).Return(tc.mockConvertResultReturn, tc.mockConvertErrorReturn).Build()
+
+			result, err := videoService.NewNeighbourFeedEvent(tc.req)
 
 			if tc.errorIsExist {
 				assert.Error(t, err)
@@ -525,6 +656,23 @@ func TestNewVideoInfoEvent(t *testing.T) {
 			mockQueryErrorReturn: errno.DatabaseCallError,
 		},
 		{
+			name: "VideoIsNotExist",
+			req: &video.VideoInfoReq{
+				VideoID: "1",
+			},
+			errorIsExist:  true,
+			expectedError: "视频不存在",
+		},
+		{
+			name: "VideoStatusIsNotPassed",
+			req: &video.VideoInfoReq{
+				VideoID: "1",
+			},
+			errorIsExist:         true,
+			expectedError:        "视频不存在",
+			mockQueryVideoReturn: new(model.Video),
+		},
+		{
 			name: "IsIPVisitedFail",
 			req: &video.VideoInfoReq{
 				VideoID: "1",
@@ -534,6 +682,9 @@ func TestNewVideoInfoEvent(t *testing.T) {
 			mockVisited:             true,
 			mockConvertResultReturn: &base.Video{},
 			mockVisitedErrorReturn:  errno.DatabaseCallError,
+			mockQueryVideoReturn: &model.Video{
+				Status: common.VideoStatusPassed,
+			},
 		},
 		{
 			name: "VisitCountFail",
@@ -545,6 +696,9 @@ func TestNewVideoInfoEvent(t *testing.T) {
 			mockVisited:               true,
 			mockConvertResultReturn:   &base.Video{},
 			mockVisitCountErrorReturn: errno.DatabaseCallError,
+			mockQueryVideoReturn: &model.Video{
+				Status: common.VideoStatusPassed,
+			},
 		},
 		{
 			name: "PutIPVisitInfoFail",
@@ -556,6 +710,9 @@ func TestNewVideoInfoEvent(t *testing.T) {
 			mockVisited:                   true,
 			mockConvertResultReturn:       &base.Video{},
 			mockPutIPVisitInfoErrorReturn: errno.DatabaseCallError,
+			mockQueryVideoReturn: &model.Video{
+				Status: common.VideoStatusPassed,
+			},
 		},
 		{
 			name: "Success",
@@ -565,6 +722,9 @@ func TestNewVideoInfoEvent(t *testing.T) {
 			errorIsExist:            false,
 			expectedResult:          &base.Video{},
 			mockConvertResultReturn: &base.Video{},
+			mockQueryVideoReturn: &model.Video{
+				Status: common.VideoStatusPassed,
+			},
 		},
 	}
 
@@ -940,7 +1100,7 @@ func TestNewSubmitLockedEvent(t *testing.T) {
 	}
 }
 
-func TestNewSumitPassedEvent(t *testing.T) {
+func TestNewSubmitPassedEvent(t *testing.T) {
 	type testCase struct {
 		name                       string
 		req                        *video.VideoSubmitPassedReq
