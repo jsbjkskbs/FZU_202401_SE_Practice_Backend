@@ -99,7 +99,7 @@ func QueryVideoChildCommentByRootIdPaged(rootID int64, pageNum, pageSize int) ([
 	vc := dal.Executor.VideoComment
 	comments, count, err := vc.WithContext(context.Background()).
 		Where(vc.RootID.Eq(rootID)).
-		Order(vc.CreatedAt.Desc()).
+		Order(vc.CreatedAt.Asc()).
 		FindByPage(pageNum*pageSize, pageSize)
 	if err != nil {
 		return nil, 0, err
@@ -238,7 +238,7 @@ func QueryActivityChildCommentByRootIdPaged(rootID int64, pageNum, pageSize int)
 	ac := dal.Executor.ActivityComment
 	comments, count, err := ac.WithContext(context.Background()).
 		Where(ac.RootID.Eq(rootID)).
-		Order(ac.CreatedAt.Desc()).
+		Order(ac.CreatedAt.Asc()).
 		FindByPage(pageNum*pageSize, pageSize)
 	if err != nil {
 		return nil, 0, err
