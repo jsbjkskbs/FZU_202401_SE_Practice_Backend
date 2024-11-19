@@ -201,7 +201,12 @@ func (service *InteractService) NewCommentVideoPublishEvent(req *interact.Intera
 		if pid == 0 {
 			return errno.ParamInvalid.WithMessage("无效的父评论ID")
 		}
-		exist, err := exquery.QueryVideoCommentExistByIdAndRootId(pid, rid)
+		var exist bool
+		if pid == rid {
+			exist, err = exquery.QueryVideoCommentExistById(pid)
+		} else {
+			exist, err = exquery.QueryVideoCommentExistByIdAndRootId(pid, rid)
+		}
 		if err != nil {
 			return errno.DatabaseCallError.WithInnerError(err)
 		}
@@ -271,7 +276,12 @@ func (service *InteractService) NewCommentActivityPublishEvent(req *interact.Int
 		if pid == 0 {
 			return errno.ParamInvalid.WithMessage("无效的父评论ID")
 		}
-		exist, err := exquery.QueryActivityCommentExistByIdAndRootId(pid, rid)
+		var exist bool
+		if pid == rid {
+			exist, err = exquery.QueryActivityCommentExistById(pid)
+		} else {
+			exist, err = exquery.QueryActivityCommentExistByIdAndRootId(pid, rid)
+		}
 		if err != nil {
 			return errno.DatabaseCallError.WithInnerError(err)
 		}
