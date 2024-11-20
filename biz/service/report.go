@@ -512,6 +512,8 @@ func (service *ReportService) NewAdminVideoHandleEvent(req *report.AdminVideoHan
 	}
 	if status == common.VideoStatusPassed {
 		go gorse.PutVideoHiddenState(req.VideoID, false)
+	} else if status == common.VideoStatusLocked {
+		go gorse.DelVideo(req.VideoID)
 	}
 	return nil
 }

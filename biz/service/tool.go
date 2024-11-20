@@ -81,6 +81,7 @@ func (service *ToolService) NewDeleteVideoEvent(req *tool.ToolDeleteVideoReq) er
 	case err := <-errs:
 		return errno.DatabaseCallError.WithInnerError(err)
 	default:
+		go gorse.DelVideo(fmt.Sprint(videoId))
 		return nil
 	}
 }
@@ -259,6 +260,7 @@ func (service *ToolService) NewAdminDeleteVideoEvent(req *tool.AdminToolDeleteVi
 	case err := <-errs:
 		return errno.InternalServerError.WithInnerError(err)
 	default:
+		go gorse.DelVideo(fmt.Sprint(videoId))
 		return nil
 	}
 }
