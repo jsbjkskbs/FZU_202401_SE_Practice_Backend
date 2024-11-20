@@ -152,6 +152,15 @@ func (service *OssService) NewCallbackImageEvent(_ *oss.OssCallbackImageReq) err
 			ImageURL: req.Key,
 			UserID:   userId,
 		})
+	} else {
+		err = exquery.InsertImage(&model.Image{
+			ID:       imageId,
+			ImageURL: req.Key,
+			UserID:   userId,
+		})
+		if err != nil {
+			return errno.DatabaseCallError
+		}
 	}
 	return nil
 }
