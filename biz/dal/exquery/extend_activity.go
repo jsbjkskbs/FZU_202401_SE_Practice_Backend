@@ -31,7 +31,7 @@ func QueryActivityByFollowedIdPaged(followerId int64, pageNum, pageSize int) ([]
 		}
 		activities = append(activities, &activity)
 	}
-	row, err := dal.DB.Raw("SELECT COUNT(*) FROM Activity WHERE user_id IN (SELECT followed_id FROM Follow WHERE follower_id = ?)", followerId).Rows()
+	row, err := dal.DB.Raw("SELECT COUNT(*) FROM Activity WHERE user_id IN (SELECT followed_id FROM Follow WHERE follower_id = ?) OR user_id = ?", followerId, followerId).Rows()
 	if err != nil {
 		return nil, 0, err
 	}

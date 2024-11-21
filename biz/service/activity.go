@@ -47,7 +47,7 @@ func (service *ActivityService) NewFeedEvent(req *activity.ActivityFeedReq) (*ac
 	}
 	return &activity.ActivityFeedRespData{
 		Items:    *items,
-		IsEnd:    count <= req.PageNum*req.PageSize,
+		IsEnd:    count <= (req.PageNum+1)*req.PageSize,
 		PageNum:  req.PageNum,
 		PageSize: req.PageSize,
 		Total:    count,
