@@ -10,7 +10,6 @@ import (
 	"sfw/biz/dal/exquery"
 	"sfw/biz/dal/model"
 	"sfw/biz/model/api/oss"
-	"sfw/biz/mw/gorse"
 	"sfw/biz/mw/redis"
 	"sfw/biz/service/common"
 	"sfw/pkg/errno"
@@ -113,7 +112,7 @@ func (service *OssService) NewCallbackVideoEvent(_ *oss.OssCallbackVideoReq) err
 	}
 
 	go redis.VideoUploadInfoDel(req.Oid)
-	go gorse.InsertVideo(req.Oid, stat["category"], labels)
+	// go gorse.InsertVideo(req.Oid, stat["category"], labels)
 	return nil
 }
 

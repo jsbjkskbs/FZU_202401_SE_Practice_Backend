@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"sfw/biz/dal/exquery"
@@ -511,9 +512,20 @@ func (service *ReportService) NewAdminVideoHandleEvent(req *report.AdminVideoHan
 		return errno.DatabaseCallError.WithInnerError(err)
 	}
 	if status == common.VideoStatusPassed {
-		go gorse.PutVideoHiddenState(req.VideoID, false)
+		// go gorse.PutVideoHiddenState(req.VideoID, false)
+		go func(vid *int64) {
+			v, err := exquery.QueryVideoById(*vid)
+			if err != nil {
+				return
+			}
+			video, err := model_converter.VideoDal2Resp(v, nil)
+			if err != nil {
+				return
+			}
+			go gorse.InsertVideoAndSetUnhidden(fmt.Sprint(video.ID), video.Category, video.Labels)
+		}(&videoId)
 	} else if status == common.VideoStatusLocked {
-		go gorse.DelVideo(req.VideoID)
+		// go gorse.DelVideo(req.VideoID)
 	}
 	return nil
 }
