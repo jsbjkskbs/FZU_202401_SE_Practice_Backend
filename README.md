@@ -25,10 +25,10 @@
 
 ``` yaml
 Email:
-  address: "smtp.mxhichina.com"
-  port: 465
-  username: "fulifuli@sophisms.cn"
-  password: "_222200316Cyk"
+  address: "your.smtp.server"
+  port: your_smtp_server_port
+  username: "your.email@account.com"
+  password: "your_password"
   conn_pool_size: 4
 ```
 
