@@ -56,3 +56,8 @@ make docker_build
 ```bash
 make docker_run
 ```
+
+## 接口
+
+- 你可以访问我在ApiFox上写的[接口文档](https://apifox.com/apidoc/shared-33a87b5b-952d-48f5-849e-591805d40fda)
+- 或者访问导出的[接口文档](api.md)
